@@ -27,5 +27,9 @@
   supabase.auth.onAuthStateChange((_event,session)=>refreshUI(session));
   const {data:{session}}=await supabase.auth.getSession();await refreshUI(session);
 
-  const adminScript=document.createElement('script');adminScript.src='js/admin.js';adminScript.onload=emitAuth;document.head.appendChild(adminScript);
+  function loadScript(src){return new Promise(resolve=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=resolve;document.head.appendChild(s)})}
+  await loadScript('js/league-content.js');
+  await loadScript('js/admin.js');
+  await loadScript('js/league-admin.js');
+  emitAuth();
 })();
