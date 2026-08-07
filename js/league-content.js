@@ -21,11 +21,11 @@
     const [{data:champions},{data:records},{data:shame}]=await Promise.all([
       supabase.from('league_champions').select('*').order('season_year',{ascending:false}),
       supabase.from('league_records').select('*').order('sort_order'),
-      supabase.from('wall_of_shame').select('*').eq('is_active',true).order('created_at',{ascending:false}).limit(1)
+      supabase.from('wall_of_shame').select('*').eq('is_active',true).order('season_year',{ascending:false,nullsFirst:false}).order('created_at',{ascending:false}).limit(1)
     ]);
-    if(champions?.length){const el=history.querySelector('.timeline');if(el)el.innerHTML=champions.map(c=>`<div class="tl-item"><div class="yr">${c.season_year}</div><div class="champ">${esc(c.champion)}</div><div class="note">${esc(c.note)}</div></div>`).join('')}
-    if(records?.length){const el=history.querySelector('.record-grid');if(el)el.innerHTML=records.map(r=>`<div class="record-card"><div class="label">${esc(r.label)}</div><div class="val">${esc(r.value)}</div><div class="sub">${esc(r.detail)}</div></div>`).join('')}
-    if(shame?.length){const el=history.querySelector('.shame');if(el)el.innerHTML=`<div class="txt"><strong>${esc(shame[0].title)}</strong><span>${esc(shame[0].note)}</span></div><div class="trophy">${esc(shame[0].icon)}</div>`}
+    if(champions?.length){const el=history.querySelector('.timeline');if(el)el.innerHTML=champions.map(c=>{const champ=[c.champion,c.champion_team].filter(Boolean).join(' — ');const result=[c.runner_up?`Defeated ${c.runner_up}`:'',c.championship_score].filter(Boolean).join(' · ');const note=[result,c.note].filter(Boolean).join(result&&c.note?' — ':'');return `<div class="tl-item"><div class="yr">${c.season_year}</div><div class="champ">${esc(champ)}</div><div class="note">${esc(note)}</div></div>`}).join('')}
+    if(records?.length){const el=history.querySelector('.record-grid');if(el)el.innerHTML=records.map(r=>{const sub=[r.holder||r.detail,r.season_context].filter(Boolean).join(' · ');return `<div class="record-card"><div class="label">${esc(r.label)}</div><div class="val">${esc(r.value)}</div><div class="sub">${esc(sub)}</div></div>`}).join('')}
+    if(shame?.length){const s=shame[0],el=history.querySelector('.shame');if(el){const title=s.member_team&&s.season_year?`${s.member_team} — Last Place, ${s.season_year}`:s.title;const note=[s.punishment,s.note&&s.note!==s.punishment?s.note:''].filter(Boolean).join(' — ');el.innerHTML=`<div class="txt"><strong>${esc(title)}</strong><span>${esc(note)}</span></div><div class="trophy">${esc(s.icon)}</div>`}}
   }
 
   async function refresh(){await Promise.all([loadMembers(),loadHistory()])}
