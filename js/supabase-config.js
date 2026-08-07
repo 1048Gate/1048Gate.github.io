@@ -4,3 +4,11 @@ window.SUPABASE_CONFIG = {
   url: "https://bnsylfokgrcmcfjeicfk.supabase.co",
   anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuc3lsZm9rZ3JjbWNmamVpY2ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMzE3OTMsImV4cCI6MjEwMTcwNzc5M30.m11g-AkbqkT9HXFGS-ha2HTrYAvfGtkkxsCeExfxZvk"
 };
+
+// Load the staff authentication layer automatically after the public config is ready.
+if (!document.querySelector('script[data-gate-auth]')) {
+  const authScript = document.createElement('script');
+  authScript.src = 'js/auth.js';
+  authScript.dataset.gateAuth = 'true';
+  document.head.appendChild(authScript);
+}
