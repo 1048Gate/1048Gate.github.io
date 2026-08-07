@@ -65,5 +65,11 @@
   }
 
   await Promise.all([loadPosts(),loadPolls()]);
-  supabase.channel('1048-community').on('postgres_changes',{event:'*',schema:'public',table:'board_posts'},loadPosts).on('postgres_changes',{event:'*',schema:'public',table:'board_comments'},loadPosts).on('postgres_changes',{event:'*',schema:'public',table:'poll_votes'},loadPolls).subscribe();
+  supabase.channel('1048-community')
+    .on('postgres_changes',{event:'*',schema:'public',table:'board_posts'},loadPosts)
+    .on('postgres_changes',{event:'*',schema:'public',table:'board_comments'},loadPosts)
+    .on('postgres_changes',{event:'*',schema:'public',table:'poll_votes'},loadPolls)
+    .on('postgres_changes',{event:'*',schema:'public',table:'polls'},loadPolls)
+    .on('postgres_changes',{event:'*',schema:'public',table:'poll_options'},loadPolls)
+    .subscribe();
 })();
