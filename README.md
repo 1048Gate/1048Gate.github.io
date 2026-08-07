@@ -1,4 +1,4 @@
-# 1048 Gate Syzn 10
+# 1048 Gate Szn 10
 
 Official website for the 1048 Gate fantasy football keeper league.
 
