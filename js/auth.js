@@ -1,4 +1,5 @@
 (async function(){
+  if(!document.querySelector('script[src="js/manager-profiles.js"]')){const profileScript=document.createElement('script');profileScript.src='js/manager-profiles.js';document.head.appendChild(profileScript)}
   if(!window.SUPABASE_CONFIG?.url||!window.SUPABASE_CONFIG?.anonKey)return;
   const {createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   const supabase=createClient(window.SUPABASE_CONFIG.url,window.SUPABASE_CONFIG.anonKey);
