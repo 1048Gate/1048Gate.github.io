@@ -5,6 +5,7 @@ import json,re,sqlite3,sys
 from pathlib import Path
 
 CURRENT_MEMBERS=['George Travis','Jared Hall','Kyle Fowler','Bryan Hunt','Brian Heino','Vincent Cannarozzi','James Brochu','JD Daley','Thomas Speer','Collin Krum','German Haro','Trevor Hash']
+ALIASES={'german joshua haro':'German Haro'}
 
 def clean(v): return re.sub(r'\s+',' ',str(v or '')).strip()
 def name_key(v): return clean(v).lower()
@@ -24,8 +25,8 @@ def main():
     games=[]
     for r in con.execute('select * from games where coalesce(is_bye,0)=0 order by year,week,home_team_id'):
         y=int(r['year']);ho=team_owner[(y,r['home_team_id'])];ao=team_owner[(y,r['away_team_id'])]
-        hn=person_name(owner_row[(y,ho)]);an=person_name(owner_row[(y,ao)])
-        hn=canon.get(name_key(hn),clean(hn));an=canon.get(name_key(an),clean(an))
+        hn=clean(person_name(owner_row[(y,ho)]));an=clean(person_name(owner_row[(y,ao)]))
+        hn=ALIASES.get(name_key(hn),canon.get(name_key(hn),hn));an=ALIASES.get(name_key(an),canon.get(name_key(an),an))
         games.append([y,int(r['week']),int(r['is_playoff'] or 0),r['matchup_type'] or 'NONE',hn,clean(r['home_team_name']),round(float(r['home_score']),2),an,clean(r['away_team_name']),round(float(r['away_score']),2)])
     pairs={}
     for g in games:
