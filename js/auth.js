@@ -31,6 +31,7 @@
   await loadScript('js/league-content.js');
   await loadScript('js/history-layout.js');
   await loadScript('js/draft-history.js');
+  await loadScript('js/player-history.js');
   await loadScript('js/game-records-layout.js');
   await loadScript('js/playoffs.js');
   await loadScript('js/admin.js');
