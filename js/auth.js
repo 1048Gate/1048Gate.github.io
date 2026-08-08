@@ -30,6 +30,7 @@
   function loadScript(src){return new Promise(resolve=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=resolve;document.head.appendChild(s)})}
   await loadScript('js/league-content.js');
   await loadScript('js/history-layout.js');
+  await loadScript('js/game-records-layout.js');
   await loadScript('js/playoffs.js');
   await loadScript('js/admin.js');
   await loadScript('js/league-admin.js');
