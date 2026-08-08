@@ -1,34 +1,197 @@
-const tabButtons=document.querySelectorAll('#tabs button');
-function switchView(name){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(name)?.classList.add('active');tabButtons.forEach(b=>b.classList.toggle('active',b.dataset.view===name));window.scrollTo({top:0,behavior:'smooth'})}
-window.switchView=switchView;tabButtons.forEach(btn=>btn.addEventListener('click',()=>switchView(btn.dataset.view)));
-document.querySelectorAll('.filter-pills .pill').forEach(p=>p.addEventListener('click',()=>{document.querySelectorAll('.filter-pills .pill').forEach(x=>x.classList.remove('active'));p.classList.add('active')}));
-document.querySelectorAll('.accordion-item').forEach(item=>item.querySelector('.accordion-head')?.addEventListener('click',()=>item.classList.toggle('open')));
+const tabButtons = document.querySelectorAll('#tabs button');
 
-/* EDIT MEMBER DATA HERE
-Each season: [year, finalFinish, "teamName", "wins-losses-ties", pointsFor, pointsAgainst]
-Use W-L for seasons without a tie and W-L-T when a tie occurred.
-Use null for unavailable point totals. */
-const leagueMembers=[
-{number:"01",name:"George Travis",role:"Commissioner",seasons:[[2017,2,"Free Zeke","8-5",null,null],[2018,2,"Beasts of the East","10-3",null,null],[2019,8,"Quon Solo and The Ewoks","7-6",1547.1,1404.7],[2020,6,"Tongy's Banned 4 Semester","9-4",1640.76,1522.54],[2021,6,"Beasts of the East","9-5",1784.84,1515.5],[2022,1,"A, B, Ceedee, **** You","8-6",1670.5,1491.6],[2023,4,"Tony 2 Step","7-7",1613.64,1700.54],[2024,2,"Justified ✨","7-7",1733.48,1710.04],[2025,5,"Shiesty Szn","8-6",1686.08,1565.66]]},
-{number:"02",name:"Jared Hall",role:"League Member",seasons:[[2017,1,"Flash In The Flex","10-3",null,null],[2018,3,"Is This Your Champ?","10-3",null,null],[2019,4,"No Kaep","9-4",1670.78,1419.84],[2020,5,"No Kap","7-6",1680.34,1610.02],[2021,3,"Bishop Sycamore","7-7",1913.62,1763.16],[2022,5,"Herbie Fully Goated","7-7",1648.7,1717.78],[2023,1,"Crown The King 👑","9-5",1815.9,1665.62],[2024,1,"The Diddlers","11-3",1868.66,1686.26],[2025,11,"Darty at 1048","7-7",1565.22,1602.38]]},
-{number:"03",name:"Kyle Fowler",role:"League Member",seasons:[[2017,8,"Lord Foxius Maximus","2-11",null,null],[2018,1,"Turn Goff the Lights","9-4",null,null],[2019,7,"Jebidiah Stay on the Path","5-8",1489.04,1648.74],[2020,8,"Hail Murray","6-7",1453.6,1661.94],[2021,2,"You Can't Stafford It","8-6",1627.36,1568.9],[2022,11,"Fields of Dreams","6-8",1502.92,1564.86],[2023,9,"Bed, Bath, and Bijan","5-9",1444.82,1621.56],[2024,11,"Kings of the North","7-7",1596.76,1644.68],[2025,8,"Buckle Up","3-11",1449.12,1761.82]]},
-{number:"04",name:"Bryan Hunt",role:"League Member",seasons:[[2017,6,"Team No Romo","8-5",null,null],[2018,7,"The Brady Bunch","5-8",null,null],[2019,3,"The How ya Been’s","8-5",1610.88,1569.36],[2020,3,"The How ya Been’s","7-6",1643.3,1542.22],[2021,4,"Kenya(n) Pass The Jay","11-3",1773.66,1525.5],[2022,4,"Howya Been's","10-4",1712.4,1581.28],[2023,10,"Howya Been's","7-7",1536.46,1536.06],[2024,6,"Howya Been's","9-5",1685.08,1593.1],[2025,4,"Howya Been's","8-6",1705.76,1540.18]]},
-{number:"05",name:"Brian Heino",role:"League Member",seasons:[[2017,7,"Dallas Blows","6-7",null,null],[2018,8,"Litty Gritty","6-7",null,null],[2019,9,"Green Eggs And Clam","6-7",1391.54,1517.82],[2020,12,"Daddy DickemDowns","6-7",1599.72,1679.76],[2021,10,"Daddy DickemDowns","6-8",1571.26,1667.12],[2022,6,"Daddy DickemDowns","7-7",1633,1835.88],[2023,5,"Daddy DickemDowns","8-6",1724.6,1626.64],[2024,8,"The Rizzlers","6-8",1642.84,1720.94],[2025,3,"Meeches Mayhem","9-5",1834.78,1608.5]]},
-{number:"06",name:"Vincent Cannarozzi",role:"League Member",seasons:[[2017,12,"More Than A Thielen","6-6-1",null,null],[2018,5,"More Than A Thielen","7-6",null,null],[2019,11,"More Than A Thielen","3-10",1457.08,1592.14],[2020,10,"More Than A Thielen","6-7",1518.88,1528.88],[2021,5,"Aiyukkidding Me","8-6",1646.88,1578.48],[2022,12,"Penny for your Thoughts","7-7",1571.58,1628.86],[2023,8,"Mary Had a Little Lamb","6-8",1740.66,1742.4],[2024,9,"Legette down to business","6-8",1524.26,1584.2],[2025,6,"Like a Good Nabers","8-6",1490.84,1749.02]]},
-{number:"07",name:"James Brochu",role:"League Member",seasons:[[2022,7,"Stafford Infection","5-9",1758.64,1791.34],[2023,3,"Jigalos Jims","8-6",1723.46,1682.84],[2024,4,"Jigalos Jims","8-6",1711.8,1656.42],[2025,7,"Jigalos Jims","6-8",1643.18,1721.56]]},
-{number:"08",name:"JD Daley",role:"League Member",seasons:[[2017,9,"Ohio State","7-6",null,null],[2018,4,"TMZ'S HITLIST","8-5",null,null],[2019,1,"We're on to Cleveland","8-5",1538.54,1512.92],[2020,7,"Cole World","5-8",1491.52,1616.16],[2021,7,"HAHA JK","2-12",1498.82,1820.8],[2022,2,"Call of Jeudy","8-6",1614.08,1627.68],[2023,2,"ZAZA FLOWERS","9-5",1721.72,1611.92],[2024,5,"Oregon Ducks","8-6",1845.04,1662.8],[2025,10,"Ja'Marr-a-Lago","6-8",1621.06,1663.14]]},
-{number:"09",name:"Thomas Speer",role:"League Member",seasons:[[2017,11,"What tattoo should i get","3-10",null,null],[2018,11,"Woke up Feeling Dangerous","3-10",null,null],[2019,6,"Two Gurls One Kupp","7-6",1636.4,1594.06],[2020,1,"Has a Nice Ring to it","7-6",1825.12,1615.84],[2021,1,"Has a Nice Ring to it","9-5",1901.02,1758.46],[2022,3,"TomBoy NeverBrokeAgain","9-4-1",1963.1,1671],[2023,6,"TomBoy NeverBrokeAgain","8-6",1755.18,1671.44],[2024,7,"Osama Bin Laddin","4-10",1653.12,1777.02],[2025,1,"The Swifties","11-3",1982.34,1592.36]]},
-{number:"10",name:"Collin Krum",role:"League Member",seasons:[[2019,12,"Comeback Kids","4-9",1434.66,1573.66],[2020,4,"Half a Chubb","9-4",1707.28,1531.52],[2021,8,"Patty and The boys","6-8",1615.4,1692.72],[2022,9,"Downtown Browns","4-10",1607.96,1673.3],[2023,11,"Downtown Browns","5-9",1609.42,1625.84],[2024,12,"Downtown Browns","6-8",1606.34,1677.52],[2025,2,"Breezin’ with Bijan","11-3",1907.82,1560.2]]},
-{number:"11",name:"German Haro",role:"League Member",seasons:[[2019,10,"Team X","5-8",1595.24,1537.3],[2020,2,"Jared eat a di*k","8-5",1533.04,1473.52],[2021,9,"Jared eat a di*k","6-8",1504.98,1618.38],[2022,8,"Jared eat a di*k","6-8",1467.04,1480.98],[2023,12,"Jared eat a di*k","6-8",1617.48,1745.28],[2024,10,"Lamb Fried Rice","2-12",1472.66,1739.82],[2025,12,"Lamb Fried Rice","2-12",1386.18,1674.28]]},
-{number:"12",name:"Trevor Hash",role:"League Member",seasons:[[2018,10,"Team Hash","6-7",null,null],[2019,2,"Team Hash","8-5",1814.28,1757.9],[2020,11,"Team Hash","5-8",1612.96,1617.3],[2021,11,"Team Hash","7-7",1683.32,1758.34],[2022,10,"Team Hash","6-7-1",1547.88,1633.24],[2023,7,"Team Hash","6-8",1620.46,1693.66],[2024,3,"Team Hash","10-4",1803.02,1690.26],[2025,9,"Team Hash","5-9",1555.82,1789.1]]}
-];
+function switchView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(name)?.classList.add('active');
+  tabButtons.forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-function parseRecord(record){const parts=String(record||'').split('-').map(Number);return{wins:parts[0]||0,losses:parts[1]||0,ties:parts[2]||0}}
-function recordText(wins,losses,ties){return ties?`${wins}-${losses}-${ties}`:`${wins}-${losses}`}
-function totals(m){let wins=0,losses=0,ties=0,pf=0,pa=0,pfs=0;const finishes=[];m.seasons.forEach(s=>{const r=parseRecord(s[3]);wins+=r.wins;losses+=r.losses;ties+=r.ties;if(Number.isFinite(s[4])){pf+=s[4];pfs++}if(Number.isFinite(s[5]))pa+=s[5];if(Number.isFinite(Number(s[1])))finishes.push(Number(s[1]))});const games=wins+losses+ties;return{wins,losses,ties,pf,pa,pfs,pct:games?(wins+ties*0.5)/games:0,avg:finishes.length?finishes.reduce((a,b)=>a+b,0)/finishes.length:null,best:finishes.length?Math.min(...finishes):null,titles:finishes.filter(x=>x===1).length}}
-const num=(v,d=1)=>Number.isFinite(v)?v.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
-function renderMembers(){const grid=document.getElementById('membersGrid');if(!grid)return;grid.innerHTML=leagueMembers.map((m,i)=>{const t=totals(m),has=m.seasons.length;return `<article class="member-card" data-i="${i}" tabindex="0"><div class="member-head"><div class="locker-num">${esc(m.number)}</div><div><div class="team">${esc(m.name)}</div><div class="mgr">${esc(m.role)}</div></div></div>${has?`<div class="member-stats"><div class="member-stat"><span class="label">Record</span><span class="value accent">${recordText(t.wins,t.losses,t.ties)}</span></div><div class="member-stat"><span class="label">Win %</span><span class="value">${(t.pct*100).toFixed(1)}%</span></div><div class="member-stat"><span class="label">Titles</span><span class="value">${t.titles}</span></div></div>`:'<div class="member-empty">Career data ready to be added.</div>'}</article>`}).join('');grid.querySelectorAll('.member-card').forEach(card=>{const open=()=>openMember(Number(card.dataset.i));card.addEventListener('click',open);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}})})}
-function openMember(i){const m=leagueMembers[i],t=totals(m);document.getElementById('memberModalName').textContent=m.name;document.getElementById('memberModalRole').textContent=`${m.role} • ${m.seasons.length} seasons recorded`;const boxes=[['Career Record',recordText(t.wins,t.losses,t.ties)],['Win Rate',`${(t.pct*100).toFixed(1)}%`],['Championships',t.titles],['Average Finish',num(t.avg)],['Best Finish',t.best?`#${t.best}`:'—'],['Career PF',t.pfs?num(t.pf):'—']];document.getElementById('careerSummary').innerHTML=boxes.map(x=>`<div class="career-box"><div class="label">${x[0]}</div><div class="value">${x[1]}</div></div>`).join('');document.getElementById('seasonRows').innerHTML=m.seasons.length?[...m.seasons].sort((a,b)=>b[0]-a[0]).map(s=>{const diff=Number.isFinite(s[4])&&Number.isFinite(s[5])?s[4]-s[5]:null;return `<tr><td>${s[0]}</td><td class="${Number(s[1])===1?'finish-champ':''}">${Number(s[1])===1?'🏆 ':''}#${s[1]}</td><td>${esc(s[2])}</td><td>${esc(s[3])}</td><td>${num(s[4])}</td><td>${num(s[5])}</td><td>${diff===null?'—':`${diff>=0?'+':''}${num(diff)}`}</td></tr>`}).join(''):'<tr><td colspan="7" class="member-empty">No season data has been entered yet.</td></tr>';document.getElementById('memberModal').classList.add('open')}
-function closeMember(){document.getElementById('memberModal')?.classList.remove('open')}
-document.getElementById('memberModalClose')?.addEventListener('click',closeMember);document.getElementById('memberModal')?.addEventListener('click',e=>{if(e.target.id==='memberModal')closeMember()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMember()});renderMembers();
+window.switchView = switchView;
+tabButtons.forEach(btn => btn.addEventListener('click', () => switchView(btn.dataset.view)));
+
+document.querySelectorAll('.filter-pills .pill').forEach(p => p.addEventListener('click', () => {
+  document.querySelectorAll('.filter-pills .pill').forEach(x => x.classList.remove('active'));
+  p.classList.add('active');
+}));
+
+document.querySelectorAll('.accordion-item').forEach(item =>
+  item.querySelector('.accordion-head')?.addEventListener('click', () => item.classList.toggle('open'))
+);
+
+let leagueMembers = [];
+
+const esc = v => String(v ?? '').replace(/[&<>'"]/g, c => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  "'": '&#39;',
+  '"': '&quot;'
+}[c]));
+
+function parseRecord(record) {
+  const parts = String(record || '').split('-').map(Number);
+  return { wins: parts[0] || 0, losses: parts[1] || 0, ties: parts[2] || 0 };
+}
+
+function recordText(wins, losses, ties) {
+  return ties ? `${wins}-${losses}-${ties}` : `${wins}-${losses}`;
+}
+
+function totals(member) {
+  let wins = 0;
+  let losses = 0;
+  let ties = 0;
+  let pf = 0;
+  let pa = 0;
+  let pfs = 0;
+  const finishes = [];
+
+  member.seasons.forEach(season => {
+    const record = parseRecord(season[3]);
+    wins += record.wins;
+    losses += record.losses;
+    ties += record.ties;
+
+    if (Number.isFinite(season[4])) {
+      pf += season[4];
+      pfs++;
+    }
+    if (Number.isFinite(season[5])) pa += season[5];
+    if (Number.isFinite(Number(season[1]))) finishes.push(Number(season[1]));
+  });
+
+  const games = wins + losses + ties;
+  return {
+    wins,
+    losses,
+    ties,
+    pf,
+    pa,
+    pfs,
+    pct: games ? (wins + ties * 0.5) / games : 0,
+    avg: finishes.length ? finishes.reduce((a, b) => a + b, 0) / finishes.length : null,
+    best: finishes.length ? Math.min(...finishes) : null,
+    titles: finishes.filter(x => x === 1).length
+  };
+}
+
+const num = (value, digits = 1) => Number.isFinite(value)
+  ? value.toLocaleString(undefined, { minimumFractionDigits: digits, maximumFractionDigits: digits })
+  : '—';
+
+function renderMembers() {
+  const grid = document.getElementById('membersGrid');
+  if (!grid) return;
+
+  grid.innerHTML = leagueMembers.map((member, index) => {
+    const stats = totals(member);
+    const hasSeasons = member.seasons.length;
+
+    return `<article class="member-card" data-i="${index}" tabindex="0">
+      <div class="member-head">
+        <div class="locker-num">${esc(member.number)}</div>
+        <div>
+          <div class="team">${esc(member.name)}</div>
+          <div class="mgr">${esc(member.role)}</div>
+        </div>
+      </div>
+      ${hasSeasons ? `<div class="member-stats">
+        <div class="member-stat"><span class="label">Record</span><span class="value accent">${recordText(stats.wins, stats.losses, stats.ties)}</span></div>
+        <div class="member-stat"><span class="label">Win %</span><span class="value">${(stats.pct * 100).toFixed(1)}%</span></div>
+        <div class="member-stat"><span class="label">Titles</span><span class="value">${stats.titles}</span></div>
+      </div>` : '<div class="member-empty">Career data ready to be added.</div>'}
+    </article>`;
+  }).join('');
+
+  grid.querySelectorAll('.member-card').forEach(card => {
+    const open = () => openMember(Number(card.dataset.i));
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        open();
+      }
+    });
+  });
+}
+
+function openMember(index) {
+  const member = leagueMembers[index];
+  if (!member) return;
+
+  const stats = totals(member);
+  document.getElementById('memberModalName').textContent = member.name;
+  document.getElementById('memberModalRole').textContent = `${member.role} • ${member.seasons.length} seasons recorded`;
+
+  const boxes = [
+    ['Career Record', recordText(stats.wins, stats.losses, stats.ties)],
+    ['Win Rate', `${(stats.pct * 100).toFixed(1)}%`],
+    ['Championships', stats.titles],
+    ['Average Finish', num(stats.avg)],
+    ['Best Finish', stats.best ? `#${stats.best}` : '—'],
+    ['Career PF', stats.pfs ? num(stats.pf) : '—']
+  ];
+
+  document.getElementById('careerSummary').innerHTML = boxes
+    .map(box => `<div class="career-box"><div class="label">${box[0]}</div><div class="value">${box[1]}</div></div>`)
+    .join('');
+
+  document.getElementById('seasonRows').innerHTML = member.seasons.length
+    ? [...member.seasons].sort((a, b) => b[0] - a[0]).map(season => {
+        const diff = Number.isFinite(season[4]) && Number.isFinite(season[5]) ? season[4] - season[5] : null;
+        return `<tr>
+          <td>${season[0]}</td>
+          <td class="${Number(season[1]) === 1 ? 'finish-champ' : ''}">${Number(season[1]) === 1 ? '🏆 ' : ''}#${season[1]}</td>
+          <td>${esc(season[2])}</td>
+          <td>${esc(season[3])}</td>
+          <td>${num(season[4])}</td>
+          <td>${num(season[5])}</td>
+          <td>${diff === null ? '—' : `${diff >= 0 ? '+' : ''}${num(diff)}`}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="7" class="member-empty">No season data has been entered yet.</td></tr>';
+
+  document.getElementById('memberModal').classList.add('open');
+}
+
+function closeMember() {
+  document.getElementById('memberModal')?.classList.remove('open');
+}
+
+async function loadMembers() {
+  const grid = document.getElementById('membersGrid');
+  if (grid) grid.innerHTML = '<div class="member-empty">Loading league history…</div>';
+
+  try {
+    const response = await fetch('data/members.json', { cache: 'no-store' });
+    if (!response.ok) throw new Error(`members.json returned HTTP ${response.status}`);
+
+    const payload = await response.json();
+    if (!Array.isArray(payload.members)) throw new Error('members.json does not contain a members array');
+
+    leagueMembers = payload.members;
+
+    const help = document.querySelector('.member-help');
+    if (help) {
+      help.innerHTML = '<strong>League database:</strong> member history is loaded from <span class="mono">data/members.json</span>, generated from the SQLite archive by <span class="mono">scripts/export_web_data.py</span>.';
+    }
+
+    renderMembers();
+  } catch (error) {
+    console.error('Unable to load member history:', error);
+    if (grid) {
+      grid.innerHTML = '<div class="member-empty">Member history could not be loaded. Check data/members.json and refresh.</div>';
+    }
+  }
+}
+
+document.getElementById('memberModalClose')?.addEventListener('click', closeMember);
+document.getElementById('memberModal')?.addEventListener('click', event => {
+  if (event.target.id === 'memberModal') closeMember();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeMember();
+});
+
+loadMembers();
