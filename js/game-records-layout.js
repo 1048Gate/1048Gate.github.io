@@ -5,9 +5,16 @@
   const recordPanel=shell.querySelector('[data-history-panel="records"]');
   if(!recordPanel)return;
 
+  let attempts=0;
+  const maxAttempts=40;
+
   function relocate(){
     const derivedGrid=shell.querySelector('.matchup-record-grid');
-    if(!derivedGrid)return;
+    if(!derivedGrid){
+      attempts++;
+      if(attempts<maxAttempts)setTimeout(relocate,100);
+      return;
+    }
 
     const oldRecordGrid=recordPanel.querySelector('.record-grid');
     if(oldRecordGrid)oldRecordGrid.remove();
@@ -20,6 +27,4 @@
   }
 
   relocate();
-  const observer=new MutationObserver(relocate);
-  observer.observe(shell,{childList:true,subtree:true});
 })();
