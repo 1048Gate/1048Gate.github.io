@@ -1,5 +1,6 @@
 (function(){
   const supabase=window.gateSupabase;if(!supabase)return;
+  if(!document.querySelector('link[href="css/playoffs-admin.css"]')){const css=document.createElement('link');css.rel='stylesheet';css.href='css/playoffs-admin.css';document.head.appendChild(css)}
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let currentProfile=null,selectedYear=null,seasons=[],matchups=[];
 
