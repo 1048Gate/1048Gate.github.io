@@ -3,65 +3,12 @@
   if(!document.querySelector('link[href="css/playoffs.css"]')){const css=document.createElement('link');css.rel='stylesheet';css.href='css/playoffs.css';document.head.appendChild(css)}
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const score=v=>v===null||v===undefined||v===''?'—':Number(v).toLocaleString(undefined,{maximumFractionDigits:2});
-
-  const tabs=document.getElementById('tabs');
-  if(!tabs||document.querySelector('[data-view="playoffs"]'))return;
-  const historyBtn=tabs.querySelector('[data-view="history"]');
-  const btn=document.createElement('button');btn.dataset.view='playoffs';btn.textContent='Playoffs';
-  historyBtn?.insertAdjacentElement('afterend',btn);
-
-  const main=document.querySelector('main');
-  const section=document.createElement('section');section.className='view';section.id='playoffs';
-  section.innerHTML=`
-    <div class="section-title"><h2>Playoffs</h2><span class="see-all">Championship & consolation history</span></div>
-    <div class="playoff-toolbar panel"><div><label for="playoffYear">Season</label><select id="playoffYear"></select></div><div class="playoff-season-status" id="playoffSeasonStatus"></div></div>
-    <div id="playoffPublicContent"><div class="panel community-empty">Playoff history is being loaded…</div></div>`;
-  main?.appendChild(section);
-  btn.addEventListener('click',()=>window.switchView?.('playoffs'));
-
+  const tabs=document.getElementById('tabs');if(!tabs||document.querySelector('[data-view="playoffs"]'))return;const historyBtn=tabs.querySelector('[data-view="history"]'),btn=document.createElement('button');btn.dataset.view='playoffs';btn.textContent='Playoffs';historyBtn?.insertAdjacentElement('afterend',btn);
+  const main=document.querySelector('main'),section=document.createElement('section');section.className='view';section.id='playoffs';section.innerHTML=`<div class="section-title"><h2>Playoffs</h2><span class="see-all">Winners & consolation bracket history</span></div><div class="playoff-toolbar panel"><div><label for="playoffYear">Season</label><select id="playoffYear"></select></div><div class="playoff-season-status" id="playoffSeasonStatus"></div></div><div id="playoffPublicContent"><div class="panel community-empty">Playoff history is being loaded…</div></div>`;main?.appendChild(section);btn.addEventListener('click',()=>window.switchView?.('playoffs'));
   let seasons=[];
-  async function loadSeasons(preferredYear){
-    const {data,error}=await supabase.from('playoff_seasons').select('*').order('season_year',{ascending:false});
-    const select=document.getElementById('playoffYear'),host=document.getElementById('playoffPublicContent');
-    if(error){host.innerHTML=`<div class="panel community-error">${esc(error.message)}</div>`;return}
-    seasons=data||[];
-    if(!seasons.length){select.innerHTML='<option>No seasons yet</option>';select.disabled=true;host.innerHTML='<div class="panel community-empty">No playoff seasons have been added yet.</div>';return}
-    select.disabled=false;select.innerHTML=seasons.map(s=>`<option value="${s.season_year}">${s.season_year}</option>`).join('');
-    const target=preferredYear&&seasons.some(s=>s.season_year===Number(preferredYear))?Number(preferredYear):seasons[0].season_year;select.value=String(target);await loadYear(target);
-  }
-
-  function summaryCard(s){
-    const items=[['Champion',s.champion||'—'],['Runner-up',s.runner_up||'—'],['3rd Place',s.third_place||'—'],['Consolation Winner',s.consolation_winner||'—']];
-    return `<div class="playoff-summary-grid">${items.map(([k,v],i)=>`<div class="playoff-summary-card ${i===0?'champ-summary':''}"><span>${k}</span><strong>${esc(v)}</strong></div>`).join('')}</div>${s.summary_note?`<div class="playoff-summary-note">${esc(s.summary_note)}</div>`:''}`;
-  }
-
-  function matchupCard(m){
-    const w1=Number(m.winner_slot)===1,w2=Number(m.winner_slot)===2;
-    const side=(seed,name,owner,pts,win)=>`<div class="bracket-team ${win?'winner':''}"><div class="bracket-team-main"><span class="bracket-seed">${seed??'—'}</span><div><strong>${esc(name)}</strong>${owner?`<small>${esc(owner)}</small>`:''}</div></div><span class="bracket-score">${score(pts)}</span></div>`;
-    return `<div class="bracket-matchup"><div class="bracket-matchup-label">${esc(m.placement_label||`Matchup ${m.matchup_order}`)}</div>${side(m.team1_seed,m.team1_name,m.team1_owner,m.team1_score,w1)}${side(m.team2_seed,m.team2_name,m.team2_owner,m.team2_score,w2)}${m.note?`<div class="bracket-note">${esc(m.note)}</div>`:''}</div>`;
-  }
-
-  function renderBracket(matchups,type,title){
-    const rows=matchups.filter(m=>m.bracket_type===type);
-    if(!rows.length)return `<div class="playoff-bracket-section"><div class="playoff-bracket-head"><h3>${title}</h3></div><div class="panel community-empty">No ${title.toLowerCase()} matchups entered for this season.</div></div>`;
-    const rounds=[...new Map(rows.sort((a,b)=>a.round_order-b.round_order||a.matchup_order-b.matchup_order).map(m=>[m.round_key,{key:m.round_key,label:m.round_label,order:m.round_order}])).values()];
-    return `<div class="playoff-bracket-section"><div class="playoff-bracket-head"><h3>${title}</h3><span>${rows.length} matchups</span></div><div class="bracket-scroll"><div class="bracket-grid" style="--round-count:${Math.max(1,rounds.length)}">${rounds.map(r=>`<div class="bracket-round"><div class="bracket-round-title">${esc(r.label)}</div><div class="bracket-round-games">${rows.filter(m=>m.round_key===r.key).map(matchupCard).join('')}</div></div>`).join('')}</div></div></div>`;
-  }
-
-  async function loadYear(year){
-    const season=seasons.find(s=>s.season_year===Number(year)),host=document.getElementById('playoffPublicContent'),status=document.getElementById('playoffSeasonStatus');if(!season)return;
-    status.textContent=`${season.season_year} PLAYOFFS`;
-    const {data,error}=await supabase.from('playoff_matchups').select('*').eq('season_id',season.id).order('bracket_type').order('round_order').order('matchup_order');
-    if(error){host.innerHTML=`<div class="panel community-error">${esc(error.message)}</div>`;return}
-    const matchups=data||[];
-    host.innerHTML=`<div class="playoff-season-summary panel"><div class="playoff-year-badge">${season.season_year}</div><div><h3>Season Recap</h3>${summaryCard(season)}</div></div>${renderBracket(matchups,'championship','Championship Bracket')}${renderBracket(matchups,'consolation','Consolation Bracket')}`;
-  }
-
-  document.getElementById('playoffYear').addEventListener('change',e=>loadYear(Number(e.target.value)));
-  window.refreshPlayoffs=()=>loadSeasons(Number(document.getElementById('playoffYear')?.value));
-  loadSeasons();
-  supabase.channel('1048-playoffs-public')
-    .on('postgres_changes',{event:'*',schema:'public',table:'playoff_seasons'},()=>loadSeasons(Number(document.getElementById('playoffYear')?.value)))
-    .on('postgres_changes',{event:'*',schema:'public',table:'playoff_matchups'},()=>loadYear(Number(document.getElementById('playoffYear')?.value)))
-    .subscribe();
+  async function loadSeasons(preferredYear){const {data,error}=await supabase.from('playoff_seasons').select('*').order('season_year',{ascending:false});const select=document.getElementById('playoffYear'),host=document.getElementById('playoffPublicContent');if(error){host.innerHTML=`<div class="panel community-error">${esc(error.message)}</div>`;return}seasons=data||[];if(!seasons.length){select.innerHTML='<option>No seasons yet</option>';select.disabled=true;host.innerHTML='<div class="panel community-empty">No playoff seasons have been added yet.</div>';return}select.disabled=false;select.innerHTML=seasons.map(s=>`<option value="${s.season_year}">${s.season_year}</option>`).join('');const target=preferredYear&&seasons.some(s=>s.season_year===Number(preferredYear))?Number(preferredYear):seasons[0].season_year;select.value=String(target);await loadYear(target)}
+  function matchupCard(m){const w1=Number(m.winner_slot)===1,w2=Number(m.winner_slot)===2;const side=(seed,name,owner,pts,win)=>`<div class="bracket-team ${win?'winner':''}"><div class="bracket-team-main"><span class="bracket-seed">${seed??'—'}</span><div><strong>${esc(name||'BYE')}</strong>${owner?`<small>${esc(owner)}</small>`:''}</div></div><span class="bracket-score">${score(pts)}</span></div>`;return `<div class="bracket-matchup"><div class="bracket-matchup-label">${esc(m.placement_label||`Game ${m.matchup_order}`)}</div>${side(m.team1_seed,m.team1_name,m.team1_owner,m.team1_score,w1)}${side(m.team2_seed,m.team2_name,m.team2_owner,m.team2_score,w2)}${m.note?`<div class="bracket-note">${esc(m.note)}</div>`:''}</div>`}
+  function renderBracket(matchups,type,title,subtitle){const rows=matchups.filter(m=>m.bracket_type===type);if(!rows.length)return `<div class="playoff-bracket-section"><div class="playoff-bracket-head"><div><h3>${title}</h3><span>${subtitle}</span></div></div><div class="panel community-empty">No games entered yet.</div></div>`;const rounds=[...new Map(rows.sort((a,b)=>a.round_order-b.round_order||a.matchup_order-b.matchup_order).map(m=>[m.round_key,{key:m.round_key,label:m.round_label}])).values()];return `<div class="playoff-bracket-section"><div class="playoff-bracket-head"><div><h3>${title}</h3><span>${subtitle}</span></div><span>${rows.length} games</span></div><div class="bracket-scroll"><div class="bracket-grid" style="--round-count:${Math.max(1,rounds.length)}">${rounds.map(r=>`<div class="bracket-round"><div class="bracket-round-title">${esc(r.label)}</div><div class="bracket-round-games">${rows.filter(m=>m.round_key===r.key).map(matchupCard).join('')}</div></div>`).join('')}</div></div></div>`}
+  async function loadYear(year){const season=seasons.find(s=>s.season_year===Number(year)),host=document.getElementById('playoffPublicContent'),status=document.getElementById('playoffSeasonStatus');if(!season)return;status.textContent=`${season.season_year} PLAYOFFS`;const {data,error}=await supabase.from('playoff_matchups').select('*').eq('season_id',season.id).order('bracket_type').order('round_order').order('matchup_order');if(error){host.innerHTML=`<div class="panel community-error">${esc(error.message)}</div>`;return}const matchups=data||[];host.innerHTML=`<div class="playoff-season-summary panel playoff-season-summary-simple"><div class="playoff-year-badge">${season.season_year}</div><div><div class="eyebrow">LEAGUE CHAMPION</div><h3 class="playoff-champion-name">🏆 ${esc(season.champion||'Champion not entered')}</h3>${season.summary_note?`<div class="playoff-summary-note">${esc(season.summary_note)}</div>`:''}</div></div>${renderBracket(matchups,'championship','Winners Bracket','6 playoff teams')}${renderBracket(matchups,'consolation','Consolation Bracket','6 consolation teams')}`}
+  document.getElementById('playoffYear').addEventListener('change',e=>loadYear(Number(e.target.value)));window.refreshPlayoffs=()=>loadSeasons(Number(document.getElementById('playoffYear')?.value));loadSeasons();supabase.channel('1048-playoffs-public').on('postgres_changes',{event:'*',schema:'public',table:'playoff_seasons'},()=>loadSeasons(Number(document.getElementById('playoffYear')?.value))).on('postgres_changes',{event:'*',schema:'public',table:'playoff_matchups'},()=>loadYear(Number(document.getElementById('playoffYear')?.value))).subscribe();
 })();
