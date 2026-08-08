@@ -17,7 +17,8 @@ def main():
     teams={(r['year'],r['team_id']):(clean(r['team_name']),owners.get((r['year'],r['owner_id']),'Unknown')) for r in con.execute('select year,team_id,team_name,owner_id from teams')}
     league={r['year']:clean(r['league_name']) for r in con.execute('select year,league_name from seasons')}
     years=[r[0] for r in con.execute('select distinct year from draft_picks order by year')]
-    seasons=[]
+    out_dir=root/'data'/'drafts';out_dir.mkdir(parents=True,exist_ok=True)
+    index={'schemaVersion':1,'totalPicks':0,'seasons':[]}
     for year in years:
         team_rows=[];team_index={};picks=[]
         for r in con.execute('select * from draft_picks where year=? order by overall_pick',(year,)):
@@ -25,8 +26,10 @@ def main():
             if team not in team_index:
                 team_index[team]=len(team_rows);team_rows.append(list(team))
             picks.append([int(r['overall_pick']),team_index[team],clean(r['player_name']),int(r['keeper'] or 0)])
-        seasons.append([year,league.get(year,''),sum(p[3] for p in picks),team_rows,picks])
-    payload={'schemaVersion':2,'seasonRange':[min(years),max(years)],'totalPicks':sum(len(s[4]) for s in seasons),'seasons':seasons}
-    out=root/'data'/'drafts.json';out.parent.mkdir(exist_ok=True);out.write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
-    print(f"Wrote {out}: {payload['totalPicks']} picks across {len(seasons)} seasons")
+        keepers=sum(p[3] for p in picks)
+        payload={'year':year,'league':league.get(year,''),'keepers':keepers,'teams':team_rows,'picks':picks}
+        (out_dir/f'{year}.json').write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
+        index['seasons'].append([year,league.get(year,''),keepers,len(picks)]);index['totalPicks']+=len(picks)
+    (out_dir/'index.json').write_text(json.dumps(index,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
+    print(f"Wrote {index['totalPicks']} picks across {len(years)} season files")
 if __name__=='__main__': main()
