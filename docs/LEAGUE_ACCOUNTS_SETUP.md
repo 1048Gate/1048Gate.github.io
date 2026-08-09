@@ -24,10 +24,12 @@ The Staff page gains **League Accounts & Invites**:
 ## Security model
 
 - Invite plaintext is never committed to GitHub.
-- Postgres stores only a bcrypt-style `pgcrypto` hash of the invite.
+- Postgres stores only a `pgcrypto` hash of the invite.
 - The Supabase `service_role` key is used only inside the Edge Function.
 - Browser code uses only the existing public/anon credential.
 - RLS restricts `poll_votes` so authenticated users can insert only their own linked member identity.
+- Database policy also rejects votes for closed polls or mismatched poll options.
+- Protected profile fields prevent a regular member from changing their own member number/role to impersonate someone else.
 - Public poll results come from a count-only RPC and do not expose voter identity.
 
 ## Install order
@@ -40,6 +42,7 @@ In Supabase **SQL Editor**, run these files in order:
 
 1. `supabase/migrations/20260809170000_invite_only_league_accounts.sql`
 2. `supabase/migrations/20260809170100_vote_id_compat.sql`
+3. `supabase/migrations/20260809170200_account_vote_hardening.sql`
 
 Or, after linking the Supabase CLI project, run:
 
@@ -113,12 +116,15 @@ username@members.1048gate.invalid
 
 The Edge Function creates that Auth record server-side and auto-confirms it. Members only ever enter their username and password on the website.
 
+Because members do not provide a real recovery email/phone, forgotten-password recovery is staff-mediated rather than self-service. A future account-management pass can add a staff reset-password tool without changing this identity model.
+
 ## Voting behavior after migration
 
 - Logged-out visitors can see poll results but cannot vote.
 - Authenticated users without a linked `member_number` cannot vote.
 - Each linked member can cast one vote per poll.
 - The database enforces the one-member/one-poll rule independently of the browser UI.
+- Closed polls reject new votes at the database level.
 - Existing browser-based vote rows remain in the database for history, but future authenticated votes use `auth_user_id` + `member_number`.
 
 ## Files in this feature
@@ -134,4 +140,5 @@ supabase/config.toml
 supabase/functions/register-league-member/index.ts
 supabase/migrations/20260809170000_invite_only_league_accounts.sql
 supabase/migrations/20260809170100_vote_id_compat.sql
+supabase/migrations/20260809170200_account_vote_hardening.sql
 ```
