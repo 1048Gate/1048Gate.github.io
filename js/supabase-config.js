@@ -2,7 +2,7 @@
 // This file intentionally contains only the public/anon browser credential.
 window.SUPABASE_CONFIG = {
   url: "https://bnsylfokgrcmcfjeicfk.supabase.co",
-  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6ImJuc3lsZm9rZ3JjbWNmamVpY2ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMzE3OTMsImV4cCI6MjEwMTcwNzc5M30.m11g-AkbqkT9HXFGS-ha2HTrYAvfGtkkxsCeExfxZvk"
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuc3lsZm9rZ3JjbWNmamVpY2ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMzE3OTMsImV4cCI6MjEwMTcwNzc5M30.m11g-AkbqkT9HXFGS-ha2HTrYAvfGtkkxsCeExfxZvk"
 };
 
 // Load the site-wide polish layer independently of Supabase/auth readiness.
