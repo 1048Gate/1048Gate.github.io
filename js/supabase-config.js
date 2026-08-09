@@ -2,7 +2,7 @@
 // This file intentionally contains only the public/anon browser credential.
 window.SUPABASE_CONFIG = {
   url: "https://bnsylfokgrcmcfjeicfk.supabase.co",
-  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuc3lsZm9rZ3JjbWNmamVpY2ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMzE3OTMsImV4cCI6MjEwMTcwNzc5M30.m11g-AkbqkT9HXFGS-ha2HTrYAvfGtkkxsCeExfxZvk"
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXAiLCJyZWYiOiJibnN5bGZva2dyY21jZmplaWNmayIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzg2MTMxNzkzLCJleHAiOjIxMDE3MDc3OTN9.m11g-AkbqkT9HXFGS-ha2HTrYAvfGtkkxsCeExfxZvk"
 };
 
 // Load the site-wide polish layer independently of Supabase/auth readiness.
@@ -24,7 +24,7 @@ if (!document.querySelector('script[data-gate-polish]')) {
 // the current app.js renderer has already inserted the logo markup.
 if (!document.querySelector('script[data-member-logo-patch]')) {
   const memberLogoPatch = document.createElement('script');
-  memberLogoPatch.src = 'js/member-logo-patch.js?v=20260809b';
+  memberLogoPatch.src = 'js/member-logo-patch.js?v=20260809c';
   memberLogoPatch.dataset.memberLogoPatch = 'true';
   document.head.appendChild(memberLogoPatch);
 }
