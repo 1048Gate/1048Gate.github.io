@@ -20,6 +20,15 @@ if (!document.querySelector('script[data-gate-polish]')) {
   document.head.appendChild(polishScript);
 }
 
+// Compatibility loader for member logos. The patch safely no-ops when
+// the current app.js renderer has already inserted the logo markup.
+if (!document.querySelector('script[data-member-logo-patch]')) {
+  const memberLogoPatch = document.createElement('script');
+  memberLogoPatch.src = 'js/member-logo-patch.js?v=20260809b';
+  memberLogoPatch.dataset.memberLogoPatch = 'true';
+  document.head.appendChild(memberLogoPatch);
+}
+
 // Load the staff authentication layer automatically after the public config is ready.
 if (!document.querySelector('script[data-gate-auth]')) {
   const authScript = document.createElement('script');
