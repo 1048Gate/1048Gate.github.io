@@ -19,6 +19,29 @@ document.querySelectorAll('.accordion-item').forEach(item =>
   item.querySelector('.accordion-head')?.addEventListener('click', () => item.classList.toggle('open'))
 );
 
+if (!document.querySelector('link[data-member-logo-styles]')) {
+  const memberLogoStyles = document.createElement('link');
+  memberLogoStyles.rel = 'stylesheet';
+  memberLogoStyles.href = 'css/member-logos.css';
+  memberLogoStyles.dataset.memberLogoStyles = 'true';
+  document.head.appendChild(memberLogoStyles);
+}
+
+const MEMBER_LOGOS = Object.freeze({
+  '01': 'images/team-logos/01-george-travis.png',
+  '02': 'images/team-logos/02-jared-hall.png',
+  '03': 'images/team-logos/03-kyle-fowler.png',
+  '04': 'images/team-logos/04-bryan-hunt.png',
+  '05': 'images/team-logos/05-brian-heino.png',
+  '06': 'images/team-logos/06-vincent-cannarozzi.png',
+  '07': 'images/team-logos/07-james-brochu.png',
+  '08': 'images/team-logos/08-jd-daley.png',
+  '09': 'images/team-logos/09-thomas-speer.png',
+  '10': 'images/team-logos/10-collin-krum.png',
+  '11': 'images/team-logos/%2011-german-haro.png',
+  '12': 'images/team-logos/12-trevor-hash.png'
+});
+
 let leagueMembers = [];
 
 const esc = v => String(v ?? '').replace(/[&<>'"]/g, c => ({
@@ -76,6 +99,11 @@ function totals(member) {
   };
 }
 
+function latestSeason(member) {
+  if (!member.seasons.length) return null;
+  return member.seasons.reduce((latest, season) => !latest || season[0] > latest[0] ? season : latest, null);
+}
+
 const num = (value, digits = 1) => Number.isFinite(value)
   ? value.toLocaleString(undefined, { minimumFractionDigits: digits, maximumFractionDigits: digits })
   : '—';
@@ -86,23 +114,40 @@ function renderMembers() {
 
   grid.innerHTML = leagueMembers.map((member, index) => {
     const stats = totals(member);
+    const latest = latestSeason(member);
     const hasSeasons = member.seasons.length;
+    const logo = MEMBER_LOGOS[member.number] || '';
+    const badge = stats.titles ? `${stats.titles}× Champ` : `#${esc(member.number)}`;
 
-    return `<article class="member-card" data-i="${index}" tabindex="0">
-      <div class="member-head">
-        <div class="locker-num">${esc(member.number)}</div>
-        <div>
+    return `<article class="member-card public-member-card" data-i="${index}" tabindex="0" aria-label="View ${esc(member.name)} career history">
+      <div class="member-head member-head-with-logo">
+        <div class="member-logo-shell">
+          ${logo ? `<img class="member-logo" src="${logo}" alt="${esc(member.name)} team logo" loading="lazy">` : ''}
+          <span class="member-logo-fallback">${esc(member.number)}</span>
+        </div>
+        <div class="member-identity">
           <div class="team">${esc(member.name)}</div>
           <div class="mgr">${esc(member.role)}</div>
         </div>
+        <span class="member-title-badge">${badge}</span>
       </div>
-      ${hasSeasons ? `<div class="member-stats">
+      ${latest ? `<div class="member-latest"><span>${esc(latest[2])}</span><small>${latest[0]} TEAM</small></div>` : ''}
+      ${hasSeasons ? `<div class="member-stats public-member-stats">
         <div class="member-stat"><span class="label">Record</span><span class="value accent">${recordText(stats.wins, stats.losses, stats.ties)}</span></div>
         <div class="member-stat"><span class="label">Win %</span><span class="value">${(stats.pct * 100).toFixed(1)}%</span></div>
         <div class="member-stat"><span class="label">Titles</span><span class="value">${stats.titles}</span></div>
+        <div class="member-stat"><span class="label">Best</span><span class="value">${stats.best ? `#${stats.best}` : '—'}</span></div>
       </div>` : '<div class="member-empty">Career data ready to be added.</div>'}
+      <div class="member-card-footer"><span>${member.seasons.length} season${member.seasons.length === 1 ? '' : 's'} recorded</span><span class="member-open-arrow">View career →</span></div>
     </article>`;
   }).join('');
+
+  grid.querySelectorAll('.member-logo').forEach(img => {
+    img.addEventListener('error', () => {
+      img.hidden = true;
+      img.closest('.member-logo-shell')?.classList.add('logo-missing');
+    });
+  });
 
   grid.querySelectorAll('.member-card').forEach(card => {
     const open = () => openMember(Number(card.dataset.i));
