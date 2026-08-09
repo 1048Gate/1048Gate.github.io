@@ -13,6 +13,7 @@
     '11':'images/team-logos/%2011-german-haro.png',
     '12':'images/team-logos/12-trevor-hash.png'
   };
+  const ROLE_OVERRIDES={'10':'Admin'};
 
   if(!document.querySelector('link[data-member-logo-patch-styles]')){
     const css=document.createElement('link');
@@ -29,12 +30,19 @@
     });
   }
 
+  function applyRoleOverride(card,number){
+    const role=ROLE_OVERRIDES[number];
+    if(!role)return;
+    const label=card?.querySelector('.mgr');
+    if(label)label.textContent=role;
+  }
+
   function patchCards(){
     document.querySelectorAll('#membersGrid .member-card').forEach(card=>{
       const existingShell=card.querySelector('.member-logo-shell');
       if(existingShell){
         const existingNumber=(existingShell.querySelector('.member-logo-fallback')?.textContent||'').trim().padStart(2,'0');
-        if(existingNumber)card.dataset.memberNumber=existingNumber;
+        if(existingNumber){card.dataset.memberNumber=existingNumber;applyRoleOverride(card,existingNumber)}
         return;
       }
 
@@ -45,6 +53,7 @@
       if(!head||!locker||!src)return;
 
       card.dataset.memberNumber=number;
+      applyRoleOverride(card,number);
       const shell=document.createElement('div');
       shell.className='member-logo-shell';
       shell.innerHTML=`<img class="member-logo" src="${src}" alt="Member ${number} team logo" loading="lazy"><span class="member-logo-fallback">${number}</span>`;
@@ -102,6 +111,14 @@
     img.src=src;
     img.alt=`${name} team logo`;
     fallback.textContent=number;
+
+    const roleOverride=ROLE_OVERRIDES[number];
+    const roleEl=document.getElementById('memberModalRole');
+    if(roleOverride&&roleEl){
+      const parts=roleEl.textContent.split(' • ');
+      parts[0]=roleOverride;
+      roleEl.textContent=parts.join(' • ');
+    }
 
     const cardTeam=card?.querySelector('.member-latest span')?.textContent?.trim();
     const latestTableTeam=document.querySelector('#seasonRows tr:first-child td:nth-child(3)')?.textContent?.trim();
