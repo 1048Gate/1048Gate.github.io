@@ -1,0 +1,7 @@
+project_id = "bnsylfokgrcmcfjeicfk"
+
+# New members are not authenticated yet when they redeem an invite, so this
+# function validates the one-time invite itself. Never put the service-role key
+# in browser code; Supabase provides it only inside the hosted Edge Function.
+[functions.register-league-member]
+verify_jwt = false

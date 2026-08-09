@@ -29,10 +29,11 @@ if (!document.querySelector('script[data-member-logo-patch]')) {
   document.head.appendChild(memberLogoPatch);
 }
 
-// Load the staff authentication layer automatically after the public config is ready.
+// Load authentication. This version includes invite-only league accounts while
+// preserving existing staff email logins.
 if (!document.querySelector('script[data-gate-auth]')) {
   const authScript = document.createElement('script');
-  authScript.src = 'js/auth.js';
+  authScript.src = 'js/auth.js?v=20260809a';
   authScript.dataset.gateAuth = 'true';
   document.head.appendChild(authScript);
 }
