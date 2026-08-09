@@ -2,7 +2,7 @@
 
 -- A normal authenticated member must not be able to edit the protected identity
 -- fields directly through the Data API. Staff and service-role operations remain
--- allowed (service-role requests do not run with auth.role() = 'authenticated').
+-- allowed; service-role requests do not have a normal member auth.uid().
 create or replace function public.protect_league_profile_identity()
 returns trigger
 language plpgsql
@@ -10,7 +10,7 @@ security definer
 set search_path = ''
 as $$
 begin
-  if (select auth.role()) = 'authenticated'
+  if (select auth.uid()) is not null
      and not public.is_league_staff()
      and (
        new.member_number is distinct from old.member_number
