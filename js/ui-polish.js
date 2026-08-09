@@ -32,7 +32,7 @@
     card.dataset.quickView='playoffs';
     card.tabIndex=0;
     card.innerHTML='<div class="num">06</div><h3>Playoffs</h3><p>Browse postseason brackets, champions, seeds, and consolation history.</p>';
-    const open=()=>window.switchView?.('playoffs');
+    const open=()=>{window.switchView?.('playoffs');requestAnimationFrame(polishTabs)};
     card.addEventListener('click',open);
     card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();open()}});
     grid.appendChild(card);
