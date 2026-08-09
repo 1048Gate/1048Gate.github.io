@@ -34,7 +34,7 @@
     const role=ROLE_OVERRIDES[number];
     if(!role)return;
     const label=card?.querySelector('.mgr');
-    if(label)label.textContent=role;
+    if(label&&label.textContent!==role)label.textContent=role;
   }
 
   function patchCards(){
@@ -116,8 +116,10 @@
     const roleEl=document.getElementById('memberModalRole');
     if(roleOverride&&roleEl){
       const parts=roleEl.textContent.split(' • ');
-      parts[0]=roleOverride;
-      roleEl.textContent=parts.join(' • ');
+      if(parts[0]!==roleOverride){
+        parts[0]=roleOverride;
+        roleEl.textContent=parts.join(' • ');
+      }
     }
 
     const cardTeam=card?.querySelector('.member-latest span')?.textContent?.trim();
