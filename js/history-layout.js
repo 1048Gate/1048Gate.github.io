@@ -41,5 +41,11 @@
     }catch(error){console.error('Unable to load matchup archive:',error);matchupHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Matchup archive could not be loaded.</div></div>'}
   }
   loadSeasonArchive();loadMatchups();
-  const observer=new MutationObserver(()=>{const shameTimeline=document.getElementById('shameTimeline');if(shameTimeline&&shameTimeline.parentElement!==shamePanel)shamePanel.appendChild(shameTimeline)});observer.observe(history,{childList:true,subtree:true});
+  let shameAttempts=0;
+  function placeShameTimeline(){
+    const shameTimeline=document.getElementById('shameTimeline');
+    if(shameTimeline){if(shameTimeline.parentElement!==shamePanel)shamePanel.appendChild(shameTimeline);return}
+    if(++shameAttempts<20)setTimeout(placeShameTimeline,100);
+  }
+  placeShameTimeline();
 })();
