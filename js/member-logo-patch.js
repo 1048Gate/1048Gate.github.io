@@ -17,37 +17,121 @@
   if(!document.querySelector('link[data-member-logo-patch-styles]')){
     const css=document.createElement('link');
     css.rel='stylesheet';
-    css.href='css/member-logos.css?v=20260809b';
+    css.href='css/member-logos.css?v=20260809c';
     css.dataset.memberLogoPatchStyles='true';
     document.head.appendChild(css);
   }
 
+  function bindImageFallback(shell,img){
+    img.addEventListener('error',()=>{
+      img.hidden=true;
+      shell.classList.add('logo-missing');
+    });
+  }
+
   function patchCards(){
     document.querySelectorAll('#membersGrid .member-card').forEach(card=>{
-      if(card.querySelector('.member-logo-shell'))return;
+      const existingShell=card.querySelector('.member-logo-shell');
+      if(existingShell){
+        const existingNumber=(existingShell.querySelector('.member-logo-fallback')?.textContent||'').trim().padStart(2,'0');
+        if(existingNumber)card.dataset.memberNumber=existingNumber;
+        return;
+      }
+
       const head=card.querySelector('.member-head');
       const locker=head?.querySelector('.locker-num');
       const number=(locker?.textContent||'').trim().padStart(2,'0');
       const src=LOGOS[number];
       if(!head||!locker||!src)return;
 
+      card.dataset.memberNumber=number;
       const shell=document.createElement('div');
       shell.className='member-logo-shell';
       shell.innerHTML=`<img class="member-logo" src="${src}" alt="Member ${number} team logo" loading="lazy"><span class="member-logo-fallback">${number}</span>`;
-      shell.querySelector('img').addEventListener('error',()=>{
-        shell.querySelector('img').hidden=true;
-        shell.classList.add('logo-missing');
-      });
+      const img=shell.querySelector('img');
+      bindImageFallback(shell,img);
 
       head.classList.add('member-head-with-logo');
       locker.replaceWith(shell);
     });
   }
 
+  function ensureModalProfile(){
+    const modalHead=document.querySelector('#memberModal .member-modal-head');
+    const name=document.getElementById('memberModalName');
+    const identity=name?.parentElement;
+    if(!modalHead||!identity)return null;
+
+    let profile=modalHead.querySelector('.member-modal-profile');
+    if(!profile){
+      profile=document.createElement('div');
+      profile.className='member-modal-profile';
+
+      const shell=document.createElement('div');
+      shell.className='member-modal-logo-shell';
+      shell.innerHTML='<img class="member-modal-logo" alt="" loading="eager"><span class="member-modal-logo-fallback"></span>';
+      bindImageFallback(shell,shell.querySelector('img'));
+
+      identity.classList.add('member-modal-identity');
+      const team=document.createElement('div');
+      team.className='member-modal-team';
+      team.id='memberModalTeam';
+      identity.appendChild(team);
+
+      profile.appendChild(shell);
+      profile.appendChild(identity);
+      modalHead.insertBefore(profile,modalHead.firstChild);
+    }
+
+    return profile;
+  }
+
+  function patchModal(number,card){
+    const src=LOGOS[number];
+    if(!src)return;
+    const profile=ensureModalProfile();
+    if(!profile)return;
+
+    const shell=profile.querySelector('.member-modal-logo-shell');
+    const img=profile.querySelector('.member-modal-logo');
+    const fallback=profile.querySelector('.member-modal-logo-fallback');
+    const name=document.getElementById('memberModalName')?.textContent?.trim()||`Member ${number}`;
+
+    shell.classList.remove('logo-missing');
+    img.hidden=false;
+    img.src=src;
+    img.alt=`${name} team logo`;
+    fallback.textContent=number;
+
+    const cardTeam=card?.querySelector('.member-latest span')?.textContent?.trim();
+    const latestTableTeam=document.querySelector('#seasonRows tr:first-child td:nth-child(3)')?.textContent?.trim();
+    const team=cardTeam||latestTableTeam||'';
+    const teamEl=document.getElementById('memberModalTeam');
+    if(teamEl){
+      teamEl.textContent=team;
+      teamEl.hidden=!team;
+    }
+  }
+
+  function scheduleModalPatch(card){
+    const number=card?.dataset.memberNumber;
+    if(!number)return;
+    [0,40,120].forEach(ms=>setTimeout(()=>patchModal(number,card),ms));
+  }
+
   patchCards();
   const grid=document.getElementById('membersGrid');
   if(grid){
     new MutationObserver(patchCards).observe(grid,{childList:true,subtree:true});
+    grid.addEventListener('click',event=>{
+      const card=event.target.closest('.member-card');
+      if(card)scheduleModalPatch(card);
+    });
+    grid.addEventListener('keydown',event=>{
+      if(event.key!=='Enter'&&event.key!==' ')return;
+      const card=event.target.closest('.member-card');
+      if(card)scheduleModalPatch(card);
+    });
   }
   [100,300,700,1500,3000].forEach(ms=>setTimeout(patchCards,ms));
 })();
