@@ -15,7 +15,7 @@ if (!document.querySelector('link[data-gate-polish]')) {
 }
 if (!document.querySelector('script[data-gate-polish]')) {
   const polishScript = document.createElement('script');
-  polishScript.src = 'js/ui-polish.js?v=20260809d';
+  polishScript.src = 'js/ui-polish.js?v=20260809e';
   polishScript.dataset.gatePolish = 'true';
   document.head.appendChild(polishScript);
 }
