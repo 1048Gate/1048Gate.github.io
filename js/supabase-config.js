@@ -1,8 +1,8 @@
 // Public browser configuration for the 1048 Gate Supabase project.
-// This file intentionally contains only the public/anon browser credential.
+// This file intentionally contains only the public/publishable browser credential.
 window.SUPABASE_CONFIG = {
   url: "https://bnsylfokgrcmcfjeicfk.supabase.co",
-  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXAiLCJyZWYiOiJibnN5bGZva2dyY21jZmplaWNmayIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzg2MTMxNzkzLCJleHAiOjIxMDE3MDc3OTN9.m11g-AkbqkT9HXFGS-ha2HTrYAvfGtkkxsCeExfxZvk"
+  anonKey: "sb_publishable_NCYuEoNM-nzOkOjgqMYqjA_3GhnfVuZ"
 };
 
 // Load the site-wide polish layer independently of Supabase/auth readiness.
