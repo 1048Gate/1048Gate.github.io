@@ -24,7 +24,7 @@ if (!document.querySelector('script[data-gate-polish]')) {
 // the current app.js renderer has already inserted the logo markup.
 if (!document.querySelector('script[data-member-logo-patch]')) {
   const memberLogoPatch = document.createElement('script');
-  memberLogoPatch.src = 'js/member-logo-patch.js?v=20260809d';
+  memberLogoPatch.src = 'js/member-logo-patch.js?v=20260809f';
   memberLogoPatch.dataset.memberLogoPatch = 'true';
   document.head.appendChild(memberLogoPatch);
 }
