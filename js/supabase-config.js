@@ -15,7 +15,7 @@ if (!document.querySelector('link[data-gate-polish]')) {
 }
 if (!document.querySelector('script[data-gate-polish]')) {
   const polishScript = document.createElement('script');
-  polishScript.src = 'js/ui-polish.js';
+  polishScript.src = 'js/ui-polish.js?v=20260809d';
   polishScript.dataset.gatePolish = 'true';
   document.head.appendChild(polishScript);
 }
@@ -24,7 +24,7 @@ if (!document.querySelector('script[data-gate-polish]')) {
 // the current app.js renderer has already inserted the logo markup.
 if (!document.querySelector('script[data-member-logo-patch]')) {
   const memberLogoPatch = document.createElement('script');
-  memberLogoPatch.src = 'js/member-logo-patch.js?v=20260809c';
+  memberLogoPatch.src = 'js/member-logo-patch.js?v=20260809d';
   memberLogoPatch.dataset.memberLogoPatch = 'true';
   document.head.appendChild(memberLogoPatch);
 }
