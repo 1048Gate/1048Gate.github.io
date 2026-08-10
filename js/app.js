@@ -153,6 +153,9 @@ function openMember(index) {
   const modal = document.getElementById('memberModal');
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
+  document.dispatchEvent(new CustomEvent('gate:member-profile-opened', {
+    detail: {name: member.name, number: member.number}
+  }));
   document.getElementById('memberModalClose')?.focus();
 }
 
