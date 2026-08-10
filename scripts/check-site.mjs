@@ -151,6 +151,9 @@ if(communitySource.includes('createClient') || communitySource.includes('supabas
 if(/mockPosts|mockPolls|Sample threads shown/.test(communitySource)){
   throw new Error('Community starter content must come from Supabase, not hard-coded browser fallbacks.');
 }
+if(communitySource.includes("starter||!poll.is_open") || communitySource.includes('Starter polls are examples and do not accept new votes.')){
+  throw new Error('Starter polls must remain voteable while they are open.');
+}
 if(!communitySource.includes('is_starter') || !html.includes('id="commissionerBoard"')){
   throw new Error('Supabase-backed starter content or the commissioner announcement mount is missing.');
 }
@@ -161,6 +164,9 @@ if(!authSource.includes('trapFocus(event') || !authSource.includes("setAttribute
 const starterSql = readFileSync(new URL('supabase/starter_content.sql', root), 'utf8');
 for(const table of ['announcements','board_posts','board_comments','polls','poll_options','poll_votes']){
   if(!starterSql.includes(`public.${table}`)) throw new Error(`starter_content.sql does not seed or secure ${table}.`);
+}
+if(starterSql.includes('polls.is_starter = false') || !starterSql.includes('set is_open = true')){
+  throw new Error('Starter poll setup must open existing examples and permit voting in them.');
 }
 
 const exportAll = readFileSync(new URL('scripts/export_all.py', root), 'utf8');

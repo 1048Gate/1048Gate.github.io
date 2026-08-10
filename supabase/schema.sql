@@ -76,7 +76,6 @@ create policy "anyone can vote" on public.poll_votes for insert with check (
     select 1 from public.polls
     where polls.id = poll_votes.poll_id
       and polls.is_open = true
-      and polls.is_starter = false
   )
 );
 
