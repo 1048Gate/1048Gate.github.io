@@ -6,7 +6,8 @@ Official website for the 1048 Gate fantasy football keeper league.
 
 - `index.html` — page structure and league content
 - `css/` — colors, layout, mobile design, member cards, history, playoffs, and staff tools
-- `js/app.js` — navigation, interactive sections, member data, and career calculations
+- `js/shared.js` — shared escaping, formatting, member normalization, and logo presentation
+- `js/app.js` — navigation plus the single member renderer and Supabase-to-JSON fallback
 - `js/` — explicitly ordered feature scripts; no runtime script-injection chain
 - `data/` — browser-ready league history exported from the SQLite archive
 - `images/1048-gate-logo.webp` — optimized league logo
@@ -14,7 +15,7 @@ Official website for the 1048 Gate fantasy football keeper league.
 
 ## Updating member data
 
-Member history is loaded from `data/members.json`. Regenerate the browser data from the SQLite archive with:
+Member history uses Supabase as its primary source and falls back to `data/members.json` whenever live data is unavailable. Regenerate that browser fallback from the SQLite archive with:
 
 ```bash
 python3 scripts/export_web_data.py

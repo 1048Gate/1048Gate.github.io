@@ -1,6 +1,6 @@
 (async function(){
   const supabase=window.gateSupabase||await window.gateSupabaseReady;if(!supabase)return;
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const {escapeHtml:esc}=window.gateShared;
   let currentProfile=null,selectedYear=null,seasons=[],matchups=[];
   const roundPresets={championship:[['quarterfinal','Round 1',1],['semifinal','Semifinal',2],['final','Championship',3]],consolation:[['consolation-1','Round 1',1],['consolation-2','Round 2',2],['consolation-3','Final Round',3]]};
   function toast(msg){let t=document.getElementById('playoffAdminToast');if(!t){t=document.createElement('div');t.id='playoffAdminToast';t.className='league-toast';document.body.appendChild(t)}t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}

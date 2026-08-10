@@ -1,6 +1,6 @@
 import {execFileSync} from 'node:child_process';
 import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
-import {join} from 'node:path';
+import {runInNewContext} from 'node:vm';
 
 const root = new URL('../', import.meta.url);
 const indexPath = new URL('index.html', root);
@@ -17,10 +17,34 @@ if(html.includes('EST. 2016')) throw new Error('The old 2016 founding year is st
 if(/[?&]v=20\d{6}/.test(html)) throw new Error('A manual date-based cache-busting query remains in index.html.');
 if(html.includes('member-logo-patch')) throw new Error('The retired member logo patch is still referenced.');
 
-const leagueContent = readFileSync(new URL('js/league-content.js', root), 'utf8');
-if(!leagueContent.includes('memberPresentation.logoFor') || !leagueContent.includes('member-head-with-logo')){
-  throw new Error('Supabase member cards must preserve the shared member-logo presentation.');
+const scriptAssets = [...html.matchAll(/<script defer src="([^"]+)"/g)].map(match => match[1]);
+const requiredScriptOrder = ['js/shared.js', 'js/supabase-config.js', 'js/auth.js', 'js/app.js'];
+for(let index = 0; index < requiredScriptOrder.length; index++){
+  if(scriptAssets[index] !== requiredScriptOrder[index]){
+    throw new Error(`Core script order must begin: ${requiredScriptOrder.join(', ')}`);
+  }
 }
+
+const leagueContent = readFileSync(new URL('js/league-content.js', root), 'utf8');
+if(leagueContent.includes("from('league_members')") || leagueContent.includes('membersGrid')){
+  throw new Error('league-content.js must not implement a second member data path or renderer.');
+}
+
+const sharedSource = readFileSync(new URL('js/shared.js', root), 'utf8');
+const sharedContext = {window:{}, document:{}};
+runInNewContext(sharedSource, sharedContext, {filename:'js/shared.js'});
+const shared = sharedContext.window.gateShared;
+if(!shared?.normalizeMember || !shared?.memberPresentation) throw new Error('shared.js did not publish the shared member utilities.');
+
+const memberPayload = JSON.parse(readFileSync(new URL('data/members.json', root), 'utf8'));
+const normalizedMembers = memberPayload.members.map(shared.normalizeMember);
+if(normalizedMembers.length !== 12) throw new Error(`Expected 12 normalized members, found ${normalizedMembers.length}.`);
+if(normalizedMembers.some(member => member.seasons.some(season => !('year' in season && 'team' in season && 'pointsFor' in season)))){
+  throw new Error('Compact JSON seasons were not normalized to named fields.');
+}
+if(normalizedMembers.find(member => member.number === '10')?.role !== 'Admin') throw new Error('Collin\'s Admin role override was lost.');
+const liveShape = shared.normalizeMember({member_number:'7', name:'Test', role_label:'League Member', member_seasons:[{season_year:2025, final_finish:2, team_name:'Test Team', record:'9-5', points_for:1700, points_against:1600}]});
+if(liveShape.number !== '07' || liveShape.seasons[0]?.team !== 'Test Team') throw new Error('Supabase member rows were not normalized correctly.');
 
 function webpDimensions(fileUrl){
   const data = readFileSync(fileUrl);
@@ -68,12 +92,12 @@ for(const logo of teamLogos){
   checkWebp(new URL(logo.name, teamLogoDir), {maxBytes: 75 * 1024, maxDimension: 256});
 }
 
-const appSource = readFileSync(new URL('js/app.js', root), 'utf8');
-for(const [, imagePath] of appSource.matchAll(/['"](images\/team-logos\/[^'"]+)['"]/g)){
-  if(!existsSync(new URL(imagePath, root))) throw new Error(`Missing member logo referenced by app.js: ${imagePath}`);
+for(const [, imagePath] of sharedSource.matchAll(/['"](images\/team-logos\/[^'"]+)['"]/g)){
+  if(!existsSync(new URL(imagePath, root))) throw new Error(`Missing member logo referenced by shared.js: ${imagePath}`);
 }
 
 const jsDir = new URL('js/', root);
+let supabaseClientCreations = 0;
 for(const entry of readdirSync(jsDir, {withFileTypes:true})){
   if(!entry.isFile() || !entry.name.endsWith('.js')) continue;
   const fileUrl = new URL(entry.name, jsDir);
@@ -81,7 +105,21 @@ for(const entry of readdirSync(jsDir, {withFileTypes:true})){
   if(/createElement\(['"](?:script|link)['"]\)/.test(source)){
     throw new Error(`${entry.name} still injects a script or stylesheet at runtime.`);
   }
+  supabaseClientCreations += [...source.matchAll(/\bcreateClient\s*\(/g)].length;
+  if(entry.name !== 'shared.js' && /const\s+esc\s*=.*replace\(/.test(source)){
+    throw new Error(`${entry.name} defines its own HTML escaping helper instead of using shared.js.`);
+  }
   execFileSync(process.execPath, ['--check', fileUrl.pathname], {stdio:'pipe'});
+}
+if(supabaseClientCreations !== 1) throw new Error(`Expected one shared Supabase client, found ${supabaseClientCreations}.`);
+
+const appSource = readFileSync(new URL('js/app.js', root), 'utf8');
+if(!appSource.includes("from('league_members')") || !appSource.includes("fetch('data/members.json'")){
+  throw new Error('app.js must use Supabase first and members.json as its fallback.');
+}
+const communitySource = readFileSync(new URL('js/community.js', root), 'utf8');
+if(communitySource.includes('createClient') || communitySource.includes('supabase-js@')){
+  throw new Error('community.js must reuse the shared Supabase client.');
 }
 
 const views = new Set([...html.matchAll(/<section[^>]+id="([^"]+)"/g)].map(match => match[1]));
@@ -90,4 +128,4 @@ for(const [, view] of html.matchAll(/<button[^>]+data-view="([^"]+)"/g)){
   if(!views.has(view)) throw new Error(`Navigation target does not exist: ${view}`);
 }
 
-console.log(`Site checks passed: ${localAssets.length} ordered CSS/JS assets, ${teamLogos.length + 1} optimized images, and ${views.size} public views.`);
+console.log(`Site checks passed: ${localAssets.length} ordered CSS/JS assets, ${normalizedMembers.length} normalized members, ${teamLogos.length + 1} optimized images, and ${views.size} public views.`);

@@ -1,6 +1,6 @@
 (async function(){
   const supabase=window.gateSupabase||await window.gateSupabaseReady;if(!supabase)return;
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const {escapeHtml:esc}=window.gateShared;
   let currentProfile=null;
 
   const tabs=document.getElementById('tabs');

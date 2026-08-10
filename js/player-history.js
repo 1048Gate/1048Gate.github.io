@@ -7,7 +7,7 @@
   if(recordBtn)subnav.insertBefore(btn,recordBtn);else subnav.appendChild(btn);
   const panel=document.createElement('section');panel.className='history-tab-panel';panel.dataset.historyPanel='players';panel.innerHTML='<div class="panel history-content-panel player-archive-panel"><div class="history-loading">Open Players to load the archive.</div></div>';
   const recordPanel=panels.querySelector('[data-history-panel="records"]');if(recordPanel)panels.insertBefore(panel,recordPanel);else panels.appendChild(panel);
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const {escapeHtml:esc}=window.gateShared;
   const num=v=>Number(v||0).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:2});
   const people={'kyle fowler':'Kyle Fowler','ronnie coiro':'Ronnie Coiro','german joshua haro':'German Haro','german haro':'German Haro','tommy speer':'Thomas Speer'};
   const person=v=>people[String(v??'').trim().toLowerCase()]||String(v??'');
