@@ -146,6 +146,12 @@ if(!authSource.includes('trapFocus(event') || !authSource.includes("setAttribute
   throw new Error('The staff login modal must manage focus and aria-hidden.');
 }
 
+const exportAll = readFileSync(new URL('scripts/export_all.py', root), 'utf8');
+for(const exporter of ['export_web_data.py', 'export_seasons.py', 'export_matchups.py', 'export_playoffs.py', 'export_drafts.py', 'export_players.py', 'export_streaks.py', 'export_manager_profiles.py']){
+  if(!exportAll.includes(`"${exporter}"`)) throw new Error(`export_all.py does not run ${exporter}.`);
+}
+execFileSync('python3', ['-c', 'from pathlib import Path; import sys; source=Path(sys.argv[1]).read_text(encoding="utf-8"); compile(source, sys.argv[1], "exec")', new URL('scripts/export_all.py', root).pathname], {stdio:'pipe'});
+
 const views = new Set([...html.matchAll(/<section[^>]+id="([^"]+)"/g)].map(match => match[1]));
 views.add('playoffs'); // Created synchronously by the explicit playoffs feature script.
 for(const [, view] of html.matchAll(/<button[^>]+data-view="([^"]+)"/g)){

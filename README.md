@@ -24,6 +24,8 @@ python3 scripts/export_web_data.py
 
 Career record, winning percentage, championships, average finish, best finish, and career points calculate automatically.
 
+To regenerate every website dataset in one pass, run `python3 scripts/export_all.py /path/to/1048_gate.db`. See `scripts/README.md` for individual exporters.
+
 ## Updating the current season
 
 Edit `data/site.json` when the league moves from preseason to the regular season or rolls into a new year. The header chip, browser title, season branding, and footer update from that one file.
