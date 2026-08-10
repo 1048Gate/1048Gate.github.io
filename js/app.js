@@ -28,18 +28,18 @@ document.querySelectorAll('.accordion-item').forEach(item =>
 );
 
 const MEMBER_LOGOS = Object.freeze({
-  '01': 'images/team-logos/01-george-travis.png',
-  '02': 'images/team-logos/02-jared-hall.png',
-  '03': 'images/team-logos/03-kyle-fowler.png',
-  '04': 'images/team-logos/04-bryan-hunt.png',
-  '05': 'images/team-logos/05-brian-heino.png',
-  '06': 'images/team-logos/06-vincent-cannarozzi.png',
-  '07': 'images/team-logos/07-james-brochu.png',
-  '08': 'images/team-logos/08-jd-daley.png',
-  '09': 'images/team-logos/09-thomas-speer.png',
-  '10': 'images/team-logos/10-collin-krum.png',
-  '11': 'images/team-logos/%2011-german-haro.png',
-  '12': 'images/team-logos/12-trevor-hash.png'
+  '01': 'images/team-logos/01-george-travis.webp',
+  '02': 'images/team-logos/02-jared-hall.webp',
+  '03': 'images/team-logos/03-kyle-fowler.webp',
+  '04': 'images/team-logos/04-bryan-hunt.webp',
+  '05': 'images/team-logos/05-brian-heino.webp',
+  '06': 'images/team-logos/06-vincent-cannarozzi.webp',
+  '07': 'images/team-logos/07-james-brochu.webp',
+  '08': 'images/team-logos/08-jd-daley.webp',
+  '09': 'images/team-logos/09-thomas-speer.webp',
+  '10': 'images/team-logos/10-collin-krum.webp',
+  '11': 'images/team-logos/11-german-haro.webp',
+  '12': 'images/team-logos/12-trevor-hash.webp'
 });
 
 const MEMBER_ROLE_OVERRIDES = Object.freeze({
