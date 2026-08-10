@@ -14,45 +14,54 @@
 
   const mockPosts=[
     {
-      id:'mock-1',author:'Collin',category:'General',title:'The new league site is officially alive',
-      body:'Records, manager profiles, playoffs, the board, and voting are all in one place now. Click around and let me know what needs fixed before the season starts.',
-      displayTime:'Just now',isMock:true,
+      id:'mock-1',author:'George',category:'General',title:'Szn 10 roll call — what weekend works best?',
+      body:'Drop your best weekend below so we can narrow down the draft date before the official vote goes live.',
+      displayTime:'18 min ago',isMock:true,
       board_comments:[
-        {author:'George',body:'Looks good. Now somebody make a poll that Jared is guaranteed to complain about.',displayTime:'2 min later'},
-        {author:'Jared',body:'I object to this comment before the poll even exists.',displayTime:'Immediately'}
+        {author:'German',body:'Saturday night works best for me. I can make Sunday work if we draft a little earlier.',displayTime:'11 min ago'},
+        {author:'Bryan',body:'I am good either day as long as we lock it in soon.',displayTime:'6 min ago'}
       ]
     },
     {
-      id:'mock-2',author:'Jared',category:'Trade Talk',title:'The 1.01 is available — serious offers only',
-      body:'I am listening on the first pick. Do not send me three bench players and call it a blockbuster.',
-      displayTime:'12 min ago',isMock:true,
-      board_comments:[{author:'Tommy',body:'Best I can do is a kicker and future considerations.',displayTime:'8 min ago'}]
+      id:'mock-2',author:'Jared',category:'Trade Talk',title:'Putting an early pick on the trade block',
+      body:'Open to moving my second-round pick for the right keeper upgrade. Send an actual offer—not a screenshot of your bench.',
+      displayTime:'1 hr ago',isMock:true,
+      board_comments:[
+        {author:'JD',body:'Define “actual offer” because your counteroffers usually require legal review.',displayTime:'46 min ago'},
+        {author:'Jared',body:'That sounds like somebody who cannot afford the pick.',displayTime:'39 min ago'}
+      ]
     },
     {
-      id:'mock-3',author:'Tommy',category:'Trash Talk',title:'Friendly reminder: the trophy lives with me',
-      body:'Enjoy the offseason rankings. They are the last standings where the rest of you have a chance.',
+      id:'mock-3',author:'Kyle',category:'Waiver Wire',title:'We need a real FAAB debate before draft night',
+      body:'Inverse standings is simple, but FAAB makes every waiver claim a decision. I want to hear the case against switching.',
       displayTime:'Yesterday',isMock:true,
-      board_comments:[{author:'George',body:'Saving this one for December.',displayTime:'Yesterday'}]
+      board_comments:[
+        {author:'Brian',body:'FAAB is better until I spend 70% on a Week 2 running back who disappears by Sunday.',displayTime:'Yesterday'},
+        {author:'Trevor',body:'That is not a flaw in FAAB. That is a scouting report on you.',displayTime:'Yesterday'}
+      ]
     },
     {
-      id:'mock-4',author:'Kyle',category:'Waiver Wire',title:'FAAB would expose half this league',
-      body:'Rolling waivers reward patience. FAAB rewards courage. I think we all know which system is better.',
-      displayTime:'2 days ago',isMock:true,board_comments:[]
+      id:'mock-4',author:'Tommy',category:'Trash Talk',title:'Preseason power rankings are already disrespectful',
+      body:'I have seen enough. Put me first, put everybody else in any order you want, and save us all some time.',
+      displayTime:'2 days ago',isMock:true,
+      board_comments:[
+        {author:'George',body:'Power rankings have been delayed while we search for evidence supporting this claim.',displayTime:'2 days ago'}
+      ]
     }
   ];
 
   const mockPolls=[
     {
-      id:'mock-poll-1',question:'When should we hold the Szn 10 draft?',status:'preview',featured:true,total:12,
-      options:[['Saturday night',7],['Sunday afternoon',3],['Labor Day weekend',2]],foot:'Sample poll · all 12 managers'
+      id:'mock-poll-1',question:'Which night should host the Szn 10 draft?',status:'preview',featured:true,total:12,
+      options:[['Saturday at 7:00 PM',6],['Sunday at 6:00 PM',4],['Friday at 8:00 PM',2]],foot:'Sample poll · full league turnout'
     },
     {
-      id:'mock-poll-2',question:'What should the last-place punishment be?',status:'preview',total:10,
-      options:[['Hot-wing challenge',5],['Embarrassing calendar shoot',3],['Public combine workout',2]],foot:'Sample poll · 2 votes remaining'
+      id:'mock-poll-2',question:'Should 1048 Gate switch to FAAB waivers?',status:'preview',total:11,
+      options:[['Yes — $100 seasonal budget',7],['No — keep inverse standings',4]],foot:'Sample poll · 1 vote remaining'
     },
     {
-      id:'mock-poll-3',question:'Keep the league at one keeper?',status:'closed',total:12,
-      options:[['Yes — keep it at one',8],['No — move to two',4]],foot:'Sample result · closed'
+      id:'mock-poll-3',question:'Choose the Szn 10 last-place punishment',status:'closed',total:12,
+      options:[['NFL combine at the park',5],['Calendar photo shoot',4],['Open-mic comedy set',3]],foot:'Sample result · voting closed'
     }
   ];
 
