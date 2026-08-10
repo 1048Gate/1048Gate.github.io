@@ -8,6 +8,32 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/polish.css">
+<link rel="stylesheet" href="css/member-logos.css">
+<link rel="stylesheet" href="css/manager-profiles.css">
+<link rel="stylesheet" href="css/history.css">
+<link rel="stylesheet" href="css/drafts.css">
+<link rel="stylesheet" href="css/players.css">
+<link rel="stylesheet" href="css/playoffs.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/playoffs-admin.css">
+<link rel="stylesheet" href="css/polish-final.css">
+
+<script defer src="js/app.js"></script>
+<script defer src="js/supabase-config.js"></script>
+<script defer src="js/auth.js"></script>
+<script defer src="js/community.js"></script>
+<script defer src="js/manager-profiles.js"></script>
+<script defer src="js/league-content.js"></script>
+<script defer src="js/history-layout.js"></script>
+<script defer src="js/draft-history.js"></script>
+<script defer src="js/player-history.js"></script>
+<script defer src="js/game-records-layout.js"></script>
+<script defer src="js/playoffs.js"></script>
+<script defer src="js/admin.js"></script>
+<script defer src="js/league-admin.js"></script>
+<script defer src="js/playoffs-admin.js"></script>
+<script defer src="js/ui-polish.js"></script>
 </head>
 <body>
 
@@ -17,7 +43,7 @@
       <img class="brand-logo" src="images/1048-gate-logo.webp" alt="1048 Gate Szn X logo">
       <div class="brand-text">
         <div class="name">1048 GATE SZN X</div>
-        <div class="tag">EST. 2016 &nbsp;•&nbsp; 12-TEAM KEEPER LEAGUE</div>
+        <div class="tag">EST. 2017 &nbsp;•&nbsp; 12-TEAM KEEPER LEAGUE</div>
       </div>
     </div>
     <div class="week-chip">
@@ -26,12 +52,13 @@
     </div>
   </div>
   <nav class="tabs" id="tabs">
-    <button data-view="home" class="active">Home</button>
-    <button data-view="board">Message Board</button>
-    <button data-view="votes">Vote Booth</button>
-    <button data-view="history">League History</button>
-    <button data-view="rules">Rules</button>
+    <button data-view="home" class="active" aria-current="page">Home</button>
+    <button data-view="history">History</button>
+    <button data-view="playoffs">Playoffs</button>
     <button data-view="members">Members</button>
+    <button data-view="board">Board</button>
+    <button data-view="votes">Votes</button>
+    <button data-view="rules">Rules</button>
   </nav>
 </div>
 
@@ -39,7 +66,7 @@
   <section class="view active" id="home">
     <div class="hero">
       <div class="hero-copy">
-        <span class="eyebrow">EST. 2016 • 12-TEAM KEEPER LEAGUE</span>
+        <span class="eyebrow">EST. 2017 • 12-TEAM KEEPER LEAGUE</span>
         <h1>1048 GATE<br><span>SZN X</span></h1>
         <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
         <p>The official headquarters for league news, message boards, voting, records, champions, and everything 1048.</p>
@@ -61,6 +88,7 @@
       <div class="quick-card" onclick="switchView('history')"><div class="num">03</div><h3>League History</h3><p>Champions, records, and the Wall of Shame.</p></div>
       <div class="quick-card" onclick="switchView('rules')"><div class="num">04</div><h3>Rules</h3><p>Scoring settings, roster rules, waivers, trades, playoffs, and payouts.</p></div>
       <div class="quick-card" onclick="switchView('members')"><div class="num">05</div><h3>Members</h3><p>View every league member, career record, championships, and season history.</p></div>
+      <div class="quick-card" data-quick-view="playoffs" role="button" tabindex="0" onclick="switchView('playoffs')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();switchView('playoffs')}"><div class="num">06</div><h3>Playoffs</h3><p>Browse postseason brackets, champions, seeds, and consolation history.</p></div>
     </div>
   </section>
 
@@ -107,13 +135,26 @@
 
   <section class="view" id="members">
     <div class="section-title"><h2>Members</h2></div>
-    <div class="member-help"><strong>Easy updates:</strong> member cards are generated from the <span class="mono">leagueMembers</span> list in <span class="mono">js/app.js</span>. Add each season as one short row: <span class="mono">[year, finish, team name, record, points for, points against]</span>. All career totals calculate automatically.</div>
+    <div class="member-help"><strong>League database:</strong> member history is loaded from <span class="mono">data/members.json</span>, generated from the SQLite archive by <span class="mono">scripts/export_web_data.py</span>.</div>
     <div class="members-grid" id="membersGrid"></div>
   </section>
 
   <div class="member-modal" id="memberModal" aria-hidden="true">
     <div class="member-modal-card" role="dialog" aria-modal="true" aria-labelledby="memberModalName">
-      <div class="member-modal-head"><div><h2 id="memberModalName"></h2><div class="member-modal-sub" id="memberModalRole"></div></div><button class="modal-close" id="memberModalClose" aria-label="Close">×</button></div>
+      <div class="member-modal-head">
+        <div class="member-modal-profile">
+          <div class="member-modal-logo-shell">
+            <img class="member-modal-logo" id="memberModalLogo" alt="" loading="eager">
+            <span class="member-modal-logo-fallback" id="memberModalLogoFallback"></span>
+          </div>
+          <div class="member-modal-identity">
+            <h2 id="memberModalName"></h2>
+            <div class="member-modal-sub" id="memberModalRole"></div>
+            <div class="member-modal-team" id="memberModalTeam"></div>
+          </div>
+        </div>
+        <button class="modal-close" id="memberModalClose" aria-label="Close">×</button>
+      </div>
       <div class="career-summary" id="careerSummary"></div>
       <div class="season-table-wrap"><table class="season-table"><thead><tr><th>Year</th><th>Finish</th><th>Team</th><th>Record</th><th>PF</th><th>PA</th><th>Diff</th></tr></thead><tbody id="seasonRows"></tbody></table></div>
     </div>
@@ -121,8 +162,5 @@
 </main>
 
 <footer>1048 Gate Szn 10</footer>
-<script src="js/app.js"></script>
-<script src="js/supabase-config.js"></script>
-<script src="js/community.js"></script>
 </body>
 </html>

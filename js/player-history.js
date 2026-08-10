@@ -1,7 +1,6 @@
 (function(){
   const shell=document.querySelector('#history .history-shell');
   if(!shell||shell.querySelector('[data-history-tab="players"]'))return;
-  if(!document.querySelector('link[href="css/players.css"]')){const css=document.createElement('link');css.rel='stylesheet';css.href='css/players.css';document.head.appendChild(css)}
   const subnav=shell.querySelector('.history-subnav'),panels=shell.querySelector('.history-tab-panels'),recordBtn=subnav?.querySelector('[data-history-tab="records"]');
   if(!subnav||!panels)return;
   const btn=document.createElement('button');btn.type='button';btn.dataset.historyTab='players';btn.textContent='🏈 Players';

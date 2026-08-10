@@ -1,6 +1,5 @@
-(function(){
-  const supabase=window.gateSupabase;if(!supabase)return;
-  if(!document.querySelector('link[href="css/playoffs-admin.css"]')){const css=document.createElement('link');css.rel='stylesheet';css.href='css/playoffs-admin.css';document.head.appendChild(css)}
+(async function(){
+  const supabase=window.gateSupabase||await window.gateSupabaseReady;if(!supabase)return;
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let currentProfile=null,selectedYear=null,seasons=[],matchups=[];
   const roundPresets={championship:[['quarterfinal','Round 1',1],['semifinal','Semifinal',2],['final','Championship',3]],consolation:[['consolation-1','Round 1',1],['consolation-2','Round 2',2],['consolation-3','Final Round',3]]};

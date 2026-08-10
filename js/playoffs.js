@@ -1,8 +1,4 @@
 (function(){
-  if(!document.querySelector('link[href="css/playoffs.css"]')){
-    const css=document.createElement('link');css.rel='stylesheet';css.href='css/playoffs.css';document.head.appendChild(css);
-  }
-
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const score=v=>v===null||v===undefined||v===''?'—':Number(v).toLocaleString(undefined,{maximumFractionDigits:2});
 
@@ -21,12 +17,10 @@
     section.innerHTML=`<div class="section-title"><h2>Playoffs</h2><span class="see-all">Winners & consolation bracket history</span></div><div class="playoff-toolbar panel"><div><label for="playoffYear">Season</label><select id="playoffYear"></select></div><div class="playoff-season-status" id="playoffSeasonStatus"></div></div><div id="playoffPublicContent"><div class="panel community-empty">Playoff history is being loaded…</div></div>`;
     document.querySelector('main')?.appendChild(section);
   }
-  btn.addEventListener('click',()=>window.switchView?.('playoffs'));
-
   const select=document.getElementById('playoffYear');
   const host=document.getElementById('playoffPublicContent');
   const status=document.getElementById('playoffSeasonStatus');
-  const supabase=window.gateSupabase||null;
+  let supabase=window.gateSupabase||null;
   let archive=[];
   let liveSeasons=[];
 
@@ -122,4 +116,9 @@
   select.addEventListener('change',e=>loadChoice(e.target.value));
   window.refreshPlayoffs=()=>loadSources(select?.value);
   loadSources();
+  window.gateSupabaseReady?.then(client=>{
+    if(!client||supabase===client)return;
+    supabase=client;
+    loadSources(select?.value);
+  });
 })();

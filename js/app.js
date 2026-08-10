@@ -1,14 +1,22 @@
-const tabButtons = document.querySelectorAll('#tabs button');
-
 function switchView(name) {
+  const target = document.getElementById(name);
+  if (!target) return;
+
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(name)?.classList.add('active');
-  tabButtons.forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  target.classList.add('active');
+  document.querySelectorAll('#tabs button[data-view]').forEach(button => {
+    const active = button.dataset.view === name;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-current', active ? 'page' : 'false');
+  });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.switchView = switchView;
-tabButtons.forEach(btn => btn.addEventListener('click', () => switchView(btn.dataset.view)));
+document.getElementById('tabs')?.addEventListener('click', event => {
+  const button = event.target.closest('button[data-view]');
+  if (button) switchView(button.dataset.view);
+});
 
 document.querySelectorAll('.filter-pills .pill').forEach(p => p.addEventListener('click', () => {
   document.querySelectorAll('.filter-pills .pill').forEach(x => x.classList.remove('active'));
@@ -18,14 +26,6 @@ document.querySelectorAll('.filter-pills .pill').forEach(p => p.addEventListener
 document.querySelectorAll('.accordion-item').forEach(item =>
   item.querySelector('.accordion-head')?.addEventListener('click', () => item.classList.toggle('open'))
 );
-
-if (!document.querySelector('link[data-member-logo-styles]')) {
-  const memberLogoStyles = document.createElement('link');
-  memberLogoStyles.rel = 'stylesheet';
-  memberLogoStyles.href = 'css/member-logos.css';
-  memberLogoStyles.dataset.memberLogoStyles = 'true';
-  document.head.appendChild(memberLogoStyles);
-}
 
 const MEMBER_LOGOS = Object.freeze({
   '01': 'images/team-logos/01-george-travis.png',
@@ -41,6 +41,12 @@ const MEMBER_LOGOS = Object.freeze({
   '11': 'images/team-logos/%2011-german-haro.png',
   '12': 'images/team-logos/12-trevor-hash.png'
 });
+
+const MEMBER_ROLE_OVERRIDES = Object.freeze({
+  '10': 'Admin'
+});
+
+const memberRole = member => MEMBER_ROLE_OVERRIDES[member.number] || member.role;
 
 let leagueMembers = [];
 
@@ -119,7 +125,7 @@ function renderMembers() {
     const logo = MEMBER_LOGOS[member.number] || '';
     const badge = stats.titles ? `${stats.titles}× Champ` : `#${esc(member.number)}`;
 
-    return `<article class="member-card public-member-card" data-i="${index}" tabindex="0" aria-label="View ${esc(member.name)} career history">
+    return `<article class="member-card public-member-card" data-i="${index}" data-member-number="${esc(member.number)}" tabindex="0" aria-label="View ${esc(member.name)} career history">
       <div class="member-head member-head-with-logo">
         <div class="member-logo-shell">
           ${logo ? `<img class="member-logo" src="${logo}" alt="${esc(member.name)} team logo" loading="lazy">` : ''}
@@ -127,7 +133,7 @@ function renderMembers() {
         </div>
         <div class="member-identity">
           <div class="team">${esc(member.name)}</div>
-          <div class="mgr">${esc(member.role)}</div>
+          <div class="mgr">${esc(memberRole(member))}</div>
         </div>
         <span class="member-title-badge">${badge}</span>
       </div>
@@ -166,8 +172,27 @@ function openMember(index) {
   if (!member) return;
 
   const stats = totals(member);
+  const latest = latestSeason(member);
   document.getElementById('memberModalName').textContent = member.name;
-  document.getElementById('memberModalRole').textContent = `${member.role} • ${member.seasons.length} seasons recorded`;
+  document.getElementById('memberModalRole').textContent = `${memberRole(member)} • ${member.seasons.length} seasons recorded`;
+
+  const logoShell = document.querySelector('#memberModal .member-modal-logo-shell');
+  const logo = document.getElementById('memberModalLogo');
+  const fallback = document.getElementById('memberModalLogoFallback');
+  const logoSrc = MEMBER_LOGOS[member.number] || '';
+  if (fallback) fallback.textContent = member.number;
+  if (logoShell) logoShell.classList.toggle('logo-missing', !logoSrc);
+  if (logo) {
+    logo.hidden = !logoSrc;
+    logo.src = logoSrc;
+    logo.alt = logoSrc ? `${member.name} team logo` : '';
+  }
+
+  const modalTeam = document.getElementById('memberModalTeam');
+  if (modalTeam) {
+    modalTeam.textContent = latest?.[2] || '';
+    modalTeam.hidden = !latest;
+  }
 
   const boxes = [
     ['Career Record', recordText(stats.wins, stats.losses, stats.ties)],
@@ -197,11 +222,15 @@ function openMember(index) {
       }).join('')
     : '<tr><td colspan="7" class="member-empty">No season data has been entered yet.</td></tr>';
 
-  document.getElementById('memberModal').classList.add('open');
+  const modal = document.getElementById('memberModal');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
 }
 
 function closeMember() {
-  document.getElementById('memberModal')?.classList.remove('open');
+  const modal = document.getElementById('memberModal');
+  modal?.classList.remove('open');
+  modal?.setAttribute('aria-hidden', 'true');
 }
 
 async function loadMembers() {
@@ -217,11 +246,6 @@ async function loadMembers() {
 
     leagueMembers = payload.members;
 
-    const help = document.querySelector('.member-help');
-    if (help) {
-      help.innerHTML = '<strong>League database:</strong> member history is loaded from <span class="mono">data/members.json</span>, generated from the SQLite archive by <span class="mono">scripts/export_web_data.py</span>.';
-    }
-
     renderMembers();
   } catch (error) {
     console.error('Unable to load member history:', error);
@@ -232,6 +256,10 @@ async function loadMembers() {
 }
 
 document.getElementById('memberModalClose')?.addEventListener('click', closeMember);
+document.getElementById('memberModalLogo')?.addEventListener('error', event => {
+  event.currentTarget.hidden = true;
+  event.currentTarget.closest('.member-modal-logo-shell')?.classList.add('logo-missing');
+});
 document.getElementById('memberModal')?.addEventListener('click', event => {
   if (event.target.id === 'memberModal') closeMember();
 });

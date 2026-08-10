@@ -1,5 +1,5 @@
-(function(){
-  const supabase=window.gateSupabase;if(!supabase)return;
+(async function(){
+  const supabase=window.gateSupabase||await window.gateSupabaseReady;if(!supabase)return;
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let currentProfile=null;
 
