@@ -137,6 +137,13 @@ if(!appSource.includes("from('league_members')") || !appSource.includes("fetch('
 if(!appSource.includes('trapFocus(event') || !appSource.includes('memberReturnFocus')){
   throw new Error('The member modal must trap focus and restore it when closed.');
 }
+const managerProfilesSource = readFileSync(new URL('js/manager-profiles.js', root), 'utf8');
+if(!appSource.includes("'gate:member-profile-opened'") || !managerProfilesSource.includes("addEventListener('gate:member-profile-opened'")){
+  throw new Error('The complete manager résumé must follow the shared member-profile-opened event.');
+}
+if(managerProfilesSource.includes('[data-i]')){
+  throw new Error('manager-profiles.js still depends on the retired member-card data-i attribute.');
+}
 const communitySource = readFileSync(new URL('js/community.js', root), 'utf8');
 if(communitySource.includes('createClient') || communitySource.includes('supabase-js@')){
   throw new Error('community.js must reuse the shared Supabase client.');
