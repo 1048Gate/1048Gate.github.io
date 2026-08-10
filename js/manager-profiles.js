@@ -36,7 +36,8 @@
         <section class="manager-profile-section manager-profile-two"><div><div class="manager-profile-head"><div><span>DRAFT DNA</span><h3>Recent First-Round Picks</h3></div><small>${draft.totalPicks||0} picks · ${draft.keepers||0} keepers</small></div><div class="manager-draft-grid">${firstRound}</div></div><div><div class="manager-profile-head"><div><span>TOP FANTASY WEAPONS</span><h3>Starter Points While Rostered</h3></div><small>2019–2025</small></div><div class="manager-weapons-wrap"><table class="manager-weapons"><thead><tr><th></th><th>Player</th><th>Pts</th><th>Starts</th></tr></thead><tbody>${weaponRows}</tbody></table></div></div></section>`;
     }catch(error){console.error('Unable to load manager profile:',error);node.innerHTML='<div class="manager-profile-loading">Full manager résumé could not be loaded.</div>'}
   }
-  function queueFromCard(target){const card=target?.closest?.('.member-card[data-i]');if(!card)return;setTimeout(()=>render(document.getElementById('memberModalName')?.textContent||''),0)}
-  document.addEventListener('click',e=>queueFromCard(e.target));
-  document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('.member-card[data-i]'))queueFromCard(e.target)});
+  document.addEventListener('gate:member-profile-opened',event=>{
+    const name=event.detail?.name||document.getElementById('memberModalName')?.textContent||'';
+    render(name);
+  });
 })();
