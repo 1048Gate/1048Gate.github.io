@@ -5,7 +5,7 @@ import {runInNewContext} from 'node:vm';
 const root = new URL('../', import.meta.url);
 const indexPath = new URL('index.html', root);
 const html = readFileSync(indexPath, 'utf8');
-const localAssets = [...html.matchAll(/(?:href|src)="((?:css|js)\/[^"?]+\.(?:css|js))"/g)].map(match => match[1]);
+const localAssets = [...html.matchAll(/(?:href|src)="((?:css|js)\/[^"?]+\.(?:css|js))(?:\?[^"#]*)?"/g)].map(match => match[1]);
 const duplicateAssets = localAssets.filter((asset, index) => localAssets.indexOf(asset) !== index);
 
 if(duplicateAssets.length) throw new Error(`Duplicate assets in index.html: ${[...new Set(duplicateAssets)].join(', ')}`);
@@ -17,7 +17,7 @@ if(html.includes('EST. 2016')) throw new Error('The old 2016 founding year is st
 if(/[?&]v=20\d{6}/.test(html)) throw new Error('A manual date-based cache-busting query remains in index.html.');
 if(html.includes('member-logo-patch')) throw new Error('The retired member logo patch is still referenced.');
 
-const scriptAssets = [...html.matchAll(/<script defer src="([^"]+)"/g)].map(match => match[1]);
+const scriptAssets = [...html.matchAll(/<script defer src="((?:js)\/[^"?]+\.js)(?:\?[^"#]*)?"/g)].map(match => match[1]);
 const requiredScriptOrder = ['js/shared.js', 'js/site-ui.js', 'js/supabase-config.js', 'js/auth.js', 'js/app.js'];
 for(let index = 0; index < requiredScriptOrder.length; index++){
   if(scriptAssets[index] !== requiredScriptOrder[index]){
@@ -148,9 +148,19 @@ const communitySource = readFileSync(new URL('js/community.js', root), 'utf8');
 if(communitySource.includes('createClient') || communitySource.includes('supabase-js@')){
   throw new Error('community.js must reuse the shared Supabase client.');
 }
+if(/mockPosts|mockPolls|Sample threads shown/.test(communitySource)){
+  throw new Error('Community starter content must come from Supabase, not hard-coded browser fallbacks.');
+}
+if(!communitySource.includes('is_starter') || !html.includes('id="commissionerBoard"')){
+  throw new Error('Supabase-backed starter content or the commissioner announcement mount is missing.');
+}
 const authSource = readFileSync(new URL('js/auth.js', root), 'utf8');
 if(!authSource.includes('trapFocus(event') || !authSource.includes("setAttribute('aria-hidden'")){
   throw new Error('The staff login modal must manage focus and aria-hidden.');
+}
+const starterSql = readFileSync(new URL('supabase/starter_content.sql', root), 'utf8');
+for(const table of ['announcements','board_posts','board_comments','polls','poll_options','poll_votes']){
+  if(!starterSql.includes(`public.${table}`)) throw new Error(`starter_content.sql does not seed or secure ${table}.`);
 }
 
 const exportAll = readFileSync(new URL('scripts/export_all.py', root), 'utf8');
