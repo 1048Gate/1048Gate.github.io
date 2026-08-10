@@ -19,9 +19,10 @@
 <link rel="stylesheet" href="css/playoffs-admin.css">
 <link rel="stylesheet" href="css/polish-final.css">
 
-<script defer src="js/app.js"></script>
+<script defer src="js/shared.js"></script>
 <script defer src="js/supabase-config.js"></script>
 <script defer src="js/auth.js"></script>
+<script defer src="js/app.js"></script>
 <script defer src="js/community.js"></script>
 <script defer src="js/manager-profiles.js"></script>
 <script defer src="js/league-content.js"></script>
@@ -135,7 +136,7 @@
 
   <section class="view" id="members">
     <div class="section-title"><h2>Members</h2></div>
-    <div class="member-help"><strong>League database:</strong> member history is loaded from <span class="mono">data/members.json</span>, generated from the SQLite archive by <span class="mono">scripts/export_web_data.py</span>.</div>
+    <div class="member-help"><strong>League database:</strong> member history uses Supabase first, with <span class="mono">data/members.json</span> as a safe fallback. <span id="memberDataSource" class="mono">Loading…</span></div>
     <div class="members-grid" id="membersGrid"></div>
   </section>
 

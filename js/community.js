@@ -6,17 +6,14 @@
   const votesSection=document.getElementById('votes');
   if(!boardSection||!votesSection)return;
 
-  const config=window.SUPABASE_CONFIG||{};
-  if(!config.url||!config.anonKey){
+  const supabase=window.gateSupabase||await window.gateSupabaseReady;
+  if(!supabase){
     boardSection.insertAdjacentHTML('beforeend','<div class="panel community-note"><strong>Message board setup pending.</strong> Add your Supabase project URL and anon key to <span class="mono">js/supabase-config.js</span>.</div>');
     votesSection.insertAdjacentHTML('beforeend','<div class="panel community-note"><strong>Voting setup pending.</strong> Add your Supabase project URL and anon key to <span class="mono">js/supabase-config.js</span>.</div>');
     return;
   }
 
-  const {createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
-  const supabase=createClient(config.url,config.anonKey);
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const relativeTime=iso=>{const s=Math.max(1,Math.floor((Date.now()-new Date(iso))/1000));if(s<60)return `${s}s ago`;const m=Math.floor(s/60);if(m<60)return `${m}m ago`;const h=Math.floor(m/60);if(h<24)return `${h}h ago`;const d=Math.floor(h/24);return `${d}d ago`};
+  const {escapeHtml:esc,relativeTime}=window.gateShared;
   const voterKey='1048GateVoterId';
   let voterId=localStorage.getItem(voterKey);if(!voterId){voterId=crypto.randomUUID();localStorage.setItem(voterKey,voterId)}
 

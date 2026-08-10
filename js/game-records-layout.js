@@ -5,7 +5,7 @@
   const recordPanel=shell.querySelector('[data-history-panel="records"]');
   if(!recordPanel)return;
 
-  const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const {escapeHtml:esc}=window.gateShared;
   let attempts=0;
   const maxAttempts=40;
 

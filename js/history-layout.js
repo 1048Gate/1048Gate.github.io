@@ -13,8 +13,8 @@
   cleanHeading(championsPanel,'CHAMPIONSHIP ARCHIVE','Champions Through the Years');cleanHeading(recordsPanel,'LEAGUE RECORD BOOK','Records & Milestones');cleanHeading(shamePanel,'HALL OF MISFORTUNE','Wall of Shame');
   function activate(name){shell.querySelectorAll('[data-history-tab]').forEach(b=>b.classList.toggle('active',b.dataset.historyTab===name));shell.querySelectorAll('[data-history-panel]').forEach(p=>p.classList.toggle('active',p.dataset.historyPanel===name))}
   shell.querySelectorAll('[data-history-tab]').forEach(btn=>btn.addEventListener('click',()=>activate(btn.dataset.historyTab)));
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const num=v=>Number.isFinite(Number(v))?Number(v).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:2}):'—';
+  const {escapeHtml:esc,formatNumber}=window.gateShared;
+  const num=value=>formatNumber(value,1,2);
   const recordText=a=>a&&a[2]?`${a[0]}-${a[1]}-${a[2]}`:a?`${a[0]}-${a[1]}`:'—';
   async function loadSeasonArchive(){
     seasonHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Loading season archive…</div></div>';

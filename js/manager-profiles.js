@@ -1,6 +1,6 @@
 (function(){
   let profilePromise=null;
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const {escapeHtml:esc}=window.gateShared;
   const num=v=>Number(v||0).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:2});
   const rec=(w,l,t)=>t?`${w}-${l}-${t}`:`${w}-${l}`;
   function host(){

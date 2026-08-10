@@ -1,5 +1,5 @@
 (function(){
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const {escapeHtml:esc}=window.gateShared;
   const score=v=>v===null||v===undefined||v===''?'—':Number(v).toLocaleString(undefined,{maximumFractionDigits:2});
 
   const tabs=document.getElementById('tabs');

@@ -7,7 +7,7 @@
   const panel=document.createElement('section');panel.className='history-tab-panel';panel.dataset.historyPanel='drafts';panel.innerHTML='<div class="panel history-content-panel draft-archive-panel"><div class="history-loading">Loading draft archive…</div></div>';
   const recordPanel=panels.querySelector('[data-history-panel="records"]');if(recordPanel)panels.insertBefore(panel,recordPanel);else panels.appendChild(panel);
   btn.addEventListener('click',()=>{shell.querySelectorAll('[data-history-tab]').forEach(x=>x.classList.toggle('active',x===btn));shell.querySelectorAll('[data-history-panel]').forEach(x=>x.classList.toggle('active',x===panel))});
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const {escapeHtml:esc}=window.gateShared;
   const aliases={'kyle fowler':'Kyle Fowler','ronnie coiro':'Ronnie Coiro','brian james':'Brian James','thomas connelly':'Thomas Connelly'};
   const displayOwner=v=>aliases[String(v||'').toLowerCase()]||v||'Unknown';
   const cache=new Map();
