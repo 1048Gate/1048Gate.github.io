@@ -9,6 +9,7 @@ create table if not exists public.board_posts (
   category text not null default 'General' check (category in ('Trash Talk','Trade Talk','Waiver Wire','General')),
   title text not null check (char_length(title) between 1 and 120),
   body text not null check (char_length(body) between 1 and 2000),
+  is_starter boolean not null default false,
   created_at timestamptz not null default now()
 );
 
@@ -24,6 +25,7 @@ create table if not exists public.polls (
   id uuid primary key default gen_random_uuid(),
   question text not null check (char_length(question) between 1 and 200),
   is_open boolean not null default true,
+  is_starter boolean not null default false,
   created_at timestamptz not null default now()
 );
 
@@ -31,16 +33,18 @@ create table if not exists public.poll_options (
   id uuid primary key default gen_random_uuid(),
   poll_id uuid not null references public.polls(id) on delete cascade,
   label text not null check (char_length(label) between 1 and 120),
-  sort_order integer not null default 0
+  sort_order integer not null default 0,
+  unique (poll_id, id)
 );
 
 create table if not exists public.poll_votes (
   id uuid primary key default gen_random_uuid(),
   poll_id uuid not null references public.polls(id) on delete cascade,
-  option_id uuid not null references public.poll_options(id) on delete cascade,
+  option_id uuid not null,
   voter_id text not null check (char_length(voter_id) between 10 and 100),
   created_at timestamptz not null default now(),
-  unique (poll_id, voter_id)
+  unique (poll_id, voter_id),
+  foreign key (poll_id, option_id) references public.poll_options(poll_id, id) on delete cascade
 );
 
 alter table public.board_posts enable row level security;
@@ -67,7 +71,14 @@ create policy "anyone can create board posts" on public.board_posts for insert w
 drop policy if exists "anyone can create comments" on public.board_comments;
 create policy "anyone can create comments" on public.board_comments for insert with check (true);
 drop policy if exists "anyone can vote" on public.poll_votes;
-create policy "anyone can vote" on public.poll_votes for insert with check (true);
+create policy "anyone can vote" on public.poll_votes for insert with check (
+  exists (
+    select 1 from public.polls
+    where polls.id = poll_votes.poll_id
+      and polls.is_open = true
+      and polls.is_starter = false
+  )
+);
 
 -- Poll creation/editing intentionally has no public write policy.
 -- Create polls in the Supabase dashboard/SQL editor so normal visitors cannot create or close polls.
