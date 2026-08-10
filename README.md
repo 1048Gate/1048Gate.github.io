@@ -10,6 +10,7 @@ Official website for the 1048 Gate fantasy football keeper league.
 - `js/` — explicitly ordered feature scripts; no runtime script-injection chain
 - `data/` — browser-ready league history exported from the SQLite archive
 - `images/1048-gate-logo.webp` — optimized league logo
+- `images/team-logos/` — 256px WebP member logos
 
 ## Updating member data
 
@@ -31,6 +32,14 @@ Before publishing, validate and build the site:
 npm run check
 npm run build
 ```
+
+When replacing a logo, create a lightweight WebP with ImageMagick:
+
+```bash
+npm run optimize:image -- source-logo.png images/team-logos/12-trevor-hash.webp 256
+```
+
+Use `512` instead of `256` for the main league crest. `npm run check` rejects misleading extensions, whitespace in image filenames, oversized dimensions, and unnecessarily large image files.
 
 The build writes `dist/` and gives every CSS and JavaScript file a content-based filename. Browsers therefore receive fresh assets automatically whenever their contents change.
 
