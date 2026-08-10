@@ -18,14 +18,14 @@
 <link rel="stylesheet" href="css/admin.css">
 <link rel="stylesheet" href="css/playoffs-admin.css">
 <link rel="stylesheet" href="css/polish-final.css">
-<link rel="stylesheet" href="css/community.css?v=cachefix1">
+<link rel="stylesheet" href="css/community.css?v=staff-content-1">
 
 <script defer src="js/shared.js"></script>
 <script defer src="js/site-ui.js"></script>
 <script defer src="js/supabase-config.js"></script>
 <script defer src="js/auth.js"></script>
 <script defer src="js/app.js"></script>
-<script defer src="js/community.js?v=cachefix1"></script>
+<script defer src="js/community.js?v=staff-content-1"></script>
 <script defer src="js/manager-profiles.js"></script>
 <script defer src="js/league-content.js"></script>
 <script defer src="js/history-layout.js"></script>
@@ -33,7 +33,7 @@
 <script defer src="js/player-history.js"></script>
 <script defer src="js/game-records-layout.js"></script>
 <script defer src="js/playoffs.js"></script>
-<script defer src="js/admin.js"></script>
+<script defer src="js/admin.js?v=staff-content-1"></script>
 <script defer src="js/league-admin.js"></script>
 <script defer src="js/playoffs-admin.js"></script>
 <script defer src="js/ui-polish.js"></script>
@@ -83,21 +83,8 @@
     </div>
 
     <div class="section-title"><span class="section-kicker">League office</span><h2>📌 From the Commissioner</h2><span class="see-all">George's bulletin board</span></div>
-    <div class="corkboard commissioner-board" aria-label="Sample commissioner announcements">
-      <article class="pin-note announcement-note announcement-alt">
-        <div class="pin" aria-hidden="true"></div><span class="mock-label">Sample announcement</span>
-        <span class="who">Commissioner George</span>
-        <strong>Keeper Deadline</strong>
-        Keepers will be due three days before the draft. No late changes after the deadline unless the league approves it.
-        <span class="when">League reminder</span>
-      </article>
-      <article class="pin-note announcement-note announcement-warning">
-        <div class="pin" aria-hidden="true"></div><span class="mock-label">Sample announcement</span>
-        <span class="who">Commissioner George</span>
-        <strong>Dues &amp; Punishment</strong>
-        League dues need to be paid before draft night. Last-place punishment ideas belong in the Vote Booth.
-        <span class="when">Official business</span>
-      </article>
+    <div class="corkboard commissioner-board" id="commissionerBoard" aria-label="Commissioner announcements" aria-live="polite">
+      <div class="commissioner-empty">Loading commissioner announcements…</div>
     </div>
 
     <div class="section-title"><h2>Get Around the League</h2></div>
