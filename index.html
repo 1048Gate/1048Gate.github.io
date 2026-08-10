@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="css/polish-final.css">
 
 <script defer src="js/shared.js"></script>
+<script defer src="js/site-ui.js"></script>
 <script defer src="js/supabase-config.js"></script>
 <script defer src="js/auth.js"></script>
 <script defer src="js/app.js"></script>
@@ -43,14 +44,15 @@
     <div class="brand">
       <img class="brand-logo" src="images/1048-gate-logo.webp" alt="1048 Gate Szn X logo">
       <div class="brand-text">
-        <div class="name">1048 GATE SZN X</div>
+        <div class="name" data-site-brand>1048 GATE SZN X</div>
         <div class="tag">EST. 2017 &nbsp;•&nbsp; 12-TEAM KEEPER LEAGUE</div>
       </div>
     </div>
-    <div class="week-chip">
-      <span class="digit">Pre-Season</span>
-      <span class="label">2026 SEASON · REGULAR</span>
+    <div class="week-chip" aria-label="Current league season">
+      <span class="digit" data-site-phase>Pre-Season</span>
+      <span class="label" data-site-season>2026 SEASON · REGULAR</span>
     </div>
+    <div class="auth-control-slot" id="authControlMount" aria-live="polite"></div>
   </div>
   <nav class="tabs" id="tabs">
     <button data-view="home" class="active" aria-current="page">Home</button>
@@ -68,7 +70,7 @@
     <div class="hero">
       <div class="hero-copy">
         <span class="eyebrow">EST. 2017 • 12-TEAM KEEPER LEAGUE</span>
-        <h1>1048 GATE<br><span>SZN X</span></h1>
+        <h1>1048 GATE<br><span data-site-edition>SZN X</span></h1>
         <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
         <p>The official headquarters for league news, message boards, voting, records, champions, and everything 1048.</p>
         <div class="hero-buttons">
@@ -84,18 +86,18 @@
 
     <div class="section-title"><h2>Get Around the League</h2></div>
     <div class="quick-grid">
-      <div class="quick-card" onclick="switchView('board')"><div class="num">01</div><h3>Message Board</h3><p>Trash talk, trade chatter, and waiver wire debates.</p></div>
-      <div class="quick-card" onclick="switchView('votes')"><div class="num">02</div><h3>Vote Booth</h3><p>League rule changes, punishments, and payout splits.</p></div>
-      <div class="quick-card" onclick="switchView('history')"><div class="num">03</div><h3>League History</h3><p>Champions, records, and the Wall of Shame.</p></div>
-      <div class="quick-card" onclick="switchView('rules')"><div class="num">04</div><h3>Rules</h3><p>Scoring settings, roster rules, waivers, trades, playoffs, and payouts.</p></div>
-      <div class="quick-card" onclick="switchView('members')"><div class="num">05</div><h3>Members</h3><p>View every league member, career record, championships, and season history.</p></div>
-      <div class="quick-card" data-quick-view="playoffs" role="button" tabindex="0" onclick="switchView('playoffs')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();switchView('playoffs')}"><div class="num">06</div><h3>Playoffs</h3><p>Browse postseason brackets, champions, seeds, and consolation history.</p></div>
+      <button type="button" class="quick-card" data-quick-view="board"><span class="num">01</span><h3>Message Board</h3><p>Trash talk, trade chatter, and waiver wire debates.</p></button>
+      <button type="button" class="quick-card" data-quick-view="votes"><span class="num">02</span><h3>Vote Booth</h3><p>League rule changes, punishments, and payout splits.</p></button>
+      <button type="button" class="quick-card" data-quick-view="history"><span class="num">03</span><h3>League History</h3><p>Champions, records, and the Wall of Shame.</p></button>
+      <button type="button" class="quick-card" data-quick-view="rules"><span class="num">04</span><h3>Rules</h3><p>Scoring settings, roster rules, waivers, trades, playoffs, and payouts.</p></button>
+      <button type="button" class="quick-card" data-quick-view="members"><span class="num">05</span><h3>Members</h3><p>View every league member, career record, championships, and season history.</p></button>
+      <button type="button" class="quick-card" data-quick-view="playoffs"><span class="num">06</span><h3>Playoffs</h3><p>Browse postseason brackets, champions, seeds, and consolation history.</p></button>
     </div>
   </section>
 
   <section class="view" id="board">
     <div class="section-title"><h2>Message Board</h2></div>
-    <div class="board-toolbar"><div class="filter-pills"><span class="pill active">All</span><span class="pill">Trash Talk</span><span class="pill">Trade Talk</span><span class="pill">Waiver Wire</span><span class="pill">General</span></div></div>
+    <div class="board-toolbar"><div class="filter-pills"><button type="button" class="pill active">All</button><button type="button" class="pill">Trash Talk</button><button type="button" class="pill">Trade Talk</button><button type="button" class="pill">Waiver Wire</button><button type="button" class="pill">General</button></div></div>
     <div class="panel"><div class="composer"><input type="text" placeholder="Start a new thread…"><button class="btn btn-primary">Post</button></div></div>
   </section>
 
@@ -126,11 +128,11 @@
   <section class="view" id="rules">
     <div class="section-title"><h2>Rules</h2></div>
     <div class="panel"><div class="accordion" id="accordion">
-      <div class="accordion-item open"><div class="accordion-head"><h3><span class="idx">§1</span>Scoring Format</h3><span class="chev">＋</span></div><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>Full PPR scoring</strong> with 6-point passing touchdowns. Players earn 1 point per 10 rushing or receiving yards, 1 point per reception, and 1 point per 25 passing yards. Defensive scoring rewards sacks and takeaways, with additional bonuses and penalties based on points and total yards allowed.</div><div class="rule-group"><h4>Passing</h4><div class="rule-grid"><div class="rule-row"><span>Passing yards</span><span>0.04 / yd</span></div><div class="rule-row"><span>Passing touchdown</span><span>6 pts</span></div><div class="rule-row"><span>Interception thrown</span><span>-2 pts</span></div><div class="rule-row"><span>2-point passing conversion</span><span>2 pts</span></div></div></div><div class="rule-group"><h4>Rushing &amp; Receiving</h4><div class="rule-grid"><div class="rule-row"><span>Rushing yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Receiving yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Reception</span><span>1 pt</span></div><div class="rule-row"><span>Rushing or receiving TD</span><span>6 pts</span></div><div class="rule-row"><span>2-point rush or reception</span><span>2 pts</span></div><div class="rule-row"><span>Fumble lost</span><span>-2 pts</span></div></div></div><div class="rule-group"><h4>Kicking</h4><div class="rule-grid"><div class="rule-row"><span>Extra point made</span><span>1 pt</span></div><div class="rule-row"><span>Field goal missed</span><span>-1 pt</span></div><div class="rule-row"><span>Field goal: 0–39 yards</span><span>3 pts</span></div><div class="rule-row"><span>Field goal: 40–49 yards</span><span>4 pts</span></div><div class="rule-row"><span>Field goal: 50+ yards</span><span>5 pts</span></div></div></div></div></div></div>
-      <div class="accordion-item"><div class="accordion-head"><h3><span class="idx">§2</span>Roster &amp; Lineup</h3><span class="chev">＋</span></div><div class="accordion-body"><div class="accordion-body-inner">1 QB · 2 RB · 2 WR · 1 TE · 1 FLEX · 1 DST · 1 K · 7 bench spots. Lineups lock at each game's individual kickoff, not Thursday for the whole week.</div></div></div>
-      <div class="accordion-item"><div class="accordion-head"><h3><span class="idx">§3</span>Waivers &amp; Trades</h3><span class="chev">＋</span></div><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Waiver period</span><span>1 day</span></div><div class="rule-row"><span>Waiver order</span><span>Inverse standings</span></div><div class="rule-row"><span>Trade review period</span><span>2 days</span></div><div class="rule-row"><span>Votes required to veto</span><span>4 votes</span></div><div class="rule-row"><span>Trade deadline</span><span>TBA</span></div></div><div class="rule-note">Waiver priority resets each week to the inverse order of the standings.</div></div></div></div>
-      <div class="accordion-item"><div class="accordion-head"><h3><span class="idx">§4</span>Playoffs</h3><span class="chev">＋</span></div><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Playoff teams</span><span>6</span></div><div class="rule-row"><span>Seeding tiebreaker</span><span>Total points for</span></div></div></div></div></div>
-      <div class="accordion-item"><div class="accordion-head"><h3><span class="idx">§5</span>Punishments &amp; Payouts</h3><span class="chev">＋</span></div><div class="accordion-body"><div class="accordion-body-inner">League punishment is determined by a league vote. The prize pool is paid 100% to first place unless the two teams in the championship matchup agree to a different split before the game.</div></div></div>
+      <div class="accordion-item open"><button type="button" class="accordion-head" aria-expanded="true"><h3><span class="idx">§1</span>Scoring Format</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>Full PPR scoring</strong> with 6-point passing touchdowns. Players earn 1 point per 10 rushing or receiving yards, 1 point per reception, and 1 point per 25 passing yards. Defensive scoring rewards sacks and takeaways, with additional bonuses and penalties based on points and total yards allowed.</div><div class="rule-group"><h4>Passing</h4><div class="rule-grid"><div class="rule-row"><span>Passing yards</span><span>0.04 / yd</span></div><div class="rule-row"><span>Passing touchdown</span><span>6 pts</span></div><div class="rule-row"><span>Interception thrown</span><span>-2 pts</span></div><div class="rule-row"><span>2-point passing conversion</span><span>2 pts</span></div></div></div><div class="rule-group"><h4>Rushing &amp; Receiving</h4><div class="rule-grid"><div class="rule-row"><span>Rushing yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Receiving yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Reception</span><span>1 pt</span></div><div class="rule-row"><span>Rushing or receiving TD</span><span>6 pts</span></div><div class="rule-row"><span>2-point rush or reception</span><span>2 pts</span></div><div class="rule-row"><span>Fumble lost</span><span>-2 pts</span></div></div></div><div class="rule-group"><h4>Kicking</h4><div class="rule-grid"><div class="rule-row"><span>Extra point made</span><span>1 pt</span></div><div class="rule-row"><span>Field goal missed</span><span>-1 pt</span></div><div class="rule-row"><span>Field goal: 0–39 yards</span><span>3 pts</span></div><div class="rule-row"><span>Field goal: 40–49 yards</span><span>4 pts</span></div><div class="rule-row"><span>Field goal: 50+ yards</span><span>5 pts</span></div></div></div></div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§2</span>Roster &amp; Lineup</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">1 QB · 2 RB · 2 WR · 1 TE · 1 FLEX · 1 DST · 1 K · 7 bench spots. Lineups lock at each game's individual kickoff, not Thursday for the whole week.</div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§3</span>Waivers &amp; Trades</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Waiver period</span><span>1 day</span></div><div class="rule-row"><span>Waiver order</span><span>Inverse standings</span></div><div class="rule-row"><span>Trade review period</span><span>2 days</span></div><div class="rule-row"><span>Votes required to veto</span><span>4 votes</span></div><div class="rule-row"><span>Trade deadline</span><span>TBA</span></div></div><div class="rule-note">Waiver priority resets each week to the inverse order of the standings.</div></div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§4</span>Playoffs</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Playoff teams</span><span>6</span></div><div class="rule-row"><span>Seeding tiebreaker</span><span>Total points for</span></div></div></div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§5</span>Punishments &amp; Payouts</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">League punishment is determined by a league vote. The prize pool is paid 100% to first place unless the two teams in the championship matchup agree to a different split before the game.</div></div></div>
     </div></div>
   </section>
 
@@ -141,7 +143,7 @@
   </section>
 
   <div class="member-modal" id="memberModal" aria-hidden="true">
-    <div class="member-modal-card" role="dialog" aria-modal="true" aria-labelledby="memberModalName">
+    <div class="member-modal-card" role="dialog" aria-modal="true" aria-labelledby="memberModalName" tabindex="-1">
       <div class="member-modal-head">
         <div class="member-modal-profile">
           <div class="member-modal-logo-shell">
@@ -162,6 +164,6 @@
   </div>
 </main>
 
-<footer>1048 Gate Szn 10</footer>
+<footer data-site-footer>1048 Gate Szn 10</footer>
 </body>
 </html>

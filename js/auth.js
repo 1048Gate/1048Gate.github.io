@@ -4,6 +4,7 @@ window.gateSupabaseReady = new Promise(resolve => {
 });
 
 (async function(){
+  const {trapFocus} = window.gateShared;
   const config = window.SUPABASE_CONFIG || {};
   if(!config.url || !config.anonKey){
     resolveGateSupabase(null);
@@ -24,16 +25,17 @@ window.gateSupabaseReady = new Promise(resolve => {
   resolveGateSupabase(supabase);
   window.dispatchEvent(new CustomEvent('gate-supabase-ready', {detail:{supabase}}));
 
-  const topbar = document.querySelector('.topbar-inner');
+  const authMount = document.getElementById('authControlMount') || document.querySelector('.topbar-inner');
   const authControl = document.createElement('div');
   authControl.className = 'auth-control';
   authControl.innerHTML = '<span class="auth-user" id="authUserLabel">Guest</span><button class="btn btn-ghost" id="authButton">Staff Login</button>';
-  topbar?.appendChild(authControl);
+  authMount?.appendChild(authControl);
 
   const modal = document.createElement('div');
   modal.className = 'auth-modal';
   modal.id = 'authModal';
-  modal.innerHTML = `<div class="auth-card"><h2>Staff Login</h2><p>For the site administrator and commissioner. Regular league members do not need an account to use the message board or vote.</p><div class="auth-fields"><input id="authEmail" type="email" placeholder="Email"><input id="authPassword" type="password" placeholder="Password"></div><div class="auth-actions"><span class="auth-status" id="authStatus"></span><button class="btn btn-ghost" id="authCancel">Cancel</button><button class="btn btn-primary" id="authLogin">Login</button></div></div>`;
+  modal.setAttribute('aria-hidden', 'true');
+  modal.innerHTML = `<div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" tabindex="-1"><h2 id="authModalTitle">Staff Login</h2><p>For the site administrator and commissioner. Regular league members do not need an account to use the message board or vote.</p><div class="auth-fields"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="username"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password"></div><div class="auth-actions"><span class="auth-status" id="authStatus" role="status"></span><button class="btn btn-ghost" id="authCancel" type="button">Cancel</button><button class="btn btn-primary" id="authLogin" type="button">Login</button></div></div>`;
   document.body.appendChild(modal);
 
   const state = {session:null, profile:null};
@@ -42,15 +44,21 @@ window.gateSupabaseReady = new Promise(resolve => {
   const btn = document.getElementById('authButton');
   const label = document.getElementById('authUserLabel');
   const status = document.getElementById('authStatus');
+  let authReturnFocus = null;
 
   function openModal(){
+    authReturnFocus = document.activeElement;
     modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
     document.getElementById('authEmail').focus();
   }
 
   function closeModal(){
     modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
     status.textContent = '';
+    if(authReturnFocus?.isConnected) authReturnFocus.focus();
+    authReturnFocus = null;
   }
 
   async function loadProfile(user){
@@ -111,7 +119,13 @@ window.gateSupabaseReady = new Promise(resolve => {
     closeModal();
   });
   document.addEventListener('keydown', event => {
-    if(event.key === 'Escape') closeModal();
+    if(!modal.classList.contains('open')) return;
+    if(event.key === 'Escape'){
+      event.preventDefault();
+      closeModal();
+      return;
+    }
+    trapFocus(event, modal.querySelector('.auth-card'));
   });
 
   supabase.auth.onAuthStateChange((_event, session) => refreshUI(session));

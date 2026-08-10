@@ -28,7 +28,7 @@
       <textarea id="boardBody" maxlength="2000" placeholder="Say what you came here to say…"></textarea>
       <div class="community-actions"><span id="boardStatus" class="community-status"></span><button class="btn btn-primary" id="boardPostBtn">Post Thread</button></div>
     </div>
-    <div class="filter-pills" id="liveBoardFilters"><span class="pill active" data-cat="All">All</span><span class="pill" data-cat="Trash Talk">Trash Talk</span><span class="pill" data-cat="Trade Talk">Trade Talk</span><span class="pill" data-cat="Waiver Wire">Waiver Wire</span><span class="pill" data-cat="General">General</span></div>
+    <div class="filter-pills" id="liveBoardFilters"><button type="button" class="pill active" data-cat="All">All</button><button type="button" class="pill" data-cat="Trash Talk">Trash Talk</button><button type="button" class="pill" data-cat="Trade Talk">Trade Talk</button><button type="button" class="pill" data-cat="Waiver Wire">Waiver Wire</button><button type="button" class="pill" data-cat="General">General</button></div>
     <div id="liveThreads"></div>`;
 
   let posts=[];let activeCategory='All';
