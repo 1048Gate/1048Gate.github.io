@@ -1,5 +1,5 @@
-(function(){
-  const supabase=window.gateSupabase;if(!supabase)return;
+(async function(){
+  const supabase=window.gateSupabase||await window.gateSupabaseReady;if(!supabase)return;
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const num=(v,d=1)=>Number.isFinite(Number(v))?Number(v).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
   function parseRecord(record){const p=String(record||'').split('-').map(Number);return{wins:p[0]||0,losses:p[1]||0,ties:p[2]||0}}

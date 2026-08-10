@@ -5,33 +5,18 @@ Official website for the 1048 Gate fantasy football keeper league.
 ## Project structure
 
 - `index.html` — page structure and league content
-- `css/style.css` — colors, layout, mobile design, member cards, and profile modal
+- `css/` — colors, layout, mobile design, member cards, history, playoffs, and staff tools
 - `js/app.js` — navigation, interactive sections, member data, and career calculations
+- `js/` — explicitly ordered feature scripts; no runtime script-injection chain
+- `data/` — browser-ready league history exported from the SQLite archive
 - `images/1048-gate-logo.webp` — optimized league logo
 
 ## Updating member data
 
-Open `js/app.js` and search for `EDIT MEMBER DATA HERE`.
+Member history is loaded from `data/members.json`. Regenerate the browser data from the SQLite archive with:
 
-Add a season in this format:
-
-```javascript
-[2025, 5, "Team Name", "8-6", 1686.08, 1565.66]
-```
-
-The order is:
-
-1. Year
-2. Final finish
-3. Team name
-4. Record
-5. Points for
-6. Points against
-
-Use `null` when older point totals are unavailable:
-
-```javascript
-[2017, 2, "Free Zeke", "8-5", null, null]
+```bash
+python3 scripts/export_web_data.py
 ```
 
 Career record, winning percentage, championships, average finish, best finish, and career points calculate automatically.
@@ -40,6 +25,15 @@ Career record, winning percentage, championships, average finish, best finish, a
 
 Open `index.html` in your browser. For easier editing and automatic browser refresh, use the VS Code Live Server extension.
 
+Before publishing, validate and build the site:
+
+```bash
+npm run check
+npm run build
+```
+
+The build writes `dist/` and gives every CSS and JavaScript file a content-based filename. Browsers therefore receive fresh assets automatically whenever their contents change.
+
 ## GitHub Pages
 
-This structure is ready for GitHub Pages. In the repository settings, choose **Pages**, select **Deploy from a branch**, then use the `main` branch and `/root` folder.
+The `Deploy GitHub Pages` workflow validates the source, builds the content-hashed site, and deploys `dist/` after changes reach `main`. In repository **Settings → Pages**, set **Source** to **GitHub Actions**.

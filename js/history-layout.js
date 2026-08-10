@@ -2,7 +2,6 @@
   const history=document.getElementById('history');
   if(!history||history.dataset.historyLayout==='ready')return;
   history.dataset.historyLayout='ready';
-  if(!document.querySelector('link[href="css/history.css"]')){const css=document.createElement('link');css.rel='stylesheet';css.href='css/history.css';document.head.appendChild(css)}
   const title=history.querySelector('.section-title'),timeline=history.querySelector('.timeline'),recordGrid=history.querySelector('.record-grid'),shame=history.querySelector('.shame');
   if(!timeline||!recordGrid||!shame)return;
   const championsPanel=timeline.closest('.panel')||timeline.parentElement,recordsPanel=recordGrid.closest('.panel')||recordGrid.parentElement,shamePanel=shame.closest('.panel')||shame.parentElement;

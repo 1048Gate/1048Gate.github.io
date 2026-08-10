@@ -1,7 +1,4 @@
 (function(){
-  if(!document.querySelector('link[href="css/manager-profiles.css"]')){
-    const css=document.createElement('link');css.rel='stylesheet';css.href='css/manager-profiles.css';document.head.appendChild(css);
-  }
   let profilePromise=null;
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const num=v=>Number(v||0).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:2});
