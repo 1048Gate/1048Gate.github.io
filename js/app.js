@@ -46,7 +46,54 @@ const MEMBER_ROLE_OVERRIDES = Object.freeze({
   '10': 'Admin'
 });
 
-const memberRole = member => MEMBER_ROLE_OVERRIDES[member.number] || member.role;
+const memberNumber = value => String(value ?? '').trim().padStart(2, '0');
+const memberLogo = value => MEMBER_LOGOS[memberNumber(value)] || '';
+const memberRole = member => MEMBER_ROLE_OVERRIDES[memberNumber(member.number ?? member.member_number)]
+  || member.role
+  || member.role_label
+  || 'League Member';
+
+function bindMemberLogoFallbacks(root = document) {
+  root.querySelectorAll('.member-logo').forEach(img => {
+    img.addEventListener('error', () => {
+      img.hidden = true;
+      img.closest('.member-logo-shell')?.classList.add('logo-missing');
+    }, { once: true });
+  });
+}
+
+function applyMemberModalPresentation({ number, name, role, seasonsRecorded, team }) {
+  const normalizedNumber = memberNumber(number);
+  const logoSrc = memberLogo(normalizedNumber);
+  const logoShell = document.querySelector('#memberModal .member-modal-logo-shell');
+  const logo = document.getElementById('memberModalLogo');
+  const fallback = document.getElementById('memberModalLogoFallback');
+
+  document.getElementById('memberModalName').textContent = name;
+  document.getElementById('memberModalRole').textContent = `${memberRole({ number: normalizedNumber, role })} • ${seasonsRecorded} seasons recorded`;
+
+  if (fallback) fallback.textContent = normalizedNumber;
+  if (logoShell) logoShell.classList.toggle('logo-missing', !logoSrc);
+  if (logo) {
+    logo.hidden = !logoSrc;
+    logo.src = logoSrc;
+    logo.alt = logoSrc ? `${name} team logo` : '';
+  }
+
+  const modalTeam = document.getElementById('memberModalTeam');
+  if (modalTeam) {
+    modalTeam.textContent = team || '';
+    modalTeam.hidden = !team;
+  }
+}
+
+window.gateMemberPresentation = Object.freeze({
+  normalizeNumber: memberNumber,
+  logoFor: memberLogo,
+  roleFor: memberRole,
+  bindLogoFallbacks: bindMemberLogoFallbacks,
+  applyModal: applyMemberModalPresentation
+});
 
 let leagueMembers = [];
 
@@ -122,14 +169,15 @@ function renderMembers() {
     const stats = totals(member);
     const latest = latestSeason(member);
     const hasSeasons = member.seasons.length;
-    const logo = MEMBER_LOGOS[member.number] || '';
-    const badge = stats.titles ? `${stats.titles}× Champ` : `#${esc(member.number)}`;
+    const number = memberNumber(member.number);
+    const logo = memberLogo(number);
+    const badge = stats.titles ? `${stats.titles}× Champ` : `#${esc(number)}`;
 
-    return `<article class="member-card public-member-card" data-i="${index}" data-member-number="${esc(member.number)}" tabindex="0" aria-label="View ${esc(member.name)} career history">
+    return `<article class="member-card public-member-card" data-i="${index}" data-member-number="${esc(number)}" tabindex="0" aria-label="View ${esc(member.name)} career history">
       <div class="member-head member-head-with-logo">
         <div class="member-logo-shell">
           ${logo ? `<img class="member-logo" src="${logo}" alt="${esc(member.name)} team logo" loading="lazy">` : ''}
-          <span class="member-logo-fallback">${esc(member.number)}</span>
+          <span class="member-logo-fallback">${esc(number)}</span>
         </div>
         <div class="member-identity">
           <div class="team">${esc(member.name)}</div>
@@ -148,12 +196,7 @@ function renderMembers() {
     </article>`;
   }).join('');
 
-  grid.querySelectorAll('.member-logo').forEach(img => {
-    img.addEventListener('error', () => {
-      img.hidden = true;
-      img.closest('.member-logo-shell')?.classList.add('logo-missing');
-    });
-  });
+  bindMemberLogoFallbacks(grid);
 
   grid.querySelectorAll('.member-card').forEach(card => {
     const open = () => openMember(Number(card.dataset.i));
@@ -173,26 +216,13 @@ function openMember(index) {
 
   const stats = totals(member);
   const latest = latestSeason(member);
-  document.getElementById('memberModalName').textContent = member.name;
-  document.getElementById('memberModalRole').textContent = `${memberRole(member)} • ${member.seasons.length} seasons recorded`;
-
-  const logoShell = document.querySelector('#memberModal .member-modal-logo-shell');
-  const logo = document.getElementById('memberModalLogo');
-  const fallback = document.getElementById('memberModalLogoFallback');
-  const logoSrc = MEMBER_LOGOS[member.number] || '';
-  if (fallback) fallback.textContent = member.number;
-  if (logoShell) logoShell.classList.toggle('logo-missing', !logoSrc);
-  if (logo) {
-    logo.hidden = !logoSrc;
-    logo.src = logoSrc;
-    logo.alt = logoSrc ? `${member.name} team logo` : '';
-  }
-
-  const modalTeam = document.getElementById('memberModalTeam');
-  if (modalTeam) {
-    modalTeam.textContent = latest?.[2] || '';
-    modalTeam.hidden = !latest;
-  }
+  applyMemberModalPresentation({
+    number: member.number,
+    name: member.name,
+    role: member.role,
+    seasonsRecorded: member.seasons.length,
+    team: latest?.[2]
+  });
 
   const boxes = [
     ['Career Record', recordText(stats.wins, stats.losses, stats.ties)],
