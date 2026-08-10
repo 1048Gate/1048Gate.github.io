@@ -30,6 +30,20 @@ To regenerate every website dataset in one pass, run `python3 scripts/export_all
 
 Edit `data/site.json` when the league moves from preseason to the regular season or rolls into a new year. The header chip, browser title, season branding, and footer update from that one file.
 
+## Supabase setup
+
+For a new database, run these files in the Supabase SQL Editor in order:
+
+1. `supabase/schema.sql`
+2. `supabase/auth_roles.sql`
+3. `supabase/staff_upgrades.sql`
+4. `supabase/league_content.sql`
+5. `supabase/league_content_manager_upgrade.sql`
+6. `supabase/playoffs.sql`
+7. `supabase/starter_content.sql`
+
+`starter_content.sql` installs the two launch announcements, four example message-board threads, and three example polls as real Supabase records. They appear in the normal Staff Tools lists with a **STARTER** badge and can be deleted by the commissioner or site admin. They do not return after deletion.
+
 ## Run locally
 
 Open `index.html` in your browser. For easier editing and automatic browser refresh, use the VS Code Live Server extension.

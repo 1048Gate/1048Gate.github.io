@@ -8,7 +8,7 @@ await rm(dist, {recursive:true, force:true});
 await mkdir(dist, {recursive:true});
 
 let html = await readFile(new URL('index.html', root), 'utf8');
-const assetPattern = /(?:href|src)="((?:css|js)\/[^"?]+\.(?:css|js))"/g;
+const assetPattern = /(?:href|src)="((?:css|js)\/[^"?]+\.(?:css|js))(?:\?[^"#]*)?"/g;
 const assets = [...new Set([...html.matchAll(assetPattern)].map(match => match[1]))];
 const manifest = {};
 
@@ -22,7 +22,8 @@ for(const asset of assets){
 
   await mkdir(new URL(`${dirname(hashedAsset)}/`, dist), {recursive:true});
   await writeFile(new URL(hashedAsset, dist), contents);
-  html = html.replaceAll(`"${asset}"`, `"${hashedAsset}"`);
+  const escapedAsset = asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  html = html.replace(new RegExp(`"${escapedAsset}(?:\\?[^"#]*)?"`, 'g'), `"${hashedAsset}"`);
   manifest[asset] = hashedAsset;
 }
 

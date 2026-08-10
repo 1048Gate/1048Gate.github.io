@@ -2,6 +2,7 @@
   const supabase=window.gateSupabase||await window.gateSupabaseReady;if(!supabase)return;
   const {escapeHtml:esc}=window.gateShared;
   let currentProfile=null;
+  const missingStarterColumn=error=>error?.code==='42703'||String(error?.message||'').includes('is_starter');
 
   const tabs=document.getElementById('tabs');
   const staffTab=document.createElement('button');staffTab.dataset.view='staff';staffTab.className='staff-nav';staffTab.textContent='Staff';tabs?.appendChild(staffTab);
@@ -9,12 +10,24 @@
   const staffView=document.createElement('section');staffView.className='view';staffView.id='staff';staffView.innerHTML='<div class="section-title"><h2>Staff Tools</h2><span class="see-all" id="staffRoleLabel"></span></div><div id="staffContent"></div>';main?.appendChild(staffView);
   staffTab.addEventListener('click',()=>window.switchView?.('staff'));
 
-  async function loadAnnouncement(){
-    const note=document.querySelector('.pin-note');if(!note)return;
-    const {data,error}=await supabase.from('announcements').select('author_name,body,created_at').eq('is_pinned',true).order('created_at',{ascending:false}).limit(1).maybeSingle();
-    if(error||!data){return}
-    const date=new Date(data.created_at).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
-    note.innerHTML=`<div class="pin"></div><span class="who">${esc(data.author_name)}</span>${esc(data.body).replace(/\n/g,'<br>')}<span class="when">${esc(date)}</span>`;
+  async function loadAnnouncementsHome(){
+    const board=document.getElementById('commissionerBoard');if(!board)return;
+    let {data,error}=await supabase.from('announcements').select('id,author_name,body,is_starter,created_at').eq('is_pinned',true).order('created_at',{ascending:false}).limit(3);
+    if(missingStarterColumn(error))({data,error}=await supabase.from('announcements').select('id,author_name,body,created_at').eq('is_pinned',true).order('created_at',{ascending:false}).limit(3));
+    if(error){
+      board.innerHTML='<div class="commissioner-empty">Commissioner announcements could not load.</div>';
+      return;
+    }
+    if(!data?.length){
+      board.innerHTML='<div class="commissioner-empty">No commissioner announcements are posted yet.</div>';
+      return;
+    }
+    board.innerHTML=data.map((announcement,index)=>{
+      const [headline,...lines]=String(announcement.body).split('\n');
+      const body=lines.join('\n').trim();
+      const date=new Date(announcement.created_at).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+      return `<article class="pin-note announcement-note ${index%2?'announcement-warning':'announcement-alt'}"><div class="pin" aria-hidden="true"></div>${announcement.is_starter?'<span class="mock-label">Starter announcement</span>':''}<span class="who">${esc(announcement.author_name)}</span><strong>${esc(headline)}</strong>${body?`<span class="announcement-copy">${esc(body).replace(/\n/g,'<br>')}</span>`:''}<span class="when">${esc(date)}</span></article>`;
+    }).join('');
   }
 
   async function loadSummary(){
@@ -43,12 +56,13 @@
 
   async function loadPollManager(){
     const host=document.getElementById('staffPollList');if(!host)return;
-    const {data,error}=await supabase.from('polls').select('id,question,is_open,created_at,poll_options(id,label,sort_order),poll_votes(id,option_id)').order('created_at',{ascending:false});
+    let {data,error}=await supabase.from('polls').select('id,question,is_open,is_starter,created_at,poll_options(id,label,sort_order),poll_votes(id,option_id)').order('created_at',{ascending:false});
+    if(missingStarterColumn(error))({data,error}=await supabase.from('polls').select('id,question,is_open,created_at,poll_options(id,label,sort_order),poll_votes(id,option_id)').order('created_at',{ascending:false}));
     if(error){host.innerHTML=`<div class="staff-empty">${esc(error.message)}</div>`;return}
     host.innerHTML=(data||[]).map(p=>{
       const votes=p.poll_votes||[],total=votes.length,opts=[...(p.poll_options||[])].sort((a,b)=>a.sort_order-b.sort_order);
       const results=opts.map(o=>{const count=votes.filter(v=>v.option_id===o.id).length,pct=total?Math.round(count/total*100):0;return `<div class="staff-poll-result"><div><span>${esc(o.label)}</span><strong>${count} · ${pct}%</strong></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>`}).join('');
-      return `<div class="staff-item"><div class="staff-item-top"><div><h4>${esc(p.question)}</h4><div class="staff-meta">${total} vote${total===1?'':'s'} · ${new Date(p.created_at).toLocaleDateString()}</div></div><span class="staff-badge ${p.is_open?'live':''}">${p.is_open?'OPEN':'CLOSED'}</span></div><div class="staff-poll-results">${results}</div><div class="staff-toolbar"><button class="btn btn-ghost" data-action="edit-poll" data-id="${p.id}" data-question="${esc(p.question)}" data-votes="${total}">Edit</button><button class="btn btn-ghost" data-action="toggle-poll" data-id="${p.id}" data-open="${p.is_open}">${p.is_open?'Close Poll':'Reopen Poll'}</button><button class="btn btn-ghost staff-danger" data-action="delete-poll" data-id="${p.id}">Delete</button></div></div>`;
+      return `<div class="staff-item"><div class="staff-item-top"><div><h4>${esc(p.question)}</h4><div class="staff-meta">${total} vote${total===1?'':'s'} · ${new Date(p.created_at).toLocaleDateString()}</div></div><div class="staff-badge-stack">${p.is_starter?'<span class="staff-badge starter">STARTER</span>':''}<span class="staff-badge ${p.is_open?'live':''}">${p.is_open?'OPEN':'CLOSED'}</span></div></div><div class="staff-poll-results">${results}</div><div class="staff-toolbar">${p.is_starter?'':`<button class="btn btn-ghost" data-action="edit-poll" data-id="${p.id}" data-question="${esc(p.question)}" data-votes="${total}">Edit</button><button class="btn btn-ghost" data-action="toggle-poll" data-id="${p.id}" data-open="${p.is_open}">${p.is_open?'Close Poll':'Reopen Poll'}</button>`}<button class="btn btn-ghost staff-danger" data-action="delete-poll" data-id="${p.id}">${p.is_starter?'Delete Starter Poll':'Delete'}</button></div></div>`;
     }).join('')||'<div class="staff-empty">No polls yet.</div>';
   }
 
@@ -65,23 +79,24 @@
 
   async function postAnnouncement(e){
     e.preventDefault();const form=e.currentTarget,status=form.querySelector('.staff-status'),body=form.body.value.trim();if(!body){status.textContent='Write an announcement first.';return}
-    status.textContent='Posting…';await supabase.from('announcements').update({is_pinned:false}).eq('is_pinned',true);
+    status.textContent='Posting…';
     const {error}=await supabase.from('announcements').insert({author_id:window.gateAuthState?.session?.user?.id,author_name:currentProfile?.display_name||'League Staff',body,is_pinned:true});
     if(error){status.textContent=error.message;return}
-    form.reset();status.textContent='Announcement posted.';await Promise.all([loadAnnouncement(),loadAnnouncements(),loadSummary()]);setTimeout(()=>status.textContent='',1600);
+    form.reset();status.textContent='Announcement posted.';await Promise.all([loadAnnouncementsHome(),loadAnnouncements(),loadSummary()]);setTimeout(()=>status.textContent='',1600);
   }
 
   async function loadAnnouncements(){
     const host=document.getElementById('staffAnnouncementList');if(!host)return;
-    const {data,error}=await supabase.from('announcements').select('*').order('created_at',{ascending:false}).limit(20);if(error){host.innerHTML=`<div class="staff-empty">${esc(error.message)}</div>`;return}
-    host.innerHTML=(data||[]).map(a=>`<div class="staff-item"><div class="staff-item-top"><div><h4>${esc(a.author_name)}</h4><div class="staff-meta">${new Date(a.created_at).toLocaleString()}</div></div>${a.is_pinned?'<span class="staff-badge live">PINNED</span>':''}</div><div class="staff-announcement-body">${esc(a.body).replace(/\n/g,'<br>')}</div><div class="staff-toolbar"><button class="btn btn-ghost" data-action="edit-announcement" data-id="${a.id}" data-body="${encodeURIComponent(a.body)}">Edit</button>${a.is_pinned?'':'<button class="btn btn-ghost" data-action="pin-announcement" data-id="'+a.id+'">Pin to Home</button>'}<button class="btn btn-ghost staff-danger" data-action="delete-announcement" data-id="${a.id}">Delete</button></div></div>`).join('')||'<div class="staff-empty">No announcements yet.</div>';
+    let {data,error}=await supabase.from('announcements').select('*').order('created_at',{ascending:false}).limit(20);if(error){host.innerHTML=`<div class="staff-empty">${esc(error.message)}</div>`;return}
+    host.innerHTML=(data||[]).map(a=>`<div class="staff-item"><div class="staff-item-top"><div><h4>${esc(a.author_name)}</h4><div class="staff-meta">${new Date(a.created_at).toLocaleString()}</div></div><div class="staff-badge-stack">${a.is_starter?'<span class="staff-badge starter">STARTER</span>':''}${a.is_pinned?'<span class="staff-badge live">ON HOME</span>':'<span class="staff-badge">HIDDEN</span>'}</div></div><div class="staff-announcement-body">${esc(a.body).replace(/\n/g,'<br>')}</div><div class="staff-toolbar"><button class="btn btn-ghost" data-action="edit-announcement" data-id="${a.id}" data-body="${encodeURIComponent(a.body)}">Edit</button><button class="btn btn-ghost" data-action="toggle-announcement" data-id="${a.id}" data-pinned="${a.is_pinned}">${a.is_pinned?'Remove from Home':'Show on Home'}</button><button class="btn btn-ghost staff-danger" data-action="delete-announcement" data-id="${a.id}">${a.is_starter?'Delete Starter Announcement':'Delete'}</button></div></div>`).join('')||'<div class="staff-empty">No announcements yet.</div>';
   }
 
   async function loadModeration(){
     const host=document.getElementById('staffBoardList');if(!host)return;
-    const {data,error}=await supabase.from('board_posts').select('id,author,title,category,created_at,board_comments(id,author,body,created_at)').order('created_at',{ascending:false}).limit(15);
+    let {data,error}=await supabase.from('board_posts').select('id,author,title,body,category,is_starter,created_at,board_comments(id,author,body,created_at)').order('created_at',{ascending:false}).limit(30);
+    if(missingStarterColumn(error))({data,error}=await supabase.from('board_posts').select('id,author,title,body,category,created_at,board_comments(id,author,body,created_at)').order('created_at',{ascending:false}).limit(30));
     if(error){host.innerHTML=`<div class="staff-empty">${esc(error.message)}</div>`;return}
-    host.innerHTML=(data||[]).map(p=>`<div class="staff-item"><div class="staff-item-top"><div><h4>${esc(p.title)}</h4><div class="staff-meta">${esc(p.author)} · ${esc(p.category)} · ${new Date(p.created_at).toLocaleString()}</div></div><span class="staff-badge">${p.board_comments?.length||0} replies</span></div><div class="staff-toolbar"><button class="btn btn-ghost staff-danger" data-action="delete-post" data-id="${p.id}">Delete Thread</button></div>${(p.board_comments||[]).length?`<div class="staff-comment-list">${[...p.board_comments].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)).map(c=>`<div class="staff-comment-row"><div><strong>${esc(c.author)}</strong><span>${esc(c.body)}</span></div><button class="staff-mini-delete" data-action="delete-comment" data-id="${c.id}" title="Delete reply">×</button></div>`).join('')}</div>`:''}</div>`).join('')||'<div class="staff-empty">No board posts.</div>';
+    host.innerHTML=(data||[]).map(p=>`<div class="staff-item"><div class="staff-item-top"><div><h4>${esc(p.title)}</h4><div class="staff-meta">${esc(p.author)} · ${esc(p.category)} · ${new Date(p.created_at).toLocaleString()}</div></div><div class="staff-badge-stack">${p.is_starter?'<span class="staff-badge starter">STARTER</span>':''}<span class="staff-badge">${p.board_comments?.length||0} replies</span></div></div><div class="staff-announcement-body">${esc(p.body).replace(/\n/g,'<br>')}</div><div class="staff-toolbar"><button class="btn btn-ghost staff-danger" data-action="delete-post" data-id="${p.id}">${p.is_starter?'Delete Starter Thread':'Delete Thread'}</button></div>${(p.board_comments||[]).length?`<div class="staff-comment-list">${[...p.board_comments].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)).map(c=>`<div class="staff-comment-row"><div><strong>${esc(c.author)}</strong><span>${esc(c.body)}</span></div><button class="staff-mini-delete" data-action="delete-comment" data-id="${c.id}" title="Delete reply" aria-label="Delete reply by ${esc(c.author)}">×</button></div>`).join('')}</div>`:''}</div>`).join('')||'<div class="staff-empty">No board posts.</div>';
   }
 
   async function loadProfiles(){
@@ -92,7 +107,7 @@
 
   function renderDashboard(){
     const host=document.getElementById('staffContent');if(!host)return;const siteAdmin=currentProfile?.role==='site_admin';document.getElementById('staffRoleLabel').textContent=siteAdmin?'SITE ADMIN':'COMMISSIONER';
-    host.innerHTML=`<div class="staff-role-note"><strong>${siteAdmin?'Site Admin':'Commissioner'} access:</strong> ${siteAdmin?'full league-site staff controls plus account-role management.':'polls, announcements, and message-board moderation.'}</div><div class="staff-summary" id="staffSummary"></div><div class="staff-grid"><div class="panel staff-panel"><h3>Create Poll</h3><form class="staff-form" id="staffPollForm"><input name="question" maxlength="200" placeholder="Poll question" required><div class="staff-options"><input name="option" maxlength="120" placeholder="Choice 1" required><input name="option" maxlength="120" placeholder="Choice 2" required><input name="option" maxlength="120" placeholder="Choice 3 (optional)"><input name="option" maxlength="120" placeholder="Choice 4 (optional)"></div><div class="staff-actions"><span class="staff-status"></span><button class="btn btn-primary">Create Poll</button></div></form></div><div class="panel staff-panel"><h3>Homepage Announcement</h3><form class="staff-form" id="staffAnnouncementForm"><textarea name="body" maxlength="1200" placeholder="Post an announcement to the homepage…" required></textarea><div class="staff-actions"><span class="staff-status"></span><button class="btn btn-primary">Publish & Pin</button></div></form></div><div class="panel staff-panel"><h3>Manage Polls</h3><div class="staff-list" id="staffPollList"></div></div><div class="panel staff-panel"><h3>Message Board Moderation</h3><div class="staff-list" id="staffBoardList"></div></div><div class="panel staff-panel"><h3>Announcements</h3><div class="staff-list" id="staffAnnouncementList"></div></div>${siteAdmin?'<div class="panel staff-panel"><h3>User Roles</h3><div class="staff-role-note">Only the site admin can change staff roles.</div><div class="staff-list" id="siteAdminProfiles"></div></div>':''}</div>`;
+    host.innerHTML=`<div class="staff-role-note"><strong>${siteAdmin?'Site Admin':'Commissioner'} access:</strong> ${siteAdmin?'full league-site staff controls plus account-role management.':'polls, announcements, and message-board moderation.'} Items marked <span class="staff-badge starter">STARTER</span> are the launch examples; delete them from their normal lists whenever the league is ready.</div><div class="staff-summary" id="staffSummary"></div><div class="staff-grid"><div class="panel staff-panel"><h3>Create Poll</h3><form class="staff-form" id="staffPollForm"><input name="question" maxlength="200" placeholder="Poll question" required><div class="staff-options"><input name="option" maxlength="120" placeholder="Choice 1" required><input name="option" maxlength="120" placeholder="Choice 2" required><input name="option" maxlength="120" placeholder="Choice 3 (optional)"><input name="option" maxlength="120" placeholder="Choice 4 (optional)"></div><div class="staff-actions"><span class="staff-status"></span><button class="btn btn-primary">Create Poll</button></div></form></div><div class="panel staff-panel"><h3>Homepage Announcement</h3><form class="staff-form" id="staffAnnouncementForm"><textarea name="body" maxlength="1200" placeholder="Headline on the first line, then the announcement…" required></textarea><div class="staff-actions"><span class="staff-status"></span><button class="btn btn-primary">Publish to Home</button></div></form></div><div class="panel staff-panel"><h3>Manage Polls</h3><div class="staff-list" id="staffPollList"></div></div><div class="panel staff-panel"><h3>Message Board Moderation</h3><div class="staff-list" id="staffBoardList"></div></div><div class="panel staff-panel"><h3>Announcements</h3><div class="staff-list" id="staffAnnouncementList"></div></div>${siteAdmin?'<div class="panel staff-panel"><h3>User Roles</h3><div class="staff-role-note">Only the site admin can change staff roles.</div><div class="staff-list" id="siteAdminProfiles"></div></div>':''}</div>`;
     document.getElementById('staffPollForm').addEventListener('submit',createPoll);document.getElementById('staffAnnouncementForm').addEventListener('submit',postAnnouncement);host.addEventListener('click',handleAction);host.addEventListener('change',handleRoleChange);
     Promise.all([loadSummary(),loadPollManager(),loadModeration(),loadAnnouncements(),loadProfiles()]);
   }
@@ -105,18 +120,18 @@
       if(action==='delete-poll'&&confirm('Delete this poll and all of its votes?')){const {error}=await supabase.from('polls').delete().eq('id',id);if(error)alert(error.message);await Promise.all([loadPollManager(),loadSummary()])}
       if(action==='delete-post'&&confirm('Delete this message-board thread and all replies?')){const {error}=await supabase.from('board_posts').delete().eq('id',id);if(error)alert(error.message);await Promise.all([loadModeration(),loadSummary()])}
       if(action==='delete-comment'&&confirm('Delete this reply?')){const {error}=await supabase.from('board_comments').delete().eq('id',id);if(error)alert(error.message);await Promise.all([loadModeration(),loadSummary()])}
-      if(action==='edit-announcement'){const old=decodeURIComponent(b.dataset.body||''),body=prompt('Edit announcement:',old);if(body!==null&&body.trim()){const {error}=await supabase.from('announcements').update({body:body.trim(),updated_at:new Date().toISOString()}).eq('id',id);if(error)alert(error.message);await Promise.all([loadAnnouncements(),loadAnnouncement()])}}
-      if(action==='pin-announcement'){await supabase.from('announcements').update({is_pinned:false}).eq('is_pinned',true);const {error}=await supabase.from('announcements').update({is_pinned:true,updated_at:new Date().toISOString()}).eq('id',id);if(error)alert(error.message);await Promise.all([loadAnnouncements(),loadAnnouncement()])}
-      if(action==='delete-announcement'&&confirm('Delete this announcement?')){const {error}=await supabase.from('announcements').delete().eq('id',id);if(error)alert(error.message);await Promise.all([loadAnnouncements(),loadAnnouncement(),loadSummary()])}
+      if(action==='edit-announcement'){const old=decodeURIComponent(b.dataset.body||''),body=prompt('Edit announcement:',old);if(body!==null&&body.trim()){const {error}=await supabase.from('announcements').update({body:body.trim(),updated_at:new Date().toISOString()}).eq('id',id);if(error)alert(error.message);await Promise.all([loadAnnouncements(),loadAnnouncementsHome()])}}
+      if(action==='toggle-announcement'){const {error}=await supabase.from('announcements').update({is_pinned:b.dataset.pinned!=='true',updated_at:new Date().toISOString()}).eq('id',id);if(error)alert(error.message);await Promise.all([loadAnnouncements(),loadAnnouncementsHome()])}
+      if(action==='delete-announcement'&&confirm('Delete this announcement?')){const {error}=await supabase.from('announcements').delete().eq('id',id);if(error)alert(error.message);await Promise.all([loadAnnouncements(),loadAnnouncementsHome(),loadSummary()])}
     }finally{b.disabled=false}
   }
 
   async function handleRoleChange(e){const select=e.target.closest('[data-role-user]');if(!select||currentProfile?.role!=='site_admin')return;select.disabled=true;const {error}=await supabase.from('profiles').update({role:select.value}).eq('id',select.dataset.roleUser);if(error)alert(error.message);select.disabled=false}
 
   window.addEventListener('gate-auth-changed',e=>{currentProfile=e.detail.profile;const staff=currentProfile&&['site_admin','commissioner'].includes(currentProfile.role);staffTab.classList.toggle('visible',!!staff);if(!staff&&document.getElementById('staff')?.classList.contains('active'))window.switchView?.('home');if(staff)renderDashboard()});
-  loadAnnouncement();
+  loadAnnouncementsHome();
   supabase.channel('1048-staff-live')
-    .on('postgres_changes',{event:'*',schema:'public',table:'announcements'},()=>{loadAnnouncement();if(currentProfile){loadAnnouncements();loadSummary()}})
+    .on('postgres_changes',{event:'*',schema:'public',table:'announcements'},()=>{loadAnnouncementsHome();if(currentProfile){loadAnnouncements();loadSummary()}})
     .on('postgres_changes',{event:'*',schema:'public',table:'board_posts'},()=>{if(currentProfile){loadModeration();loadSummary()}})
     .on('postgres_changes',{event:'*',schema:'public',table:'board_comments'},()=>{if(currentProfile){loadModeration();loadSummary()}})
     .on('postgres_changes',{event:'*',schema:'public',table:'poll_votes'},()=>{if(currentProfile)loadPollManager()})
