@@ -114,7 +114,7 @@
 
     const polls=data||[];
     document.getElementById('pollCount').textContent=String(polls.length);
-    notice('pollNotice',polls.some(poll=>poll.is_starter)?'Starter polls are examples and do not accept new votes.':'Official league polls · your vote is saved to this device.');
+    notice('pollNotice',polls.some(poll=>poll.is_starter)?'Starter polls are live examples · your vote is saved to this device.':'Official league polls · your vote is saved to this device.');
     if(!polls.length){
       host.innerHTML='<div class="panel community-empty">No polls are posted yet.</div>';
       return;
@@ -125,12 +125,12 @@
       const options=[...(poll.poll_options||[])].sort((a,b)=>a.sort_order-b.sort_order);
       const starter=Boolean(poll.is_starter);
       return `<article class="panel poll-card live-poll ${index===0?'poll-featured':''}" data-poll="${poll.id}">
-        <div class="poll-head"><div>${starter?'<span class="community-starter-badge">Starter poll</span>':''}<h3>${esc(poll.question)}</h3><div class="poll-meta">${total} vote${total===1?'':'s'} · ${starter?'example result':myVote?'vote recorded':'choose one option'}</div></div><span class="${starter?'status-preview':poll.is_open?'status-live':'status-closed'}">${starter?'Example':poll.is_open?'Live':'Closed'}</span></div>
+        <div class="poll-head"><div>${starter?'<span class="community-starter-badge">Starter poll</span>':''}<h3>${esc(poll.question)}</h3><div class="poll-meta">${total} vote${total===1?'':'s'} · ${myVote?'vote recorded':poll.is_open?'choose one option':'final result'}</div></div><span class="${poll.is_open?'status-live':'status-closed'}">${poll.is_open?'Live':'Closed'}</span></div>
         ${options.map(option=>{
           const count=votes.filter(vote=>vote.option_id===option.id).length,pct=total?Math.round(count/total*100):0,selected=myVote?.option_id===option.id;
-          return `<button class="poll-vote-option ${selected?'selected':''}" data-option="${option.id}" ${starter||!poll.is_open||myVote?'disabled':''}><div class="option-top"><span>${esc(option.label)}${selected?' ✓':''}</span><span class="pct">${pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></button>`;
+          return `<button class="poll-vote-option ${selected?'selected':''}" data-option="${option.id}" ${!poll.is_open||myVote?'disabled':''}><div class="option-top"><span>${esc(option.label)}${selected?' ✓':''}</span><span class="pct">${pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></button>`;
         }).join('')}
-        <div class="poll-foot"><span>${starter?'Staff can delete this example':poll.is_open?'Voting open':'Final result'}</span><span>${total} total</span></div>
+        <div class="poll-foot"><span>${starter?'Starter example · staff can delete it':poll.is_open?'Voting open':'Final result'}</span><span>${total} total</span></div>
       </article>`;
     }).join('');
 

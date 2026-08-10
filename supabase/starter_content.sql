@@ -34,7 +34,7 @@ begin
   end if;
 end $$;
 
--- A public visitor may vote only in a real, currently open poll.
+-- A public visitor may vote in any currently open poll, including a starter poll.
 drop policy if exists "anyone can vote" on public.poll_votes;
 create policy "anyone can vote"
 on public.poll_votes for insert
@@ -44,7 +44,6 @@ with check (
     select 1 from public.polls
     where polls.id = poll_votes.poll_id
       and polls.is_open = true
-      and polls.is_starter = false
   )
 );
 
@@ -79,10 +78,20 @@ on conflict (id) do nothing;
 insert into public.polls
   (id, question, is_open, is_starter, created_at)
 values
-  ('10480000-0000-4000-8000-000000000401', 'Which night should host the Szn 10 draft?', false, true, now() - interval '10 minutes'),
-  ('10480000-0000-4000-8000-000000000402', 'Should 1048 Gate switch to FAAB waivers?', false, true, now() - interval '1 day'),
-  ('10480000-0000-4000-8000-000000000403', 'Choose the Szn 10 last-place punishment', false, true, now() - interval '2 days')
+  ('10480000-0000-4000-8000-000000000401', 'Which night should host the Szn 10 draft?', true, true, now() - interval '10 minutes'),
+  ('10480000-0000-4000-8000-000000000402', 'Should 1048 Gate switch to FAAB waivers?', true, true, now() - interval '1 day'),
+  ('10480000-0000-4000-8000-000000000403', 'Choose the Szn 10 last-place punishment', true, true, now() - interval '2 days')
 on conflict (id) do nothing;
+
+-- Existing starter rows may have been installed as closed examples.
+update public.polls
+set is_open = true
+where is_starter = true
+  and id in (
+    '10480000-0000-4000-8000-000000000401',
+    '10480000-0000-4000-8000-000000000402',
+    '10480000-0000-4000-8000-000000000403'
+  );
 
 insert into public.poll_options
   (id, poll_id, label, sort_order)
