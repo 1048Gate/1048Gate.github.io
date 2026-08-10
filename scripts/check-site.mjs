@@ -17,6 +17,11 @@ if(html.includes('EST. 2016')) throw new Error('The old 2016 founding year is st
 if(/[?&]v=20\d{6}/.test(html)) throw new Error('A manual date-based cache-busting query remains in index.html.');
 if(html.includes('member-logo-patch')) throw new Error('The retired member logo patch is still referenced.');
 
+const leagueContent = readFileSync(new URL('js/league-content.js', root), 'utf8');
+if(!leagueContent.includes('memberPresentation.logoFor') || !leagueContent.includes('member-head-with-logo')){
+  throw new Error('Supabase member cards must preserve the shared member-logo presentation.');
+}
+
 const jsDir = new URL('js/', root);
 for(const entry of readdirSync(jsDir, {withFileTypes:true})){
   if(!entry.isFile() || !entry.name.endsWith('.js')) continue;
