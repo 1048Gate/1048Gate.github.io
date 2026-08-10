@@ -18,7 +18,7 @@ if(/[?&]v=20\d{6}/.test(html)) throw new Error('A manual date-based cache-bustin
 if(html.includes('member-logo-patch')) throw new Error('The retired member logo patch is still referenced.');
 
 const scriptAssets = [...html.matchAll(/<script defer src="([^"]+)"/g)].map(match => match[1]);
-const requiredScriptOrder = ['js/shared.js', 'js/supabase-config.js', 'js/auth.js', 'js/app.js'];
+const requiredScriptOrder = ['js/shared.js', 'js/site-ui.js', 'js/supabase-config.js', 'js/auth.js', 'js/app.js'];
 for(let index = 0; index < requiredScriptOrder.length; index++){
   if(scriptAssets[index] !== requiredScriptOrder[index]){
     throw new Error(`Core script order must begin: ${requiredScriptOrder.join(', ')}`);
@@ -45,6 +45,23 @@ if(normalizedMembers.some(member => member.seasons.some(season => !('year' in se
 if(normalizedMembers.find(member => member.number === '10')?.role !== 'Admin') throw new Error('Collin\'s Admin role override was lost.');
 const liveShape = shared.normalizeMember({member_number:'7', name:'Test', role_label:'League Member', member_seasons:[{season_year:2025, final_finish:2, team_name:'Test Team', record:'9-5', points_for:1700, points_against:1600}]});
 if(liveShape.number !== '07' || liveShape.seasons[0]?.team !== 'Test Team') throw new Error('Supabase member rows were not normalized correctly.');
+
+const siteConfig = JSON.parse(readFileSync(new URL('data/site.json', root), 'utf8'));
+if(!Number.isInteger(siteConfig.seasonYear) || !Number.isInteger(siteConfig.seasonNumber) || !siteConfig.phase || !siteConfig.competition){
+  throw new Error('data/site.json must define the current season year, number, phase, and competition.');
+}
+if(!html.includes('data-site-phase') || !html.includes('data-site-season') || !scriptAssets.includes('js/site-ui.js')){
+  throw new Error('The season display must be driven by data/site.json through site-ui.js.');
+}
+if([...html.matchAll(/<button[^>]+class="quick-card"[^>]+data-quick-view=/g)].length !== 6 || /class="quick-card"[^>]+onclick=/.test(html)){
+  throw new Error('All six home quick cards must be native buttons without inline handlers.');
+}
+if([...html.matchAll(/<button[^>]+class="accordion-head"[^>]+aria-expanded=/g)].length !== 5){
+  throw new Error('Every rules accordion trigger must be an accessible button with aria-expanded.');
+}
+if(!html.includes('id="authControlMount"') || !html.includes('class="member-modal-card" role="dialog" aria-modal="true"')){
+  throw new Error('Stable authentication and accessible member-modal markup is missing.');
+}
 
 function webpDimensions(fileUrl){
   const data = readFileSync(fileUrl);
@@ -117,9 +134,16 @@ const appSource = readFileSync(new URL('js/app.js', root), 'utf8');
 if(!appSource.includes("from('league_members')") || !appSource.includes("fetch('data/members.json'")){
   throw new Error('app.js must use Supabase first and members.json as its fallback.');
 }
+if(!appSource.includes('trapFocus(event') || !appSource.includes('memberReturnFocus')){
+  throw new Error('The member modal must trap focus and restore it when closed.');
+}
 const communitySource = readFileSync(new URL('js/community.js', root), 'utf8');
 if(communitySource.includes('createClient') || communitySource.includes('supabase-js@')){
   throw new Error('community.js must reuse the shared Supabase client.');
+}
+const authSource = readFileSync(new URL('js/auth.js', root), 'utf8');
+if(!authSource.includes('trapFocus(event') || !authSource.includes("setAttribute('aria-hidden'")){
+  throw new Error('The staff login modal must manage focus and aria-hidden.');
 }
 
 const views = new Set([...html.matchAll(/<section[^>]+id="([^"]+)"/g)].map(match => match[1]));

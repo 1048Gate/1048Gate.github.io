@@ -6,6 +6,7 @@ const {
   memberTotals,
   latestSeason,
   recordText,
+  trapFocus,
   memberPresentation
 } = window.gateShared;
 
@@ -29,18 +30,28 @@ document.getElementById('tabs')?.addEventListener('click', event => {
   if (button) switchView(button.dataset.view);
 });
 
+document.querySelector('.quick-grid')?.addEventListener('click', event => {
+  const card = event.target.closest('[data-quick-view]');
+  if(card) switchView(card.dataset.quickView);
+});
+
 document.querySelectorAll('.filter-pills .pill').forEach(pill => pill.addEventListener('click', () => {
   document.querySelectorAll('.filter-pills .pill').forEach(item => item.classList.remove('active'));
   pill.classList.add('active');
 }));
 
-document.querySelectorAll('.accordion-item').forEach(item =>
-  item.querySelector('.accordion-head')?.addEventListener('click', () => item.classList.toggle('open'))
-);
+document.querySelectorAll('.accordion-item').forEach(item => {
+  const trigger = item.querySelector('.accordion-head');
+  trigger?.addEventListener('click', () => {
+    const open = item.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', String(open));
+  });
+});
 
 let leagueMembers = [];
 let membersClient = null;
 let membersChannel = null;
+let memberReturnFocus = null;
 
 function setMemberSource(label) {
   const source = document.getElementById('memberDataSource');
@@ -98,6 +109,7 @@ function openMember(index) {
   if (!member) return;
   const stats = memberTotals(member);
   const latest = latestSeason(member);
+  memberReturnFocus = document.activeElement;
 
   memberPresentation.applyModal({
     number: member.number,
@@ -141,12 +153,15 @@ function openMember(index) {
   const modal = document.getElementById('memberModal');
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
+  document.getElementById('memberModalClose')?.focus();
 }
 
 function closeMember() {
   const modal = document.getElementById('memberModal');
   modal?.classList.remove('open');
   modal?.setAttribute('aria-hidden', 'true');
+  if(memberReturnFocus?.isConnected) memberReturnFocus.focus();
+  memberReturnFocus = null;
 }
 
 function useMembers(rows, sourceLabel) {
@@ -226,7 +241,14 @@ document.getElementById('memberModal')?.addEventListener('click', event => {
   if (event.target.id === 'memberModal') closeMember();
 });
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') closeMember();
+  const modal = document.getElementById('memberModal');
+  if(!modal?.classList.contains('open')) return;
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeMember();
+    return;
+  }
+  trapFocus(event, modal.querySelector('.member-modal-card'));
 });
 
 initializeMembers();

@@ -10,6 +10,7 @@ Official website for the 1048 Gate fantasy football keeper league.
 - `js/app.js` — navigation plus the single member renderer and Supabase-to-JSON fallback
 - `js/` — explicitly ordered feature scripts; no runtime script-injection chain
 - `data/` — browser-ready league history exported from the SQLite archive
+- `data/site.json` — current season number, year, phase, and competition labels
 - `images/1048-gate-logo.webp` — optimized league logo
 - `images/team-logos/` — 256px WebP member logos
 
@@ -22,6 +23,10 @@ python3 scripts/export_web_data.py
 ```
 
 Career record, winning percentage, championships, average finish, best finish, and career points calculate automatically.
+
+## Updating the current season
+
+Edit `data/site.json` when the league moves from preseason to the regular season or rolls into a new year. The header chip, browser title, season branding, and footer update from that one file.
 
 ## Run locally
 
