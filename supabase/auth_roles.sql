@@ -15,6 +15,7 @@ create table if not exists public.announcements (
   author_name text not null,
   body text not null check (char_length(body) between 1 and 1200),
   is_pinned boolean not null default true,
+  is_starter boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
