@@ -2,6 +2,8 @@
 
 Official website for the 1048 Gate fantasy football keeper league.
 
+The public interface uses a restrained league-office design: compact navigation, a data-driven season dashboard, clean commissioner updates, and consistent charcoal, teal, and gold surfaces across the archive.
+
 ## Project structure
 
 - `index.html` — page structure and league content

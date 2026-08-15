@@ -1,6 +1,6 @@
 (async function(){
   const supabase=window.gateSupabase||await window.gateSupabaseReady;if(!supabase)return;
-  const {escapeHtml:esc}=window.gateShared;
+  const {escapeHtml:esc,memberPresentation}=window.gateShared;
   let currentProfile=null;
   const missingStarterColumn=error=>error?.code==='42703'||String(error?.message||'').includes('is_starter');
 
@@ -22,11 +22,12 @@
       board.innerHTML='<div class="commissioner-empty">No commissioner announcements are posted yet.</div>';
       return;
     }
-    board.innerHTML=data.map((announcement,index)=>{
+    board.innerHTML=data.map(announcement=>{
       const [headline,...lines]=String(announcement.body).split('\n');
       const body=lines.join('\n').trim();
       const date=new Date(announcement.created_at).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
-      return `<article class="pin-note announcement-note ${index%2?'announcement-warning':'announcement-alt'}"><div class="pin" aria-hidden="true"></div>${announcement.is_starter?'<span class="mock-label">Starter announcement</span>':''}<span class="who">${esc(announcement.author_name)}</span><strong>${esc(headline)}</strong>${body?`<span class="announcement-copy">${esc(body).replace(/\n/g,'<br>')}</span>`:''}<span class="when">${esc(date)}</span></article>`;
+      const initials=memberPresentation.initialsFor(announcement.author_name);
+      return `<article class="league-announcement"><div class="announcement-avatar" aria-hidden="true">${esc(initials)}</div><div class="announcement-content"><div class="announcement-meta"><span>League office</span><time datetime="${esc(announcement.created_at)}">${esc(date)}</time></div>${announcement.is_starter?'<span class="announcement-starter">Starter announcement</span>':''}<h3>${esc(headline)}</h3>${body?`<p>${esc(body).replace(/\n/g,'<br>')}</p>`:''}<small>${esc(announcement.author_name)}</small></div></article>`;
     }).join('');
   }
 

@@ -59,8 +59,14 @@ if(!Number.isInteger(siteConfig.seasonYear) || !Number.isInteger(siteConfig.seas
 if(!html.includes('data-site-phase') || !html.includes('data-site-season') || !scriptAssets.includes('js/site-ui.js')){
   throw new Error('The season display must be driven by data/site.json through site-ui.js.');
 }
+if(!html.includes('class="hero-season-card"') || !html.includes('data-site-year') || !html.includes('data-site-season-label') || !html.includes('class="home-dashboard"')){
+  throw new Error('The professional home dashboard and data-driven season card are missing.');
+}
 if([...html.matchAll(/<button[^>]+class="quick-card"[^>]+data-quick-view=/g)].length !== 6 || /class="quick-card"[^>]+onclick=/.test(html)){
   throw new Error('All six home quick cards must be native buttons without inline handlers.');
+}
+if([...html.matchAll(/class="quick-kicker"/g)].length !== 6 || html.includes('class="corkboard commissioner-board"')){
+  throw new Error('Home directory labels or the clean league-office presentation regressed.');
 }
 if([...html.matchAll(/<button[^>]+class="accordion-head"[^>]+aria-expanded=/g)].length !== 5){
   throw new Error('Every rules accordion trigger must be an accessible button with aria-expanded.');
@@ -155,6 +161,10 @@ if(!communitySource.includes('is_starter') || !html.includes('id="commissionerBo
 const authSource = readFileSync(new URL('js/auth.js', root), 'utf8');
 if(!authSource.includes('trapFocus(event') || !authSource.includes("setAttribute('aria-hidden'")){
   throw new Error('The staff login modal must manage focus and aria-hidden.');
+}
+const adminSource = readFileSync(new URL('js/admin.js', root), 'utf8');
+if(!adminSource.includes('league-announcement') || !adminSource.includes('memberPresentation.initialsFor')){
+  throw new Error('Commissioner updates must use the clean initials-based league-office cards.');
 }
 const transactionSource = readFileSync(new URL('js/transactions.js', root), 'utf8');
 for(const table of ['league_transactions','league_transaction_items']){
