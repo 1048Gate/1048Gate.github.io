@@ -19,12 +19,15 @@
 <link rel="stylesheet" href="css/playoffs-admin.css">
 <link rel="stylesheet" href="css/polish-final.css">
 <link rel="stylesheet" href="css/community.css?v=staff-content-1">
+<link rel="stylesheet" href="css/transactions.css">
+<link rel="stylesheet" href="css/professional.css">
 
 <script defer src="js/shared.js"></script>
 <script defer src="js/site-ui.js"></script>
 <script defer src="js/supabase-config.js"></script>
 <script defer src="js/auth.js"></script>
 <script defer src="js/app.js"></script>
+<script defer src="js/transactions.js"></script>
 <script defer src="js/community.js?v=staff-content-1"></script>
 <script defer src="js/manager-profiles.js"></script>
 <script defer src="js/league-content.js"></script>
@@ -40,10 +43,12 @@
 </head>
 <body>
 
+<a class="skip-link" href="#mainContent">Skip to league content</a>
+
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <img class="brand-logo" src="images/1048-gate-logo.webp" alt="1048 Gate Szn X logo">
+      <img class="brand-logo" src="images/1048-gate-logo.webp" alt="1048 Gate Szn 10 logo" width="512" height="512">
       <div class="brand-text">
         <div class="name" data-site-brand>1048 GATE SZN X</div>
         <div class="tag">EST. 2017 &nbsp;•&nbsp; 12-TEAM KEEPER LEAGUE</div>
@@ -55,9 +60,10 @@
     </div>
     <div class="auth-control-slot" id="authControlMount" aria-live="polite"></div>
   </div>
-  <nav class="tabs" id="tabs">
+  <nav class="tabs" id="tabs" aria-label="Primary league navigation">
     <button data-view="home" class="active" aria-current="page">Home</button>
     <button data-view="history">History</button>
+    <button data-view="transactions">Transactions</button>
     <button data-view="playoffs">Playoffs</button>
     <button data-view="members">Members</button>
     <button data-view="board">Board</button>
@@ -66,7 +72,7 @@
   </nav>
 </div>
 
-<main>
+<main id="mainContent" tabindex="-1">
   <section class="view active" id="home">
     <div class="hero">
       <div class="hero-copy">
@@ -75,14 +81,19 @@
         <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
         <p>The official headquarters for league news, message boards, voting, records, champions, and everything 1048.</p>
         <div class="hero-buttons">
-          <button class="btn btn-primary" onclick="switchView('board')">Message Board</button>
-          <button class="btn btn-ghost" onclick="switchView('history')">League History</button>
+          <button class="btn btn-primary" data-view-link="transactions">Explore Transactions</button>
+          <button class="btn btn-ghost" data-view-link="history">League History</button>
+        </div>
+        <div class="hero-stats" aria-label="League archive totals">
+          <div><strong>9</strong><span>Seasons</span></div>
+          <div><strong>12</strong><span>Managers</span></div>
+          <div><strong>903</strong><span>Games</span></div>
         </div>
       </div>
-      <div class="hero-logo"><img src="images/1048-gate-logo.webp" alt="1048 Gate Szn X fantasy football league crest"></div>
+      <div class="hero-logo"><img src="images/1048-gate-logo.webp" alt="1048 Gate Szn 10 fantasy football league crest" width="512" height="512"></div>
     </div>
 
-    <div class="section-title"><span class="section-kicker">League office</span><h2>📌 From the Commissioner</h2><span class="see-all">George's bulletin board</span></div>
+    <div class="section-title"><span class="section-kicker">League office</span><h2>From the Commissioner</h2><span class="see-all">George's bulletin board</span></div>
     <div class="corkboard commissioner-board" id="commissionerBoard" aria-label="Commissioner announcements" aria-live="polite">
       <div class="commissioner-empty">Loading commissioner announcements…</div>
     </div>
@@ -91,11 +102,48 @@
     <div class="quick-grid">
       <button type="button" class="quick-card" data-quick-view="board"><span class="num">01</span><h3>Message Board</h3><p>Trash talk, trade chatter, and waiver wire debates.</p></button>
       <button type="button" class="quick-card" data-quick-view="votes"><span class="num">02</span><h3>Vote Booth</h3><p>League rule changes, punishments, and payout splits.</p></button>
-      <button type="button" class="quick-card" data-quick-view="history"><span class="num">03</span><h3>League History</h3><p>Champions, records, and the Wall of Shame.</p></button>
-      <button type="button" class="quick-card" data-quick-view="rules"><span class="num">04</span><h3>Rules</h3><p>Scoring settings, roster rules, waivers, trades, playoffs, and payouts.</p></button>
+      <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><h3>Transactions</h3><p>Search every add, drop, waiver, trade, and lineup move since 2019.</p></button>
+      <button type="button" class="quick-card" data-quick-view="history"><span class="num">04</span><h3>League History</h3><p>Champions, records, and the Wall of Shame.</p></button>
       <button type="button" class="quick-card" data-quick-view="members"><span class="num">05</span><h3>Members</h3><p>View every league member, career record, championships, and season history.</p></button>
       <button type="button" class="quick-card" data-quick-view="playoffs"><span class="num">06</span><h3>Playoffs</h3><p>Browse postseason brackets, champions, seeds, and consolation history.</p></button>
     </div>
+  </section>
+
+  <section class="view" id="transactions">
+    <div class="section-title"><span class="section-kicker">The league wire</span><h2>Transaction Archive</h2><span class="see-all">2019–2025 ESPN history</span></div>
+    <div class="transaction-intro">
+      <div>
+        <span class="transaction-eyebrow">Complete roster activity</span>
+        <h3>Every move has a paper trail.</h3>
+        <p>Search seven seasons of waiver claims, free-agent pickups, drops, trades, proposals, failures, and lineup changes pulled directly from the league archive.</p>
+      </div>
+      <div class="transaction-sync" id="transactionSync" role="status" aria-live="polite"><span></span>Ready to load</div>
+    </div>
+    <div class="transaction-summary" id="transactionSummary" aria-label="Transaction archive totals">
+      <div class="transaction-summary-card is-loading"><span>Events</span><strong>—</strong><small>Loading archive</small></div>
+      <div class="transaction-summary-card is-loading"><span>Player moves</span><strong>—</strong><small>Loading archive</small></div>
+      <div class="transaction-summary-card is-loading"><span>Executed</span><strong>—</strong><small>Loading archive</small></div>
+      <div class="transaction-summary-card is-loading"><span>Seasons</span><strong>—</strong><small>Loading archive</small></div>
+    </div>
+    <div class="panel transaction-workbench">
+      <div class="transaction-controls">
+        <label class="transaction-search"><span>Search player or team</span><input id="transactionSearch" type="search" placeholder="Try Saquon Barkley or The Swifties" autocomplete="off"></label>
+        <label><span>Season</span><select id="transactionSeason"><option value="all">All seasons</option></select></label>
+        <label><span>Activity</span><select id="transactionType"><option value="all">All activity</option></select></label>
+        <label><span>Status</span><select id="transactionStatus"><option value="EXECUTED">Executed</option><option value="all">All statuses</option></select></label>
+        <label><span>Order</span><select id="transactionSort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label>
+        <button class="btn btn-ghost transaction-reset" id="transactionReset" type="button">Reset filters</button>
+      </div>
+      <div class="transaction-default-note" id="transactionDefaultNote">Executed activity is shown first. Choose <strong>All statuses</strong> to include proposals, canceled moves, and failed claims.</div>
+    </div>
+    <div class="transaction-results-head">
+      <div><strong id="transactionResultCount">Archive not loaded</strong><span id="transactionResultRange">Open this section to load live data.</span></div>
+      <span class="transaction-source">Live from the 1048 Gate database</span>
+    </div>
+    <div class="transaction-feed" id="transactionFeed" aria-live="polite">
+      <div class="panel transaction-empty"><strong>Loading transaction archive…</strong><span id="transactionLoadProgress">Connecting to the league database.</span></div>
+    </div>
+    <nav class="transaction-pagination" id="transactionPagination" aria-label="Transaction results pages"></nav>
   </section>
 
   <section class="view" id="board">
@@ -141,7 +189,7 @@
 
   <section class="view" id="members">
     <div class="section-title"><h2>Members</h2></div>
-    <div class="member-help"><strong>League database:</strong> member history uses Supabase first, with <span class="mono">data/members.json</span> as a safe fallback. <span id="memberDataSource" class="mono">Loading…</span></div>
+    <div class="member-help"><strong>Nine seasons. Twelve managers. One league.</strong> Open a manager card for career results, team history, rivalries, signature games, draft results, and top players. <span id="memberDataSource" class="mono">Loading history…</span></div>
     <div class="members-grid" id="membersGrid"></div>
   </section>
 
@@ -167,6 +215,6 @@
   </div>
 </main>
 
-<footer data-site-footer>1048 Gate Szn 10</footer>
+<footer><strong data-site-footer>1048 Gate Szn 10</strong><span>Brotherhood • Competition • Tradition</span></footer>
 </body>
 </html>
