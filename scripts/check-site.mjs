@@ -185,6 +185,9 @@ for(const excluded of ["'FUTURE_ROSTER'", "'ROSTER'", "'TRADE_PROPOSAL'", "'TRAD
 if(!transactionSource.includes("row.status === 'EXECUTED'") || html.includes('id="transactionStatus"') || transactionSource.includes('transaction-technical')){
   throw new Error('Transactions must show only completed adds, drops, successful waivers, and accepted trades without status or technical controls.');
 }
+if(html.includes('id="transactionType"') || !transactionSource.includes('data-transaction-category') || !transactionSource.includes('renderDayGroup') || !transactionSource.includes('transaction-ledger-row')){
+  throw new Error('Transactions must use category navigation and the date-grouped activity ledger.');
+}
 const starterSql = readFileSync(new URL('supabase/starter_content.sql', root), 'utf8');
 for(const table of ['announcements','board_posts','board_comments','polls','poll_options','poll_votes']){
   if(!starterSql.includes(`public.${table}`)) throw new Error(`starter_content.sql does not seed or secure ${table}.`);

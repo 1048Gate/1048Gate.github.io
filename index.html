@@ -137,17 +137,16 @@
       </div>
       <div class="transaction-sync" id="transactionSync" role="status" aria-live="polite"><span></span>Ready to load</div>
     </div>
-    <div class="transaction-summary" id="transactionSummary" aria-label="Transaction archive totals">
-      <div class="transaction-summary-card is-loading"><span>Adds</span><strong>—</strong><small>Loading archive</small></div>
-      <div class="transaction-summary-card is-loading"><span>Drops</span><strong>—</strong><small>Loading archive</small></div>
-      <div class="transaction-summary-card is-loading"><span>Successful waivers</span><strong>—</strong><small>Loading archive</small></div>
-      <div class="transaction-summary-card is-loading"><span>Accepted trades</span><strong>—</strong><small>Loading archive</small></div>
+    <div class="transaction-summary" id="transactionSummary" aria-label="Choose a transaction category">
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>All activity</span><strong>—</strong><small>Loading archive</small></button>
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>Adds &amp; drops</span><strong>—</strong><small>Loading archive</small></button>
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>Successful waivers</span><strong>—</strong><small>Loading archive</small></button>
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>Accepted trades</span><strong>—</strong><small>Loading archive</small></button>
     </div>
     <div class="panel transaction-workbench">
       <div class="transaction-controls">
         <label class="transaction-search"><span>Search player or team</span><input id="transactionSearch" type="search" placeholder="Try Saquon Barkley or The Swifties" autocomplete="off"></label>
         <label><span>Season</span><select id="transactionSeason"><option value="all">All seasons</option></select></label>
-        <label><span>Move type</span><select id="transactionType"><option value="all">All moves</option></select></label>
         <label><span>Order</span><select id="transactionSort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label>
         <button class="btn btn-ghost transaction-reset" id="transactionReset" type="button">Reset filters</button>
       </div>
