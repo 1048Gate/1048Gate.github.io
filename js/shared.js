@@ -1,19 +1,4 @@
 (function(){
-  const MEMBER_LOGOS = Object.freeze({
-    '01': 'images/team-logos/01-george-travis.webp',
-    '02': 'images/team-logos/02-jared-hall.webp',
-    '03': 'images/team-logos/03-kyle-fowler.webp',
-    '04': 'images/team-logos/04-bryan-hunt.webp',
-    '05': 'images/team-logos/05-brian-heino.webp',
-    '06': 'images/team-logos/06-vincent-cannarozzi.webp',
-    '07': 'images/team-logos/07-james-brochu.webp',
-    '08': 'images/team-logos/08-jd-daley.webp',
-    '09': 'images/team-logos/09-thomas-speer.webp',
-    '10': 'images/team-logos/10-collin-krum.webp',
-    '11': 'images/team-logos/11-german-haro.webp',
-    '12': 'images/team-logos/12-trevor-hash.webp'
-  });
-
   const MEMBER_ROLE_OVERRIDES = Object.freeze({'10': 'Admin'});
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, character => ({
@@ -78,7 +63,12 @@
   }
 
   const normalizeMemberNumber = value => String(value ?? '').trim().padStart(2, '0');
-  const memberLogo = value => MEMBER_LOGOS[normalizeMemberNumber(value)] || '';
+  const memberInitials = name => {
+    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if(!parts.length) return '—';
+    if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return `${parts[0][0]}${parts.at(-1)[0]}`.toUpperCase();
+  };
   const memberRole = member => MEMBER_ROLE_OVERRIDES[normalizeMemberNumber(member.number ?? member.member_number)]
     || member.role
     || member.role_label
@@ -156,34 +146,16 @@
     return (member.seasons || []).reduce((latest, season) => !latest || season.year > latest.year ? season : latest, null);
   }
 
-  function bindLogoFallbacks(root = document){
-    root.querySelectorAll('.member-logo').forEach(image => {
-      image.addEventListener('error', () => {
-        image.hidden = true;
-        image.closest('.member-logo-shell')?.classList.add('logo-missing');
-      }, {once:true});
-    });
-  }
-
   function applyMemberModal({number, name, role, seasonsRecorded, team}){
     const normalizedNumber = normalizeMemberNumber(number);
-    const logoSrc = memberLogo(normalizedNumber);
-    const logoShell = document.querySelector('#memberModal .member-modal-logo-shell');
-    const logo = document.getElementById('memberModalLogo');
-    const fallback = document.getElementById('memberModalLogoFallback');
+    const initials = document.getElementById('memberModalInitials');
     const modalName = document.getElementById('memberModalName');
     const modalRole = document.getElementById('memberModalRole');
     const modalTeam = document.getElementById('memberModalTeam');
 
     if(modalName) modalName.textContent = name;
     if(modalRole) modalRole.textContent = `${memberRole({number:normalizedNumber, role})} • ${seasonsRecorded} seasons recorded`;
-    if(fallback) fallback.textContent = normalizedNumber;
-    if(logoShell) logoShell.classList.toggle('logo-missing', !logoSrc);
-    if(logo){
-      logo.hidden = !logoSrc;
-      logo.src = logoSrc;
-      logo.alt = logoSrc ? `${name} team logo` : '';
-    }
+    if(initials) initials.textContent = memberInitials(name);
     if(modalTeam){
       modalTeam.textContent = team || '';
       modalTeam.hidden = !team;
@@ -192,9 +164,8 @@
 
   const memberPresentation = Object.freeze({
     normalizeNumber: normalizeMemberNumber,
-    logoFor: memberLogo,
+    initialsFor: memberInitials,
     roleFor: memberRole,
-    bindLogoFallbacks,
     applyModal: applyMemberModal
   });
 

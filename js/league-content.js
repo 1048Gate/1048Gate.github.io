@@ -2,6 +2,19 @@
   const supabase = window.gateSupabase || await window.gateSupabaseReady;
   if(!supabase) return;
   const {escapeHtml:esc} = window.gateShared;
+  const clean = value => String(value ?? '').trim().replace(/\s+/g, ' ');
+
+  function championIdentity(champion){
+    const raw = clean(champion.champion);
+    const explicitTeam = clean(champion.champion_team);
+    const parenthetical = raw.match(/^(.*?)\s*\(([^()]+)\)\s*$/);
+    const slash = raw.match(/^(.*?)\s*\/\s*([^/]+)$/);
+    const parsed = parenthetical || slash;
+    return {
+      team:explicitTeam || clean(parsed?.[1]) || raw || 'Champion unavailable',
+      owner:clean(parsed?.[2])
+    };
+  }
 
   async function loadHistory(){
     const history = document.getElementById('history');
@@ -17,8 +30,9 @@
       if(timeline){
         timeline.classList.add('champions-timeline');
         timeline.innerHTML = champions.map((champion, index) => {
+          const identity = championIdentity(champion);
           const result = [champion.runner_up ? `Defeated ${champion.runner_up}` : '', champion.championship_score].filter(Boolean).join(' · ');
-          return `<article class="champion-entry ${index === 0 ? 'latest-champion' : ''}"><div class="champion-year">${champion.season_year}</div><div class="champion-main"><div class="champion-kicker">${index === 0 ? 'Defending Champion' : 'League Champion'}</div><h3>${esc(champion.champion || '')}</h3>${champion.champion_team ? `<div class="champion-team">${esc(champion.champion_team)}</div>` : ''}${result ? `<div class="champion-result">${esc(result)}</div>` : ''}${champion.note ? `<p>${esc(champion.note)}</p>` : ''}</div><div class="champion-trophy">🏆</div></article>`;
+          return `<article class="champion-entry ${index === 0 ? 'latest-champion' : ''}"><div class="champion-year">${champion.season_year}</div><div class="champion-main"><div class="champion-kicker">${index === 0 ? 'Defending Champion' : 'League Champion'}</div><h3>${esc(identity.team)}</h3>${identity.owner ? `<div class="champion-owner">${esc(identity.owner)}</div>` : ''}${result ? `<div class="champion-result">${esc(result)}</div>` : ''}${champion.note ? `<p>${esc(champion.note)}</p>` : ''}</div><div class="champion-trophy" aria-hidden="true">🏆</div></article>`;
         }).join('');
       }
     }

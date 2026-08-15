@@ -80,14 +80,13 @@ function renderMembers() {
   grid.innerHTML = leagueMembers.map((member, index) => {
     const stats = memberTotals(member);
     const latest = latestSeason(member);
-    const logo = memberPresentation.logoFor(member.number);
+    const initials = memberPresentation.initialsFor(member.name);
     const badge = stats.titles ? `${stats.titles}× Champ` : `#${esc(member.number)}`;
 
     return `<article class="member-card public-member-card" data-member-index="${index}" data-member-number="${esc(member.number)}" tabindex="0" aria-label="View ${esc(member.name)} career history">
-      <div class="member-head member-head-with-logo">
-        <div class="member-logo-shell">
-          ${logo ? `<img class="member-logo" src="${logo}" alt="${esc(member.name)} team logo" loading="lazy">` : ''}
-          <span class="member-logo-fallback">${esc(member.number)}</span>
+      <div class="member-head member-head-with-avatar">
+        <div class="member-avatar" aria-hidden="true">
+          <span class="member-initials">${esc(initials)}</span>
         </div>
         <div class="member-identity">
           <div class="team">${esc(member.name)}</div>
@@ -106,7 +105,6 @@ function renderMembers() {
     </article>`;
   }).join('');
 
-  memberPresentation.bindLogoFallbacks(grid);
   grid.querySelectorAll('[data-member-index]').forEach(card => {
     const open = () => openMember(Number(card.dataset.memberIndex));
     card.addEventListener('click', open);
@@ -251,10 +249,6 @@ window.gateMembers = Object.freeze({
 });
 
 document.getElementById('memberModalClose')?.addEventListener('click', closeMember);
-document.getElementById('memberModalLogo')?.addEventListener('error', event => {
-  event.currentTarget.hidden = true;
-  event.currentTarget.closest('.member-modal-logo-shell')?.classList.add('logo-missing');
-});
 document.getElementById('memberModal')?.addEventListener('click', event => {
   if (event.target.id === 'memberModal') closeMember();
 });

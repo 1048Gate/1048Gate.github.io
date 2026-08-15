@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css?v=cachefix1">
 <link rel="stylesheet" href="css/polish.css">
-<link rel="stylesheet" href="css/member-logos.css">
+<link rel="stylesheet" href="css/member-avatars.css">
 <link rel="stylesheet" href="css/manager-profiles.css">
 <link rel="stylesheet" href="css/history.css">
 <link rel="stylesheet" href="css/drafts.css">
@@ -102,7 +102,7 @@
     <div class="quick-grid">
       <button type="button" class="quick-card" data-quick-view="board"><span class="num">01</span><h3>Message Board</h3><p>Trash talk, trade chatter, and waiver wire debates.</p></button>
       <button type="button" class="quick-card" data-quick-view="votes"><span class="num">02</span><h3>Vote Booth</h3><p>League rule changes, punishments, and payout splits.</p></button>
-      <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><h3>Transactions</h3><p>Search every add, drop, waiver, trade, and lineup move since 2019.</p></button>
+      <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><h3>Transactions</h3><p>Search adds, drops, successful waivers, and trade history since 2019.</p></button>
       <button type="button" class="quick-card" data-quick-view="history"><span class="num">04</span><h3>League History</h3><p>Champions, records, and the Wall of Shame.</p></button>
       <button type="button" class="quick-card" data-quick-view="members"><span class="num">05</span><h3>Members</h3><p>View every league member, career record, championships, and season history.</p></button>
       <button type="button" class="quick-card" data-quick-view="playoffs"><span class="num">06</span><h3>Playoffs</h3><p>Browse postseason brackets, champions, seeds, and consolation history.</p></button>
@@ -113,32 +113,31 @@
     <div class="section-title"><span class="section-kicker">The league wire</span><h2>Transaction Archive</h2><span class="see-all">2019–2025 ESPN history</span></div>
     <div class="transaction-intro">
       <div>
-        <span class="transaction-eyebrow">Complete roster activity</span>
-        <h3>Every move has a paper trail.</h3>
-        <p>Search seven seasons of waiver claims, free-agent pickups, drops, trades, proposals, failures, and lineup changes pulled directly from the league archive.</p>
+        <span class="transaction-eyebrow">League moves that matter</span>
+        <h3>The waiver wire and trade block.</h3>
+        <p>Search seven seasons of successful adds, drops, waiver claims, trade offers, vetoes, and upheld deals—without routine lineup noise.</p>
       </div>
       <div class="transaction-sync" id="transactionSync" role="status" aria-live="polite"><span></span>Ready to load</div>
     </div>
     <div class="transaction-summary" id="transactionSummary" aria-label="Transaction archive totals">
-      <div class="transaction-summary-card is-loading"><span>Events</span><strong>—</strong><small>Loading archive</small></div>
-      <div class="transaction-summary-card is-loading"><span>Player moves</span><strong>—</strong><small>Loading archive</small></div>
-      <div class="transaction-summary-card is-loading"><span>Executed</span><strong>—</strong><small>Loading archive</small></div>
-      <div class="transaction-summary-card is-loading"><span>Seasons</span><strong>—</strong><small>Loading archive</small></div>
+      <div class="transaction-summary-card is-loading"><span>Adds</span><strong>—</strong><small>Loading archive</small></div>
+      <div class="transaction-summary-card is-loading"><span>Drops</span><strong>—</strong><small>Loading archive</small></div>
+      <div class="transaction-summary-card is-loading"><span>Successful waivers</span><strong>—</strong><small>Loading archive</small></div>
+      <div class="transaction-summary-card is-loading"><span>Trade history</span><strong>—</strong><small>Loading archive</small></div>
     </div>
     <div class="panel transaction-workbench">
       <div class="transaction-controls">
         <label class="transaction-search"><span>Search player or team</span><input id="transactionSearch" type="search" placeholder="Try Saquon Barkley or The Swifties" autocomplete="off"></label>
         <label><span>Season</span><select id="transactionSeason"><option value="all">All seasons</option></select></label>
-        <label><span>Activity</span><select id="transactionType"><option value="all">All activity</option></select></label>
-        <label><span>Status</span><select id="transactionStatus"><option value="EXECUTED">Executed</option><option value="all">All statuses</option></select></label>
+        <label><span>Move type</span><select id="transactionType"><option value="all">All moves</option></select></label>
         <label><span>Order</span><select id="transactionSort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label>
         <button class="btn btn-ghost transaction-reset" id="transactionReset" type="button">Reset filters</button>
       </div>
-      <div class="transaction-default-note" id="transactionDefaultNote">Executed activity is shown first. Choose <strong>All statuses</strong> to include proposals, canceled moves, and failed claims.</div>
+      <div class="transaction-default-note">Only completed free-agent and waiver moves are included. Failed claims, lineup changes, and future-lineup records are hidden.</div>
     </div>
     <div class="transaction-results-head">
       <div><strong id="transactionResultCount">Archive not loaded</strong><span id="transactionResultRange">Open this section to load live data.</span></div>
-      <span class="transaction-source">Live from the 1048 Gate database</span>
+      <span class="transaction-source">Curated from the live league archive</span>
     </div>
     <div class="transaction-feed" id="transactionFeed" aria-live="polite">
       <div class="panel transaction-empty"><strong>Loading transaction archive…</strong><span id="transactionLoadProgress">Connecting to the league database.</span></div>
@@ -171,6 +170,7 @@
       <div class="tl-item"><div class="yr">2023</div><div class="champ">Crown The King (Jared)</div><div class="note">Jared earned the No. 1 seed, cruised through the semifinal, and edged JD 126.12–121.20 in a 4.92-point championship thriller. Crown The King lived up to the name, giving Jared his second league title.</div></div>
       <div class="tl-item"><div class="yr">2022</div><div class="champ">A, B, Ceedee, **** You (George)</div><div class="note">George came through from the No. 3 seed, dropped 151.98 in the semifinal, and then routed JD 134.28–81.30 in the title game. The 52.98-point win delivered George’s first 1048 Gate championship.</div></div>
         <div class="tl-item"><div class="yr">2021</div><div class="champ">Has a Nice Ring to it (Tommy)</div><div class="note">Tommy entered as the No. 2 seed, scored 164.66 in the semifinal, and beat Kyle 130.60–109.16 for the title. The win completed the league’s first repeat and gave Tommy back-to-back championships.</div></div>
+      </div>
     </div>
     <div class="panel" style="margin-bottom:16px;"><h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:18px;">Record Book</h3><div class="record-grid"><div class="record-card"><div class="label">Highest Single-Week Score</div><div class="val">235.64</div><div class="sub">Downtown Browns · Week 8, 2022</div></div><div class="record-card"><div class="label">Lowest Single-Week Score</div><div class="val">54.2</div><div class="sub">The Bad Decisions · Week 3, 2023</div></div><div class="record-card"><div class="label">Biggest Blowout</div><div class="val">+87.4</div><div class="sub">Zeke &amp; Destroy over Punt Gods, 2024</div></div><div class="record-card"><div class="label">Longest Win Streak</div><div class="val">9 gms</div><div class="sub">Purdy Good Team, 2023</div></div></div></div>
     <div class="panel"><h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:12px;">Wall of Shame</h3><div class="shame"><div class="txt"><strong>The Bad Decisions — Last Place, 2025</strong><span>Sentenced to this year's punishment. Details TBD by the committee.</span></div><div class="trophy">💩</div></div></div>
@@ -197,9 +197,8 @@
     <div class="member-modal-card" role="dialog" aria-modal="true" aria-labelledby="memberModalName" tabindex="-1">
       <div class="member-modal-head">
         <div class="member-modal-profile">
-          <div class="member-modal-logo-shell">
-            <img class="member-modal-logo" id="memberModalLogo" alt="" loading="eager">
-            <span class="member-modal-logo-fallback" id="memberModalLogoFallback"></span>
+          <div class="member-modal-avatar">
+            <span class="member-modal-initials" id="memberModalInitials" aria-hidden="true"></span>
           </div>
           <div class="member-modal-identity">
             <h2 id="memberModalName"></h2>
