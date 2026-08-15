@@ -45,6 +45,12 @@ if(normalizedMembers.some(member => member.seasons.some(season => !('year' in se
 if(normalizedMembers.find(member => member.number === '10')?.role !== 'Admin') throw new Error('Collin\'s Admin role override was lost.');
 const liveShape = shared.normalizeMember({member_number:'7', name:'Test', role_label:'League Member', member_seasons:[{season_year:2025, final_finish:2, team_name:'Test Team', record:'9-5', points_for:1700, points_against:1600}]});
 if(liveShape.number !== '07' || liveShape.seasons[0]?.team !== 'Test Team') throw new Error('Supabase member rows were not normalized correctly.');
+if(shared.memberPresentation.initialsFor('George Travis') !== 'GT' || shared.memberPresentation.initialsFor('Tommy') !== 'TO'){
+  throw new Error('Member initials must use first and last initials, with a safe one-name fallback.');
+}
+if(/images\/team-logos|member-logo/.test(`${html}\n${sharedSource}`)){
+  throw new Error('Public member presentation must use initials instead of team logo assets.');
+}
 
 const siteConfig = JSON.parse(readFileSync(new URL('data/site.json', root), 'utf8'));
 if(!Number.isInteger(siteConfig.seasonYear) || !Number.isInteger(siteConfig.seasonNumber) || !siteConfig.phase || !siteConfig.competition){
@@ -101,17 +107,6 @@ function checkWebp(fileUrl, {maxBytes, maxDimension}){
 
 const mainLogo = new URL('images/1048-gate-logo.webp', root);
 checkWebp(mainLogo, {maxBytes: 100 * 1024, maxDimension: 512});
-
-const teamLogoDir = new URL('images/team-logos/', root);
-const teamLogos = readdirSync(teamLogoDir, {withFileTypes:true}).filter(entry => entry.isFile());
-if(teamLogos.length !== 12) throw new Error(`Expected 12 team logos, found ${teamLogos.length}.`);
-for(const logo of teamLogos){
-  checkWebp(new URL(logo.name, teamLogoDir), {maxBytes: 75 * 1024, maxDimension: 256});
-}
-
-for(const [, imagePath] of sharedSource.matchAll(/['"](images\/team-logos\/[^'"]+)['"]/g)){
-  if(!existsSync(new URL(imagePath, root))) throw new Error(`Missing member logo referenced by shared.js: ${imagePath}`);
-}
 
 const jsDir = new URL('js/', root);
 let supabaseClientCreations = 0;
@@ -171,6 +166,15 @@ if(!html.includes('id="transactions"') || !html.includes('data-view="transaction
 if(!transactionSource.includes("addEventListener('gate:viewchange'")){
   throw new Error('Transaction data must stay lazy-loaded until its view opens.');
 }
+for(const type of ['FREEAGENT','WAIVER','TRADE_PROPOSAL','TRADE_VETO','TRADE_UPHOLD']){
+  if(!transactionSource.includes(`'${type}'`)) throw new Error(`Curated transaction archive is missing ${type}.`);
+}
+for(const excluded of ["'FUTURE_ROSTER'", "'ROSTER'", "'TRADE_ACCEPT'", "'TRADE_DECLINE'", "'LINEUP'"]){
+  if(transactionSource.includes(excluded)) throw new Error(`Transaction archive still exposes excluded activity: ${excluded}.`);
+}
+if(!transactionSource.includes("row.status === 'EXECUTED'") || html.includes('id="transactionStatus"') || transactionSource.includes('transaction-technical')){
+  throw new Error('Transactions must show completed adds/waivers and curated trade events without status or technical controls.');
+}
 const starterSql = readFileSync(new URL('supabase/starter_content.sql', root), 'utf8');
 for(const table of ['announcements','board_posts','board_comments','polls','poll_options','poll_votes']){
   if(!starterSql.includes(`public.${table}`)) throw new Error(`starter_content.sql does not seed or secure ${table}.`);
@@ -191,4 +195,4 @@ for(const [, view] of html.matchAll(/<button[^>]+data-view="([^"]+)"/g)){
   if(!views.has(view)) throw new Error(`Navigation target does not exist: ${view}`);
 }
 
-console.log(`Site checks passed: ${localAssets.length} ordered CSS/JS assets, ${normalizedMembers.length} normalized members, ${teamLogos.length + 1} optimized images, and ${views.size} public views.`);
+console.log(`Site checks passed: ${localAssets.length} ordered CSS/JS assets, ${normalizedMembers.length} normalized members, 1 optimized image, and ${views.size} public views.`);

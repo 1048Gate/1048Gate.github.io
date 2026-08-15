@@ -5,26 +5,15 @@
   const {escapeHtml:esc} = window.gateShared;
   const PAGE_SIZE = 25;
   const CHUNK_SIZE = 1000;
+  const RELEVANT_TYPES = Object.freeze(['FREEAGENT','WAIVER','TRADE_PROPOSAL','TRADE_VETO','TRADE_UPHOLD']);
+  const TRADE_TYPES = Object.freeze(['TRADE_PROPOSAL','TRADE_VETO','TRADE_UPHOLD']);
+  const MOVEMENT_TYPES = Object.freeze(['ADD','DROP','TRADE']);
   const TYPE_LABELS = Object.freeze({
-    FREEAGENT:'Free-agent move',
-    WAIVER:'Waiver claim',
-    FUTURE_ROSTER:'Future lineup',
-    ROSTER:'Lineup change',
-    TRADE_PROPOSAL:'Trade proposal',
-    TRADE_ACCEPT:'Trade accepted',
+    FREEAGENT:'Add / drop',
+    WAIVER:'Successful waiver',
+    TRADE_PROPOSAL:'Trade offered',
+    TRADE_VETO:'Trade vetoed',
     TRADE_UPHOLD:'Trade upheld',
-    TRADE_DECLINE:'Trade declined',
-    TRADE_VETO:'Trade vetoed'
-  });
-  const STATUS_LABELS = Object.freeze({
-    EXECUTED:'Executed',
-    CANCELED:'Canceled',
-    PENDING:'Pending',
-    FAILED_INVALIDPLAYERSOURCE:'Invalid player source',
-    FAILED_PLAYERALREADYDROPPED:'Player already dropped',
-    FAILED_ROSTERLIMIT:'Roster limit',
-    FAILED_POSITIONLIMIT:'Position limit',
-    UNKNOWN:'Status unavailable'
   });
 
   let supabase = null;
@@ -41,7 +30,6 @@
     search:document.getElementById('transactionSearch'),
     season:document.getElementById('transactionSeason'),
     type:document.getElementById('transactionType'),
-    status:document.getElementById('transactionStatus'),
     sort:document.getElementById('transactionSort'),
     reset:document.getElementById('transactionReset')
   };
@@ -50,7 +38,6 @@
   const number = value => Number(value || 0).toLocaleString();
   const slug = value => clean(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'unknown';
   const labelType = value => TYPE_LABELS[value] || clean(value).toLowerCase().replaceAll('_', ' ').replace(/^./, letter => letter.toUpperCase());
-  const labelStatus = value => STATUS_LABELS[value || 'UNKNOWN'] || clean(value).toLowerCase().replaceAll('_', ' ').replace(/^./, letter => letter.toUpperCase());
   const transactionKey = row => `${row.season_year}|${row.espn_transaction_id}`;
 
   function setControlsDisabled(disabled){
@@ -68,13 +55,13 @@
     if(sync) sync.innerHTML = `<span></span>${esc(details)}`;
   }
 
-  async function fetchAll(table, columns, progressKey, totalKey){
+  async function fetchAll(table, columns, progressKey, totalKey, configure = query => query){
     const loadRange = async (start, includeCount = false) => {
-      const query = supabase.from(table)
+      let query = supabase.from(table)
         .select(columns, includeCount ? {count:'exact'} : undefined)
         .order('season_year', {ascending:false})
-        .order('id', {ascending:true})
-        .range(start, start + CHUNK_SIZE - 1);
+        .order('id', {ascending:true});
+      query = configure(query).range(start, start + CHUNK_SIZE - 1);
       const {data, error, count} = await query;
       if(error) throw error;
       return {start, rows:data || [], count};
@@ -123,7 +110,8 @@
       status:row.status || 'UNKNOWN',
       transaction_date_ms:Number(row.transaction_date_ms || new Date(row.transaction_date).getTime() || 0),
       item_count:Number(row.item_count || 0)
-    }));
+    })).filter(row => RELEVANT_TYPES.includes(row.transaction_type) && (TRADE_TYPES.includes(row.transaction_type) || row.status === 'EXECUTED'));
+    const relevantKeys = new Set(transactions.map(transactionKey));
     items = items.map(item => ({
       ...item,
       season_year:Number(item.season_year),
@@ -132,7 +120,12 @@
       player_name:clean(item.player_name),
       from_team_name:clean(item.from_team_name),
       to_team_name:clean(item.to_team_name)
-    }));
+    })).filter(item => relevantKeys.has(transactionKey(item)) && MOVEMENT_TYPES.includes(item.item_type));
+    progress.transactionTotal = transactions.length;
+    progress.transactions = transactions.length;
+    progress.itemTotal = items.length;
+    progress.items = items.length;
+    updateProgress();
 
     itemsByTransaction = new Map();
     for(const item of items){
@@ -147,8 +140,7 @@
       transaction.searchText = [
         transaction.team_name,
         transaction.transaction_type,
-        transaction.status,
-        transaction.espn_transaction_id,
+        labelType(transaction.transaction_type),
         ...related.flatMap(item => [item.player_name, item.from_team_name, item.to_team_name, item.item_type])
       ].join(' ').toLowerCase();
     }
@@ -158,23 +150,20 @@
     const years = [...new Set(transactions.map(row => row.season_year))].sort((a,b) => b-a);
     const types = [...new Set(transactions.map(row => row.transaction_type).filter(Boolean))]
       .sort((a,b) => labelType(a).localeCompare(labelType(b)));
-    const statuses = [...new Set(transactions.map(row => row.status).filter(value => value && value !== 'EXECUTED'))]
-      .sort((a,b) => labelStatus(a).localeCompare(labelStatus(b)));
     controls.season.innerHTML = '<option value="all">All seasons</option>' + years.map(year => `<option value="${year}">${year}</option>`).join('');
-    controls.type.innerHTML = '<option value="all">All activity</option>' + types.map(type => `<option value="${esc(type)}">${esc(labelType(type))}</option>`).join('');
-    controls.status.innerHTML = '<option value="EXECUTED">Executed</option><option value="all">All statuses</option>' + statuses.map(status => `<option value="${esc(status)}">${esc(labelStatus(status))}</option>`).join('');
+    controls.type.innerHTML = '<option value="all">All moves</option>' + types.map(type => `<option value="${esc(type)}">${esc(labelType(type))}</option>`).join('');
   }
 
   function renderSummary(){
-    const executed = transactions.filter(row => row.status === 'EXECUTED').length;
-    const archiveYears = [...new Set(transactions.map(row => row.season_year))].sort((a,b) => a-b);
-    const seasons = archiveYears.length;
-    const archiveSpan = seasons ? `${archiveYears[0]} through ${archiveYears.at(-1)}` : 'No archived seasons';
+    const adds = items.filter(item => item.item_type === 'ADD').length;
+    const drops = items.filter(item => item.item_type === 'DROP').length;
+    const waivers = transactions.filter(row => row.transaction_type === 'WAIVER').length;
+    const trades = transactions.filter(row => TRADE_TYPES.includes(row.transaction_type)).length;
     document.getElementById('transactionSummary').innerHTML = [
-      ['Events', number(transactions.length), 'Every ESPN action'],
-      ['Player moves', number(items.length), 'Adds, drops, trades & lineups'],
-      ['Executed', number(executed), `${transactions.length ? Math.round(executed / transactions.length * 100) : 0}% completed`],
-      ['Seasons', number(seasons), archiveSpan]
+      ['Adds', number(adds), 'Players added to rosters'],
+      ['Drops', number(drops), 'Players released to free agency'],
+      ['Successful waivers', number(waivers), 'Completed claims only'],
+      ['Trade history', number(trades), 'Offered, vetoed, and upheld']
     ].map(([label,value,note]) => `<div class="transaction-summary-card"><span>${label}</span><strong>${value}</strong><small>${note}</small></div>`).join('');
   }
 
@@ -182,11 +171,9 @@
     const query = clean(controls.search.value).toLowerCase();
     const year = controls.season.value;
     const type = controls.type.value;
-    const status = controls.status.value;
     return transactions.filter(row => {
       if(year !== 'all' && row.season_year !== Number(year)) return false;
       if(type !== 'all' && row.transaction_type !== type) return false;
-      if(status !== 'all' && row.status !== status) return false;
       return !query || row.searchText.includes(query);
     }).sort((a,b) => controls.sort.value === 'oldest'
       ? a.transaction_date_ms - b.transaction_date_ms
@@ -195,16 +182,15 @@
 
   function renderItem(item){
     const type = item.item_type;
-    const player = item.player_name || (item.player_id ? `Player ${item.player_id}` : 'Roster item');
+    const player = item.player_name || 'Player unavailable';
     const from = item.from_team_name;
     const to = item.to_team_name;
     let movement = 'Roster activity recorded';
     if(type === 'ADD') movement = `${from || 'Free agency'} → ${to || 'Roster'}`;
     if(type === 'DROP') movement = `${from || 'Roster'} → ${to || 'Free agency'}`;
     if(type === 'TRADE') movement = `${from || 'Previous team'} → ${to || 'New team'}`;
-    if(type === 'LINEUP') movement = `${to || from || 'Team roster'} lineup adjustment`;
     return `<li class="transaction-item transaction-item-${slug(type)}">
-      <span class="transaction-item-mark" aria-hidden="true">${esc(type === 'LINEUP' ? 'L' : type.slice(0,1))}</span>
+      <span class="transaction-item-mark" aria-hidden="true">${esc(type.slice(0,1))}</span>
       <div><strong>${esc(player)}</strong><span>${esc(movement)}</span></div>
       <small>${esc(type === 'UNKNOWN' ? 'ITEM' : type)}</small>
     </li>`;
@@ -219,12 +205,10 @@
     const related = itemsByTransaction.get(transactionKey(row)) || [];
     const bid = Number(row.bid_amount || 0);
     const typeLabel = labelType(row.transaction_type);
-    const statusLabel = labelStatus(row.status);
-    return `<article class="transaction-card" data-status="${slug(row.status)}">
+    return `<article class="transaction-card" data-type="${slug(row.transaction_type)}">
       <header class="transaction-card-head">
         <div class="transaction-card-title">
           <span class="transaction-type transaction-type-${slug(row.transaction_type)}">${esc(typeLabel)}</span>
-          <span class="transaction-status status-${slug(row.status)}">${esc(statusLabel)}</span>
         </div>
         <time datetime="${esc(row.transaction_date || '')}">${esc(formatDate(row))}</time>
       </header>
@@ -236,14 +220,8 @@
         </div>
         ${related.length
           ? `<ul class="transaction-items">${related.map(renderItem).join('')}</ul>`
-          : '<div class="transaction-no-items">This status event has no player movement attached. It may be a proposal, decline, veto, canceled action, or failed request.</div>'}
+          : '<div class="transaction-no-items">No player movement was attached to this trade event.</div>'}
       </div>
-      <details class="transaction-technical"><summary>Record details</summary><dl>
-        <div><dt>ESPN transaction</dt><dd>${esc(row.espn_transaction_id)}</dd></div>
-        <div><dt>Team ID</dt><dd>${row.team_id ?? '—'}</dd></div>
-        <div><dt>Scoring period</dt><dd>${row.scoring_period || '—'}</dd></div>
-        <div><dt>Recorded items</dt><dd>${row.item_count}</dd></div>
-      </dl></details>
     </article>`;
   }
 
@@ -262,10 +240,9 @@
     const visible = filtered.slice(start, start + PAGE_SIZE);
     document.getElementById('transactionResultCount').textContent = `${number(filtered.length)} matching event${filtered.length === 1 ? '' : 's'}`;
     document.getElementById('transactionResultRange').textContent = filtered.length ? `Showing ${number(start + 1)}–${number(start + visible.length)}` : 'Adjust the filters to widen your search.';
-    document.getElementById('transactionDefaultNote').hidden = controls.status.value !== 'EXECUTED' || controls.search.value || controls.type.value !== 'all' || controls.season.value !== 'all';
     document.getElementById('transactionFeed').innerHTML = visible.length
       ? visible.map(renderCard).join('')
-      : '<div class="panel transaction-empty"><strong>No transactions match those filters.</strong><span>Try another player, team, season, activity, or status.</span></div>';
+      : '<div class="panel transaction-empty"><strong>No transactions match those filters.</strong><span>Try another player, team, season, or move type.</span></div>';
     renderPagination(totalPages);
   }
 
@@ -278,8 +255,8 @@
         supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
         if(!supabase) throw new Error('The league database connection is unavailable.');
         [transactions, items] = await Promise.all([
-          fetchAll('league_transactions', 'id,season_year,espn_transaction_id,scoring_period,transaction_type,status,team_id,team_name,bid_amount,transaction_date_ms,transaction_date,item_count', 'transactions', 'transactionTotal'),
-          fetchAll('league_transaction_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_id,player_name,from_team_id,from_team_name,to_team_id,to_team_name', 'items', 'itemTotal')
+          fetchAll('league_transactions', 'id,season_year,espn_transaction_id,scoring_period,transaction_type,status,team_name,bid_amount,transaction_date_ms,transaction_date,item_count', 'transactions', 'transactionTotal', query => query.in('transaction_type', RELEVANT_TYPES)),
+          fetchAll('league_transaction_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_name,from_team_name,to_team_name', 'items', 'itemTotal')
         ]);
         prepareArchive();
         populateFilters();
@@ -303,7 +280,7 @@
     return loadPromise;
   }
 
-  for(const control of [controls.season, controls.type, controls.status, controls.sort]){
+  for(const control of [controls.season, controls.type, controls.sort]){
     control.addEventListener('change', () => {page=1;render()});
   }
   controls.search.addEventListener('input', () => {
@@ -314,7 +291,6 @@
     controls.search.value='';
     controls.season.value='all';
     controls.type.value='all';
-    controls.status.value='EXECUTED';
     controls.sort.value='newest';
     page=1;
     render();

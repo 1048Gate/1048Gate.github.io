@@ -6,14 +6,13 @@ Official website for the 1048 Gate fantasy football keeper league.
 
 - `index.html` — page structure and league content
 - `css/` — colors, layout, mobile design, member cards, history, playoffs, and staff tools
-- `js/shared.js` — shared escaping, formatting, member normalization, and logo presentation
+- `js/shared.js` — shared escaping, formatting, member normalization, and initials presentation
 - `js/app.js` — navigation plus the single member renderer and Supabase-to-JSON fallback
 - `js/transactions.js` — lazy-loaded search, filtering, pagination, and rendering for the live transaction archive
 - `js/` — explicitly ordered feature scripts; no runtime script-injection chain
 - `data/` — browser-ready league history exported from the SQLite archive
 - `data/site.json` — current season number, year, phase, and competition labels
 - `images/1048-gate-logo.webp` — optimized league logo
-- `images/team-logos/` — 256px WebP member logos
 
 ## Updating member data
 
@@ -27,9 +26,9 @@ Career record, winning percentage, championships, average finish, best finish, a
 
 ## Transaction archive
 
-The Transactions view reads `league_transactions` and `league_transaction_items` from Supabase only after a visitor opens that section. This keeps the landing page light while making all 4,785 transaction events and 8,531 item-level moves from 2019–2025 searchable by season, activity, status, player, and team.
+The Transactions view reads `league_transactions` and `league_transaction_items` from Supabase only after a visitor opens that section. This keeps the landing page light while making the useful activity from 2019–2025 searchable by season, move type, player, and team.
 
-The list intentionally omits ESPN raw JSON and internal member identifiers from the browser UI. It presents the useful league-facing details: date, scoring period, action type, status, acting team, FAAB bid, player, and movement between teams.
+The list intentionally focuses on completed adds and drops, successful waiver claims, and trades that were offered, vetoed, or upheld. Failed claims, lineup activity, future-lineup records, ESPN raw JSON, and internal identifiers are omitted from the browser UI.
 
 To regenerate every website dataset in one pass, run `python3 scripts/export_all.py /path/to/1048_gate.db`. See `scripts/README.md` for individual exporters.
 
@@ -62,13 +61,13 @@ npm run check
 npm run build
 ```
 
-When replacing a logo, create a lightweight WebP with ImageMagick:
+When replacing the league crest, create a lightweight WebP with ImageMagick:
 
 ```bash
-npm run optimize:image -- source-logo.png images/team-logos/12-trevor-hash.webp 256
+npm run optimize:image -- source-logo.png images/1048-gate-logo.webp 512
 ```
 
-Use `512` instead of `256` for the main league crest. `npm run check` rejects misleading extensions, whitespace in image filenames, oversized dimensions, and unnecessarily large image files.
+`npm run check` rejects misleading extensions, whitespace in image filenames, oversized dimensions, and unnecessarily large image files.
 
 The build writes `dist/` and gives every CSS and JavaScript file a content-based filename. Browsers therefore receive fresh assets automatically whenever their contents change.
 
