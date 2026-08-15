@@ -10,7 +10,7 @@ const {
   memberPresentation
 } = window.gateShared;
 
-function switchView(name) {
+function switchView(name, {updateHash = true, scroll = true} = {}) {
   const target = document.getElementById(name);
   if (!target) return;
 
@@ -21,7 +21,12 @@ function switchView(name) {
     button.classList.toggle('active', active);
     button.setAttribute('aria-current', active ? 'page' : 'false');
   });
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  const activeButton = [...document.querySelectorAll('#tabs button[data-view]')]
+    .find(button => button.dataset.view === name);
+  activeButton?.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+  if (updateHash && window.location.hash !== `#${name}`) history.pushState({view:name}, '', `#${name}`);
+  if (scroll) window.scrollTo({top: 0, behavior: 'smooth'});
+  document.dispatchEvent(new CustomEvent('gate:viewchange', {detail:{name}}));
 }
 
 window.switchView = switchView;
@@ -33,6 +38,16 @@ document.getElementById('tabs')?.addEventListener('click', event => {
 document.querySelector('.quick-grid')?.addEventListener('click', event => {
   const card = event.target.closest('[data-quick-view]');
   if(card) switchView(card.dataset.quickView);
+});
+
+document.addEventListener('click', event => {
+  const link = event.target.closest('[data-view-link]');
+  if(link) switchView(link.dataset.viewLink);
+});
+
+window.addEventListener('popstate', () => {
+  const name = window.location.hash.slice(1) || 'home';
+  switchView(name, {updateHash:false});
 });
 
 document.querySelectorAll('.filter-pills .pill').forEach(pill => pill.addEventListener('click', () => {
@@ -180,7 +195,7 @@ async function loadJsonMembers() {
   if (!response.ok) throw new Error(`members.json returned HTTP ${response.status}`);
   const payload = await response.json();
   if (!Array.isArray(payload.members)) throw new Error('members.json does not contain a members array');
-  useMembers(payload.members, 'Static archive fallback');
+  useMembers(payload.members, 'Archived history');
 }
 
 async function loadSupabaseMembers(client) {
@@ -188,7 +203,7 @@ async function loadSupabaseMembers(client) {
     .select('id,member_number,name,role_label,sort_order,member_seasons(id,season_year,final_finish,team_name,record,points_for,points_against)')
     .order('sort_order');
   if (error) throw error;
-  useMembers(data, 'Live league database');
+  useMembers(data, 'Live history synced');
 }
 
 async function refreshLeagueMembers({allowFallback = true, showLoading = !leagueMembers.length} = {}) {
@@ -255,3 +270,10 @@ document.addEventListener('keydown', event => {
 });
 
 initializeMembers();
+
+const initialView = window.location.hash.slice(1);
+if(initialView && document.getElementById(initialView)){
+  switchView(initialView, {updateHash:false, scroll:false});
+}else if(!window.location.hash){
+  history.replaceState({view:'home'}, '', '#home');
+}

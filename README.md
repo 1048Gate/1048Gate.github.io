@@ -8,6 +8,7 @@ Official website for the 1048 Gate fantasy football keeper league.
 - `css/` — colors, layout, mobile design, member cards, history, playoffs, and staff tools
 - `js/shared.js` — shared escaping, formatting, member normalization, and logo presentation
 - `js/app.js` — navigation plus the single member renderer and Supabase-to-JSON fallback
+- `js/transactions.js` — lazy-loaded search, filtering, pagination, and rendering for the live transaction archive
 - `js/` — explicitly ordered feature scripts; no runtime script-injection chain
 - `data/` — browser-ready league history exported from the SQLite archive
 - `data/site.json` — current season number, year, phase, and competition labels
@@ -23,6 +24,12 @@ python3 scripts/export_web_data.py
 ```
 
 Career record, winning percentage, championships, average finish, best finish, and career points calculate automatically.
+
+## Transaction archive
+
+The Transactions view reads `league_transactions` and `league_transaction_items` from Supabase only after a visitor opens that section. This keeps the landing page light while making all 4,785 transaction events and 8,531 item-level moves from 2019–2025 searchable by season, activity, status, player, and team.
+
+The list intentionally omits ESPN raw JSON and internal member identifiers from the browser UI. It presents the useful league-facing details: date, scoring period, action type, status, acting team, FAAB bid, player, and movement between teams.
 
 To regenerate every website dataset in one pass, run `python3 scripts/export_all.py /path/to/1048_gate.db`. See `scripts/README.md` for individual exporters.
 

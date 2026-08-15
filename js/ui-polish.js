@@ -4,6 +4,7 @@
     board:'Community',
     votes:'League Decisions',
     history:'The Archive',
+    transactions:'The League Wire',
     playoffs:'Postseason',
     rules:'League Handbook',
     members:'The League'

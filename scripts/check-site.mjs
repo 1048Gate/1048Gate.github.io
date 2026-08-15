@@ -161,6 +161,16 @@ const authSource = readFileSync(new URL('js/auth.js', root), 'utf8');
 if(!authSource.includes('trapFocus(event') || !authSource.includes("setAttribute('aria-hidden'")){
   throw new Error('The staff login modal must manage focus and aria-hidden.');
 }
+const transactionSource = readFileSync(new URL('js/transactions.js', root), 'utf8');
+for(const table of ['league_transactions','league_transaction_items']){
+  if(!transactionSource.includes(`'${table}'`)) throw new Error(`Transaction archive does not query ${table}.`);
+}
+if(!html.includes('id="transactions"') || !html.includes('data-view="transactions"')){
+  throw new Error('Transaction archive view or navigation is missing.');
+}
+if(!transactionSource.includes("addEventListener('gate:viewchange'")){
+  throw new Error('Transaction data must stay lazy-loaded until its view opens.');
+}
 const starterSql = readFileSync(new URL('supabase/starter_content.sql', root), 'utf8');
 for(const table of ['announcements','board_posts','board_comments','polls','poll_options','poll_votes']){
   if(!starterSql.includes(`public.${table}`)) throw new Error(`starter_content.sql does not seed or secure ${table}.`);
