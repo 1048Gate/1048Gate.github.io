@@ -16,6 +16,8 @@
     document.title = `${leagueName} Szn ${config.seasonNumber}`;
     document.querySelectorAll('[data-site-brand]').forEach(element => {element.textContent = brand});
     document.querySelectorAll('[data-site-edition]').forEach(element => {element.textContent = `SZN ${roman}`});
+    document.querySelectorAll('[data-site-year]').forEach(element => {element.textContent = String(config.seasonYear)});
+    document.querySelectorAll('[data-site-season-label]').forEach(element => {element.textContent = `Season ${config.seasonNumber}`});
     document.querySelectorAll('[data-site-phase]').forEach(element => {element.textContent = phase});
     document.querySelectorAll('[data-site-season]').forEach(element => {element.textContent = `${config.seasonYear} SEASON · ${competition.toUpperCase()}`});
     document.querySelectorAll('[data-site-footer]').forEach(element => {element.textContent = `${leagueName} Szn ${config.seasonNumber}`});

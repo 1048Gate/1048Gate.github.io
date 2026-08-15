@@ -76,36 +76,54 @@
   <section class="view active" id="home">
     <div class="hero">
       <div class="hero-copy">
-        <span class="eyebrow">EST. 2017 • 12-TEAM KEEPER LEAGUE</span>
-        <h1>1048 GATE<br><span data-site-edition>SZN X</span></h1>
+        <span class="eyebrow">Official League Headquarters</span>
+        <h1>1048 GATE<br><span>FANTASY FOOTBALL</span></h1>
         <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
-        <p>The official headquarters for league news, message boards, voting, records, champions, and everything 1048.</p>
+        <p>League news, voting, records, postseason history, transactions, and member profiles—all in one place and built around nine completed seasons of 1048 Gate.</p>
         <div class="hero-buttons">
-          <button class="btn btn-primary" data-view-link="transactions">Explore Transactions</button>
-          <button class="btn btn-ghost" data-view-link="history">League History</button>
-        </div>
-        <div class="hero-stats" aria-label="League archive totals">
-          <div><strong>9</strong><span>Seasons</span></div>
-          <div><strong>12</strong><span>Managers</span></div>
-          <div><strong>903</strong><span>Games</span></div>
+          <button class="btn btn-primary" data-view-link="board">League Board</button>
+          <button class="btn btn-ghost" data-view-link="history">Explore History</button>
         </div>
       </div>
-      <div class="hero-logo"><img src="images/1048-gate-logo.webp" alt="1048 Gate Szn 10 fantasy football league crest" width="512" height="512"></div>
+      <aside class="hero-season-card" aria-label="Current league campaign">
+        <span class="hero-season-kicker">Current campaign</span>
+        <strong class="hero-season-year" data-site-year>2026</strong>
+        <span class="hero-season-edition" data-site-season-label>Season 10</span>
+        <div class="hero-meta-grid">
+          <div><strong>12</strong><span>Managers</span></div>
+          <div><strong>9</strong><span>Completed seasons</span></div>
+          <div><strong>PPR</strong><span>Scoring</span></div>
+          <div><strong>Keeper</strong><span>Format</span></div>
+        </div>
+      </aside>
     </div>
 
-    <div class="section-title"><span class="section-kicker">League office</span><h2>From the Commissioner</h2><span class="see-all">George's bulletin board</span></div>
-    <div class="corkboard commissioner-board" id="commissionerBoard" aria-label="Commissioner announcements" aria-live="polite">
-      <div class="commissioner-empty">Loading commissioner announcements…</div>
+    <div class="home-dashboard">
+      <section class="home-section home-office">
+        <header class="home-section-head"><div><span>League office</span><h2>Commissioner Updates</h2></div><small>Official announcements</small></header>
+        <div class="commissioner-board" id="commissionerBoard" aria-label="Commissioner announcements" aria-live="polite">
+          <div class="commissioner-empty">Loading commissioner announcements…</div>
+        </div>
+      </section>
+      <aside class="home-section home-snapshot">
+        <header class="home-section-head"><div><span>At a glance</span><h2>League Snapshot</h2></div><small>1048 Gate</small></header>
+        <div class="snapshot-list">
+          <div><span>Established</span><strong>2017</strong></div>
+          <div><span>Completed seasons</span><strong>9</strong></div>
+          <div><span>Archived games</span><strong>903</strong></div>
+          <div><span>League format</span><strong>12-team keeper</strong></div>
+        </div>
+      </aside>
     </div>
 
-    <div class="section-title"><h2>Get Around the League</h2></div>
+    <div class="section-title home-directory-title"><span class="section-kicker">League directory</span><h2>Get Around the League</h2><span class="see-all">Everything 1048</span></div>
     <div class="quick-grid">
-      <button type="button" class="quick-card" data-quick-view="board"><span class="num">01</span><h3>Message Board</h3><p>Trash talk, trade chatter, and waiver wire debates.</p></button>
-      <button type="button" class="quick-card" data-quick-view="votes"><span class="num">02</span><h3>Vote Booth</h3><p>League rule changes, punishments, and payout splits.</p></button>
-      <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><h3>Transactions</h3><p>Search adds, drops, successful waivers, and trade history since 2019.</p></button>
-      <button type="button" class="quick-card" data-quick-view="history"><span class="num">04</span><h3>League History</h3><p>Champions, records, and the Wall of Shame.</p></button>
-      <button type="button" class="quick-card" data-quick-view="members"><span class="num">05</span><h3>Members</h3><p>View every league member, career record, championships, and season history.</p></button>
-      <button type="button" class="quick-card" data-quick-view="playoffs"><span class="num">06</span><h3>Playoffs</h3><p>Browse postseason brackets, champions, seeds, and consolation history.</p></button>
+      <button type="button" class="quick-card" data-quick-view="board"><span class="num">01</span><span class="quick-kicker">Community</span><h3>Message Board</h3><p>Trash talk, trade chatter, and league discussion.</p></button>
+      <button type="button" class="quick-card" data-quick-view="votes"><span class="num">02</span><span class="quick-kicker">League office</span><h3>Vote Booth</h3><p>Rule proposals, league decisions, and official polls.</p></button>
+      <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><span class="quick-kicker">League wire</span><h3>Transactions</h3><p>Adds, drops, successful waivers, and trade history.</p></button>
+      <button type="button" class="quick-card" data-quick-view="history"><span class="num">04</span><span class="quick-kicker">Archive</span><h3>League History</h3><p>Champions, records, season results, and milestones.</p></button>
+      <button type="button" class="quick-card" data-quick-view="members"><span class="num">05</span><span class="quick-kicker">The league</span><h3>Members</h3><p>Manager profiles, career records, and team history.</p></button>
+      <button type="button" class="quick-card" data-quick-view="playoffs"><span class="num">06</span><span class="quick-kicker">Competition</span><h3>Playoffs</h3><p>Postseason brackets, championship games, and seeds.</p></button>
     </div>
   </section>
 

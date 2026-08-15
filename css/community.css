@@ -1,30 +1,13 @@
-/* Message board, Vote Booth, and commissioner bulletin board */
+/* Message board, Vote Booth, and commissioner updates */
 .commissioner-board{
-  position:relative;
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:24px;
-  padding:34px;
-  overflow:hidden;
-  border:1px solid rgba(245,235,217,.12);
-  box-shadow:inset 0 0 45px rgba(0,0,0,.28),0 16px 34px rgba(0,0,0,.2);
-  background:
-    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
-    linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
-    #3e2c1e;
-  background-size:20px 20px;
+  gap:0;
 }
-.commissioner-board:before{content:"";position:absolute;inset:9px;border:2px solid rgba(20,10,4,.28);border-radius:9px;pointer-events:none}
-.announcement-note{max-width:none;min-height:205px;padding:22px 21px 20px;display:flex;flex-direction:column;align-items:flex-start;transform:rotate(-.7deg);box-shadow:0 12px 22px rgba(0,0,0,.28)}
-.announcement-note:nth-child(1){transform:rotate(-.7deg);background:#dce9d9}
-.announcement-note:nth-child(2){transform:rotate(.7deg);background:#ead7cf}
-.announcement-note strong{display:block;margin:3px 0 8px;font:700 20px Oswald,sans-serif;text-transform:uppercase;line-height:1.08}
-.announcement-copy{display:block;line-height:1.55}
-.announcement-note .when{margin-top:auto;padding-top:12px}
-.mock-label{align-self:flex-end;margin:-3px -3px 7px;padding:3px 7px;border:1px solid rgba(42,30,20,.24);border-radius:999px;font:700 7px 'Space Mono',monospace;letter-spacing:.09em;text-transform:uppercase;opacity:.62}
-.announcement-alt .pin{background:var(--turf)}
-.announcement-warning .pin{background:var(--amber)}
-.commissioner-empty{grid-column:1/-1;padding:34px 20px;color:rgba(255,255,255,.72);text-align:center;font:11px 'Space Mono',monospace}
+.league-announcement{display:grid;grid-template-columns:44px minmax(0,1fr);gap:15px;padding:19px 20px;border-bottom:1px solid var(--line)}
+.league-announcement:last-child{border-bottom:0}
+.announcement-avatar{display:grid;place-items:center;width:42px;height:42px;border:1px solid rgba(57,169,170,.25);border-radius:50%;background:#193031;color:var(--amber);font:700 14px Oswald,sans-serif;letter-spacing:.05em}
+.announcement-content{min-width:0}.announcement-meta{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:6px;color:var(--muted);font:8px 'Space Mono',monospace;letter-spacing:.1em;text-transform:uppercase}.announcement-content h3{font-size:15px;line-height:1.25;text-transform:none}.announcement-content p{margin:7px 0 0;color:var(--muted);font-size:12px;line-height:1.6}.announcement-content small{display:block;margin-top:10px;color:var(--amber);font:9px 'Space Mono',monospace}.announcement-starter{display:inline-flex;margin:0 0 7px;padding:3px 6px;border:1px solid rgba(195,160,108,.32);border-radius:999px;color:var(--amber);background:rgba(195,160,108,.07);font:700 7px 'Space Mono',monospace;letter-spacing:.07em;text-transform:uppercase}
+.commissioner-empty{padding:36px 20px;color:var(--muted);text-align:center;font:10px 'Space Mono',monospace}
 
 #board,#votes{--community-surface:linear-gradient(150deg,rgba(33,65,67,.3),rgba(16,26,27,.98) 48%,rgba(185,138,82,.035))}
 .community-intro{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;margin-bottom:18px;padding:18px 20px;border:1px solid rgba(0,132,135,.25);border-radius:13px;background:linear-gradient(135deg,rgba(0,132,135,.12),rgba(185,138,82,.045))}
@@ -100,11 +83,10 @@ button.poll-vote-option:not(:disabled):hover{transform:translateX(2px);border-co
 .staff-badge-stack{display:flex;align-items:flex-end;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 
 @media(max-width:860px){
-  .commissioner-board{grid-template-columns:repeat(2,minmax(0,1fr))}
   .community-fields{grid-template-columns:1fr 1fr}.community-fields input:last-child{grid-column:1/-1}
 }
 @media(max-width:620px){
-  .commissioner-board{grid-template-columns:1fr;gap:18px;padding:25px 22px}.announcement-note,.announcement-note:last-child{grid-column:auto;min-height:190px;transform:none!important}
+  .league-announcement{grid-template-columns:38px minmax(0,1fr);gap:12px;padding:16px}.announcement-avatar{width:38px;height:38px;font-size:12px}.announcement-meta{align-items:flex-start;flex-direction:column;gap:3px}
   .community-intro{grid-template-columns:1fr;padding:15px 16px}.community-count{display:none}
   .community-fields{grid-template-columns:1fr}.community-fields input:last-child{grid-column:auto}.community-compose:before{display:none}
   .community-thread-main{padding:17px 17px 14px}.community-comment{padding:12px 17px}.comment-form{grid-template-columns:1fr;padding:13px 17px}.comment-form button{width:100%}
