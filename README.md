@@ -30,7 +30,7 @@ Career record, winning percentage, championships, average finish, best finish, a
 
 The Transactions view reads `league_transactions` and `league_transaction_items` from Supabase only after a visitor opens that section. This keeps the landing page light while making the useful activity from 2019–2025 searchable by season, move type, player, and team.
 
-The list intentionally focuses on completed adds and drops, successful waiver claims, and trades that were offered, vetoed, or upheld. Failed claims, lineup activity, future-lineup records, ESPN raw JSON, and internal identifiers are omitted from the browser UI.
+The list intentionally focuses on completed adds and drops, successful waiver claims, and accepted trades. Failed claims, trade proposals, veto and review events, lineup activity, future-lineup records, ESPN raw JSON, and internal identifiers are omitted from the browser UI.
 
 To regenerate every website dataset in one pass, run `python3 scripts/export_all.py /path/to/1048_gate.db`. See `scripts/README.md` for individual exporters.
 

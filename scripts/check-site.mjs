@@ -176,14 +176,14 @@ if(!html.includes('id="transactions"') || !html.includes('data-view="transaction
 if(!transactionSource.includes("addEventListener('gate:viewchange'")){
   throw new Error('Transaction data must stay lazy-loaded until its view opens.');
 }
-for(const type of ['FREEAGENT','WAIVER','TRADE_PROPOSAL','TRADE_VETO','TRADE_UPHOLD']){
+for(const type of ['FREEAGENT','WAIVER','TRADE_ACCEPT']){
   if(!transactionSource.includes(`'${type}'`)) throw new Error(`Curated transaction archive is missing ${type}.`);
 }
-for(const excluded of ["'FUTURE_ROSTER'", "'ROSTER'", "'TRADE_ACCEPT'", "'TRADE_DECLINE'", "'LINEUP'"]){
+for(const excluded of ["'FUTURE_ROSTER'", "'ROSTER'", "'TRADE_PROPOSAL'", "'TRADE_VETO'", "'TRADE_UPHOLD'", "'TRADE_DECLINE'", "'LINEUP'"]){
   if(transactionSource.includes(excluded)) throw new Error(`Transaction archive still exposes excluded activity: ${excluded}.`);
 }
 if(!transactionSource.includes("row.status === 'EXECUTED'") || html.includes('id="transactionStatus"') || transactionSource.includes('transaction-technical')){
-  throw new Error('Transactions must show completed adds/waivers and curated trade events without status or technical controls.');
+  throw new Error('Transactions must show only completed adds, drops, successful waivers, and accepted trades without status or technical controls.');
 }
 const starterSql = readFileSync(new URL('supabase/starter_content.sql', root), 'utf8');
 for(const table of ['announcements','board_posts','board_comments','polls','poll_options','poll_votes']){

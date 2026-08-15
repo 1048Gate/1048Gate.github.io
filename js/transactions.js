@@ -5,15 +5,12 @@
   const {escapeHtml:esc} = window.gateShared;
   const PAGE_SIZE = 25;
   const CHUNK_SIZE = 1000;
-  const RELEVANT_TYPES = Object.freeze(['FREEAGENT','WAIVER','TRADE_PROPOSAL','TRADE_VETO','TRADE_UPHOLD']);
-  const TRADE_TYPES = Object.freeze(['TRADE_PROPOSAL','TRADE_VETO','TRADE_UPHOLD']);
+  const RELEVANT_TYPES = Object.freeze(['FREEAGENT','WAIVER','TRADE_ACCEPT']);
   const MOVEMENT_TYPES = Object.freeze(['ADD','DROP','TRADE']);
   const TYPE_LABELS = Object.freeze({
     FREEAGENT:'Add / drop',
     WAIVER:'Successful waiver',
-    TRADE_PROPOSAL:'Trade offered',
-    TRADE_VETO:'Trade vetoed',
-    TRADE_UPHOLD:'Trade upheld',
+    TRADE_ACCEPT:'Accepted trade',
   });
 
   let supabase = null;
@@ -110,7 +107,7 @@
       status:row.status || 'UNKNOWN',
       transaction_date_ms:Number(row.transaction_date_ms || new Date(row.transaction_date).getTime() || 0),
       item_count:Number(row.item_count || 0)
-    })).filter(row => RELEVANT_TYPES.includes(row.transaction_type) && (TRADE_TYPES.includes(row.transaction_type) || row.status === 'EXECUTED'));
+    })).filter(row => RELEVANT_TYPES.includes(row.transaction_type) && row.status === 'EXECUTED');
     const relevantKeys = new Set(transactions.map(transactionKey));
     items = items.map(item => ({
       ...item,
@@ -158,12 +155,12 @@
     const adds = items.filter(item => item.item_type === 'ADD').length;
     const drops = items.filter(item => item.item_type === 'DROP').length;
     const waivers = transactions.filter(row => row.transaction_type === 'WAIVER').length;
-    const trades = transactions.filter(row => TRADE_TYPES.includes(row.transaction_type)).length;
+    const trades = transactions.filter(row => row.transaction_type === 'TRADE_ACCEPT').length;
     document.getElementById('transactionSummary').innerHTML = [
       ['Adds', number(adds), 'Players added to rosters'],
       ['Drops', number(drops), 'Players released to free agency'],
       ['Successful waivers', number(waivers), 'Completed claims only'],
-      ['Trade history', number(trades), 'Offered, vetoed, and upheld']
+      ['Accepted trades', number(trades), 'Completed deals only']
     ].map(([label,value,note]) => `<div class="transaction-summary-card"><span>${label}</span><strong>${value}</strong><small>${note}</small></div>`).join('');
   }
 

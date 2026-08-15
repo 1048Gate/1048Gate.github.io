@@ -120,7 +120,7 @@
     <div class="quick-grid">
       <button type="button" class="quick-card" data-quick-view="board"><span class="num">01</span><span class="quick-kicker">Community</span><h3>Message Board</h3><p>Trash talk, trade chatter, and league discussion.</p></button>
       <button type="button" class="quick-card" data-quick-view="votes"><span class="num">02</span><span class="quick-kicker">League office</span><h3>Vote Booth</h3><p>Rule proposals, league decisions, and official polls.</p></button>
-      <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><span class="quick-kicker">League wire</span><h3>Transactions</h3><p>Adds, drops, successful waivers, and trade history.</p></button>
+      <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><span class="quick-kicker">League wire</span><h3>Transactions</h3><p>Adds, drops, successful waivers, and accepted trades.</p></button>
       <button type="button" class="quick-card" data-quick-view="history"><span class="num">04</span><span class="quick-kicker">Archive</span><h3>League History</h3><p>Champions, records, season results, and milestones.</p></button>
       <button type="button" class="quick-card" data-quick-view="members"><span class="num">05</span><span class="quick-kicker">The league</span><h3>Members</h3><p>Manager profiles, career records, and team history.</p></button>
       <button type="button" class="quick-card" data-quick-view="playoffs"><span class="num">06</span><span class="quick-kicker">Competition</span><h3>Playoffs</h3><p>Postseason brackets, championship games, and seeds.</p></button>
@@ -133,7 +133,7 @@
       <div>
         <span class="transaction-eyebrow">League moves that matter</span>
         <h3>The waiver wire and trade block.</h3>
-        <p>Search seven seasons of successful adds, drops, waiver claims, trade offers, vetoes, and upheld deals—without routine lineup noise.</p>
+        <p>Search seven seasons of completed player adds and drops, successful waiver claims, and accepted trades—nothing else.</p>
       </div>
       <div class="transaction-sync" id="transactionSync" role="status" aria-live="polite"><span></span>Ready to load</div>
     </div>
@@ -141,7 +141,7 @@
       <div class="transaction-summary-card is-loading"><span>Adds</span><strong>—</strong><small>Loading archive</small></div>
       <div class="transaction-summary-card is-loading"><span>Drops</span><strong>—</strong><small>Loading archive</small></div>
       <div class="transaction-summary-card is-loading"><span>Successful waivers</span><strong>—</strong><small>Loading archive</small></div>
-      <div class="transaction-summary-card is-loading"><span>Trade history</span><strong>—</strong><small>Loading archive</small></div>
+      <div class="transaction-summary-card is-loading"><span>Accepted trades</span><strong>—</strong><small>Loading archive</small></div>
     </div>
     <div class="panel transaction-workbench">
       <div class="transaction-controls">
@@ -151,7 +151,7 @@
         <label><span>Order</span><select id="transactionSort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label>
         <button class="btn btn-ghost transaction-reset" id="transactionReset" type="button">Reset filters</button>
       </div>
-      <div class="transaction-default-note">Only completed free-agent and waiver moves are included. Failed claims, lineup changes, and future-lineup records are hidden.</div>
+      <div class="transaction-default-note">Only completed adds, drops, successful waiver claims, and accepted trades are included.</div>
     </div>
     <div class="transaction-results-head">
       <div><strong id="transactionResultCount">Archive not loaded</strong><span id="transactionResultRange">Open this section to load live data.</span></div>
