@@ -170,8 +170,8 @@
       if(activeCategory !== 'all' && row.transaction_type !== activeCategory) return false;
       return !query || row.searchText.includes(query);
     }).sort((a,b) => controls.sort.value === 'oldest'
-      ? a.transaction_date_ms - b.transaction_date_ms
-      : b.transaction_date_ms - a.transaction_date_ms);
+      ? a.transaction_date_ms - b.transaction_date_ms || Number(a.id || 0) - Number(b.id || 0)
+      : b.transaction_date_ms - a.transaction_date_ms || Number(b.id || 0) - Number(a.id || 0));
   }
 
   function renderItem(item){
