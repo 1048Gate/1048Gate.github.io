@@ -64,11 +64,15 @@
   }
 
   const narrativeNotes = {
-    2025: "The league's top two teams met for the title, and Tommy capped an 11–3 regular season by beating Collin 129.64–107.88. The Swifties led the league in scoring and delivered Tommy's third 1048 Gate championship.",
-    2024: "Jared entered the playoffs as the No. 1 seed and beat George 161.22–135.48 to complete the repeat. The Diddlers' title was Jared's second in a row and third overall.",
-    2023: "Jared earned the No. 1 seed, cruised through the semifinal, and edged JD 126.12–121.20 in a 4.92-point championship thriller. Crown The King lived up to the name, giving Jared his second league title.",
-    2022: "George came through from the No. 3 seed, dropped 151.98 in the semifinal, and then routed JD 134.28–81.30 in the title game. The 52.98-point win delivered George's first 1048 Gate championship.",
-    2021: "Tommy entered as the No. 2 seed, scored 164.66 in the semifinal, and beat Kyle 130.60–109.16 for the title. The win completed the league's first repeat and gave Tommy back-to-back championships."
+    2017: "The Flash In The Flex beat George Travis to win the 2017 championship. Jared Hall finished the regular season 10–3 with a +259.8 point differential, earning the league's first 1048 Gate title.",
+    2018: "Turn Goff the Lights beat George Travis 167.02–126.08 to win the 2018 championship. Kyle Fowler finished the regular season 9–4 with a +125.64 point differential, earning his first 1048 Gate title.",
+    2019: "We're on to Cleveland beat Trevor Hash 156.84–131.2 to win the 2019 championship. JD Daley finished the regular season 8–5 with a +25.62 point differential, earning his first 1048 Gate title.",
+    2020: "Has a Nice Ring to it beat German Haro 165.3–107.16 to win the 2020 championship. Thomas Speer finished the regular season 7–6 with a +209.28 point differential, earning his first 1048 Gate title.",
+    2021: "Has a Nice Ring to it beat Kyle Fowler 130.6–109.16 to win the 2021 championship. Thomas Speer finished the regular season 9–5 with a +142.56 point differential, completing the league's first repeat and his second straight title.",
+    2022: "A, B, Ceedee, **** You beat JD Daley 134.28–81.3 to win the 2022 championship. George Travis finished the regular season 8–6 with a +178.9 point differential, earning his first 1048 Gate title.",
+    2023: "Crown The King beat JD Daley 126.12–121.2 to win the 2023 championship. Jared Hall finished the regular season 9–5 with a +150.28 point differential, earning his second 1048 Gate title.",
+    2024: "The Diddlers beat George Travis 161.22–135.48 to win the 2024 championship. Jared Hall finished the regular season 11–3 with a +182.4 point differential, completing the repeat and his third 1048 Gate title.",
+    2025: "The Swifties beat Collin Krum 129.64–107.88 to win the 2025 championship. Thomas Speer finished the regular season 11–3 with a +389.98 point differential, earning his third 1048 Gate title and tying the all-time league record."
   };
 
   async function loadChampionsFallback(){
