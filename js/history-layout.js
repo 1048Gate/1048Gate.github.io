@@ -15,6 +15,7 @@
   shell.querySelectorAll('[data-history-tab]').forEach(btn=>btn.addEventListener('click',()=>activate(btn.dataset.historyTab)));
   const {escapeHtml:esc,formatNumber}=window.gateShared;
   const num=value=>formatNumber(value,1,2);
+  const clean=value=>String(value??'').trim().replace(/\s+/g,' ');
   const recordText=a=>a&&a[2]?`${a[0]}-${a[1]}-${a[2]}`:a?`${a[0]}-${a[1]}`:'—';
   async function loadSeasonArchive(){
     seasonHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Loading season archive…</div></div>';
@@ -37,7 +38,65 @@
       a.addEventListener('change',render);b.addEventListener('change',render);render();
     }catch(error){console.error('Unable to load matchup archive:',error);matchupHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Matchup archive could not be loaded.</div></div>'}
   }
-  loadSeasonArchive();loadMatchups();
+  function trophyStats(seasons,playoffs){
+    const champs=seasons.map(([year,,owner,team,standings])=>{
+      const row=Array.isArray(standings)?standings.find(t=>Number(t[0])===1):null;
+      return {year:Number(year),owner:clean(owner),team:clean(team),record:row?String(row[4]||''):'',diff:row?Number(row[7])||0:0};
+    }).filter(c=>Number.isFinite(c.year)&&c.year>=2017);
+    const byOwner={};
+    champs.forEach(c=>{(byOwner[c.owner]=byOwner[c.owner]||[]).push(c.year)});
+    const titleCounts=Object.entries(byOwner).map(([owner,years])=>({owner,years:years.sort((a,b)=>a-b),count:years.length}));
+    const maxTitles=Math.max(...titleCounts.map(t=>t.count));
+    const most=titleCounts.filter(t=>t.count===maxTitles).map(t=>t.owner).join(' & ');
+    const repeats=[];
+    titleCounts.forEach(({owner,years})=>{for(let i=1;i<years.length;i++)if(years[i]===years[i-1]+1)repeats.push({owner,from:years[i-1],to:years[i]})});
+    const first=champs.reduce((a,b)=>a.year<b.year?a:b);
+    const best=champs.reduce((a,b)=>{const aw=Number(a.record.split('-')[0])||0,bw=Number(b.record.split('-')[0])||0;return bw>aw?b:a});
+    const diffMax=champs.reduce((a,b)=>b.diff>a.diff?b:a);
+    const finals=playoffs.map(s=>{
+      const year=Number(s[0]),champOwner=clean(s[1]),bracket=s[5]||[],games=s[6]||[];
+      const seed=(bracket.find(t=>clean(t[2])===champOwner)||[])[0];
+      const game=games.find(g=>g[2]==='Championship'&&typeof g[7]==='number'&&typeof g[11]==='number');
+      return game?{year,seed:Number(seed)||0,margin:Math.abs(game[7]-game[11]),scores:[game[7],game[11]]}:null;
+    }).filter(Boolean);
+    const biggest=finals.reduce((a,b)=>b.margin>a.margin?b:a);
+    const closest=finals.reduce((a,b)=>b.margin<a.margin?b:a);
+    const underdog=finals.reduce((a,b)=>b.seed>a.seed?b:a);
+    const ownerOf=year=>champs.find(c=>c.year===year)||{owner:''};
+    const bestRecord=champs.filter(c=>Number(c.record.split('-')[0])===Number(best.record.split('-')[0])).map(c=>`${c.owner} '${String(c.year).slice(2)}`).join(' · ');
+    return [
+      {label:'Most Titles',value:`${maxTitles} apiece`,detail:most},
+      {label:'First Champion',value:String(first.year),detail:`${first.owner} · ${first.team}`},
+      {label:'Back-to-Back Champs',value:String(repeats.length),detail:[...repeats].sort((a,b)=>a.from-b.from).map(r=>`${r.owner} '${String(r.from).slice(2)}–'${String(r.to).slice(2)}`).join(' · ')},
+      {label:'Best Champion Record',value:best.record,detail:bestRecord},
+      {label:'Biggest Title-Game Win',value:`+${num(biggest.margin)}`,detail:`${ownerOf(biggest.year).owner}, ${biggest.year} (${num(biggest.scores[0])}–${num(biggest.scores[1])})`},
+      {label:'Closest Title Game',value:`+${num(closest.margin)}`,detail:`${ownerOf(closest.year).owner}, ${closest.year} (${num(closest.scores[0])}–${num(closest.scores[1])})`},
+      {label:'Lowest Seed to Win',value:`#${underdog.seed}`,detail:`${ownerOf(underdog.year).owner}, ${underdog.year}`},
+      {label:'Best Champion Differential',value:`+${num(diffMax.diff)}`,detail:`${diffMax.owner}, ${diffMax.year}`}
+    ];
+  }
+
+  async function loadTrophyRoom(){
+    const trophy=history.querySelector('[data-trophy-room]');
+    if(!trophy)return;
+    try{
+      const [seasonRes,playoffRes]=await Promise.all([
+        fetch('data/seasons.json',{cache:'no-store'}),
+        fetch('data/playoffs.json',{cache:'no-store'})
+      ]);
+      if(!seasonRes.ok)throw new Error(`seasons.json returned HTTP ${seasonRes.status}`);
+      if(!playoffRes.ok)throw new Error(`playoffs.json returned HTTP ${playoffRes.status}`);
+      const seasons=(await seasonRes.json()).seasons||[];
+      const playoffs=(await playoffRes.json()).seasons||[];
+      const years=seasons.map(s=>Number(s[0])).filter(Number.isFinite);
+      trophy.innerHTML=`<div class="trophy-room-head"><span>TROPHY ROOM</span><small>Championship stats · ${Math.min(...years)}–${Math.max(...years)}</small></div><div class="trophy-grid">${trophyStats(seasons,playoffs).map(card=>`<div class="trophy-card"><span>${esc(card.label)}</span><strong>${esc(card.value)}</strong><small>${esc(card.detail)}</small></div>`).join('')}</div>`;
+    }catch(error){
+      console.error('Unable to load trophy room:',error);
+      trophy.innerHTML='<div class="history-loading">Trophy room could not be loaded.</div>';
+    }
+  }
+
+  loadSeasonArchive();loadMatchups();loadTrophyRoom();
   let shameAttempts=0;
   function placeShameTimeline(){
     const shameTimeline=document.getElementById('shameTimeline');
