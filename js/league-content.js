@@ -17,7 +17,11 @@
 
   function championEntryHTML(champion, index){
     const result = [champion.runner_up ? `Defeated ${champion.runner_up}` : '', champion.championship_score].filter(Boolean).join(' · ');
-    return `<article class="champion-entry ${index === 0 ? 'latest-champion' : ''}"><div class="champion-year">${champion.season_year}</div><div class="champion-main"><div class="champion-kicker">${index === 0 ? 'Defending Champion' : 'League Champion'}</div><h3>${esc(champion.team)}</h3>${champion.owner ? `<div class="champion-owner">${esc(champion.owner)}</div>` : ''}${result ? `<div class="champion-result">${esc(result)}</div>` : ''}${champion.note ? `<p>${esc(champion.note)}</p>` : ''}</div><div class="champion-trophy" aria-hidden="true">🏆</div></article>`;
+    const open = index === 0;
+    const hasStory = Boolean(result || champion.note);
+    const story = hasStory ? `<div class="champion-story" id="champion-story-${index}" aria-hidden="${!open}">${result ? `<div class="champion-result">${esc(result)}</div>` : ''}${champion.note ? `<p>${esc(champion.note)}</p>` : ''}</div>` : '';
+    const toggle = hasStory ? `<button class="champion-toggle" type="button" aria-expanded="${open}" aria-controls="champion-story-${index}" data-champion-toggle><span class="chev" aria-hidden="true">▸</span>Story</button>` : '';
+    return `<article class="champion-entry ${index === 0 ? 'latest-champion' : ''} ${open ? 'open' : ''}"><div class="champion-year">${champion.season_year}</div><div class="champion-main"><div class="champion-kicker">${index === 0 ? 'Defending Champion' : 'League Champion'}</div><h3>${esc(champion.team)}</h3>${champion.owner ? `<div class="champion-owner">${esc(champion.owner)}</div>` : ''}</div><div class="champion-trophy" aria-hidden="true">🏆</div>${toggle}${story}</article>`;
   }
 
   function renderChampions(champions){
@@ -27,6 +31,18 @@
     if(!timeline || !champions?.length) return;
     timeline.classList.add('champions-timeline');
     timeline.innerHTML = champions.map(championEntryHTML).join('');
+    if(timeline.dataset.championTogglesReady) return;
+    timeline.dataset.championTogglesReady = 'true';
+    timeline.addEventListener('click', event => {
+      const button = event.target.closest('[data-champion-toggle]');
+      if(!button) return;
+      const entry = button.closest('.champion-entry');
+      if(!entry) return;
+      const open = entry.classList.toggle('open');
+      button.setAttribute('aria-expanded', String(open));
+      const story = entry.querySelector('.champion-story');
+      if(story) story.setAttribute('aria-hidden', String(!open));
+    });
   }
 
   function renderCmsRecords(records){
