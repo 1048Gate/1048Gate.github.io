@@ -28,7 +28,7 @@ Career record, winning percentage, championships, average finish, best finish, a
 
 ## Transaction archive
 
-The Transactions view reads `league_transactions` and `league_transaction_items` from Supabase only after a visitor opens that section. This keeps the landing page light while making the useful activity from 2019–2025 searchable by season, move type, player, and team.
+The Transactions view reads `league_transactions` and `league_transaction_items` from Supabase only after a visitor opens that section. This keeps the landing page light while making the useful activity from 2019–2025 searchable by season, category, player, and team. Results are grouped by date in a compact activity ledger instead of separate full-size cards.
 
 The list intentionally focuses on completed adds and drops, successful waiver claims, and accepted trades. Failed claims, trade proposals, veto and review events, lineup activity, future-lineup records, ESPN raw JSON, and internal identifiers are omitted from the browser UI.
 

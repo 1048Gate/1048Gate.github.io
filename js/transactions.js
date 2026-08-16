@@ -3,7 +3,7 @@
   if(!section) return;
 
   const {escapeHtml:esc} = window.gateShared;
-  const PAGE_SIZE = 25;
+  const PAGE_SIZE = 35;
   const CHUNK_SIZE = 1000;
   const RELEVANT_TYPES = Object.freeze(['FREEAGENT','WAIVER','TRADE_ACCEPT']);
   const MOVEMENT_TYPES = Object.freeze(['ADD','DROP','TRADE']);
@@ -20,13 +20,13 @@
   let loadPromise = null;
   let loaded = false;
   let page = 1;
+  let activeCategory = 'all';
   let searchTimer = null;
   const progress = {transactions:0, transactionTotal:null, items:0, itemTotal:null};
 
   const controls = {
     search:document.getElementById('transactionSearch'),
     season:document.getElementById('transactionSeason'),
-    type:document.getElementById('transactionType'),
     sort:document.getElementById('transactionSort'),
     reset:document.getElementById('transactionReset')
   };
@@ -145,36 +145,33 @@
 
   function populateFilters(){
     const years = [...new Set(transactions.map(row => row.season_year))].sort((a,b) => b-a);
-    const types = [...new Set(transactions.map(row => row.transaction_type).filter(Boolean))]
-      .sort((a,b) => labelType(a).localeCompare(labelType(b)));
     controls.season.innerHTML = '<option value="all">All seasons</option>' + years.map(year => `<option value="${year}">${year}</option>`).join('');
-    controls.type.innerHTML = '<option value="all">All moves</option>' + types.map(type => `<option value="${esc(type)}">${esc(labelType(type))}</option>`).join('');
   }
 
   function renderSummary(){
     const adds = items.filter(item => item.item_type === 'ADD').length;
     const drops = items.filter(item => item.item_type === 'DROP').length;
+    const freeAgents = transactions.filter(row => row.transaction_type === 'FREEAGENT').length;
     const waivers = transactions.filter(row => row.transaction_type === 'WAIVER').length;
     const trades = transactions.filter(row => row.transaction_type === 'TRADE_ACCEPT').length;
     document.getElementById('transactionSummary').innerHTML = [
-      ['Adds', number(adds), 'Players added to rosters'],
-      ['Drops', number(drops), 'Players released to free agency'],
-      ['Successful waivers', number(waivers), 'Completed claims only'],
-      ['Accepted trades', number(trades), 'Completed deals only']
-    ].map(([label,value,note]) => `<div class="transaction-summary-card"><span>${label}</span><strong>${value}</strong><small>${note}</small></div>`).join('');
+      ['all','All activity',transactions.length,'Every completed move'],
+      ['FREEAGENT','Adds & drops',freeAgents,`${number(adds)} added · ${number(drops)} dropped`],
+      ['WAIVER','Successful waivers',waivers,'Completed claims only'],
+      ['TRADE_ACCEPT','Accepted trades',trades,'Completed deals only']
+    ].map(([key,label,value,note]) => `<button class="transaction-summary-card ${activeCategory === key ? 'active' : ''}" type="button" data-transaction-category="${key}" aria-pressed="${activeCategory === key}"><span>${label}</span><strong>${number(value)}</strong><small>${note}</small></button>`).join('');
   }
 
   function filteredTransactions(){
     const query = clean(controls.search.value).toLowerCase();
     const year = controls.season.value;
-    const type = controls.type.value;
     return transactions.filter(row => {
       if(year !== 'all' && row.season_year !== Number(year)) return false;
-      if(type !== 'all' && row.transaction_type !== type) return false;
+      if(activeCategory !== 'all' && row.transaction_type !== activeCategory) return false;
       return !query || row.searchText.includes(query);
     }).sort((a,b) => controls.sort.value === 'oldest'
-      ? a.transaction_date_ms - b.transaction_date_ms
-      : b.transaction_date_ms - a.transaction_date_ms);
+      ? a.transaction_date_ms - b.transaction_date_ms || Number(a.id || 0) - Number(b.id || 0)
+      : b.transaction_date_ms - a.transaction_date_ms || Number(b.id || 0) - Number(a.id || 0));
   }
 
   function renderItem(item){
@@ -182,44 +179,66 @@
     const player = item.player_name || 'Player unavailable';
     const from = item.from_team_name;
     const to = item.to_team_name;
-    let movement = 'Roster activity recorded';
-    if(type === 'ADD') movement = `${from || 'Free agency'} → ${to || 'Roster'}`;
-    if(type === 'DROP') movement = `${from || 'Roster'} → ${to || 'Free agency'}`;
-    if(type === 'TRADE') movement = `${from || 'Previous team'} → ${to || 'New team'}`;
+    let verb = 'Moved';
+    let movement = `${from || 'Previous team'} → ${to || 'New team'}`;
+    if(type === 'ADD'){
+      verb = 'Added';
+      movement = `to ${to || 'the roster'}`;
+    }
+    if(type === 'DROP'){
+      verb = 'Dropped';
+      movement = `from ${from || 'the roster'}`;
+    }
+    if(type === 'TRADE') verb = 'Traded';
     return `<li class="transaction-item transaction-item-${slug(type)}">
-      <span class="transaction-item-mark" aria-hidden="true">${esc(type.slice(0,1))}</span>
-      <div><strong>${esc(player)}</strong><span>${esc(movement)}</span></div>
-      <small>${esc(type === 'UNKNOWN' ? 'ITEM' : type)}</small>
+      <span class="transaction-item-verb">${esc(verb)}</span>
+      <strong>${esc(player)}</strong>
+      <span class="transaction-item-route">${esc(movement)}</span>
     </li>`;
   }
 
-  function formatDate(row){
-    if(!row.transaction_date_ms) return 'Date unavailable';
-    return new Intl.DateTimeFormat(undefined, {month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(row.transaction_date_ms));
+  function dateKey(row){
+    if(!row.transaction_date_ms) return 'unknown';
+    const date = new Date(row.transaction_date_ms);
+    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
   }
 
-  function renderCard(row){
+  function formatDay(row){
+    if(!row.transaction_date_ms) return 'Date unavailable';
+    return new Intl.DateTimeFormat(undefined, {weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date(row.transaction_date_ms));
+  }
+
+  function formatTime(row){
+    if(!row.transaction_date_ms) return 'Time unavailable';
+    return new Intl.DateTimeFormat(undefined, {hour:'numeric',minute:'2-digit'}).format(new Date(row.transaction_date_ms));
+  }
+
+  function renderLedgerRow(row){
     const related = itemsByTransaction.get(transactionKey(row)) || [];
     const bid = Number(row.bid_amount || 0);
     const typeLabel = labelType(row.transaction_type);
-    return `<article class="transaction-card" data-type="${slug(row.transaction_type)}">
-      <header class="transaction-card-head">
-        <div class="transaction-card-title">
-          <span class="transaction-type transaction-type-${slug(row.transaction_type)}">${esc(typeLabel)}</span>
-        </div>
-        <time datetime="${esc(row.transaction_date || '')}">${esc(formatDate(row))}</time>
-      </header>
-      <div class="transaction-card-body">
-        <div class="transaction-actor">
-          <span>${row.season_year} season${row.scoring_period ? ` · Week ${row.scoring_period}` : ''}</span>
+    return `<article class="transaction-ledger-row" data-type="${slug(row.transaction_type)}">
+      <span class="transaction-ledger-marker" aria-hidden="true"></span>
+      <div class="transaction-ledger-main">
+        <div class="transaction-ledger-heading">
           <strong>${esc(row.team_name || 'League transaction')}</strong>
-          <small>${bid > 0 ? `$${number(bid)} FAAB bid` : `${related.length || row.item_count} item${(related.length || row.item_count) === 1 ? '' : 's'}`}</small>
+          <span class="transaction-type transaction-type-${slug(row.transaction_type)}">${esc(typeLabel)}</span>
         </div>
         ${related.length
           ? `<ul class="transaction-items">${related.map(renderItem).join('')}</ul>`
-          : '<div class="transaction-no-items">No player movement was attached to this trade event.</div>'}
+          : '<div class="transaction-no-items">No player movement was attached to this event.</div>'}
+      </div>
+      <div class="transaction-ledger-meta">
+        <time datetime="${esc(row.transaction_date || '')}">${esc(formatTime(row))}</time>
+        <span>${row.season_year}${row.scoring_period ? ` · Week ${row.scoring_period}` : ''}</span>
+        ${bid > 0 ? `<strong>$${number(bid)} FAAB</strong>` : ''}
       </div>
     </article>`;
+  }
+
+  function renderDayGroup(rows){
+    const first = rows[0];
+    return `<section class="transaction-day"><header class="transaction-day-head"><time datetime="${dateKey(first)}">${esc(formatDay(first))}</time><span>${rows.length} event${rows.length === 1 ? '' : 's'}</span></header><div class="transaction-ledger">${rows.map(renderLedgerRow).join('')}</div></section>`;
   }
 
   function renderPagination(totalPages){
@@ -235,11 +254,18 @@
     page = Math.min(page, totalPages);
     const start = (page - 1) * PAGE_SIZE;
     const visible = filtered.slice(start, start + PAGE_SIZE);
-    document.getElementById('transactionResultCount').textContent = `${number(filtered.length)} matching event${filtered.length === 1 ? '' : 's'}`;
+    document.getElementById('transactionResultCount').textContent = `${number(filtered.length)} matching activit${filtered.length === 1 ? 'y' : 'ies'}`;
     document.getElementById('transactionResultRange').textContent = filtered.length ? `Showing ${number(start + 1)}–${number(start + visible.length)}` : 'Adjust the filters to widen your search.';
+    const groups = [];
+    for(const row of visible){
+      const key = dateKey(row);
+      const latest = groups.at(-1);
+      if(latest?.key === key) latest.rows.push(row);
+      else groups.push({key,rows:[row]});
+    }
     document.getElementById('transactionFeed').innerHTML = visible.length
-      ? visible.map(renderCard).join('')
-      : '<div class="panel transaction-empty"><strong>No transactions match those filters.</strong><span>Try another player, team, season, or move type.</span></div>';
+      ? groups.map(group => renderDayGroup(group.rows)).join('')
+      : '<div class="panel transaction-empty"><strong>No transactions match those filters.</strong><span>Try another player, team, season, or activity category.</span></div>';
     renderPagination(totalPages);
   }
 
@@ -277,7 +303,7 @@
     return loadPromise;
   }
 
-  for(const control of [controls.season, controls.type, controls.sort]){
+  for(const control of [controls.season, controls.sort]){
     control.addEventListener('change', () => {page=1;render()});
   }
   controls.search.addEventListener('input', () => {
@@ -287,9 +313,10 @@
   controls.reset.addEventListener('click', () => {
     controls.search.value='';
     controls.season.value='all';
-    controls.type.value='all';
     controls.sort.value='newest';
+    activeCategory='all';
     page=1;
+    renderSummary();
     render();
     controls.search.focus();
   });
@@ -299,6 +326,14 @@
     page = Number(button.dataset.page);
     render();
     document.querySelector('.transaction-results-head')?.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  document.getElementById('transactionSummary').addEventListener('click', event => {
+    const button = event.target.closest('[data-transaction-category]');
+    if(!button) return;
+    activeCategory = button.dataset.transactionCategory;
+    page = 1;
+    renderSummary();
+    render();
   });
 
   document.addEventListener('gate:viewchange', event => {
