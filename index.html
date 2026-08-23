@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/webp" href="images/1048-gate-logo.webp">
-<meta name="description" content="1048 Gate — the league's official fantasy football hub. Scores, standings, matchups, draft history, records, and Wall of Shame. Now in its 10th season.">
+<meta name="description" content="1048 Gate — the league's official fantasy football hub. Scores, standings, matchups, draft history, records, and Wall of Shame.">
 <meta name="theme-color" content="#070b0c">
 <meta property="og:type" content="website">
 <meta property="og:title" content="1048 Gate — Fantasy Football League">
-<meta property="og:description" content="The official home of the 1048 Gate fantasy football league. Scores, standings, matchups, draft history, records, and Wall of Shame. Now in its 10th season.">
+<meta property="og:description" content="The official home of the 1048 Gate fantasy football league. Scores, standings, matchups, draft history, records, and Wall of Shame.">
 <meta property="og:url" content="https://1048gate.github.io/">
 <meta property="og:image" content="https://1048gate.github.io/images/1048-gate-logo.webp">
 <meta name="twitter:card" content="summary">
@@ -30,6 +30,7 @@
 <link rel="stylesheet" href="css/playoffs-admin.css">
 <link rel="stylesheet" href="css/community.css">
 <link rel="stylesheet" href="css/transactions.css">
+<link rel="stylesheet" href="css/trades.css">
 
 <script defer src="js/shared.js"></script>
 <script defer src="js/site-ui.js"></script>
@@ -37,6 +38,7 @@
 <script defer src="js/auth.js"></script>
 <script defer src="js/app.js"></script>
 <script defer src="js/transactions.js"></script>
+<script defer src="js/trade-talk.js"></script>
 <script defer src="js/community.js"></script>
 <script defer src="js/manager-profiles.js"></script>
 <script defer src="js/league-content.js"></script>
@@ -75,7 +77,7 @@
     <button data-view="transactions">Transactions</button>
     <button data-view="playoffs">Playoffs</button>
     <button data-view="members">Members</button>
-    <button data-view="board">Board</button>
+    <button data-view="trades">Trades</button>
     <button data-view="votes">Votes</button>
     <button data-view="rules">Rules</button>
   </nav>
@@ -88,9 +90,9 @@
         <span class="eyebrow">Official League Headquarters</span>
         <h1>1048 GATE<br><span>FANTASY FOOTBALL</span></h1>
         <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
-        <p>League news, voting, records, postseason history, transactions, and member profiles—all in one place and built around nine completed seasons of 1048 Gate.</p>
+        <p>The <span data-site-year>2026</span> campaign is underway—scope the draft order below, then dig through every completed season of standings, playoffs, drafts, and records in the archive.</p>
         <div class="hero-buttons">
-          <button class="btn btn-primary" data-view-link="board">League Board</button>
+          <button class="btn btn-primary" data-view-link="trades">Trade Talk</button>
           <button class="btn btn-ghost" data-view-link="history">Explore History</button>
         </div>
       </div>
@@ -99,8 +101,8 @@
         <strong class="hero-season-year" data-site-year>2026</strong>
         <span class="hero-season-edition" data-site-season-label>Season 10</span>
         <div class="hero-meta-grid">
-          <div><strong>12</strong><span>Managers</span></div>
-          <div><strong>9</strong><span>Completed seasons</span></div>
+          <div><strong data-stat-managers>12</strong><span>Managers</span></div>
+          <div><strong data-stat-seasons>9</strong><span>Completed seasons</span></div>
           <div><strong>PPR</strong><span>Scoring</span></div>
           <div><strong>Keeper</strong><span>Format</span></div>
         </div>
@@ -117,17 +119,24 @@
       <aside class="home-section home-snapshot">
         <header class="home-section-head"><div><span>At a glance</span><h2>League Snapshot</h2></div><small>1048 Gate</small></header>
         <div class="snapshot-list">
-          <div><span>Established</span><strong>2017</strong></div>
-          <div><span>Completed seasons</span><strong>9</strong></div>
-          <div><span>Archived games</span><strong>903</strong></div>
+          <div><span>Established</span><strong data-stat-established>2017</strong></div>
+          <div><span>Completed seasons</span><strong data-stat-seasons>9</strong></div>
+          <div><span>Archived games</span><strong data-stat-games>885</strong></div>
           <div><span>League format</span><strong>12-team keeper</strong></div>
         </div>
       </aside>
     </div>
 
+    <section class="home-section draft-order-section" aria-label="Current season draft order">
+      <header class="home-section-head"><div><span>The <span data-site-year>2026</span> keeper draft</span><h2>Draft Order</h2></div><small>First round</small></header>
+      <div class="draft-order-grid" data-draft-order aria-live="polite">
+        <div class="draft-order-empty">Loading draft order…</div>
+      </div>
+    </section>
+
     <div class="section-title home-directory-title"><span class="section-kicker">League directory</span><h2>Get Around the League</h2><span class="see-all">Everything 1048</span></div>
     <div class="quick-grid">
-      <button type="button" class="quick-card" data-quick-view="board"><span class="num">01</span><span class="quick-kicker">Community</span><h3>Message Board</h3><p>Trash talk, trade chatter, and league discussion.</p></button>
+      <button type="button" class="quick-card" data-quick-view="trades"><span class="num">01</span><span class="quick-kicker">The deal ledger</span><h3>Trade Talk</h3><p>Every accepted trade on record, season by season.</p></button>
       <button type="button" class="quick-card" data-quick-view="votes"><span class="num">02</span><span class="quick-kicker">League office</span><h3>Vote Booth</h3><p>Rule proposals, league decisions, and official polls.</p></button>
       <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><span class="quick-kicker">League wire</span><h3>Transactions</h3><p>Adds, drops, successful waivers, and accepted trades.</p></button>
       <button type="button" class="quick-card" data-quick-view="history"><span class="num">04</span><span class="quick-kicker">Archive</span><h3>League History</h3><p>Champions, records, season results, and milestones.</p></button>
@@ -137,15 +146,7 @@
   </section>
 
   <section class="view" id="transactions">
-    <div class="section-title"><span class="section-kicker">The league wire</span><h2>Transaction Archive</h2><span class="see-all">2019–2025 ESPN history</span></div>
-    <div class="transaction-intro">
-      <div>
-        <span class="transaction-eyebrow">League moves that matter</span>
-        <h3>The waiver wire and trade block.</h3>
-        <p>Search seven seasons of completed player adds and drops, successful waiver claims, and accepted trades—nothing else.</p>
-      </div>
-      <div class="transaction-sync" id="transactionSync" role="status" aria-live="polite"><span></span>Ready to load</div>
-    </div>
+    <div class="section-title"><span class="section-kicker">The league wire</span><h2>Transaction Archive</h2><span class="see-all"><span data-archive-years>2019–2025</span> ESPN history</span></div>
     <div class="transaction-summary" id="transactionSummary" aria-label="Choose a transaction category">
       <button class="transaction-summary-card is-loading" type="button" disabled><span>All activity</span><strong>—</strong><small>Loading archive</small></button>
       <button class="transaction-summary-card is-loading" type="button" disabled><span>Adds &amp; drops</span><strong>—</strong><small>Loading archive</small></button>
@@ -159,11 +160,10 @@
         <label><span>Order</span><select id="transactionSort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label>
         <button class="btn btn-ghost transaction-reset" id="transactionReset" type="button">Reset filters</button>
       </div>
-      <div class="transaction-default-note">Only completed adds, drops, successful waiver claims, and accepted trades are included.</div>
     </div>
     <div class="transaction-results-head">
       <div><strong id="transactionResultCount">Archive not loaded</strong><span id="transactionResultRange">Open this section to load live data.</span></div>
-      <span class="transaction-source">Curated from the live league archive</span>
+      <div class="transaction-sync" id="transactionSync" role="status" aria-live="polite"><span></span>Ready to load</div>
     </div>
     <div class="transaction-feed" id="transactionFeed" aria-live="polite">
       <div class="panel transaction-empty"><strong>Loading transaction archive…</strong><span id="transactionLoadProgress">Connecting to the league database.</span></div>
@@ -171,10 +171,21 @@
     <nav class="transaction-pagination" id="transactionPagination" aria-label="Transaction results pages"></nav>
   </section>
 
-  <section class="view" id="board">
-    <div class="section-title"><h2>Message Board</h2></div>
-    <div class="board-toolbar"><div class="filter-pills"><button type="button" class="pill active">All</button><button type="button" class="pill">Trash Talk</button><button type="button" class="pill">Trade Talk</button><button type="button" class="pill">Waiver Wire</button><button type="button" class="pill">General</button></div></div>
-    <div class="panel"><div class="composer"><input type="text" placeholder="Start a new thread…"><button class="btn btn-primary">Post</button></div></div>
+  <section class="view" id="trades">
+    <div class="section-title"><span class="section-kicker">The deal ledger</span><h2>Trade Talk</h2><span class="see-all">Every accepted trade on record</span></div>
+    <div class="trade-intro">
+      <div>
+        <span class="transaction-eyebrow">Blockbusters, steals, and head-scratchers</span>
+        <h3>The complete trade archive.</h3>
+        <p>Every accepted deal since 2019, organized by season. Follow the current campaign as trades go down.</p>
+      </div>
+      <div class="transaction-sync" id="tradeSync" role="status" aria-live="polite"><span></span>Ready to load</div>
+    </div>
+    <nav class="trade-year-nav" id="tradeYearNav" aria-label="Trade archive seasons"></nav>
+    <div class="trade-season-meta" id="tradeSeasonMeta" role="status"></div>
+    <div class="trade-feed" id="tradeFeed" aria-live="polite">
+      <div class="panel transaction-empty"><strong>Loading trade archive…</strong><span>Connecting to the league database.</span></div>
+    </div>
   </section>
 
   <section class="view" id="votes">
@@ -208,7 +219,7 @@
 
   <section class="view" id="members">
     <div class="section-title"><h2>Members</h2></div>
-    <div class="member-help"><strong>Nine seasons. Twelve managers. One league.</strong> Open a manager card for career results, team history, rivalries, signature games, draft results, and top players. <span id="memberDataSource" class="mono">Loading history…</span></div>
+    <div class="member-help"><strong><span data-stat-seasons>9</span> seasons. <span data-stat-managers>12</span> managers. One league.</strong> Open a manager card for career results, team history, rivalries, signature games, draft results, and top players. <span id="memberDataSource" class="mono">Loading history…</span></div>
     <div class="members-grid" id="membersGrid"></div>
   </section>
 

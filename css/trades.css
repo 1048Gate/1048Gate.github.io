@@ -1,0 +1,31 @@
+/* Trade Talk — season-by-season trade archive */
+.trade-intro{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}
+.trade-intro h3{font-size:19px;margin-top:5px}
+.trade-intro p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.6;max-width:68ch}
+.transaction-eyebrow{font:8px 'Space Mono',monospace;color:var(--amber);letter-spacing:.12em;text-transform:uppercase}
+.trade-year-nav{display:flex;gap:7px;flex-wrap:wrap;padding:6px;margin-bottom:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;position:sticky;top:133px;z-index:15;box-shadow:0 8px 18px rgba(0,0,0,.15)}
+.trade-year-nav button{border:1px solid transparent;background:transparent;color:var(--muted);border-radius:8px;padding:10px 14px;font:600 12px Oswald,sans-serif;text-transform:uppercase;letter-spacing:.02em;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.trade-year-nav button i{font:700 9px 'Space Mono',monospace;font-style:normal;color:var(--turf)}
+.trade-year-nav button:hover{background:var(--panel2);color:var(--cream)}
+.trade-year-nav button.active{background:linear-gradient(135deg,rgba(0,132,135,.22),rgba(185,138,82,.13));border-color:rgba(185,138,82,.35);color:var(--amber)}
+.trade-year-nav button.active i{color:var(--cream)}
+.trade-season-meta{margin:-4px 2px 14px;color:var(--muted);font:9px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;min-height:13px}
+.trade-feed{display:flex;flex-direction:column;gap:12px}
+
+.trade-card{padding:0!important;overflow:hidden}
+.trade-card-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 16px;border-bottom:1px solid var(--line);background:rgba(23,40,41,.45)}
+.trade-card-head time{font:700 11px Oswald,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--cream)}
+.trade-card-head span{color:var(--muted);font:9px 'Space Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.trade-card-body{display:flex;align-items:stretch;gap:10px;padding:15px 16px;flex-wrap:wrap}
+.trade-side{flex:1 1 240px;min-width:0;display:grid;gap:7px}
+.trade-swap{align-self:center;flex:0 0 auto;font-size:17px;color:var(--amber)}
+.trade-team{display:block;font:600 13px Oswald,sans-serif;text-transform:uppercase;letter-spacing:.03em;color:var(--turf);padding-bottom:6px;border-bottom:1px solid var(--line)}
+.trade-gives small,.trade-receives small{display:block;font:8px 'Space Mono',monospace;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.trade-gives p,.trade-receives p{margin:0;font-size:12px;line-height:1.65;color:var(--muted)}
+.trade-gives p strong,.trade-receives p strong{color:var(--cream);font-weight:600}
+.trade-receives p strong{color:var(--amber)}
+.trade-gives p em,.trade-receives p em{opacity:.75}
+
+@media(max-width:900px){.trade-intro{flex-direction:column;align-items:flex-start;gap:10px}.trade-year-nav{position:static;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:5px}}
+@media(max-width:900px){.trade-year-nav::-webkit-scrollbar{display:none}.trade-year-nav button{flex:0 0 auto}}
+@media(max-width:620px){.trade-card-body{flex-direction:column}.trade-swap{transform:rotate(90deg);align-self:center}.trade-card-head{flex-wrap:wrap;gap:6px}}

@@ -104,10 +104,14 @@
       season_year:Number(row.season_year),
       scoring_period:Number(row.scoring_period || 0),
       team_name:clean(row.team_name),
-      status:row.status || 'UNKNOWN',
+      status:row.status || null,
       transaction_date_ms:Number(row.transaction_date_ms || new Date(row.transaction_date).getTime() || 0),
       item_count:Number(row.item_count || 0)
-    })).filter(row => RELEVANT_TYPES.includes(row.transaction_type) && row.status === 'EXECUTED');
+    })).filter(row => RELEVANT_TYPES.includes(row.transaction_type) && (
+      row.status === 'EXECUTED' ||
+      // Legacy ESPN trade imports leave status null; only CANCELED trades should be excluded.
+      (row.transaction_type === 'TRADE_ACCEPT' && row.status === null)
+    ));
     const relevantKeys = new Set(transactions.map(transactionKey));
     items = items.map(item => ({
       ...item,

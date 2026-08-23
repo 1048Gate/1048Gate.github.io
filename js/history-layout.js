@@ -5,7 +5,7 @@
   const title=history.querySelector('.section-title'),timeline=history.querySelector('.timeline'),recordGrid=history.querySelector('.record-grid'),shame=history.querySelector('.shame');
   if(!timeline||!recordGrid||!shame)return;
   const championsPanel=timeline.closest('.panel')||timeline.parentElement,recordsPanel=recordGrid.closest('.panel')||recordGrid.parentElement,shamePanel=shame.closest('.panel')||shame.parentElement;
-  const shell=document.createElement('div');shell.className='history-shell';shell.innerHTML=`<div class="history-intro"><div><span class="history-eyebrow">1048 ARCHIVES</span><h3>Nine seasons of league lore</h3><p>Browse champions, full season standings, head-to-head rivalries, all-time records, and the moments nobody is allowed to forget.</p></div></div><div class="history-subnav" role="tablist" aria-label="League history sections"><button class="active" type="button" data-history-tab="champions">Champions</button><button type="button" data-history-tab="seasons">Seasons</button><button type="button" data-history-tab="matchups">Matchups</button><button type="button" data-history-tab="records">Record Book</button><button type="button" data-history-tab="shame">Wall of Shame</button></div><div class="history-tab-panels"><section class="history-tab-panel active" data-history-panel="champions"></section><section class="history-tab-panel" data-history-panel="seasons"></section><section class="history-tab-panel" data-history-panel="matchups"></section><section class="history-tab-panel" data-history-panel="records"></section><section class="history-tab-panel" data-history-panel="shame"></section></div>`;
+  const shell=document.createElement('div');shell.className='history-shell';shell.innerHTML=`<div class="history-intro"><div><span class="history-eyebrow">1048 ARCHIVES</span><h3>Season-by-Season League Lore</h3><p>Every season gets a full rundown—standings, playoff results, draft recap, and stat leaders—together with champions, rivalries, records, and the moments nobody is allowed to forget.</p></div></div><div class="history-subnav" role="tablist" aria-label="League history sections"><button class="active" type="button" data-history-tab="seasons">Seasons</button><button type="button" data-history-tab="champions">Champions</button><button type="button" data-history-tab="matchups">Matchups</button><button type="button" data-history-tab="records">Record Book</button><button type="button" data-history-tab="shame">Wall of Shame</button></div><div class="history-tab-panels"><section class="history-tab-panel active" data-history-panel="seasons"></section><section class="history-tab-panel" data-history-panel="champions"></section><section class="history-tab-panel" data-history-panel="matchups"></section><section class="history-tab-panel" data-history-panel="records"></section><section class="history-tab-panel" data-history-panel="shame"></section></div>`;
   if(title)title.insertAdjacentElement('afterend',shell);else history.prepend(shell);
   const champHost=shell.querySelector('[data-history-panel="champions"]'),seasonHost=shell.querySelector('[data-history-panel="seasons"]'),matchupHost=shell.querySelector('[data-history-panel="matchups"]'),recordHost=shell.querySelector('[data-history-panel="records"]'),shameHost=shell.querySelector('[data-history-panel="shame"]');
   championsPanel.classList.add('history-content-panel');recordsPanel.classList.add('history-content-panel');shamePanel.classList.add('history-content-panel');champHost.appendChild(championsPanel);recordHost.appendChild(recordsPanel);shameHost.appendChild(shamePanel);
@@ -20,12 +20,76 @@
   async function loadSeasonArchive(){
     seasonHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Loading season archive…</div></div>';
     try{
-      const response=await fetch('data/seasons.json',{cache:'no-store'});if(!response.ok)throw new Error(`seasons.json returned HTTP ${response.status}`);const payload=await response.json();const seasons=Array.isArray(payload.seasons)?payload.seasons:[];if(!seasons.length)throw new Error('No seasons found');
-      seasonHost.innerHTML='<div class="panel history-content-panel season-archive-panel"><div class="history-section-head"><div><span>SEASON ARCHIVE</span><h3>Year-by-Year Standings</h3></div></div><div class="season-year-nav"></div><div class="season-detail"></div></div>';
-      const nav=seasonHost.querySelector('.season-year-nav'),detail=seasonHost.querySelector('.season-detail'),sorted=[...seasons].sort((a,b)=>b[0]-a[0]);
-      nav.innerHTML=sorted.map((s,i)=>`<button type="button" class="${i===0?'active':''}" data-season-year="${s[0]}">${s[0]}</button>`).join('');
-      function renderSeason(year){const season=sorted.find(s=>Number(s[0])===Number(year));if(!season)return;nav.querySelectorAll('button').forEach(btn=>btn.classList.toggle('active',Number(btn.dataset.seasonYear)===Number(year)));const [seasonYear,leagueName,championOwner,championTeam,standings]=season;detail.innerHTML=`<div class="season-summary"><div><span class="season-label">${esc(leagueName)}</span><h4>${seasonYear} Season</h4></div><div class="season-champion"><span>🏆 Champion</span><strong>${esc(championOwner)}</strong><small>${esc(championTeam)}</small></div></div><div class="season-table-wrap"><table class="season-archive-table"><thead><tr><th>Finish</th><th>Team</th><th>Owner</th><th>Record</th><th>PF</th><th>PA</th><th>Diff</th><th>RS</th></tr></thead><tbody>${(standings||[]).map(team=>{const [finish,regular,teamName,ownerName,record,pf,pa,diff]=team;return `<tr class="${Number(finish)===1?'season-champ-row':''}"><td class="season-finish">${Number(finish)===1?'🏆 ':''}#${finish}</td><td><strong>${esc(teamName)}</strong></td><td>${esc(ownerName)}</td><td>${esc(record)}</td><td>${num(pf)}</td><td>${num(pa)}</td><td class="${Number(diff)>=0?'positive-diff':'negative-diff'}">${Number(diff)>=0?'+':''}${num(diff)}</td><td>#${regular}</td></tr>`}).join('')}</tbody></table></div>`}
-      nav.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>renderSeason(btn.dataset.seasonYear)));renderSeason(sorted[0][0]);
+      const [seasonRes,playoffRes]=await Promise.all([fetch('data/seasons.json',{cache:'no-store'}),fetch('data/playoffs.json',{cache:'no-store'})]);
+      if(!seasonRes.ok)throw new Error(`seasons.json returned HTTP ${seasonRes.status}`);
+      if(!playoffRes.ok)throw new Error(`playoffs.json returned HTTP ${playoffRes.status}`);
+      const seasons=(await seasonRes.json()).seasons||[];
+      const playoffByYear=new Map(((await playoffRes.json()).seasons||[]).map(s=>[Number(s[0]),s]));
+      const seasonsList=seasons.filter(s=>Array.isArray(s)&&s.length>=5).sort((a,b)=>b[0]-a[0]);
+      if(!seasonsList.length)throw new Error('No seasons found');
+      const extraCache={};
+      const loadExtras=year=>{
+        if(!extraCache[year]){
+          extraCache[year]=Promise.all([
+            fetch(`data/drafts/${year}.json`,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
+            fetch(`data/players/${year}.json`,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
+          ]).then(([draft,players])=>({draft,players}));
+        }
+        return extraCache[year];
+      };
+      seasonHost.innerHTML='<div class="panel history-content-panel season-archive-panel"><div class="history-section-head"><div><span>SEASON ARCHIVE</span><h3>Season Rundowns</h3></div><small>Standings · Playoffs · Draft · Leaders</small></div><div class="season-year-nav"></div><div class="season-detail"></div></div>';
+      const nav=seasonHost.querySelector('.season-year-nav'),detail=seasonHost.querySelector('.season-detail');
+      nav.innerHTML=seasonsList.map((s,i)=>`<button type="button" class="${i===0?'active':''}" data-season-year="${s[0]}">${s[0]}</button>`).join('');
+      function titleGame(playoffEntry){
+        const games=(playoffEntry&&playoffEntry[6])||[];
+        const final=[...games].reverse().find(g=>g&&g[2]==='Championship'&&typeof g[7]==='number'&&typeof g[11]==='number');
+        if(!final)return null;
+        const champFirst=final[7]>=final[11];
+        return {round:String(final[2]),label:String(final[3]||''),winnerTeam:String(champFirst?final[4]:final[9]),winnerOwner:String(champFirst?final[5]:final[10]),winnerScore:final[7]>=final[11]?final[7]:final[11],runnerUpTeam:String(champFirst?final[9]:final[4]),runnerUpOwner:String(champFirst?final[10]:final[5]),runnerUpScore:champFirst?final[11]:final[7]};
+      }
+      function postseasonRounds(playoffEntry){
+        const rounds=[];
+        for(const game of (playoffEntry&&playoffEntry[6])||[]){
+          if(!game||game[1]!=='championship')continue;
+          const label=String(game[2]);
+          let round=rounds.find(r=>r.label===label);
+          if(!round){round={label,games:[]};rounds.push(round)}
+          round.games.push(game);
+        }
+        return rounds;
+      }
+      function renderSeason(year){
+        const season=seasonsList.find(s=>Number(s[0])===Number(year));
+        if(!season)return;
+        nav.querySelectorAll('button').forEach(btn=>btn.classList.toggle('active',Number(btn.dataset.seasonYear)===Number(year)));
+        detail.dataset.renderYear=String(year);
+        const [seasonYear,leagueName,championOwner,championTeam,standings]=season;
+        const playoffEntry=playoffByYear.get(Number(seasonYear))||null;
+        const final=titleGame(playoffEntry);
+        const runnerUpRow=Array.isArray(standings)?standings.find(t=>Number(t[0])===2):null;
+        const champRow=Array.isArray(standings)?standings.find(t=>Number(t[0])===1):null;
+        const banner=`<div class="season-hero"><div class="season-hero-year"><span>${seasonYear}</span><small>${esc(leagueName)}</small></div><div class="season-hero-champ"><span>🏆 League Champion</span><strong>${esc(championOwner)}</strong><small>${esc(championTeam)}${champRow?` · ${esc(String(champRow[4]||''))} record`:''}</small></div>${final?`<div class="season-hero-final"><span>${esc(final.round)}</span><div class="season-hero-score"><b>${esc(final.winnerOwner)}</b><strong>${num(final.winnerScore)}</strong></div><em>def.</em><div class="season-hero-score"><b>${esc(final.runnerUpOwner)}</b><strong>${num(final.runnerUpScore)}</strong></div></div>`:(runnerUpRow?`<div class="season-hero-final"><span>Runner-up</span><div class="season-hero-score"><b>${esc(String(runnerUpRow[3]||''))}</b><strong>${esc(String(runnerUpRow[2]||''))}</strong></div></div>`:'')}</div>`;
+        const standingsTable=`<div class="rundown-block"><div class="rundown-head"><span>REGULAR SEASON</span><h4>Final Standings</h4></div><div class="season-table-wrap"><table class="season-archive-table"><thead><tr><th>Finish</th><th>Team</th><th>Owner</th><th>Record</th><th>PF</th><th>PA</th><th>Diff</th><th>Seed</th></tr></thead><tbody>${(standings||[]).map(team=>{const [finish,regular,teamName,ownerName,record,pf,pa,diff]=team;return `<tr class="${Number(finish)===1?'season-champ-row':''}${Number(finish)<=6?' playoff-row':''}"><td class="season-finish">${Number(finish)===1?'🏆 ':''}#${finish}</td><td><strong>${esc(teamName)}</strong></td><td>${esc(ownerName)}</td><td>${esc(record)}</td><td>${num(pf)}</td><td>${num(pa)}</td><td class="${Number(diff)>=0?'positive-diff':'negative-diff'}">${Number(diff)>=0?'+':''}${num(diff)}</td><td>#${regular}</td></tr>`}).join('')}</tbody></table></div><small class="rundown-note">Top six seeds reached the postseason.</small></div>`;
+        const rounds=postseasonRounds(playoffEntry);
+        const playoffsBlock=`<div class="rundown-block"><div class="rundown-head"><span>POSTSEASON</span><h4>Playoff Results</h4></div>${rounds.length?rounds.map(round=>`<div class="playoff-round-group"><span class="playoff-round-label">${esc(round.label)}</span>${round.games.map(g=>{const hasBoth=typeof g[7]==='number'&&typeof g[11]==='number';if(!hasBoth)return `<div class="playoff-result-row bye"><span>#${esc(g[4])} ${esc(g[5])}</span><em>bye</em><span></span></div>`;const aWins=g[7]>=g[11];return `<div class="playoff-result-row"><span class="${aWins?'is-winner':''}">#${esc(g[4])} ${esc(g[5])}</span><strong>${num(g[7])}</strong><span class="playoff-vs">—</span><strong>${num(g[11])}</strong><span class="${!aWins?'is-winner':''}">#${esc(g[8])} ${esc(g[9])}</span></div>`}).join('')}</div>`).join(''):'<div class="rundown-empty">No postseason archive recorded for this season.</div>'}</div>`;
+        detail.innerHTML=`${banner}<div class="rundown-grid">${standingsTable}${playoffsBlock}<div class="rundown-block" data-rundown-draft><div class="rundown-head"><span>THE DRAFT</span><h4>Round 1 Recap</h4></div><div class="history-loading">Loading draft recap…</div></div><div class="rundown-block" data-rundown-leaders><div class="rundown-head"><span>STAT LEADERS</span><h4>Top Performers</h4></div><div class="history-loading">Loading stat leaders…</div></div></div>`;
+        loadExtras(seasonYear).then(({draft,players})=>{
+          if(detail.dataset.renderYear!==String(year))return;
+          const draftBlock=detail.querySelector('[data-rundown-draft]');
+          if(draftBlock){
+            const picks=(draft&&Array.isArray(draft.picks)?draft.picks:[]).slice(0,12);
+            const teams=(draft&&Array.isArray(draft.teams))?draft.teams:[];
+            draftBlock.innerHTML=`<div class="rundown-head"><span>THE DRAFT</span><h4>Round 1 Recap</h4></div>${picks.length?`<ol class="draft-recap-list">${picks.map(pick=>{const [overall,teamIdx,player,isKeeper]=pick;const teamInfo=teams[teamIdx]||['',''];return `<li><span class="draft-recap-pick">${overall}</span><strong>${esc(player)}</strong><small>${esc(teamInfo[1])}<em> · ${esc(teamInfo[0])}</em></small>${Number(isKeeper)?'<i class="keeper-tag">Keeper</i>':''}</li>`}).join('')}</ol>`:'<div class="rundown-empty">No draft archive recorded for this season.</div>'}`;
+          }
+          const leadersBlock=detail.querySelector('[data-rundown-leaders]');
+          if(leadersBlock){
+            const rows=((players&&Array.isArray(players.players)?players.players:[])||[]).slice(0,8);
+            leadersBlock.innerHTML=`<div class="rundown-head"><span>STAT LEADERS</span><h4>Top Performers</h4></div>${rows.length?`<div class="season-table-wrap"><table class="season-archive-table leaders-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Pts</th><th>Fantasy Team</th></tr></thead><tbody>${rows.map((row,i)=>{const name=row[1],pos=row[2],points=row[3],ownerName=row[8],teamName=row[9];return `<tr><td class="season-finish">${i+1}</td><td><strong>${esc(name)}</strong></td><td>${esc(pos)}</td><td>${num(points)}</td><td>${esc(ownerName)}<small> · ${esc(teamName)}</small></td></tr>`}).join('')}</tbody></table></div>`:'<div class="rundown-empty">No player stats recorded for this season.</div>'}`;
+          }
+        });
+      }
+      nav.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>renderSeason(btn.dataset.seasonYear)));
+      renderSeason(seasonsList[0][0]);
     }catch(error){console.error('Unable to load season archive:',error);seasonHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Season archive could not be loaded.</div></div>'}
   }
   async function loadMatchups(){

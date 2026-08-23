@@ -5,5 +5,20 @@
   "seasonRoman": "X",
   "seasonYear": 2026,
   "phase": "Pre-Season",
-  "competition": "Regular"
+  "competition": "Regular",
+  "transactionRange": [2019, 2025],
+  "draftOrder": [
+    { "pick": 1, "number": "12", "name": "Trevor Hash" },
+    { "pick": 2, "number": "01", "name": "George Travis" },
+    { "pick": 3, "number": "04", "name": "Bryan Hunt" },
+    { "pick": 4, "number": "02", "name": "Jared Hall" },
+    { "pick": 5, "number": "06", "name": "Vincent Cannarozzi" },
+    { "pick": 6, "number": "09", "name": "Thomas Speer" },
+    { "pick": 7, "number": "07", "name": "James Brochu" },
+    { "pick": 8, "number": "08", "name": "JD Daley" },
+    { "pick": 9, "number": "11", "name": "German Haro" },
+    { "pick": 10, "number": "10", "name": "Collin Krum" },
+    { "pick": 11, "number": "05", "name": "Brian Heino" },
+    { "pick": 12, "number": "03", "name": "Kyle Fowler" }
+  ]
 }
