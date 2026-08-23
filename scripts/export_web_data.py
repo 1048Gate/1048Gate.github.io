@@ -24,12 +24,10 @@ from pathlib import Path
 START_YEAR = 2017
 END_YEAR = 2025
 
-# Current Members-page roster.
-#
-# A couple ESPN accounts changed IDs over league history, so members can have
-# more than one owner_id. Keeping those aliases here prevents a member's older
-# seasons from disappearing from the export.
-MEMBERS = [
+# Fallback roster used only when the database has not been migrated yet
+# (no members/owner_aliases tables). Prefer the database tables: they are the
+# canonical identity source maintained by espn-fantasy-history-toolkit/migrate.sql.
+FALLBACK_MEMBERS = [
     {
         "number": "01",
         "name": "George Travis",
@@ -110,8 +108,8 @@ MEMBERS = [
     },
 ]
 
-# ESPN's imported teams table has final_standing=0 for 2017 and 2018.
-# These are the established final finishes already used on the website.
+# Kept for un-migrated databases. A migrated database carries these finishes
+# in teams.final_standing (see espn-fantasy-history-toolkit/migrate.sql).
 EARLY_FINAL_FINISH = {
     2017: {
         "{FACABF18-8353-4007-83E6-0962A870FB65}": 2,
@@ -145,6 +143,39 @@ def clean_team_name(value: str | None) -> str:
 
 def record_text(wins: int, losses: int, ties: int) -> str:
     return f"{wins}-{losses}-{ties}" if ties else f"{wins}-{losses}"
+
+
+def load_members(conn: sqlite3.Connection) -> list[dict]:
+    """Read the canonical roster from migrated tables, or fall back."""
+
+    try:
+        rows = conn.execute(
+            """
+            SELECT member_id, member_number, name, role
+            FROM members
+            WHERE is_current = 1
+            ORDER BY member_number
+            """
+        ).fetchall()
+        aliases = conn.execute("SELECT owner_id, member_id FROM owner_aliases").fetchall()
+    except sqlite3.OperationalError:
+        return FALLBACK_MEMBERS
+
+    by_member: dict[int, list[str]] = {}
+    for alias in aliases:
+        by_member.setdefault(alias["member_id"], []).append(alias["owner_id"])
+
+    members = []
+    for row in rows:
+        members.append(
+            {
+                "number": row["member_number"],
+                "name": row["name"],
+                "role": row["role"],
+                "owner_ids": by_member.get(row["member_id"], []),
+            }
+        )
+    return members
 
 
 def export_member(conn: sqlite3.Connection, member: dict) -> dict:
@@ -260,7 +291,7 @@ def main() -> None:
     conn.row_factory = sqlite3.Row
 
     try:
-        members = [export_member(conn, member) for member in MEMBERS]
+        members = [export_member(conn, member) for member in load_members(conn)]
     finally:
         conn.close()
 
@@ -277,7 +308,7 @@ def main() -> None:
     output_path = output_dir / "members.json"
 
     output_path.write_text(
-        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        json.dumps(payload, separators=(",", ":"), ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
 
