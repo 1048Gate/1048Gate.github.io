@@ -19,6 +19,7 @@
   let itemsByTransaction = new Map();
   let loadPromise = null;
   let loaded = false;
+  let itemsLoaded = false;
   let page = 1;
   let activeCategory = 'all';
   let searchTimer = null;
@@ -94,7 +95,7 @@
         updateProgress();
       }
     };
-    await Promise.all(Array.from({length:Math.min(3, starts.length)}, worker));
+    await Promise.all(Array.from({length:Math.min(6, starts.length)}, worker));
     return batches.sort((a,b) => a.start - b.start).flatMap(batch => batch.rows);
   }
 
@@ -230,7 +231,9 @@
         </div>
         ${related.length
           ? `<ul class="transaction-items">${related.map(renderItem).join('')}</ul>`
-          : '<div class="transaction-no-items">No player movement was attached to this event.</div>'}
+          : (itemsLoaded
+            ? '<div class="transaction-no-items">No player movement was attached to this event.</div>'
+            : '<div class="transaction-no-items is-pending">Loading player moves…</div>')}
       </div>
       <div class="transaction-ledger-meta">
         <time datetime="${esc(row.transaction_date || '')}">${esc(formatTime(row))}</time>
@@ -281,10 +284,10 @@
       try{
         supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
         if(!supabase) throw new Error('The league database connection is unavailable.');
-        [transactions, items] = await Promise.all([
-          fetchAll('league_transactions', 'id,season_year,espn_transaction_id,scoring_period,transaction_type,status,team_name,bid_amount,transaction_date_ms,transaction_date,item_count', 'transactions', 'transactionTotal', query => query.in('transaction_type', RELEVANT_TYPES)),
-          fetchAll('league_transaction_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_name,from_team_name,to_team_name', 'items', 'itemTotal')
-        ]);
+
+        // Phase 1: events first — render the ledger immediately, player moves follow.
+        transactions = await fetchAll('league_transactions', 'id,season_year,espn_transaction_id,scoring_period,transaction_type,status,team_name,bid_amount,transaction_date_ms,transaction_date,item_count', 'transactions', 'transactionTotal', query => query.in('transaction_type', RELEVANT_TYPES));
+        items = [];
         prepareArchive();
         populateFilters();
         renderSummary();
@@ -292,6 +295,14 @@
         setControlsDisabled(false);
         const sync = document.getElementById('transactionSync');
         sync.classList.add('is-live');
+        sync.innerHTML = '<span></span>Loading details…';
+        render();
+
+        // Phase 2: attach player movement and re-render.
+        items = await fetchAll('league_transaction_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_name,from_team_name,to_team_name', 'items', 'itemTotal');
+        itemsLoaded = true;
+        prepareArchive();
+        renderSummary();
         sync.innerHTML = '<span></span>Archive synced';
         render();
       }catch(error){

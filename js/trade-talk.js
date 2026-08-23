@@ -22,14 +22,15 @@
     sync.innerHTML = `<span></span>${esc(text)}`;
   }
 
-  async function fetchAll(table, columns){
+  async function fetchAll(table, columns, filter){
     const rows = [];
     for(let start = 0; ; start += CHUNK_SIZE){
-      const {data, error} = await supabase.from(table)
+      let query = supabase.from(table)
         .select(columns)
         .order('season_year', {ascending:false})
-        .order('id', {ascending:true})
-        .range(start, start + CHUNK_SIZE - 1);
+        .order('id', {ascending:true});
+      if(filter) query = query.in(filter.column, filter.values);
+      const {data, error} = await query.range(start, start + CHUNK_SIZE - 1);
       if(error) throw error;
       rows.push(...(data || []));
       if(!data || data.length < CHUNK_SIZE) return rows;
@@ -156,8 +157,8 @@
         supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
         if(!supabase) throw new Error('The league database connection is unavailable.');
         const [transactions, items] = await Promise.all([
-          fetchAll('league_transactions', 'id,season_year,espn_transaction_id,scoring_period,transaction_type,status,team_name,transaction_date_ms,transaction_date'),
-          fetchAll('league_transaction_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_name,from_team_name,to_team_name')
+          fetchAll('league_transactions', 'id,season_year,espn_transaction_id,scoring_period,transaction_type,status,team_name,transaction_date_ms,transaction_date', {column:'transaction_type', values:['TRADE_ACCEPT']}),
+          fetchAll('league_transaction_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_name,from_team_name,to_team_name', {column:'item_type', values:['TRADE']})
         ]);
         // Legacy ESPN trade imports leave status null; only CANCELED trades are excluded.
         const executed = transactions.filter(row => row.transaction_type === 'TRADE_ACCEPT' && (row.status === null || row.status === 'EXECUTED'));

@@ -36,3 +36,5 @@
 .transaction-feed{gap:10px}
 @media(max-width:900px){.transaction-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.transaction-controls{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.transaction-summary{gap:7px;margin-bottom:10px}.transaction-workbench{padding:11px!important}.transaction-controls{grid-template-columns:1fr}}
+.transaction-no-items.is-pending{opacity:.55;animation:transactionPending 1.2s ease-in-out infinite}
+@keyframes transactionPending{50%{opacity:.25}}
