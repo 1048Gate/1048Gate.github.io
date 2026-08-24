@@ -159,3 +159,11 @@ if(unmatched.length) console.warn('\nKept at end (not matched by model):', unmat
 
 writeFileSync(new URL('data/site.json', root), JSON.stringify(config, null, 2) + '\n');
 console.log(`\nWrote ${config.futures.length} futures entries to data/site.json`);
+
+// Machine-readable ratings feed for the client-side playoff projector.
+writeFileSync(new URL('data/power-rankings.json', root), JSON.stringify({
+  schemaVersion: 1,
+  generatedForSeason: config.seasonNumber,
+  ratings: ratings.map(r => ({name: r.name, rating: Math.round(r.rating * 10) / 10}))
+}, null, 2) + '\n');
+console.log(`Wrote ${ratings.length} power ratings to data/power-rankings.json`);
