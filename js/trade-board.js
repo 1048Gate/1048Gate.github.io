@@ -7,70 +7,20 @@
   const supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
   let currentUser = null;
   let currentProfile = null;
+  let activeFilter = 'all';
 
-  // Sub-navigation for Trade History / Trade Board
-  const tradeIntro = tradeSection.querySelector('.trade-intro');
-  const subNav = document.createElement('nav');
-  subNav.className = 'trade-subnav';
-  subNav.setAttribute('role', 'tablist');
-  subNav.setAttribute('aria-label', 'Trade sections');
-  subNav.innerHTML = `
-    <button type="button" class="active" data-trade-tab="history" role="tab" aria-selected="true">Trade History</button>
-    <button type="button" data-trade-tab="board" role="tab" aria-selected="false">Trade Board</button>
-  `;
-  tradeIntro?.insertAdjacentElement('afterend', subNav);
+  // Find existing panels (authoritative markup from index.html)
+  const historyPanel = tradeSection.querySelector('[data-trade-panel="history"]');
+  const boardPanel = tradeSection.querySelector('[data-trade-panel="board"]');
+  const subNav = tradeSection.querySelector('.trade-subnav');
+  const filterNav = boardPanel?.querySelector('.trade-board-filters');
+  const form = boardPanel?.querySelector('#tradeBoardForm');
+  const feed = boardPanel?.querySelector('#tradeBoardFeed');
+  const authStatusHost = boardPanel?.querySelector('#tradeBoardAuthStatus');
 
-  // Create tab panels
-  const historyPanel = document.createElement('div');
-  historyPanel.className = 'trade-tab-panel active';
-  historyPanel.dataset.tradePanel = 'history';
-  historyPanel.setAttribute('role', 'tabpanel');
-  historyPanel.innerHTML = `
-    <nav class="trade-year-nav" id="tradeYearNav" aria-label="Trade archive seasons"></nav>
-    <div class="trade-season-meta" id="tradeSeasonMeta" role="status"></div>
-    <div class="trade-feed" id="tradeFeed" aria-live="polite">
-      <div class="panel transaction-empty"><strong>Loading trade archive…</strong><span>Connecting to the league database.</span></div>
-    </div>
-  `;
+  if (!historyPanel || !boardPanel || !subNav || !filterNav || !form || !feed) return;
 
-  const boardPanel = document.createElement('div');
-  boardPanel.className = 'trade-tab-panel';
-  boardPanel.dataset.tradePanel = 'board';
-  boardPanel.setAttribute('role', 'tabpanel');
-  boardPanel.innerHTML = `
-    <div class="trade-board-header">
-      <div class="trade-board-intro">
-        <strong>Propose, discuss, and gauge interest</strong>
-        <p>Post trade ideas, find partners, and work out frameworks before sending offers on ESPN.</p>
-      </div>
-      <div id="tradeBoardAuthStatus"></div>
-    </div>
-    <form class="trade-board-form panel" id="tradeBoardForm" hidden>
-      <div class="form-row">
-        <label for="tbTitle">Title</label>
-        <input type="text" id="tbTitle" name="title" maxlength="120" placeholder="e.g., Shopping my RB2, targeting WR1" required>
-      </div>
-      <div class="form-row">
-        <label for="tbBody">Details</label>
-        <textarea id="tbBody" name="body" maxlength="2000" rows="5" placeholder="Players involved, what you're looking for, framework…" required></textarea>
-      </div>
-      <div class="form-actions">
-        <span class="form-status" id="tbFormStatus" role="status"></span>
-        <button type="submit" class="btn btn-primary">Post to Trade Board</button>
-      </div>
-    </form>
-    <div class="trade-board-feed" id="tradeBoardFeed" aria-live="polite">
-      <div class="panel community-empty">Loading Trade Board…</div>
-    </div>
-  `;
-
-  // Replace the existing content after trade-intro
-  const existingContent = tradeSection.querySelectorAll(':scope > *:not(.section-title):not(.trade-intro)');
-  existingContent.forEach(el => el.remove());
-  tradeSection.appendChild(historyPanel);
-  tradeSection.appendChild(boardPanel);
-
-  // Tab switching
+  // Tab switching - use existing subNav
   subNav.querySelectorAll('[data-trade-tab]').forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tradeTab;
@@ -78,11 +28,23 @@
         b.classList.toggle('active', b === btn);
         b.setAttribute('aria-selected', b === btn);
       });
-      tradeSection.querySelectorAll('.trade-tab-panel').forEach(p => {
-        p.classList.toggle('active', p.dataset.tradePanel === tab);
-        p.setAttribute('aria-hidden', p.dataset.tradePanel !== tab);
-      });
+      historyPanel.classList.toggle('active', tab === 'history');
+      historyPanel.setAttribute('aria-hidden', tab !== 'history');
+      boardPanel.classList.toggle('active', tab === 'board');
+      boardPanel.setAttribute('aria-hidden', tab !== 'board');
+      if (tab === 'history') historyPanel.hidden = false;
+      else historyPanel.hidden = true;
+      boardPanel.hidden = tab !== 'board';
       if (tab === 'board') loadBoard();
+    });
+  });
+
+  // Filter switching
+  filterNav.querySelectorAll('[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.filter;
+      filterNav.querySelectorAll('[data-filter]').forEach(b => b.classList.toggle('active', b === btn));
+      renderFilteredBoard();
     });
   });
 
@@ -98,16 +60,16 @@
     }
     renderAuthStatus();
     renderFormVisibility();
+    renderFilteredBoard(); // re-render to show/hide delete buttons
   }
 
   function renderAuthStatus() {
-    const host = document.getElementById('tradeBoardAuthStatus');
-    if (!host) return;
+    if (!authStatusHost) return;
     if (currentUser) {
-      host.innerHTML = `<span class="trade-board-user">Signed in as <strong>${esc(currentProfile?.display_name || currentUser.email)}</strong></span>`;
+      authStatusHost.innerHTML = `<span class="trade-board-user">Signed in as <strong>${esc(currentProfile?.display_name || currentUser.email)}</strong></span>`;
     } else {
-      host.innerHTML = `<button class="btn btn-ghost" id="tbSignInBtn">Sign in to post</button>`;
-      host.querySelector('#tbSignInBtn')?.addEventListener('click', () => {
+      authStatusHost.innerHTML = `<button class="btn btn-ghost" id="tbSignInBtn">Sign in to post</button>`;
+      authStatusHost.querySelector('#tbSignInBtn')?.addEventListener('click', () => {
         const authBtn = document.getElementById('authButton');
         authBtn?.click();
       });
@@ -115,7 +77,6 @@
   }
 
   function renderFormVisibility() {
-    const form = document.getElementById('tradeBoardForm');
     if (!form) return;
     if (currentUser) {
       form.hidden = false;
@@ -124,9 +85,20 @@
     }
   }
 
+  // Post type display helpers
+  const POST_TYPES = {
+    on_the_block: {label: 'ON THE BLOCK', class: 'type-on-the-block'},
+    looking_for: {label: 'LOOKING FOR', class: 'type-looking-for'},
+    open_to_offers: {label: 'OPEN TO OFFERS', class: 'type-open-to-offers'},
+    trade_discussion: {label: 'TRADE DISCUSSION', class: 'type-trade-discussion'}
+  };
+
+  function getPostTypeInfo(type) {
+    return POST_TYPES[type] || {label: type?.toUpperCase() || 'UNKNOWN', class: ''};
+  }
+
   // Load board posts
   async function loadBoard() {
-    const feed = document.getElementById('tradeBoardFeed');
     if (!feed) return;
 
     if (!supabase) {
@@ -141,26 +113,36 @@
         .from('trade_board_posts')
         .select(`
           id, title, body, is_closed, is_starter, created_at, updated_at,
-          author_id, author_name,
+          author_id, author_name, post_type, player_name, position,
           trade_board_comments (id, body, author_name, author_id, created_at)
         `)
         .order('created_at', {ascending: false});
 
       if (error) throw error;
 
-      renderBoardPosts(posts || []);
+      boardPanel.dataset.allPosts = JSON.stringify(posts || []);
+      renderFilteredBoard();
     } catch (err) {
       console.error('Unable to load Trade Board:', err);
       feed.innerHTML = `<div class="panel community-empty community-error"><strong>Trade Board could not load.</strong><span>${esc(err.message)}</span></div>`;
     }
   }
 
+  function renderFilteredBoard() {
+    if (!feed) return;
+    const posts = JSON.parse(boardPanel.dataset.allPosts || '[]');
+    const filtered = activeFilter === 'all' ? posts : posts.filter(p => p.post_type === activeFilter);
+    renderBoardPosts(filtered);
+  }
+
   function renderBoardPosts(posts) {
-    const feed = document.getElementById('tradeBoardFeed');
     if (!feed) return;
 
     if (!posts.length) {
-      feed.innerHTML = '<div class="panel community-empty">No trade discussions yet. Be the first to post!</div>';
+      const emptyMsg = activeFilter === 'all'
+        ? 'No trade discussions yet. Be the first to post!'
+        : `No ${POST_TYPES[activeFilter]?.label?.toLowerCase() || activeFilter} posts yet.`;
+      feed.innerHTML = `<div class="panel community-empty">${esc(emptyMsg)}</div>`;
       return;
     }
 
@@ -171,20 +153,24 @@
   function renderPostCard(post) {
     const isAuthor = currentUser && post.author_id === currentUser.id;
     const isStaff = currentProfile && ['commissioner', 'site_admin'].includes(currentProfile.role);
-    const canManage = isAuthor || isStaff;
+    const canManagePost = isAuthor || isStaff;
+    const typeInfo = getPostTypeInfo(post.post_type);
     const comments = (post.trade_board_comments || []).sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
     const commentCount = comments.length;
 
+    const playerLine = post.player_name ? `<span class="trade-board-player">${esc(post.player_name)}${post.position ? ` · ${esc(post.position)}` : ''}</span>` : '';
+
     return `
-      <article class="panel trade-board-post${post.is_closed ? ' closed' : ''}" data-post-id="${post.id}">
+      <article class="panel trade-board-post${post.is_closed ? ' closed' : ''}" data-post-id="${post.id}" data-post-type="${esc(post.post_type)}">
         <header class="trade-board-post-head">
           <div class="trade-board-post-meta">
+            <span class="trade-board-type-badge ${typeInfo.class}">${esc(typeInfo.label)}</span>
             <span class="trade-board-author">${esc(post.author_name)}${post.is_starter ? ' <span class="trade-starter-badge">Starter</span>' : ''}</span>
             <time datetime="${post.created_at}">${formatDate(post.created_at)}</time>
             ${post.updated_at !== post.created_at ? `<span class="trade-board-edited">edited ${formatDate(post.updated_at)}</span>` : ''}
           </div>
           <div class="trade-board-post-actions">
-            ${canManage ? `
+            ${canManagePost ? `
               <button type="button" class="btn btn-ghost btn-sm tb-toggle-close" data-post-id="${post.id}" aria-label="${post.is_closed ? 'Reopen' : 'Close'} post">
                 ${post.is_closed ? 'Reopen' : 'Close'}
               </button>
@@ -193,6 +179,7 @@
             ` : ''}
           </div>
         </header>
+        ${playerLine}
         <h3 class="trade-board-post-title">${esc(post.title)}</h3>
         <div class="trade-board-post-body">${esc(post.body).replace(/\n/g, '<br>')}</div>
         ${post.is_closed ? '<div class="trade-board-closed-notice"><span>🔒</span> This discussion is closed.</div>' : ''}
@@ -201,7 +188,7 @@
             <span>Replies <strong>${commentCount}</strong></span>
           </div>
           <div class="trade-board-comment-list">
-            ${comments.map(comment => renderComment(comment, canManage)).join('')}
+            ${comments.map(comment => renderComment(comment, isStaff)).join('')}
           </div>
           <form class="trade-board-comment-form" data-post-id="${post.id}" ${post.is_closed && !isStaff ? 'hidden' : ''}>
             <textarea name="body" maxlength="1000" rows="2" placeholder="${post.is_closed && !isStaff ? 'This discussion is closed.' : 'Write a reply…'}" ${post.is_closed && !isStaff ? 'disabled' : 'required'}></textarea>
@@ -215,9 +202,8 @@
     `;
   }
 
-  function renderComment(comment, canManage) {
+  function renderComment(comment, isStaff) {
     const isAuthor = currentUser && comment.author_id === currentUser.id;
-    const isStaff = currentProfile && ['commissioner', 'site_admin'].includes(currentProfile.role);
     const canDelete = isAuthor || isStaff;
 
     return `
@@ -227,7 +213,7 @@
           <time datetime="${comment.created_at}">${formatDate(comment.created_at)}</time>
         </div>
         <p class="trade-board-comment-body">${esc(comment.body)}</p>
-        ${canDelete ? `<button type="button" class="btn btn-ghost btn-sm tb-delete-comment" data-comment-id="${comment.id}" data-post-id="${comment.post_id}" aria-label="Delete reply">Delete</button>` : ''}
+        ${canDelete ? `<button type="button" class="btn btn-ghost btn-sm tb-delete-comment" data-comment-id="${comment.id}" aria-label="Delete reply">Delete</button>` : ''}
       </div>
     `;
   }
@@ -247,24 +233,27 @@
   }
 
   function attachPostListeners() {
-    const feed = document.getElementById('tradeBoardFeed');
     if (!feed) return;
 
     // Create post
-    const form = document.getElementById('tradeBoardForm');
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const statusEl = form.querySelector('.form-status');
+      const postType = form.post_type.value;
+      const playerName = form.player_name.value.trim();
+      const position = form.position.value;
       const title = form.title.value.trim();
       const body = form.body.value.trim();
-      if (!title || !body) return;
+      if (!postType || !title || !body) return;
       if (!currentUser) return alert('Please sign in first.');
 
       statusEl.textContent = 'Posting…';
       try {
         const {error} = await supabase.from('trade_board_posts').insert({
           author_id: currentUser.id,
-          author_name: currentProfile?.display_name || currentUser.email,
+          post_type: postType,
+          player_name: playerName || null,
+          position: position || null,
           title,
           body
         });
@@ -360,7 +349,6 @@
           const {error} = await supabase.from('trade_board_comments').insert({
             post_id: postId,
             author_id: currentUser.id,
-            author_name: currentProfile?.display_name || currentUser.email,
             body
           });
           if (error) throw error;

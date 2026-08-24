@@ -210,7 +210,63 @@
       </div>
     </div>
     <div class="trade-tab-panel" data-trade-panel="board" role="tabpanel" hidden>
-      <!-- Trade Board content rendered by trade-board.js -->
+      <div class="trade-board-header">
+        <div class="trade-board-intro">
+          <strong>Propose, discuss, and gauge interest</strong>
+          <p>Post trade ideas, find partners, and work out frameworks before sending offers on ESPN.</p>
+        </div>
+        <div id="tradeBoardAuthStatus"></div>
+      </div>
+      <div class="trade-board-filters" id="tradeBoardFilters" role="group" aria-label="Filter by post type">
+        <button type="button" class="active" data-filter="all">All</button>
+        <button type="button" data-filter="on_the_block">On the Block</button>
+        <button type="button" data-filter="looking_for">Looking For</button>
+        <button type="button" data-filter="open_to_offers">Open to Offers</button>
+        <button type="button" data-filter="trade_discussion">Trade Discussion</button>
+      </div>
+      <form class="trade-board-form panel" id="tradeBoardForm" hidden>
+        <div class="form-row">
+          <label for="tbType">Post Type <span class="required">*</span></label>
+          <select id="tbType" name="post_type" required>
+            <option value="">Select type…</option>
+            <option value="on_the_block">On the Block</option>
+            <option value="looking_for">Looking For</option>
+            <option value="open_to_offers">Open to Offers</option>
+            <option value="trade_discussion">Trade Discussion</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="tbPlayer">Player (optional)</label>
+          <input type="text" id="tbPlayer" name="player_name" maxlength="80" placeholder="e.g., Saquon Barkley">
+        </div>
+        <div class="form-row">
+          <label for="tbPosition">Position (optional)</label>
+          <select id="tbPosition" name="position">
+            <option value="">Any</option>
+            <option value="QB">QB</option>
+            <option value="RB">RB</option>
+            <option value="WR">WR</option>
+            <option value="TE">TE</option>
+            <option value="K">K</option>
+            <option value="D/ST">D/ST</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="tbTitle">Title <span class="required">*</span></label>
+          <input type="text" id="tbTitle" name="title" maxlength="120" placeholder="e.g., Shopping my RB2, targeting WR1" required>
+        </div>
+        <div class="form-row">
+          <label for="tbBody">Details <span class="required">*</span></label>
+          <textarea id="tbBody" name="body" maxlength="2000" rows="5" placeholder="Players involved, what you're looking for, framework…" required></textarea>
+        </div>
+        <div class="form-actions">
+          <span class="form-status" id="tbFormStatus" role="status"></span>
+          <button type="submit" class="btn btn-primary">Post to Trade Board</button>
+        </div>
+      </form>
+      <div class="trade-board-feed" id="tradeBoardFeed" aria-live="polite">
+        <div class="panel community-empty"><div class="history-loading">Loading Trade Board…</div></div>
+      </div>
     </div>
   </section>
 
