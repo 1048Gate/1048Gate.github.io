@@ -3,7 +3,7 @@
   const section = document.getElementById('trades');
   if(!section) return;
 
-  const {escapeHtml:esc} = window.gateShared;
+  const {escapeHtml:esc, buildAcceptedTradeArchive} = window.gateShared;
   const CHUNK_SIZE = 1000;
   let currentSeasonYear = null;
 
@@ -11,8 +11,6 @@
   let loadPromise = null;
   let tradesByYear = new Map();
   let activeYear = null;
-
-  const clean = value => String(value ?? '').trim().replace(/\s+/g, ' ');
 
   function setSync(state, text){
     const sync = document.getElementById('tradeSync');
@@ -38,44 +36,14 @@
   }
 
   function buildArchive(transactions, items){
-    const itemsByTransaction = new Map();
-    for(const item of items){
-      const key = `${item.season_year}|${item.espn_transaction_id}`;
-      if(!itemsByTransaction.has(key)) itemsByTransaction.set(key, []);
-      itemsByTransaction.get(key).push(item);
-    }
-
     tradesByYear = new Map();
-    for(const row of transactions){
-      const key = `${row.season_year}|${row.espn_transaction_id}`;
-      const related = (itemsByTransaction.get(key) || [])
-        .map(item => ({
-          player:clean(item.player_name),
-          from:clean(item.from_team_name),
-          to:clean(item.to_team_name)
-        }))
-        .filter(item => item.player && (item.from || item.to));
-      const teams = new Set();
-      related.forEach(item => {
-        if(item.from) teams.add(item.from);
-        if(item.to) teams.add(item.to);
-      });
-
-      const dateMs = Number(row.transaction_date_ms || new Date(row.transaction_date).getTime() || 0);
+    for(const canonicalTrade of buildAcceptedTradeArchive(transactions, items)){
       const trade = {
-        id:key,
-        dateMs,
-        week:Number(row.scoring_period || 0),
-        teams:[...teams],
-        sides:new Map(),
-        incomplete:related.length === 0
+        ...canonicalTrade,
+        dateMs:canonicalTrade.transaction_date_ms,
+        week:canonicalTrade.scoring_period
       };
-      for(const team of trade.teams) trade.sides.set(team, {gives:[], receives:[]});
-      for(const item of related){
-        if(item.from && trade.sides.has(item.from)) trade.sides.get(item.from).gives.push(item.player);
-        if(item.to && trade.sides.has(item.to)) trade.sides.get(item.to).receives.push(item.player);
-      }
-      const year = Number(row.season_year);
+      const year = Number(trade.season_year);
       if(!tradesByYear.has(year)) tradesByYear.set(year, []);
       tradesByYear.get(year).push(trade);
     }
@@ -93,7 +61,7 @@
 
   function renderTradeCard(trade){
     const sideBlocks = trade.incomplete
-      ? `<div class="trade-details-unavailable"><strong>Accepted trade recorded</strong><span>Player and team details were not included in the imported transaction data.</span></div>`
+      ? `<div class="trade-details-unavailable"><strong>Trade accepted</strong><span>ESPN did not retain the player details for this deal in the imported archive.</span></div>`
       : trade.teams.map(team => {
       const side = trade.sides.get(team);
       return `<div class="trade-side">
@@ -122,7 +90,7 @@
     const playersMoved = new Set(trades.flatMap(t => [...t.teams.flatMap(team => t.sides.get(team).gives)])).size;
     const incompleteTrades = trades.filter(trade => trade.incomplete).length;
     meta.textContent = trades.length
-      ? `${trades.length} accepted trade${trades.length === 1 ? '' : 's'} · ${playersMoved} player${playersMoved === 1 ? '' : 's'} changed teams${incompleteTrades ? ` · ${incompleteTrades} awaiting details` : ''}`
+      ? `${trades.length} accepted deal${trades.length === 1 ? '' : 's'} · ${playersMoved} player${playersMoved === 1 ? '' : 's'} changed teams${incompleteTrades ? ` · ${incompleteTrades} source gap${incompleteTrades === 1 ? '' : 's'}` : ''}`
       : '';
     feed.innerHTML = trades.length
       ? trades.map(renderTradeCard).join('')
@@ -159,14 +127,11 @@
         supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
         if(!supabase) throw new Error('The league database connection is unavailable.');
         const [transactions, items] = await Promise.all([
-          fetchAll('league_transactions', 'id,season_year,espn_transaction_id,scoring_period,transaction_type,status,team_name,transaction_date_ms,transaction_date', {column:'transaction_type', values:['TRADE_ACCEPT']}),
-          fetchAll('league_transaction_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_name,from_team_name,to_team_name', {column:'item_type', values:['TRADE']})
+          fetchAll('league_transactions', 'id,season_year,espn_transaction_id,related_transaction_id,scoring_period,transaction_type,status,team_name,transaction_date_ms,transaction_date', {column:'transaction_type', values:['TRADE_ACCEPT']}),
+          fetchAll('league_transaction_archive_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_id,player_name,from_team_id,from_team_name,to_team_id,to_team_name', {column:'item_type', values:['TRADE']})
         ]);
-        // Legacy ESPN trade imports leave status null; only CANCELED trades are excluded.
-        const executed = transactions.filter(row => row.transaction_type === 'TRADE_ACCEPT' && (row.status === null || row.status === 'EXECUTED'));
-        const tradeKeys = new Set(executed.map(row => `${row.season_year}|${row.espn_transaction_id}`));
-        buildArchive(executed, items.filter(item => tradeKeys.has(`${item.season_year}|${item.espn_transaction_id}`)));
-        setSync('is-live', 'Archive synced');
+        buildArchive(transactions, items);
+        setSync('is-live', 'Archive loaded');
         render();
       }catch(error){
         console.error('Unable to load trade archive:', error);

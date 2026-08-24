@@ -34,7 +34,31 @@ const sharedSource = readFileSync(new URL('js/shared.js', root), 'utf8');
 const sharedContext = {window:{}, document:{}};
 runInNewContext(sharedSource, sharedContext, {filename:'js/shared.js'});
 const shared = sharedContext.window.gateShared;
-if(!shared?.normalizeMember || !shared?.memberPresentation) throw new Error('shared.js did not publish the shared member utilities.');
+if(!shared?.normalizeMember || !shared?.memberPresentation || !shared?.buildAcceptedTradeArchive) throw new Error('shared.js did not publish the shared member and trade utilities.');
+
+const canonicalTradeFixture = shared.buildAcceptedTradeArchive([
+  {season_year:2025, espn_transaction_id:'accept-a', related_transaction_id:'deal-a', transaction_type:'TRADE_ACCEPT', status:null, transaction_date_ms:100, scoring_period:5},
+  {season_year:2025, espn_transaction_id:'accept-b', related_transaction_id:'deal-a', transaction_type:'TRADE_ACCEPT', status:'EXECUTED', transaction_date_ms:200, scoring_period:5},
+  {season_year:2025, espn_transaction_id:'accept-canceled', related_transaction_id:'deal-a', transaction_type:'TRADE_ACCEPT', status:'CANCELED', transaction_date_ms:300, scoring_period:5},
+  {season_year:2025, espn_transaction_id:'accept-missing', related_transaction_id:'deal-missing', transaction_type:'TRADE_ACCEPT', status:null, transaction_date_ms:400, scoring_period:6},
+  {season_year:2025, espn_transaction_id:'accept-fallback', related_transaction_id:'deal-fallback', transaction_type:'TRADE_ACCEPT', status:null, transaction_date_ms:500, scoring_period:7}
+], [
+  {season_year:2025, espn_transaction_id:'deal-a', item_index:0, item_type:'TRADE', player_id:1, player_name:'Correct Player', from_team_id:1, from_team_name:'Alpha', to_team_id:2, to_team_name:'Beta'},
+  {season_year:2025, espn_transaction_id:'accept-a', item_index:0, item_type:'DROP', player_id:2, player_name:'Roster Cut', from_team_id:1, from_team_name:'Alpha', to_team_id:0, to_team_name:''},
+  {season_year:2025, espn_transaction_id:'accept-fallback', item_index:0, item_type:'TRADE', player_id:3, player_name:'Fallback Player', from_team_id:3, from_team_name:'Gamma', to_team_id:4, to_team_name:'Delta'}
+]);
+const canonicalDeal = canonicalTradeFixture.find(trade => trade.deal_id === 'deal-a');
+const missingDeal = canonicalTradeFixture.find(trade => trade.deal_id === 'deal-missing');
+const fallbackDeal = canonicalTradeFixture.find(trade => trade.deal_id === 'deal-fallback');
+if(canonicalTradeFixture.length !== 3 || canonicalDeal?.acceptance_count !== 2 || canonicalDeal?.transaction_date_ms !== 200){
+  throw new Error('Trade acceptance actions were not canonicalized into one completed deal.');
+}
+if(canonicalDeal.items.length !== 1 || canonicalDeal.items[0].player_name !== 'Correct Player' || canonicalDeal.items.some(item => item.player_name === 'Roster Cut')){
+  throw new Error('Trade archive mixed roster-space drops into the traded-player details.');
+}
+if(!missingDeal?.incomplete || fallbackDeal?.items[0]?.player_name !== 'Fallback Player'){
+  throw new Error('Trade archive must flag source gaps and retain accepted-event trade-item fallbacks.');
+}
 
 const memberPayload = JSON.parse(readFileSync(new URL('data/members.json', root), 'utf8'));
 const normalizedMembers = memberPayload.members.map(shared.normalizeMember);
@@ -167,7 +191,7 @@ if(!adminSource.includes('league-announcement') || !adminSource.includes('member
   throw new Error('Commissioner updates must use the clean initials-based league-office cards.');
 }
 const transactionSource = readFileSync(new URL('js/transactions.js', root), 'utf8');
-for(const table of ['league_transactions','league_transaction_items']){
+for(const table of ['league_transactions','league_transaction_archive_items']){
   if(!transactionSource.includes(`'${table}'`)) throw new Error(`Transaction archive does not query ${table}.`);
 }
 if(!html.includes('id="transactions"') || !html.includes('data-view="transactions"')){
@@ -178,6 +202,9 @@ if(!transactionSource.includes("addEventListener('gate:viewchange'")){
 }
 for(const type of ['FREEAGENT','WAIVER','TRADE_ACCEPT']){
   if(!transactionSource.includes(`'${type}'`)) throw new Error(`Curated transaction archive is missing ${type}.`);
+}
+if(!transactionSource.includes('related_transaction_id') || !transactionSource.includes('buildAcceptedTradeArchive') || !transactionSource.includes('Promise.all')){
+  throw new Error('Transactions must load complete item data and canonicalize ESPN trade acceptance actions.');
 }
 for(const excluded of ["'FUTURE_ROSTER'", "'ROSTER'", "'TRADE_PROPOSAL'", "'TRADE_VETO'", "'TRADE_UPHOLD'", "'TRADE_DECLINE'", "'LINEUP'"]){
   if(transactionSource.includes(excluded)) throw new Error(`Transaction archive still exposes excluded activity: ${excluded}.`);
@@ -203,8 +230,12 @@ if(tradeBoardSource.includes('supabase?.auth.getSession()') || !tradeBoardSource
   throw new Error('The Trade Board must degrade safely when Supabase authentication is unavailable.');
 }
 const tradeTalkSource = readFileSync(new URL('js/trade-talk.js', root), 'utf8');
-if(/if\s*\(\s*!related\.length\s*\)\s*continue/.test(tradeTalkSource) || !tradeTalkSource.includes('awaiting details')){
+if(/if\s*\(\s*!related\.length\s*\)\s*continue/.test(tradeTalkSource) || !tradeTalkSource.includes('source gap') || !tradeTalkSource.includes('buildAcceptedTradeArchive')){
   throw new Error('Accepted trades with incomplete item data must remain visible in Trade Talk.');
+}
+const transactionArchiveSql = readFileSync(new URL('supabase/transaction_archive_repair.sql', root), 'utf8');
+if(!transactionArchiveSql.includes('related_transaction_id') || !transactionArchiveSql.includes("raw_data ->> 'relatedTransactionId'") || !transactionArchiveSql.includes('generated always') || !transactionArchiveSql.includes('security_invoker = true')){
+  throw new Error('The transaction archive repair must normalize ESPN related transaction IDs for future imports.');
 }
 const starterSql = readFileSync(new URL('supabase/starter_content.sql', root), 'utf8');
 for(const table of ['announcements','board_posts','board_comments','polls','poll_options','poll_votes']){

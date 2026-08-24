@@ -30,7 +30,9 @@ Career record, winning percentage, championships, average finish, best finish, a
 
 The Transactions view reads `league_transactions` and `league_transaction_items` from Supabase only after a visitor opens that section. This keeps the landing page light while making the useful activity from 2019–2025 searchable by season, category, player, and team. Results are grouped by date in a compact activity ledger instead of separate full-size cards.
 
-The list intentionally focuses on completed adds and drops, successful waiver claims, and accepted trades. Failed claims, trade proposals, veto and review events, lineup activity, future-lineup records, ESPN raw JSON, and internal identifiers are omitted from the browser UI.
+The list intentionally focuses on completed adds and drops, successful waiver claims, and accepted trades. Multiple ESPN acceptance actions are combined into one deal, proposal player movement is attached when the source retained it, and roster-space drops are not misreported as traded assets. Failed claims, trade proposals, veto and review events, lineup activity, future-lineup records, ESPN raw JSON, and internal identifiers are omitted from the browser UI.
+
+After importing the transaction tables, run `supabase/transaction_archive_repair.sql`. It exposes ESPN's underlying deal identifier as a generated column so future imports remain canonical without a manual backfill, and creates a security-invoker view that sends the browser only relevant archive items.
 
 To regenerate every website dataset in one pass, run `python3 scripts/export_all.py /path/to/1048_gate.db`. See `scripts/README.md` for individual exporters.
 

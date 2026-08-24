@@ -169,6 +169,99 @@
     applyModal: applyMemberModal
   });
 
+  const cleanTransactionText = value => String(value ?? '').trim().replace(/\s+/g, ' ');
+  const archiveTransactionKey = (year, transactionId) => `${Number(year)}|${cleanTransactionText(transactionId)}`;
+
+  function buildAcceptedTradeArchive(transactions = [], items = []){
+    const tradeItemsByTransaction = new Map();
+    for(const rawItem of items){
+      if(rawItem?.item_type !== 'TRADE') continue;
+      const player = cleanTransactionText(rawItem.player_name);
+      const from = cleanTransactionText(rawItem.from_team_name);
+      const to = cleanTransactionText(rawItem.to_team_name);
+      if(!player || (!from && !to)) continue;
+      const item = {
+        ...rawItem,
+        season_year:Number(rawItem.season_year),
+        item_index:Number(rawItem.item_index || 0),
+        player_name:player,
+        from_team_name:from,
+        to_team_name:to
+      };
+      const key = archiveTransactionKey(item.season_year, item.espn_transaction_id);
+      if(!tradeItemsByTransaction.has(key)) tradeItemsByTransaction.set(key, []);
+      tradeItemsByTransaction.get(key).push(item);
+    }
+    for(const group of tradeItemsByTransaction.values()) group.sort((a,b) => a.item_index - b.item_index);
+
+    const groups = new Map();
+    for(const rawRow of transactions){
+      if(rawRow?.transaction_type !== 'TRADE_ACCEPT') continue;
+      if(rawRow.status !== null && rawRow.status !== 'EXECUTED') continue;
+      const seasonYear = Number(rawRow.season_year);
+      const acceptanceId = cleanTransactionText(rawRow.espn_transaction_id);
+      if(!Number.isFinite(seasonYear) || !acceptanceId) continue;
+      const dealId = cleanTransactionText(rawRow.related_transaction_id) || acceptanceId;
+      const key = archiveTransactionKey(seasonYear, dealId);
+      if(!groups.has(key)) groups.set(key, {key, dealId, seasonYear, acceptances:[]});
+      groups.get(key).acceptances.push({
+        ...rawRow,
+        season_year:seasonYear,
+        espn_transaction_id:acceptanceId,
+        transaction_date_ms:Number(rawRow.transaction_date_ms || new Date(rawRow.transaction_date).getTime() || 0),
+        scoring_period:Number(rawRow.scoring_period || 0)
+      });
+    }
+
+    const trades = [];
+    for(const group of groups.values()){
+      group.acceptances.sort((a,b) => a.transaction_date_ms - b.transaction_date_ms || a.espn_transaction_id.localeCompare(b.espn_transaction_id));
+      const completed = group.acceptances.at(-1);
+      const proposalItems = tradeItemsByTransaction.get(group.key) || [];
+      const acceptedItems = group.acceptances.flatMap(row => tradeItemsByTransaction.get(archiveTransactionKey(group.seasonYear, row.espn_transaction_id)) || []);
+      const sourceItems = proposalItems.length ? proposalItems : acceptedItems;
+      const seenItems = new Set();
+      const tradeItems = sourceItems.filter(item => {
+        const key = [item.player_id || item.player_name, item.from_team_id || item.from_team_name, item.to_team_id || item.to_team_name].join('|');
+        if(seenItems.has(key)) return false;
+        seenItems.add(key);
+        return true;
+      });
+      const teams = [];
+      const sides = new Map();
+      const addTeam = team => {
+        if(!team || sides.has(team)) return;
+        teams.push(team);
+        sides.set(team, {gives:[], receives:[]});
+      };
+      for(const item of tradeItems){
+        addTeam(item.from_team_name);
+        addTeam(item.to_team_name);
+      }
+      for(const item of tradeItems){
+        if(item.from_team_name) sides.get(item.from_team_name)?.gives.push(item.player_name);
+        if(item.to_team_name) sides.get(item.to_team_name)?.receives.push(item.player_name);
+      }
+
+      trades.push({
+        ...completed,
+        id:group.key,
+        deal_id:group.dealId,
+        espn_transaction_id:group.dealId,
+        transaction_type:'TRADE_ACCEPT',
+        status:'EXECUTED',
+        team_name:teams.length ? teams.join(' ↔ ') : 'League trade',
+        acceptance_count:group.acceptances.length,
+        source_acceptance_ids:group.acceptances.map(row => row.espn_transaction_id),
+        items:tradeItems,
+        teams,
+        sides,
+        incomplete:tradeItems.length === 0
+      });
+    }
+    return trades.sort((a,b) => b.transaction_date_ms - a.transaction_date_ms || a.id.localeCompare(b.id));
+  }
+
   window.gateShared = Object.freeze({
     escapeHtml,
     parseRecord,
@@ -181,6 +274,7 @@
     normalizeMember,
     memberTotals,
     latestSeason,
-    memberPresentation
+    memberPresentation,
+    buildAcceptedTradeArchive
   });
 })();

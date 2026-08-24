@@ -2,7 +2,7 @@
   const section = document.getElementById('transactions');
   if(!section) return;
 
-  const {escapeHtml:esc} = window.gateShared;
+  const {escapeHtml:esc, buildAcceptedTradeArchive} = window.gateShared;
   const PAGE_SIZE = 35;
   const CHUNK_SIZE = 1000;
   const RELEVANT_TYPES = Object.freeze(['FREEAGENT','WAIVER','TRADE_ACCEPT']);
@@ -100,7 +100,7 @@
   }
 
   function prepareArchive(){
-    transactions = transactions.map(row => ({
+    const normalizedTransactions = transactions.map(row => ({
       ...row,
       season_year:Number(row.season_year),
       scoring_period:Number(row.scoring_period || 0),
@@ -113,8 +113,7 @@
       // Legacy ESPN trade imports leave status null; only CANCELED trades should be excluded.
       (row.transaction_type === 'TRADE_ACCEPT' && row.status === null)
     ));
-    const relevantKeys = new Set(transactions.map(transactionKey));
-    items = items.map(item => ({
+    const normalizedItems = items.map(item => ({
       ...item,
       season_year:Number(item.season_year),
       item_index:Number(item.item_index || 0),
@@ -122,7 +121,19 @@
       player_name:clean(item.player_name),
       from_team_name:clean(item.from_team_name),
       to_team_name:clean(item.to_team_name)
-    })).filter(item => relevantKeys.has(transactionKey(item)) && MOVEMENT_TYPES.includes(item.item_type));
+    })).filter(item => MOVEMENT_TYPES.includes(item.item_type));
+
+    const acceptedTrades = buildAcceptedTradeArchive(normalizedTransactions, normalizedItems);
+    const ordinaryTransactions = normalizedTransactions.filter(row => row.transaction_type !== 'TRADE_ACCEPT');
+    const ordinaryKeys = new Set(ordinaryTransactions.map(transactionKey));
+    const curatedItems = normalizedItems.filter(item => ordinaryKeys.has(transactionKey(item)) && item.item_type !== 'TRADE');
+    for(const trade of acceptedTrades){
+      for(const item of trade.items){
+        curatedItems.push({...item, season_year:trade.season_year, espn_transaction_id:trade.deal_id});
+      }
+    }
+    transactions = [...ordinaryTransactions, ...acceptedTrades];
+    items = curatedItems;
     progress.transactionTotal = transactions.length;
     progress.transactions = transactions.length;
     progress.itemTotal = items.length;
@@ -158,12 +169,15 @@
     const drops = items.filter(item => item.item_type === 'DROP').length;
     const freeAgents = transactions.filter(row => row.transaction_type === 'FREEAGENT').length;
     const waivers = transactions.filter(row => row.transaction_type === 'WAIVER').length;
-    const trades = transactions.filter(row => row.transaction_type === 'TRADE_ACCEPT').length;
+    const tradeRows = transactions.filter(row => row.transaction_type === 'TRADE_ACCEPT');
+    const trades = tradeRows.length;
+    const verifiedTrades = tradeRows.filter(row => !row.incomplete).length;
+    const missingTrades = trades - verifiedTrades;
     document.getElementById('transactionSummary').innerHTML = [
       ['all','All activity',transactions.length,'Every completed move'],
       ['FREEAGENT','Adds & drops',freeAgents,`${number(adds)} added · ${number(drops)} dropped`],
       ['WAIVER','Successful waivers',waivers,'Completed claims only'],
-      ['TRADE_ACCEPT','Accepted trades',trades,'Completed deals only']
+      ['TRADE_ACCEPT','Accepted trades',trades,`${number(verifiedTrades)} with player details${missingTrades ? ` · ${number(missingTrades)} source gaps` : ''}`]
     ].map(([key,label,value,note]) => `<button class="transaction-summary-card ${activeCategory === key ? 'active' : ''}" type="button" data-transaction-category="${key}" aria-pressed="${activeCategory === key}"><span>${label}</span><strong>${number(value)}</strong><small>${note}</small></button>`).join('');
   }
 
@@ -175,8 +189,8 @@
       if(activeCategory !== 'all' && row.transaction_type !== activeCategory) return false;
       return !query || row.searchText.includes(query);
     }).sort((a,b) => controls.sort.value === 'oldest'
-      ? a.transaction_date_ms - b.transaction_date_ms || Number(a.id || 0) - Number(b.id || 0)
-      : b.transaction_date_ms - a.transaction_date_ms || Number(b.id || 0) - Number(a.id || 0));
+      ? a.transaction_date_ms - b.transaction_date_ms || String(a.id || '').localeCompare(String(b.id || ''))
+      : b.transaction_date_ms - a.transaction_date_ms || String(a.id || '').localeCompare(String(b.id || '')));
   }
 
   function renderItem(item){
@@ -231,9 +245,9 @@
         </div>
         ${related.length
           ? `<ul class="transaction-items">${related.map(renderItem).join('')}</ul>`
-          : (itemsLoaded
-            ? '<div class="transaction-no-items">No player movement was attached to this event.</div>'
-            : '<div class="transaction-no-items is-pending">Loading player moves…</div>')}
+          : `<div class="transaction-no-items${itemsLoaded ? '' : ' is-pending'}">${row.transaction_type === 'TRADE_ACCEPT'
+            ? 'ESPN recorded this accepted deal, but its player details are missing from the source archive.'
+            : (itemsLoaded ? 'No player movement was attached to this event.' : 'Loading player moves…')}</div>`}
       </div>
       <div class="transaction-ledger-meta">
         <time datetime="${esc(row.transaction_date || '')}">${esc(formatTime(row))}</time>
@@ -285,9 +299,12 @@
         supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
         if(!supabase) throw new Error('The league database connection is unavailable.');
 
-        // Phase 1: events first — render the ledger immediately, player moves follow.
-        transactions = await fetchAll('league_transactions', 'id,season_year,espn_transaction_id,scoring_period,transaction_type,status,team_name,bid_amount,transaction_date_ms,transaction_date,item_count', 'transactions', 'transactionTotal', query => query.in('transaction_type', RELEVANT_TYPES));
-        items = [];
+        // Load events and item movement together so partial records are never rendered as complete.
+        [transactions, items] = await Promise.all([
+          fetchAll('league_transactions', 'id,season_year,espn_transaction_id,related_transaction_id,scoring_period,transaction_type,status,team_name,bid_amount,transaction_date_ms,transaction_date,item_count', 'transactions', 'transactionTotal', query => query.in('transaction_type', RELEVANT_TYPES)),
+          fetchAll('league_transaction_archive_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_id,player_name,from_team_id,from_team_name,to_team_id,to_team_name', 'items', 'itemTotal', query => query.in('item_type', MOVEMENT_TYPES))
+        ]);
+        itemsLoaded = true;
         prepareArchive();
         populateFilters();
         renderSummary();
@@ -295,15 +312,7 @@
         setControlsDisabled(false);
         const sync = document.getElementById('transactionSync');
         sync.classList.add('is-live');
-        sync.innerHTML = '<span></span>Loading details…';
-        render();
-
-        // Phase 2: attach player movement and re-render.
-        items = await fetchAll('league_transaction_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_name,from_team_name,to_team_name', 'items', 'itemTotal');
-        itemsLoaded = true;
-        prepareArchive();
-        renderSummary();
-        sync.innerHTML = '<span></span>Archive synced';
+        sync.innerHTML = '<span></span>Archive loaded';
         render();
       }catch(error){
         console.error('Unable to load transaction archive:', error);
