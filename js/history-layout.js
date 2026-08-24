@@ -17,6 +17,20 @@
   const num=value=>formatNumber(value,1,2);
   const clean=value=>String(value??'').trim().replace(/\s+/g,' ');
   const recordText=a=>a&&a[2]?`${a[0]}-${a[1]}-${a[2]}`:a?`${a[0]}-${a[1]}`:'—';
+  function applyRundownStory(block,note){
+    block.style.display='';
+    if(!block.querySelector('p'))block.insertAdjacentHTML('beforeend',`<p>${esc(note)}</p>`);
+  }
+  function fillRundownStory(detail,year){
+    const block=detail.querySelector('[data-rundown-story]');
+    if(!block||detail.dataset.renderYear!==String(year))return;
+    const store=window.gateChampionStories,note=store&&store.byYear?store.byYear[Number(year)]:'';
+    if(note){applyRundownStory(block,note);return}
+    Promise.race([(store&&store.ready)||Promise.resolve(),new Promise(r=>setTimeout(r,4000))]).then(()=>{
+      const late=window.gateChampionStories&&window.gateChampionStories.byYear[Number(year)];
+      if(late&&detail.dataset.renderYear===String(year))applyRundownStory(block,late);
+    });
+  }
   async function loadSeasonArchive(){
     seasonHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Loading season archive…</div></div>';
     try{
@@ -72,7 +86,8 @@
         const standingsTable=`<div class="rundown-block"><div class="rundown-head"><span>REGULAR SEASON</span><h4>Final Standings</h4></div><div class="season-table-wrap"><table class="season-archive-table"><thead><tr><th>Finish</th><th>Team</th><th>Owner</th><th>Record</th><th>PF</th><th>PA</th><th>Diff</th><th>Seed</th></tr></thead><tbody>${(standings||[]).map(team=>{const [finish,regular,teamName,ownerName,record,pf,pa,diff]=team;return `<tr class="${Number(finish)===1?'season-champ-row':''}${Number(finish)<=6?' playoff-row':''}"><td class="season-finish">${Number(finish)===1?'🏆 ':''}#${finish}</td><td><strong>${esc(teamName)}</strong></td><td>${esc(ownerName)}</td><td>${esc(record)}</td><td>${num(pf)}</td><td>${num(pa)}</td><td class="${Number(diff)>=0?'positive-diff':'negative-diff'}">${Number(diff)>=0?'+':''}${num(diff)}</td><td>#${regular}</td></tr>`}).join('')}</tbody></table></div><small class="rundown-note">Top six seeds reached the postseason.</small></div>`;
         const rounds=postseasonRounds(playoffEntry);
         const playoffsBlock=`<div class="rundown-block"><div class="rundown-head"><span>POSTSEASON</span><h4>Playoff Results</h4></div>${rounds.length?rounds.map(round=>`<div class="playoff-round-group"><span class="playoff-round-label">${esc(round.label)}</span>${round.games.map(g=>{const hasBoth=typeof g[7]==='number'&&typeof g[11]==='number';if(!hasBoth)return `<div class="playoff-result-row bye"><span>#${esc(g[4])} ${esc(g[5])}</span><em>bye</em><span></span></div>`;const aWins=g[7]>=g[11];return `<div class="playoff-result-row"><span class="${aWins?'is-winner':''}">#${esc(g[4])} ${esc(g[5])}</span><strong>${num(g[7])}</strong><span class="playoff-vs">—</span><strong>${num(g[11])}</strong><span class="${!aWins?'is-winner':''}">#${esc(g[8])} ${esc(g[9])}</span></div>`}).join('')}</div>`).join(''):'<div class="rundown-empty">No postseason archive recorded for this season.</div>'}</div>`;
-        detail.innerHTML=`${banner}<div class="rundown-grid">${standingsTable}${playoffsBlock}<div class="rundown-block" data-rundown-draft><div class="rundown-head"><span>THE DRAFT</span><h4>Round 1 Recap</h4></div><div class="history-loading">Loading draft recap…</div></div><div class="rundown-block" data-rundown-leaders><div class="rundown-head"><span>STAT LEADERS</span><h4>Top Performers</h4></div><div class="history-loading">Loading stat leaders…</div></div></div>`;
+        detail.innerHTML=`${banner}<div class="rundown-block rundown-story" data-rundown-story style="display:none"><div class="rundown-head"><span>THE STORY</span><h4>How the Title Was Won</h4></div></div><div class="rundown-grid">${standingsTable}${playoffsBlock}<div class="rundown-block" data-rundown-draft><div class="rundown-head"><span>THE DRAFT</span><h4>Round 1 Recap</h4></div><div class="history-loading">Loading draft recap…</div></div><div class="rundown-block" data-rundown-leaders><div class="rundown-head"><span>STAT LEADERS</span><h4>Top Performers</h4></div><div class="history-loading">Loading stat leaders…</div></div></div>`;
+        fillRundownStory(detail,seasonYear);
         loadExtras(seasonYear).then(({draft,players})=>{
           if(detail.dataset.renderYear!==String(year))return;
           const draftBlock=detail.querySelector('[data-rundown-draft]');
@@ -102,7 +117,7 @@
       a.addEventListener('change',render);b.addEventListener('change',render);render();
     }catch(error){console.error('Unable to load matchup archive:',error);matchupHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Matchup archive could not be loaded.</div></div>'}
   }
-  function trophyStats(seasons,playoffs){
+  function trophyStats(seasons,playoffs,currentMembers){
     const champs=seasons.map(([year,,owner,team,standings])=>{
       const row=Array.isArray(standings)?standings.find(t=>Number(t[0])===1):null;
       return {year:Number(year),owner:clean(owner),team:clean(team),record:row?String(row[4]||''):'',diff:row?Number(row[7])||0:0};
@@ -128,6 +143,41 @@
     const underdog=finals.reduce((a,b)=>b.seed>a.seed?b:a);
     const ownerOf=year=>champs.find(c=>c.year===year)||{owner:''};
     const bestRecord=champs.filter(c=>Number(c.record.split('-')[0])===Number(best.record.split('-')[0])).map(c=>`${c.owner} '${String(c.year).slice(2)}`).join(' · ');
+    const career={};
+    seasons.forEach(s=>{
+      (Array.isArray(s[4])?s[4]:[]).forEach(row=>{
+        const owner=clean(row[3]);if(!owner)return;
+        const parts=String(row[4]||'').split('-');
+        const c=career[owner]=career[owner]||{w:0,l:0,t:0};
+        c.w+=Number(parts[0])||0;c.l+=Number(parts[1])||0;c.t+=Number(parts[2])||0;
+      });
+    });
+    const bestCareer=Object.entries(career).map(([owner,c])=>{
+      const games=c.w+c.l+c.t;
+      return {owner,games,pct:games?c.w/games:0,line:recordText([c.w,c.l,c.t])};
+    }).filter(c=>c.games>=40).sort((a,b)=>b.pct-a.pct);
+    const topCareerPct=bestCareer.length?bestCareer.filter(c=>c.pct===bestCareer[0].pct):[];
+    const appearances={};
+    playoffs.forEach(s=>{
+      const year=Number(s[0]);
+      (Array.isArray(s[5])?s[5]:[]).forEach(t=>{
+        const owner=clean(t[2]);if(!owner)return;
+        (appearances[owner]=appearances[owner]||new Set()).add(year);
+      });
+    });
+    const appearanceCounts=Object.entries(appearances).map(([owner,years])=>({owner,count:years.size})).sort((a,b)=>b.count-a.count);
+    const topAppearances=appearanceCounts.length?appearanceCounts.filter(a=>a.count===appearanceCounts[0].count):[];
+    const titleOwners=new Set(Object.keys(byOwner));
+    const chasing=(Array.isArray(currentMembers)?currentMembers:[]).map(clean).filter(name=>name&&!titleOwners.has(name));
+    let biggestFall=null;
+    champs.forEach(c=>{
+      const nextSeason=seasons.find(s=>Number(s[0])===c.year+1);
+      if(!nextSeason||!Array.isArray(nextSeason[4]))return;
+      const row=nextSeason[4].find(t=>clean(t[3])===c.owner);
+      if(!row)return;
+      const finish=Number(row[0]);
+      if(!biggestFall||finish>biggestFall.finish)biggestFall={owner:c.owner,from:c.year,to:c.year+1,finish};
+    });
     return [
       {label:'Most Titles',value:`${maxTitles} apiece`,detail:most},
       {label:'First Champion',value:String(first.year),detail:`${first.owner} · ${first.team}`},
@@ -136,7 +186,11 @@
       {label:'Biggest Title-Game Win',value:`+${num(biggest.margin)}`,detail:`${ownerOf(biggest.year).owner}, ${biggest.year} (${num(biggest.scores[0])}–${num(biggest.scores[1])})`},
       {label:'Closest Title Game',value:`+${num(closest.margin)}`,detail:`${ownerOf(closest.year).owner}, ${closest.year} (${num(closest.scores[0])}–${num(closest.scores[1])})`},
       {label:'Lowest Seed to Win',value:`#${underdog.seed}`,detail:`${ownerOf(underdog.year).owner}, ${underdog.year}`},
-      {label:'Best Champion Differential',value:`+${num(diffMax.diff)}`,detail:`${diffMax.owner}, ${diffMax.year}`}
+      {label:'Best Champion Differential',value:`+${num(diffMax.diff)}`,detail:`${diffMax.owner}, ${diffMax.year}`},
+      {label:'Best Career Win %',value:topCareerPct.length?`${(topCareerPct[0].pct*100).toFixed(1)}%`:'—',detail:topCareerPct.map(c=>`${c.owner} · ${c.line} career`).join(' · ')},
+      {label:'Most Playoff Trips',value:topAppearances.length?String(topAppearances[0].count):'—',detail:topAppearances.map(a=>`${a.owner} · ${a.count} of ${playoffs.length}`).join(' · ')},
+      {label:'Still Chasing #1',value:String(chasing.length),detail:chasing.join(' · ')||'Everyone has tasted glory'},
+      {label:'Biggest Fall',value:biggestFall?`#1 → #${biggestFall.finish}`:'—',detail:biggestFall?`${biggestFall.owner}, '${String(biggestFall.from).slice(2)} → '${String(biggestFall.to).slice(2)}`:''}
     ];
   }
 
@@ -144,16 +198,18 @@
     const trophy=history.querySelector('[data-trophy-room]');
     if(!trophy)return;
     try{
-      const [seasonRes,playoffRes]=await Promise.all([
+      const [seasonRes,playoffRes,membersRes]=await Promise.all([
         fetch('data/seasons.json',{cache:'no-store'}),
-        fetch('data/playoffs.json',{cache:'no-store'})
+        fetch('data/playoffs.json',{cache:'no-store'}),
+        fetch('data/members.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
       ]);
       if(!seasonRes.ok)throw new Error(`seasons.json returned HTTP ${seasonRes.status}`);
       if(!playoffRes.ok)throw new Error(`playoffs.json returned HTTP ${playoffRes.status}`);
       const seasons=(await seasonRes.json()).seasons||[];
       const playoffs=(await playoffRes.json()).seasons||[];
+      const memberNames=((membersRes&&Array.isArray(membersRes.members))?membersRes.members:[]).map(m=>m&&m.name).filter(Boolean);
       const years=seasons.map(s=>Number(s[0])).filter(Number.isFinite);
-      trophy.innerHTML=`<div class="trophy-room-head"><span>TROPHY ROOM</span><small>Championship stats · ${Math.min(...years)}–${Math.max(...years)}</small></div><div class="trophy-grid">${trophyStats(seasons,playoffs).map(card=>`<div class="trophy-card"><span>${esc(card.label)}</span><strong>${esc(card.value)}</strong><small>${esc(card.detail)}</small></div>`).join('')}</div>`;
+      trophy.innerHTML=`<div class="trophy-room-head"><span>TROPHY ROOM</span><small>Championship stats · ${Math.min(...years)}–${Math.max(...years)}</small></div><div class="trophy-grid">${trophyStats(seasons,playoffs,memberNames).map(card=>`<div class="trophy-card"><span>${esc(card.label)}</span><strong>${esc(card.value)}</strong><small>${esc(card.detail)}</small></div>`).join('')}</div>`;
     }catch(error){
       console.error('Unable to load trophy room:',error);
       trophy.innerHTML='<div class="history-loading">Trophy room could not be loaded.</div>';

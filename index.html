@@ -50,6 +50,7 @@
 <script defer src="js/admin.js"></script>
 <script defer src="js/league-admin.js"></script>
 <script defer src="js/playoffs-admin.js"></script>
+<script defer src="js/banner-wall.js"></script>
 <script defer src="js/ui-polish.js"></script>
 </head>
 <body>
@@ -131,6 +132,20 @@
       <header class="home-section-head"><div><span>The <span data-site-year>2026</span> keeper draft</span><h2>Draft Order</h2></div><small>First round</small></header>
       <div class="draft-order-grid" data-draft-order aria-live="polite">
         <div class="draft-order-empty">Loading draft order…</div>
+      </div>
+    </section>
+
+    <section class="home-section banner-wall-section" aria-label="Championship banners">
+      <header class="home-section-head"><div><span>Ring count since 2017</span><h2>Championship Banners</h2></div><small>One banner per title</small></header>
+      <div class="banner-wall" data-banner-wall aria-live="polite">
+        <div class="banner-wall-empty">Raising the banners…</div>
+      </div>
+    </section>
+
+    <section class="home-section futures-section" aria-label="Championship futures odds">
+      <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small>Set by the league office</small></header>
+      <div class="futures-grid" data-futures aria-live="polite">
+        <div class="futures-empty">Setting the lines…</div>
       </div>
     </section>
 

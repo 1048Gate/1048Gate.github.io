@@ -41,3 +41,5 @@
 tr.playoff-row td{background:rgba(0,132,135,.06)}
 @media(max-width:900px){.rundown-grid{grid-template-columns:1fr}.season-hero{grid-template-columns:auto 1fr}}
 @media(max-width:620px){.season-hero{grid-template-columns:1fr;gap:13px;padding:16px}.season-hero-final{flex-wrap:wrap;gap:10px}.rundown-block{padding:13px 14px}}
+.rundown-story{margin-bottom:22px;background:linear-gradient(135deg,rgba(0,132,135,.1),rgba(185,138,82,.07));border-left:3px solid var(--amber)}
+.rundown-story p{margin:0;color:#c9d5ce;font-size:12px;line-height:1.7}

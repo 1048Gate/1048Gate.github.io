@@ -3,6 +3,25 @@
   const clean = value => String(value ?? '').trim().replace(/\s+/g, ' ');
   const supabase = window.gateSupabase || await window.gateSupabaseReady;
 
+  // Shared store so other views (season rundowns) can read champion stories.
+  // `ready` resolves once at least one champions render has published notes.
+  const championStoryStore = window.gateChampionStories = window.gateChampionStories || {byYear:{}};
+  if(!championStoryStore.ready){
+    let resolveReady;
+    championStoryStore.ready = new Promise(resolve => {resolveReady = resolve});
+    championStoryStore._resolveReady = resolveReady;
+  }
+  function publishChampionStories(champions){
+    (champions || []).forEach(champion => {
+      const year = Number(champion.season_year);
+      if(Number.isFinite(year) && champion.note) championStoryStore.byYear[year] = String(champion.note);
+    });
+    if(championStoryStore._resolveReady){
+      championStoryStore._resolveReady();
+      championStoryStore._resolveReady = null;
+    }
+  }
+
   function championIdentity(champion){
     const raw = clean(champion.champion);
     const explicitTeam = clean(champion.champion_team);
@@ -25,6 +44,7 @@
   }
 
   function renderChampions(champions){
+    publishChampionStories(champions);
     const history = document.getElementById('history');
     if(!history) return;
     const timeline = history.querySelector('.timeline');

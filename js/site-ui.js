@@ -21,6 +21,7 @@
     document.querySelectorAll('[data-site-phase]').forEach(element => {element.textContent = phase});
     document.querySelectorAll('[data-site-season]').forEach(element => {element.textContent = `${config.seasonYear} SEASON · ${competition.toUpperCase()}`});
     document.querySelectorAll('[data-site-footer]').forEach(element => {element.textContent = `${leagueName} Szn ${config.seasonNumber}`});
+    document.querySelectorAll('[data-site-season-number]').forEach(element => {element.textContent = String(config.seasonNumber)});
     document.querySelectorAll('meta[name="description"],meta[property="og:description"],meta[name="twitter:description"]').forEach(element => {
       element.setAttribute('content', `${element.getAttribute('content').replace(/\s*Now in its \d+(st|nd|rd|th) season\.?\s*$/,'')} Now in its ${config.seasonNumber}${['th','st','nd','rd'][config.seasonNumber%10>3||Math.floor(config.seasonNumber/10)%10===1?0:config.seasonNumber%10] || 'th'} season.`);
     });
@@ -30,11 +31,31 @@
     }
 
     renderDraftOrder(config);
+    renderFutures(config);
     renderLiveStats();
   }catch(error){
     console.warn('Unable to load site season settings; keeping the HTML fallback labels.', error);
   }
 })();
+
+function renderFutures(config){
+  const target = document.querySelector('[data-futures]');
+  if(!target) return;
+  const futures = Array.isArray(config.futures) ? config.futures : [];
+  if(!futures.length){
+    target.innerHTML = '<div class="futures-empty">Odds will be posted before the season starts.</div>';
+    return;
+  }
+  const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
+  target.innerHTML = futures.map((entry, index) => `
+    <div class="futures-row${index === 0 ? ' is-favorite' : ''}">
+      <span class="futures-odds">${escapeHtml(entry.odds || '')}</span>
+      <div class="futures-body">
+        <strong>${escapeHtml(entry.name || '')}</strong>
+        <p>${escapeHtml(entry.case || '')}</p>
+      </div>
+    </div>`).join('');
+}
 
 async function renderLiveStats(){
   const set=(selector,value)=>document.querySelectorAll(selector).forEach(el=>{el.textContent=value});
