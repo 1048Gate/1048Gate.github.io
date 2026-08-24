@@ -111,7 +111,36 @@
     matchupHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Loading matchup archive…</div></div>';
     try{
       const response=await fetch('data/matchups.json',{cache:'no-store'});if(!response.ok)throw new Error(`matchups.json returned HTTP ${response.status}`);const data=await response.json();const people=data.participants||[],pairs=data.pairs||[];
-      matchupHost.innerHTML=`<div class="panel history-content-panel matchup-panel"><div class="history-section-head"><div><span>MATCHUP ARCHIVE</span><h3>Head-to-Head Rivalries</h3></div><small>${data.gameCount||0} played games analyzed</small></div><div class="h2h-builder"><div class="h2h-selects"><label>Manager A<select id="h2hA">${people.map((p,i)=>`<option value="${esc(p)}" ${i===0?'selected':''}>${esc(p)}</option>`).join('')}</select></label><div class="h2h-vs">VS</div><label>Manager B<select id="h2hB">${people.map((p,i)=>`<option value="${esc(p)}" ${i===1?'selected':''}>${esc(p)}</option>`).join('')}</select></label></div><div id="h2hResult"></div></div></div>`;
+      function rivalryMatrix(){
+        const shortName=p=>{const t=String(p).trim().split(/\s+/);return t.length>1?`${t[0][0]}. ${t[t.length-1]}`:p};
+        const record=(i,j)=>{
+          const nA=people[i],nB=people[j];
+          const pair=pairs.find(p=>(p[0]===nA&&p[1]===nB)||(p[0]===nB&&p[1]===nA));
+          if(!pair)return null;
+          const same=pair[0]===nA;
+          return same?[pair[2][0],pair[2][1],pair[2][2]]:[pair[2][1],pair[2][0],pair[2][2]];
+        };
+        const head=`<thead><tr><th class="rivalry-corner" scope="col">Manager</th>${people.map(n=>`<th scope="col" title="${esc(n)}">${esc(shortName(n))}</th>`).join('')}</tr></thead>`;
+        const body=`<tbody>${people.map((rowName,i)=>`<tr><th scope="row">${esc(rowName)}</th>${people.map((colName,j)=>{
+          if(i===j)return '<td class="rivalry-cell rivalry-self"></td>';
+          const rec=record(i,j);
+          if(!rec)return '<td class="rivalry-cell">—</td>';
+          const cls=rec[0]>rec[1]?'is-winning':rec[0]<rec[1]?'is-losing':'is-even';
+          return `<td class="rivalry-cell ${cls}"><button type="button" class="rivalry-btn" data-rivalry-a="${esc(rowName)}" data-rivalry-b="${esc(colName)}">${rec[0]}–${rec[1]}${rec[2]?`–${rec[2]}`:''}</button></td>`;
+        }).join('')}</tr>`).join('')}</tbody>`;
+        return `<div class="history-section-head"><div><span>RIVALRY MATRIX</span><h3>All-Time Head-to-Head</h3></div><small>Tap any score for the full breakdown</small></div><div class="season-table-wrap rivalry-wrap"><table class="season-archive-table rivalry-matrix">${head}${body}</table></div>`;
+      }
+      matchupHost.innerHTML=`<div class="panel history-content-panel matchup-panel"><div class="history-section-head"><div><span>MATCHUP ARCHIVE</span><h3>Head-to-Head Rivalries</h3></div><small>${data.gameCount||0} played games analyzed</small></div>${rivalryMatrix()}<div class="h2h-builder"><div class="h2h-selects"><label>Manager A<select id="h2hA">${people.map((p,i)=>`<option value="${esc(p)}" ${i===0?'selected':''}>${esc(p)}</option>`).join('')}</select></label><div class="h2h-vs">VS</div><label>Manager B<select id="h2hB">${people.map((p,i)=>`<option value="${esc(p)}" ${i===1?'selected':''}>${esc(p)}</option>`).join('')}</select></label></div><div id="h2hResult"></div></div></div>`;
+      if(matchupHost.dataset.rivalryWired!=='true'){
+        matchupHost.dataset.rivalryWired='true';
+        matchupHost.addEventListener('click',event=>{
+          const btn=event.target.closest('[data-rivalry-a]');
+          if(!btn)return;
+          const a=matchupHost.querySelector('#h2hA'),b=matchupHost.querySelector('#h2hB');
+          if(a&&b){a.value=btn.dataset.rivalryA;b.value=btn.dataset.rivalryB;a.dispatchEvent(new Event('change'))}
+          matchupHost.querySelector('.h2h-builder')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+        });
+      }
       const a=matchupHost.querySelector('#h2hA'),b=matchupHost.querySelector('#h2hB'),result=matchupHost.querySelector('#h2hResult');
       function render(){if(a.value===b.value){result.innerHTML='<div class="h2h-empty">Pick two different managers.</div>';return}const pair=pairs.find(p=>(p[0]===a.value&&p[1]===b.value)||(p[0]===b.value&&p[1]===a.value));if(!pair){result.innerHTML='<div class="h2h-empty">These managers never played each other in the archive.</div>';return}const same=pair[0]===a.value,all=pair[2],reg=pair[3],po=pair[4],aw=same?all[0]:all[1],bw=same?all[1]:all[0],ap=same?all[3]:all[4],bp=same?all[4]:all[3],ar=same?[reg[0],reg[1],reg[2]]:[reg[1],reg[0],reg[2]],br=[ar[1],ar[0],ar[2]],apo=same?[po[0],po[1],po[2]]:[po[1],po[0],po[2]],bpo=[apo[1],apo[0],apo[2]];result.innerHTML=`<div class="h2h-score"><div><span>${esc(a.value)}</span><strong>${aw}</strong><small>${num(ap)} pts scored</small></div><div class="h2h-middle"><span>ALL-TIME</span><b>${recordText([aw,bw,all[2]])}</b><small>${aw+bw+all[2]} meetings</small></div><div><span>${esc(b.value)}</span><strong>${bw}</strong><small>${num(bp)} pts scored</small></div></div><div class="h2h-splits"><div><span>Regular Season</span><strong>${recordText(ar)}</strong><small>${esc(a.value)}</small><strong>${recordText(br)}</strong><small>${esc(b.value)}</small></div><div><span>Playoffs</span><strong>${recordText(apo)}</strong><small>${esc(a.value)}</small><strong>${recordText(bpo)}</strong><small>${esc(b.value)}</small></div></div>`}
       a.addEventListener('change',render);b.addEventListener('change',render);render();
