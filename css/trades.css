@@ -3,7 +3,7 @@
 .trade-intro h3{font-size:19px;margin-top:5px}
 .trade-intro p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.6;max-width:68ch}
 .transaction-eyebrow{font:8px 'Space Mono',monospace;color:var(--amber);letter-spacing:.12em;text-transform:uppercase}
-.trade-year-nav{display:flex;gap:7px;flex-wrap:wrap;padding:6px;margin-bottom:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;position:sticky;top:133px;z-index:15;box-shadow:0 8px 18px rgba(0,0,0,.15)}
+.trade-year-nav{display:flex;gap:7px;flex-wrap:wrap;padding:6px;margin-bottom:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;position:sticky;top:calc(var(--sticky-offset) - 1px);z-index:15;box-shadow:0 8px 18px rgba(0,0,0,.15)}
 .trade-year-nav button{border:1px solid transparent;background:transparent;color:var(--muted);border-radius:8px;padding:10px 14px;font:600 12px Oswald,sans-serif;text-transform:uppercase;letter-spacing:.02em;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
 .trade-year-nav button i{font:700 9px 'Space Mono',monospace;font-style:normal;color:var(--turf)}
 .trade-year-nav button:hover{background:var(--panel2);color:var(--cream)}
