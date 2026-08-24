@@ -188,6 +188,24 @@ if(!transactionSource.includes("row.status === 'EXECUTED'") || html.includes('id
 if(html.includes('id="transactionType"') || !transactionSource.includes('data-transaction-category') || !transactionSource.includes('renderDayGroup') || !transactionSource.includes('transaction-ledger-row')){
   throw new Error('Transactions must use category navigation and the date-grouped activity ledger.');
 }
+const titleOddsSource = readFileSync(new URL('js/title-odds.js', root), 'utf8');
+if(!titleOddsSource.includes('Math.round(value * 100)') || titleOddsSource.includes('count / SIMULATIONS')){
+  throw new Error('Playoff probability labels must format normalized probability values without dividing by the simulation count twice.');
+}
+if(!titleOddsSource.includes('function buildSchedule') || !titleOddsSource.includes('wins[play(home, away)]++')){
+  throw new Error('Playoff simulations must use shared head-to-head matchups so total wins remain zero-sum.');
+}
+const tradeBoardSource = readFileSync(new URL('js/trade-board.js', root), 'utf8');
+if(!tradeBoardSource.includes("form.dataset.submitBound !== 'true'") || !tradeBoardSource.includes("form.dataset.submitBound = 'true'")){
+  throw new Error('The Trade Board create form must bind its submit handler exactly once.');
+}
+if(tradeBoardSource.includes('supabase?.auth.getSession()') || !tradeBoardSource.includes('Posting is temporarily unavailable.')){
+  throw new Error('The Trade Board must degrade safely when Supabase authentication is unavailable.');
+}
+const tradeTalkSource = readFileSync(new URL('js/trade-talk.js', root), 'utf8');
+if(/if\s*\(\s*!related\.length\s*\)\s*continue/.test(tradeTalkSource) || !tradeTalkSource.includes('awaiting details')){
+  throw new Error('Accepted trades with incomplete item data must remain visible in Trade Talk.');
+}
 const starterSql = readFileSync(new URL('supabase/starter_content.sql', root), 'utf8');
 for(const table of ['announcements','board_posts','board_comments','polls','poll_options','poll_votes']){
   if(!starterSql.includes(`public.${table}`)) throw new Error(`starter_content.sql does not seed or secure ${table}.`);
@@ -200,7 +218,10 @@ const exportAll = readFileSync(new URL('scripts/export_all.py', root), 'utf8');
 for(const exporter of ['export_web_data.py', 'export_seasons.py', 'export_matchups.py', 'export_playoffs.py', 'export_drafts.py', 'export_players.py', 'export_streaks.py', 'export_manager_profiles.py']){
   if(!exportAll.includes(`"${exporter}"`)) throw new Error(`export_all.py does not run ${exporter}.`);
 }
-execFileSync('python3', ['-c', 'from pathlib import Path; import sys; source=Path(sys.argv[1]).read_text(encoding="utf-8"); compile(source, sys.argv[1], "exec")', new URL('scripts/export_all.py', root).pathname], {stdio:'pipe'});
+for(const entry of readdirSync(new URL('scripts/', root), {withFileTypes:true})){
+  if(!entry.isFile() || !entry.name.endsWith('.py')) continue;
+  execFileSync('python3', ['-c', 'from pathlib import Path; import sys; source=Path(sys.argv[1]).read_text(encoding="utf-8"); compile(source, sys.argv[1], "exec")', new URL(`scripts/${entry.name}`, root).pathname], {stdio:'pipe'});
+}
 
 const views = new Set([...html.matchAll(/<section[^>]+id="([^"]+)"/g)].map(match => match[1]));
 views.add('playoffs'); // Created synchronously by the explicit playoffs feature script.

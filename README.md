@@ -48,7 +48,9 @@ For a new database, run these files in the Supabase SQL Editor in order:
 4. `supabase/league_content.sql`
 5. `supabase/league_content_manager_upgrade.sql`
 6. `supabase/playoffs.sql`
-7. `supabase/starter_content.sql`
+7. `supabase/champion_stories.sql`
+8. `supabase/trade_board.sql`
+9. `supabase/starter_content.sql`
 
 `starter_content.sql` installs the two launch announcements, four example message-board threads, and three example polls as real Supabase records. They appear in the normal Staff Tools lists with a **STARTER** badge and can be deleted by the commissioner or site admin. They do not return after deletion.
 

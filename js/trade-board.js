@@ -8,6 +8,7 @@
   let currentUser = null;
   let currentProfile = null;
   let activeFilter = 'all';
+  let authAvailable = Boolean(supabase);
 
   // Find existing panels (authoritative markup from index.html)
   const historyPanel = tradeSection.querySelector('[data-trade-panel="history"]');
@@ -50,13 +51,28 @@
 
   // Auth state handling
   async function updateAuthUI() {
-    const {data: {session}} = await supabase?.auth.getSession();
-    currentUser = session?.user || null;
-    if (currentUser) {
-      const {data: profile} = await supabase.from('profiles').select('role,display_name').eq('id', currentUser.id).maybeSingle();
-      currentProfile = profile;
-    } else {
+    if (!supabase) {
+      authAvailable = false;
+      currentUser = null;
       currentProfile = null;
+    } else {
+      try {
+        const {data: {session}, error: sessionError} = await supabase.auth.getSession();
+        if (sessionError) throw sessionError;
+        authAvailable = true;
+        currentUser = session?.user || null;
+        if (currentUser) {
+          const {data: profile, error: profileError} = await supabase.from('profiles').select('role,display_name').eq('id', currentUser.id).maybeSingle();
+          if (profileError) throw profileError;
+          currentProfile = profile;
+        } else {
+          currentProfile = null;
+        }
+      } catch (_) {
+        authAvailable = false;
+        currentUser = null;
+        currentProfile = null;
+      }
     }
     renderAuthStatus();
     renderFormVisibility();
@@ -65,7 +81,9 @@
 
   function renderAuthStatus() {
     if (!authStatusHost) return;
-    if (currentUser) {
+    if (!authAvailable) {
+      authStatusHost.innerHTML = '<span class="trade-board-user" role="status">Posting is temporarily unavailable.</span>';
+    } else if (currentUser) {
       authStatusHost.innerHTML = `<span class="trade-board-user">Signed in as <strong>${esc(currentProfile?.display_name || currentUser.email)}</strong></span>`;
     } else {
       authStatusHost.innerHTML = `<button class="btn btn-ghost" id="tbSignInBtn">Sign in to post</button>`;
@@ -143,6 +161,7 @@
         ? 'No trade discussions yet. Be the first to post!'
         : `No ${POST_TYPES[activeFilter]?.label?.toLowerCase() || activeFilter} posts yet.`;
       feed.innerHTML = `<div class="panel community-empty">${esc(emptyMsg)}</div>`;
+      attachPostListeners();
       return;
     }
 
@@ -236,7 +255,7 @@
     if (!feed) return;
 
     // Create post
-    form?.addEventListener('submit', async (e) => {
+    if (form.dataset.submitBound !== 'true') form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const statusEl = form.querySelector('.form-status');
       const postType = form.post_type.value;
@@ -267,6 +286,7 @@
         statusEl.style.color = 'var(--danger)';
       }
     });
+    form.dataset.submitBound = 'true';
 
     // Edit post
     feed.querySelectorAll('.tb-edit').forEach(btn => {
@@ -276,7 +296,7 @@
         const titleEl = postCard.querySelector('.trade-board-post-title');
         const bodyEl = postCard.querySelector('.trade-board-post-body');
         const currentTitle = titleEl.textContent;
-        const currentBody = bodyEl.innerHTML.replace(/<br>/g, '\n');
+        const currentBody = bodyEl.innerText;
 
         const newTitle = prompt('Edit title:', currentTitle);
         if (newTitle === null) return;

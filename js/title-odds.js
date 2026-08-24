@@ -34,6 +34,31 @@
     return 1 / (1 + Math.pow(10, -(a.rating - b.rating) / RATING_SCALE));
   }
 
+  function shuffled(values){
+    const copy = [...values];
+    for(let index = copy.length - 1; index > 0; index--){
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+    }
+    return copy;
+  }
+
+  function buildSchedule(teamCount){
+    const rotation = shuffled(Array.from({length:teamCount}, (_, index) => index));
+    const rounds = [];
+    for(let round = 0; round < teamCount - 1; round++){
+      const matchups = [];
+      for(let index = 0; index < teamCount / 2; index++){
+        matchups.push([rotation[index], rotation[teamCount - 1 - index]]);
+      }
+      rounds.push(matchups);
+      rotation.splice(1, 0, rotation.pop());
+    }
+    const rematchRounds = shuffled(rounds.map((_, index) => index))
+      .slice(0, GAMES_PER_SEASON - (teamCount - 1));
+    return [...rounds, ...rematchRounds.map(index => rounds[index])].flat();
+  }
+
   function simulate(teams){
     const made = teams.map(() => 0);
     const bye = teams.map(() => 0);
@@ -42,12 +67,8 @@
     const play = (i, j) => Math.random() < pWin(teams[i], teams[j]) ? i : j;
     for(let sim = 0; sim < SIMULATIONS; sim++){
       const wins = teams.map(() => 0);
-      for(let i = 0; i < n; i++){
-        for(let g = 0; g < GAMES_PER_SEASON; g++){
-          let j = Math.floor(Math.random() * (n - 1));
-          if(j >= i) j++;
-          if(Math.random() < pWin(teams[i], teams[j])) wins[i]++;
-        }
+      for(const [home, away] of buildSchedule(n)){
+        wins[play(home, away)]++;
       }
       const order = teams.map((_, i) => i).sort((a, b) => wins[b] - wins[a] || (Math.random() - 0.5));
       const field = order.slice(0, PLAYOFF_TEAMS);
@@ -65,7 +86,7 @@
 
   function render(teams, seasonNumber){
     const {made, bye, title} = simulate(teams);
-    const pct = count => `${Math.round(count / SIMULATIONS * 100)}%`;
+    const pct = value => `${Math.round(value * 100)}%`;
     const rows = teams
       .map((t, i) => ({name:t.name, madePct:made[i]/SIMULATIONS, byePct:bye[i]/SIMULATIONS, titlePct:title[i]/SIMULATIONS}))
       .sort((a, b) => b.titlePct - a.titlePct || b.madePct - a.madePct);

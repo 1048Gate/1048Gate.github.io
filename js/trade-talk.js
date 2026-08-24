@@ -55,8 +55,6 @@
           to:clean(item.to_team_name)
         }))
         .filter(item => item.player && (item.from || item.to));
-      if(!related.length) continue;
-
       const teams = new Set();
       related.forEach(item => {
         if(item.from) teams.add(item.from);
@@ -69,7 +67,8 @@
         dateMs,
         week:Number(row.scoring_period || 0),
         teams:[...teams],
-        sides:new Map()
+        sides:new Map(),
+        incomplete:related.length === 0
       };
       for(const team of trade.teams) trade.sides.set(team, {gives:[], receives:[]});
       for(const item of related){
@@ -93,14 +92,16 @@
   const listNames = names => names.length ? names.map(name => `<strong>${esc(name)}</strong>`).join(', ') : '<em>future considerations</em>';
 
   function renderTradeCard(trade){
-    const sideBlocks = trade.teams.map(team => {
+    const sideBlocks = trade.incomplete
+      ? `<div class="trade-details-unavailable"><strong>Accepted trade recorded</strong><span>Player and team details were not included in the imported transaction data.</span></div>`
+      : trade.teams.map(team => {
       const side = trade.sides.get(team);
       return `<div class="trade-side">
         <span class="trade-team">${esc(team)}</span>
         <div class="trade-gives"><small>Sends</small><p>${listNames(side.gives)}</p></div>
         <div class="trade-receives"><small>Receives</small><p>${listNames(side.receives)}</p></div>
       </div>`;
-    }).join(`<span class="trade-swap" aria-hidden="true">⇄</span>`);
+      }).join(`<span class="trade-swap" aria-hidden="true">⇄</span>`);
 
     return `<article class="panel trade-card">
       <header class="trade-card-head">
@@ -119,8 +120,9 @@
     const feed = document.getElementById('tradeFeed');
     const trades = tradesByYear.get(Number(year)) || [];
     const playersMoved = new Set(trades.flatMap(t => [...t.teams.flatMap(team => t.sides.get(team).gives)])).size;
+    const incompleteTrades = trades.filter(trade => trade.incomplete).length;
     meta.textContent = trades.length
-      ? `${trades.length} accepted trade${trades.length === 1 ? '' : 's'} · ${playersMoved} player${playersMoved === 1 ? '' : 's'} changed teams`
+      ? `${trades.length} accepted trade${trades.length === 1 ? '' : 's'} · ${playersMoved} player${playersMoved === 1 ? '' : 's'} changed teams${incompleteTrades ? ` · ${incompleteTrades} awaiting details` : ''}`
       : '';
     feed.innerHTML = trades.length
       ? trades.map(renderTradeCard).join('')
