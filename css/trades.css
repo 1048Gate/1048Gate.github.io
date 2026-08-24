@@ -26,6 +26,54 @@
 .trade-receives p strong{color:var(--amber)}
 .trade-gives p em,.trade-receives p em{opacity:.75}
 
-@media(max-width:900px){.trade-intro{flex-direction:column;align-items:flex-start;gap:10px}.trade-year-nav{position:static;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:5px}}
-@media(max-width:900px){.trade-year-nav::-webkit-scrollbar{display:none}.trade-year-nav button{flex:0 0 auto}}
+@media(max-width:620px){.trade-intro{flex-direction:column;align-items:flex-start;gap:10px}.trade-year-nav{position:static;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:5px}}
+@media(max-width:620px){.trade-year-nav::-webkit-scrollbar{display:none}.trade-year-nav button{flex:0 0 auto}}
 @media(max-width:620px){.trade-card-body{flex-direction:column}.trade-swap{transform:rotate(90deg);align-self:center}.trade-card-head{flex-wrap:wrap;gap:6px}}
+
+/* Trade Board — message board for trade discussions */
+.trade-subnav{display:flex;gap:7px;flex-wrap:wrap;padding:6px;margin:14px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.trade-subnav button{border:1px solid transparent;background:transparent;color:var(--muted);border-radius:8px;padding:10px 14px;font:600 12px Oswald,sans-serif;text-transform:uppercase;letter-spacing:.02em;cursor:pointer}
+.trade-subnav button:hover{background:var(--panel2);color:var(--cream)}
+.trade-subnav button.active{background:linear-gradient(135deg,rgba(0,132,135,.22),rgba(185,138,82,.13));border-color:rgba(185,138,82,.35);color:var(--amber)}
+.trade-tab-panel{display:none}
+.trade-tab-panel.active{display:block}
+
+.trade-board-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}
+.trade-board-intro strong{display:block;font:600 14px Oswald,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--cream);margin-bottom:4px}
+.trade-board-intro p{margin:0;color:var(--muted);font-size:12px;line-height:1.6;max-width:68ch}
+.trade-board-user{color:var(--muted);font-size:12px}
+
+.trade-board-form .form-row{margin-bottom:14px}
+.trade-board-form label{display:block;font:600 11px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.trade-board-form input,.trade-board-form textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;color:var(--cream);outline:none}
+.trade-board-form input:focus,.trade-board-form textarea:focus{border-color:var(--turf);box-shadow:0 0 0 2px rgba(0,132,135,.15)}
+.trade-board-form .form-actions{display:flex;align-items:center;gap:12px;margin-top:10px}
+.trade-board-form .form-status{font:9px 'Space Mono',monospace;color:var(--muted);min-height:12px}
+
+.trade-board-feed{display:flex;flex-direction:column;gap:12px}
+.trade-board-post{padding:16px}
+.trade-board-post.closed{opacity:.7;background:rgba(139,0,0,.08);border-color:rgba(139,0,0,.3)}
+.trade-board-post-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.trade-board-post-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.trade-board-author{font-weight:600;color:var(--cream)}
+.trade-starter-badge{font:700 8px 'Space Mono',monospace;color:var(--amber);background:rgba(185,138,82,.15);padding:2px 6px;border-radius:4px}
+.trade-board-edited{opacity:.7}
+.trade-board-post-actions{display:flex;gap:6px}
+.trade-board-post-title{margin:0 0 8px;font-size:16px;line-height:1.3}
+.trade-board-post-body{font-size:13px;line-height:1.65;color:var(--muted);white-space:pre-wrap}
+.trade-board-closed-notice{margin-top:10px;padding:8px 12px;background:rgba(139,0,0,.15);border:1px solid rgba(139,0,0,.3);border-radius:8px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--danger)}
+
+.trade-board-comments{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.trade-board-comments-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;font:9px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.trade-board-comment-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.trade-board-comment{padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.trade-board-comment-meta{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:11px;color:var(--muted)}
+.trade-board-comment-author{font-weight:600;color:var(--cream)}
+.trade-board-comment-body{margin:0;font-size:12px;line-height:1.55;color:var(--muted)}
+.trade-board-comment-form textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;color:var(--cream);resize:vertical;min-height:50px;outline:none}
+.trade-board-comment-form textarea:focus{border-color:var(--turf);box-shadow:0 0 0 2px rgba(0,132,135,.15)}
+.trade-board-comment-form .form-actions{display:flex;align-items:center;gap:10px;margin-top:8px}
+.trade-board-comment-form .form-status{font:9px 'Space Mono',monospace;color:var(--muted);min-height:12px}
+
+@media(max-width:900px){.trade-board-header{flex-direction:column;align-items:flex-start;gap:10px}}
+@media(max-width:620px){.trade-board-post-head{flex-direction:column;align-items:flex-start}.trade-board-post-actions{width:100%;justify-content:flex-end}}

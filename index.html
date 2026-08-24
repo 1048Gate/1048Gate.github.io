@@ -39,6 +39,7 @@
 <script defer src="js/app.js"></script>
 <script defer src="js/transactions.js"></script>
 <script defer src="js/trade-talk.js"></script>
+<script defer src="js/trade-board.js"></script>
 <script defer src="js/community.js"></script>
 <script defer src="js/manager-profiles.js"></script>
 <script defer src="js/league-content.js"></script>
@@ -197,10 +198,19 @@
       </div>
       <div class="transaction-sync" id="tradeSync" role="status" aria-live="polite"><span></span>Ready to load</div>
     </div>
-    <nav class="trade-year-nav" id="tradeYearNav" aria-label="Trade archive seasons"></nav>
-    <div class="trade-season-meta" id="tradeSeasonMeta" role="status"></div>
-    <div class="trade-feed" id="tradeFeed" aria-live="polite">
-      <div class="panel transaction-empty"><strong>Loading trade archive…</strong><span>Connecting to the league database.</span></div>
+    <nav class="trade-subnav" role="tablist" aria-label="Trade sections">
+      <button type="button" class="active" data-trade-tab="history" role="tab" aria-selected="true">Trade History</button>
+      <button type="button" data-trade-tab="board" role="tab" aria-selected="false">Trade Board</button>
+    </nav>
+    <div class="trade-tab-panel active" data-trade-panel="history" role="tabpanel">
+      <nav class="trade-year-nav" id="tradeYearNav" aria-label="Trade archive seasons"></nav>
+      <div class="trade-season-meta" id="tradeSeasonMeta" role="status"></div>
+      <div class="trade-feed" id="tradeFeed" aria-live="polite">
+        <div class="panel transaction-empty"><strong>Loading trade archive…</strong><span>Connecting to the league database.</span></div>
+      </div>
+    </div>
+    <div class="trade-tab-panel" data-trade-panel="board" role="tabpanel" hidden>
+      <!-- Trade Board content rendered by trade-board.js -->
     </div>
   </section>
 
