@@ -51,8 +51,11 @@ For a new database, run these files in the Supabase SQL Editor in order:
 7. `supabase/champion_stories.sql`
 8. `supabase/trade_board.sql`
 9. `supabase/starter_content.sql`
+10. `supabase/security_hardening.sql`
 
 `starter_content.sql` installs the two launch announcements, four example message-board threads, and three example polls as real Supabase records. They appear in the normal Staff Tools lists with a **STARTER** badge and can be deleted by the commissioner or site admin. They do not return after deletion.
+
+`security_hardening.sql` locks trigger-only functions out of the Data API, optimizes RLS helper evaluation, consolidates Trade Board policies, and adds the foreign-key indexes reported by the Supabase database advisor.
 
 ## Run locally
 
