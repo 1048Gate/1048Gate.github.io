@@ -4,6 +4,7 @@
   "scripts": {
     "check": "node scripts/check-site.mjs",
     "build": "node scripts/build-site.mjs",
+    "futures": "node scripts/build-futures.mjs",
     "optimize:image": "node scripts/optimize-image.mjs"
   }
 }
