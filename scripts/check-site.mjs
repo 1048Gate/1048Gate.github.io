@@ -176,8 +176,14 @@ if(communitySource.includes('createClient') || communitySource.includes('supabas
 if(/mockPosts|mockPolls|Sample threads shown/.test(communitySource)){
   throw new Error('Community starter content must come from Supabase, not hard-coded browser fallbacks.');
 }
-if(communitySource.includes("starter||!poll.is_open") || communitySource.includes('Starter polls are examples and do not accept new votes.')){
-  throw new Error('Starter polls must remain voteable while they are open.');
+if(!communitySource.includes("rpc('get_informal_polls'") || !communitySource.includes("rpc('cast_informal_poll_vote'")){
+  throw new Error('Informal polls must use aggregate-only server RPCs.');
+}
+if(communitySource.includes("from('poll_votes')") || /select\([^)]*voter_id/.test(communitySource)){
+  throw new Error('Vote Booth must not read individual voter identifiers from the browser.');
+}
+if(!communitySource.includes('Informal Vote Booth') || !communitySource.includes('informal feedback')){
+  throw new Error('Vote Booth must clearly label device-based polls as informal.');
 }
 if(!communitySource.includes('is_starter') || !html.includes('id="commissionerBoard"')){
   throw new Error('Supabase-backed starter content or the commissioner announcement mount is missing.');
@@ -191,26 +197,20 @@ if(!adminSource.includes('league-announcement') || !adminSource.includes('member
   throw new Error('Commissioner updates must use the clean initials-based league-office cards.');
 }
 const transactionSource = readFileSync(new URL('js/transactions.js', root), 'utf8');
-for(const table of ['league_transactions','league_transaction_archive_items']){
-  if(!transactionSource.includes(`'${table}'`)) throw new Error(`Transaction archive does not query ${table}.`);
-}
 if(!html.includes('id="transactions"') || !html.includes('data-view="transactions"')){
   throw new Error('Transaction archive view or navigation is missing.');
 }
-if(!transactionSource.includes("addEventListener('gate:viewchange'")){
-  throw new Error('Transaction data must stay lazy-loaded until its view opens.');
+if(!transactionSource.includes("rpc('get_transaction_archive'") || !transactionSource.includes("rpc('get_transaction_archive_seasons'")){
+  throw new Error('Transactions must use the paginated server archive RPCs.');
+}
+if(transactionSource.includes("from('league_transactions')") || transactionSource.includes("from('league_transaction_archive_items')")){
+  throw new Error('Transactions must not query raw archive tables from the browser.');
+}
+if(!transactionSource.includes("addEventListener('gate:viewchange'") || !transactionSource.includes('source_detail_status')){
+  throw new Error('Transaction data must stay lazy-loaded and display server-provided trade detail status.');
 }
 for(const type of ['FREEAGENT','WAIVER','TRADE_ACCEPT']){
   if(!transactionSource.includes(`'${type}'`)) throw new Error(`Curated transaction archive is missing ${type}.`);
-}
-if(!transactionSource.includes('related_transaction_id') || !transactionSource.includes('buildAcceptedTradeArchive') || !transactionSource.includes('Promise.all')){
-  throw new Error('Transactions must load complete item data and canonicalize ESPN trade acceptance actions.');
-}
-for(const excluded of ["'FUTURE_ROSTER'", "'ROSTER'", "'TRADE_PROPOSAL'", "'TRADE_VETO'", "'TRADE_UPHOLD'", "'TRADE_DECLINE'", "'LINEUP'"]){
-  if(transactionSource.includes(excluded)) throw new Error(`Transaction archive still exposes excluded activity: ${excluded}.`);
-}
-if(!transactionSource.includes("row.status === 'EXECUTED'") || html.includes('id="transactionStatus"') || transactionSource.includes('transaction-technical')){
-  throw new Error('Transactions must show only completed adds, drops, successful waivers, and accepted trades without status or technical controls.');
 }
 if(html.includes('id="transactionType"') || !transactionSource.includes('data-transaction-category') || !transactionSource.includes('renderDayGroup') || !transactionSource.includes('transaction-ledger-row')){
   throw new Error('Transactions must use category navigation and the date-grouped activity ledger.');
@@ -230,19 +230,26 @@ if(tradeBoardSource.includes('supabase?.auth.getSession()') || !tradeBoardSource
   throw new Error('The Trade Board must degrade safely when Supabase authentication is unavailable.');
 }
 const tradeTalkSource = readFileSync(new URL('js/trade-talk.js', root), 'utf8');
-if(/if\s*\(\s*!related\.length\s*\)\s*continue/.test(tradeTalkSource) || !tradeTalkSource.includes('source gap') || !tradeTalkSource.includes('buildAcceptedTradeArchive')){
-  throw new Error('Accepted trades with incomplete item data must remain visible in Trade Talk.');
+if(!tradeTalkSource.includes("rpc('get_transaction_archive'") || !tradeTalkSource.includes('source_detail_status') || !tradeTalkSource.includes('source gap')){
+  throw new Error('Trade Talk must use the canonical server archive and keep incomplete trades visible.');
 }
-const transactionArchiveSql = readFileSync(new URL('supabase/transaction_archive_repair.sql', root), 'utf8');
-if(!transactionArchiveSql.includes('related_transaction_id') || !transactionArchiveSql.includes("raw_data ->> 'relatedTransactionId'") || !transactionArchiveSql.includes('generated always') || !transactionArchiveSql.includes('security_invoker = true')){
-  throw new Error('The transaction archive repair must normalize ESPN related transaction IDs for future imports.');
+if(tradeTalkSource.includes("from('league_transactions')") || tradeTalkSource.includes("from('league_transaction_archive_items')")){
+  throw new Error('Trade Talk must not query raw archive tables from the browser.');
 }
-const starterSql = readFileSync(new URL('supabase/starter_content.sql', root), 'utf8');
-for(const table of ['announcements','board_posts','board_comments','polls','poll_options','poll_votes']){
-  if(!starterSql.includes(`public.${table}`)) throw new Error(`starter_content.sql does not seed or secure ${table}.`);
+const migrationDir = new URL('supabase/migrations/', root);
+const migrationFiles = readdirSync(migrationDir).filter(name => name.endsWith('.sql')).sort();
+if(migrationFiles.length < 13 || !migrationFiles.includes('20260825012000_013_security_performance_release.sql')){
+  throw new Error('Ordered Supabase migrations, including the security-performance release, are missing.');
 }
-if(starterSql.includes('polls.is_starter = false') || !starterSql.includes('set is_open = true')){
-  throw new Error('Starter poll setup must open existing examples and permit voting in them.');
+const releaseSql = readFileSync(new URL('supabase/migrations/20260825012000_013_security_performance_release.sql', root), 'utf8');
+for(const required of ['private.legacy_board_posts','private.legacy_board_comments','get_transaction_archive','get_informal_polls','cast_informal_poll_vote','drop policy if exists "Public can read league transactions"']){
+  if(!releaseSql.includes(required)) throw new Error(`Security-performance migration is missing ${required}.`);
+}
+if(!existsSync(new URL('archive/legacy-board-production-export-2026-08-25.json', root))){
+  throw new Error('Legacy board export must be retained before board retirement.');
+}
+if(/from\('board_posts'\)|from\('board_comments'\)/.test(adminSource)){
+  throw new Error('Staff Tools must not depend on retired legacy board tables.');
 }
 
 const exportAll = readFileSync(new URL('scripts/export_all.py', root), 'utf8');

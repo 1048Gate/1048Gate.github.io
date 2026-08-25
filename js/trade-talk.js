@@ -1,16 +1,16 @@
-// 1048 Gate Trade Talk — season-by-season archive of accepted trades.
+// 1048 Gate Trade Talk — server-paginated canonical accepted-trade archive.
 (function(){
   const section = document.getElementById('trades');
   if(!section) return;
 
-  const {escapeHtml:esc, buildAcceptedTradeArchive} = window.gateShared;
-  const CHUNK_SIZE = 1000;
+  const {escapeHtml:esc} = window.gateShared;
+  const PAGE_SIZE = 100;
   let currentSeasonYear = null;
-
   let supabase = null;
   let loadPromise = null;
-  let tradesByYear = new Map();
   let activeYear = null;
+  let seasons = [];
+  const tradesByYear = new Map();
 
   function setSync(state, text){
     const sync = document.getElementById('tradeSync');
@@ -20,35 +20,40 @@
     sync.innerHTML = `<span></span>${esc(text)}`;
   }
 
-  async function fetchAll(table, columns, filter){
-    const rows = [];
-    for(let start = 0; ; start += CHUNK_SIZE){
-      let query = supabase.from(table)
-        .select(columns)
-        .order('season_year', {ascending:false})
-        .order('id', {ascending:true});
-      if(filter) query = query.in(filter.column, filter.values);
-      const {data, error} = await query.range(start, start + CHUNK_SIZE - 1);
-      if(error) throw error;
-      rows.push(...(data || []));
-      if(!data || data.length < CHUNK_SIZE) return rows;
+  function buildTrade(row){
+    const items = Array.isArray(row.items) ? row.items : [];
+    const teams = [];
+    const sides = new Map();
+    const addTeam = team => {
+      if(!team || sides.has(team)) return;
+      teams.push(team);
+      sides.set(team, {gives:[], receives:[]});
+    };
+    for(const item of items){
+      addTeam(item.from_team_name);
+      addTeam(item.to_team_name);
     }
+    for(const item of items){
+      if(item.from_team_name) sides.get(item.from_team_name)?.gives.push(item.player_name || 'Player unavailable');
+      if(item.to_team_name) sides.get(item.to_team_name)?.receives.push(item.player_name || 'Player unavailable');
+    }
+    return {...row, items, teams, sides, dateMs:Number(row.transaction_date_ms || new Date(row.transaction_date).getTime() || 0)};
   }
 
-  function buildArchive(transactions, items){
-    tradesByYear = new Map();
-    for(const canonicalTrade of buildAcceptedTradeArchive(transactions, items)){
-      const trade = {
-        ...canonicalTrade,
-        dateMs:canonicalTrade.transaction_date_ms,
-        week:canonicalTrade.scoring_period
-      };
-      const year = Number(trade.season_year);
-      if(!tradesByYear.has(year)) tradesByYear.set(year, []);
-      tradesByYear.get(year).push(trade);
-    }
-
-    for(const list of tradesByYear.values()) list.sort((a,b) => b.dateMs - a.dateMs);
+  async function loadSeason(year){
+    if(tradesByYear.has(year)) return tradesByYear.get(year);
+    const {data, error} = await supabase.rpc('get_transaction_archive', {
+      p_page:1,
+      p_page_size:PAGE_SIZE,
+      p_season_year:Number(year),
+      p_category:'TRADE_ACCEPT',
+      p_search:null,
+      p_sort:'newest'
+    });
+    if(error) throw error;
+    const rows = (data?.items || []).map(buildTrade);
+    tradesByYear.set(Number(year), rows);
+    return rows;
   }
 
   function formatDay(ms){
@@ -59,58 +64,54 @@
   }
   const listNames = names => names.length ? names.map(name => `<strong>${esc(name)}</strong>`).join(', ') : '<em>future considerations</em>';
 
-  function renderTradeCard(trade){
-    const sideBlocks = trade.incomplete
-      ? `<div class="trade-details-unavailable"><strong>Trade accepted</strong><span>ESPN did not retain the player details for this deal in the imported archive.</span></div>`
-      : trade.teams.map(team => {
-      const side = trade.sides.get(team);
-      return `<div class="trade-side">
-        <span class="trade-team">${esc(team)}</span>
-        <div class="trade-gives"><small>Sends</small><p>${listNames(side.gives)}</p></div>
-        <div class="trade-receives"><small>Receives</small><p>${listNames(side.receives)}</p></div>
-      </div>`;
-      }).join(`<span class="trade-swap" aria-hidden="true">⇄</span>`);
-
-    return `<article class="panel trade-card">
-      <header class="trade-card-head">
-        <time datetime="${new Date(trade.dateMs).toISOString()}">${esc(formatDay(trade.dateMs))}</time>
-        <span>${esc(formatTime(trade.dateMs))}${trade.week ? ` · Week ${trade.week}` : ''}</span>
-      </header>
-      <div class="trade-card-body">${sideBlocks}</div>
-    </article>`;
+  function renderDetailStatus(trade){
+    if(trade.source_detail_status === 'verified') return '<span class="transaction-detail-status">Source-verified player movement</span>';
+    if(trade.source_detail_status === 'proposal_derived') return '<span class="transaction-detail-status">Player movement reconstructed from the recorded proposal</span>';
+    return '<div class="trade-details-unavailable"><strong>Trade accepted</strong><span>ESPN did not retain player details for this deal in the imported archive.</span></div>';
   }
 
-  function renderYear(year){
-    activeYear = year;
+  function renderTradeCard(trade){
+    const sideBlocks = trade.items.length
+      ? trade.teams.map(team => {
+          const side = trade.sides.get(team);
+          return `<div class="trade-side"><span class="trade-team">${esc(team)}</span><div class="trade-gives"><small>Sends</small><p>${listNames(side.gives)}</p></div><div class="trade-receives"><small>Receives</small><p>${listNames(side.receives)}</p></div></div>`;
+        }).join('<span class="trade-swap" aria-hidden="true">⇄</span>')
+      : '';
+    return `<article class="panel trade-card"><header class="trade-card-head"><time datetime="${trade.dateMs ? new Date(trade.dateMs).toISOString() : ''}">${esc(trade.dateMs ? formatDay(trade.dateMs) : 'Date unavailable')}</time><span>${esc(trade.dateMs ? formatTime(trade.dateMs) : 'Time unavailable')}${trade.scoring_period ? ` · Week ${esc(trade.scoring_period)}` : ''}</span></header><div class="trade-card-body">${sideBlocks}${renderDetailStatus(trade)}</div></article>`;
+  }
+
+  async function renderYear(year){
+    activeYear = Number(year);
     const nav = document.getElementById('tradeYearNav');
-    nav.querySelectorAll('button').forEach(btn => btn.classList.toggle('active', Number(btn.dataset.tradeYear) === Number(year)));
+    nav.querySelectorAll('button').forEach(btn => btn.classList.toggle('active', Number(btn.dataset.tradeYear) === activeYear));
     const meta = document.getElementById('tradeSeasonMeta');
     const feed = document.getElementById('tradeFeed');
-    const trades = tradesByYear.get(Number(year)) || [];
-    const playersMoved = new Set(trades.flatMap(t => [...t.teams.flatMap(team => t.sides.get(team).gives)])).size;
-    const incompleteTrades = trades.filter(trade => trade.incomplete).length;
-    meta.textContent = trades.length
-      ? `${trades.length} accepted deal${trades.length === 1 ? '' : 's'} · ${playersMoved} player${playersMoved === 1 ? '' : 's'} changed teams${incompleteTrades ? ` · ${incompleteTrades} source gap${incompleteTrades === 1 ? '' : 's'}` : ''}`
-      : '';
-    feed.innerHTML = trades.length
-      ? trades.map(renderTradeCard).join('')
-      : `<div class="panel transaction-empty"><strong>No accepted trades in ${esc(year)}.</strong><span>${Number(year) === currentSeasonYear ? 'Deals will appear here as they are accepted.' : 'A quiet deadline season, apparently.'}</span></div>`;
+    feed.innerHTML = '<div class="panel transaction-empty"><strong>Loading accepted trades…</strong><span>Reading the selected season only.</span></div>';
+    try{
+      const trades = await loadSeason(activeYear);
+      const playersMoved = new Set(trades.flatMap(trade => [...trade.sides.values()].flatMap(side => [...side.gives, ...side.receives]))).size;
+      const proposalDerived = trades.filter(trade => trade.source_detail_status === 'proposal_derived').length;
+      const missing = trades.filter(trade => trade.source_detail_status === 'missing').length;
+      meta.textContent = trades.length ? `${trades.length} accepted deal${trades.length === 1 ? '' : 's'} · ${playersMoved} player${playersMoved === 1 ? '' : 's'} changed teams${proposalDerived ? ` · ${proposalDerived} proposal-derived` : ''}${missing ? ` · ${missing} source gap${missing === 1 ? '' : 's'}` : ''}` : '';
+      feed.innerHTML = trades.length ? trades.map(renderTradeCard).join('') : `<div class="panel transaction-empty"><strong>No accepted trades in ${esc(activeYear)}.</strong><span>${activeYear === currentSeasonYear ? 'Deals will appear here as they are accepted.' : 'A quiet deadline season, apparently.'}</span></div>`;
+      setSync('is-live', 'Archive loaded');
+    }catch(error){
+      console.error('Unable to load selected trade season:', error);
+      setSync('is-error', 'Sync unavailable');
+      feed.innerHTML = `<div class="panel transaction-empty transaction-error"><strong>Trade history could not load.</strong><span>${esc(error.message || 'Please try again shortly.')}</span></div>`;
+    }
   }
 
   function renderNav(){
     const nav = document.getElementById('tradeYearNav');
-    const years = [...tradesByYear.keys()].sort((a,b) => b-a);
+    const years = seasons.map(entry => Number(entry.season_year)).sort((a,b) => b-a);
     if(currentSeasonYear && !years.includes(currentSeasonYear)) years.unshift(currentSeasonYear);
     nav.innerHTML = years.map(year => {
+      const entry = seasons.find(candidate => Number(candidate.season_year) === Number(year));
       const label = year === currentSeasonYear ? `${year} · Current` : String(year);
-      const count = (tradesByYear.get(year) || []).length;
+      const count = Number(entry?.accepted_trade_count || 0);
       return `<button type="button" data-trade-year="${year}" class="${Number(activeYear) === Number(year) ? 'active' : ''}">${esc(label)}${count ? ` <i>${count}</i>` : ''}</button>`;
     }).join('');
-  }
-
-  function render(){
-    renderNav();
-    renderYear(activeYear !== null ? activeYear : ([...tradesByYear.keys()].sort((a,b) => b-a)[0] || currentSeasonYear));
   }
 
   async function loadArchive(){
@@ -126,13 +127,13 @@
         }
         supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
         if(!supabase) throw new Error('The league database connection is unavailable.');
-        const [transactions, items] = await Promise.all([
-          fetchAll('league_transactions', 'id,season_year,espn_transaction_id,related_transaction_id,scoring_period,transaction_type,status,team_name,transaction_date_ms,transaction_date', {column:'transaction_type', values:['TRADE_ACCEPT']}),
-          fetchAll('league_transaction_archive_items', 'id,season_year,espn_transaction_id,item_index,item_type,player_id,player_name,from_team_id,from_team_name,to_team_id,to_team_name', {column:'item_type', values:['TRADE']})
-        ]);
-        buildArchive(transactions, items);
-        setSync('is-live', 'Archive loaded');
-        render();
+        const {data, error} = await supabase.rpc('get_transaction_archive_seasons');
+        if(error) throw error;
+        seasons = Array.isArray(data) ? data : [];
+        renderNav();
+        const firstYear = activeYear ?? seasons.map(entry => Number(entry.season_year)).sort((a,b) => b-a)[0] ?? currentSeasonYear;
+        if(firstYear) await renderYear(firstYear);
+        else document.getElementById('tradeFeed').innerHTML = '<div class="panel transaction-empty"><strong>No trade archive is available yet.</strong><span>Accepted deals will appear here after they are imported.</span></div>';
       }catch(error){
         console.error('Unable to load trade archive:', error);
         loadPromise = null;

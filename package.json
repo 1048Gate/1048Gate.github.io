@@ -4,6 +4,7 @@
   "scripts": {
     "test": "npm run check && npm run build",
     "check": "node scripts/check-site.mjs",
+    "test:release": "node scripts/test-supabase-release.mjs",
     "build": "node scripts/build-site.mjs",
     "futures": "node scripts/build-futures.mjs",
     "optimize:image": "node scripts/optimize-image.mjs"

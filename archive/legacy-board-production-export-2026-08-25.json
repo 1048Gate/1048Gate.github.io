@@ -1,0 +1,111 @@
+{
+  "exported_at": "2026-08-25T01:52:18.796278+00:00",
+  "source": "production Supabase public.board_posts and public.board_comments",
+  "board_posts": [
+    {
+      "id": "10480000-0000-4000-8000-000000000204",
+      "body": "I have seen enough. Put me first, put everybody else in any order you want, and save us all some time.",
+      "title": "Preseason power rankings are already disrespectful",
+      "author": "Tommy",
+      "category": "Trash Talk",
+      "created_at": "2026-08-08T22:58:42.364479+00:00",
+      "is_starter": true
+    },
+    {
+      "id": "10480000-0000-4000-8000-000000000203",
+      "body": "Inverse standings is simple, but FAAB makes every waiver claim a decision. I want to hear the case against switching.",
+      "title": "We need a real FAAB debate before draft night",
+      "author": "Kyle",
+      "category": "Waiver Wire",
+      "created_at": "2026-08-09T22:58:42.364479+00:00",
+      "is_starter": true
+    },
+    {
+      "id": "10480000-0000-4000-8000-000000000202",
+      "body": "Open to moving my second-round pick for the right keeper upgrade. Send an actual offer—not a screenshot of your bench.",
+      "title": "Putting an early pick on the trade block",
+      "author": "Jared",
+      "category": "Trade Talk",
+      "created_at": "2026-08-10T21:58:42.364479+00:00",
+      "is_starter": true
+    },
+    {
+      "id": "10480000-0000-4000-8000-000000000201",
+      "body": "Drop your best weekend below so we can narrow down the draft date before the official vote goes live.",
+      "title": "Szn 10 roll call — what weekend works best?",
+      "author": "George",
+      "category": "General",
+      "created_at": "2026-08-10T22:40:42.364479+00:00",
+      "is_starter": true
+    },
+    {
+      "id": "32042d9f-04c0-4d44-8f79-23de954482d4",
+      "body": "Any Ideas?",
+      "title": "Creative Ways to Determine Draft Order",
+      "author": "George",
+      "category": "General",
+      "created_at": "2026-08-11T00:35:20.372101+00:00",
+      "is_starter": false
+    },
+    {
+      "id": "0151f38f-edf3-4320-83bf-6ef51986bd16",
+      "body": "Monday August 31st?",
+      "title": "Draft Date",
+      "author": "George",
+      "category": "General",
+      "created_at": "2026-08-15T03:05:00.535999+00:00",
+      "is_starter": false
+    }
+  ],
+  "board_comments": [
+    {
+      "id": "10480000-0000-4000-8000-000000000307",
+      "body": "Power rankings have been delayed while we search for evidence supporting this claim.",
+      "author": "George",
+      "post_id": "10480000-0000-4000-8000-000000000204",
+      "created_at": "2026-08-08T23:58:42.364479+00:00"
+    },
+    {
+      "id": "10480000-0000-4000-8000-000000000305",
+      "body": "FAAB is better until I spend 70% on a Week 2 running back who disappears by Sunday.",
+      "author": "Brian",
+      "post_id": "10480000-0000-4000-8000-000000000203",
+      "created_at": "2026-08-09T23:58:42.364479+00:00"
+    },
+    {
+      "id": "10480000-0000-4000-8000-000000000306",
+      "body": "That is not a flaw in FAAB. That is a scouting report on you.",
+      "author": "Trevor",
+      "post_id": "10480000-0000-4000-8000-000000000203",
+      "created_at": "2026-08-10T00:58:42.364479+00:00"
+    },
+    {
+      "id": "10480000-0000-4000-8000-000000000303",
+      "body": "Define “actual offer” because your counteroffers usually require legal review.",
+      "author": "JD",
+      "post_id": "10480000-0000-4000-8000-000000000202",
+      "created_at": "2026-08-10T22:12:42.364479+00:00"
+    },
+    {
+      "id": "10480000-0000-4000-8000-000000000304",
+      "body": "That sounds like somebody who cannot afford the pick.",
+      "author": "Jared",
+      "post_id": "10480000-0000-4000-8000-000000000202",
+      "created_at": "2026-08-10T22:19:42.364479+00:00"
+    },
+    {
+      "id": "10480000-0000-4000-8000-000000000301",
+      "body": "Saturday night works best for me. I can make Sunday work if we draft a little earlier.",
+      "author": "German",
+      "post_id": "10480000-0000-4000-8000-000000000201",
+      "created_at": "2026-08-10T22:47:42.364479+00:00"
+    },
+    {
+      "id": "10480000-0000-4000-8000-000000000302",
+      "body": "I am good either day as long as we lock it in soon.",
+      "author": "Bryan",
+      "post_id": "10480000-0000-4000-8000-000000000201",
+      "created_at": "2026-08-10T22:52:42.364479+00:00"
+    }
+  ]
+}
