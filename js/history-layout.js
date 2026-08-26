@@ -5,18 +5,41 @@
   const title=history.querySelector('.section-title'),timeline=history.querySelector('.timeline'),recordGrid=history.querySelector('.record-grid'),shame=history.querySelector('.shame');
   if(!timeline||!recordGrid||!shame)return;
   const championsPanel=timeline.closest('.panel')||timeline.parentElement,recordsPanel=recordGrid.closest('.panel')||recordGrid.parentElement,shamePanel=shame.closest('.panel')||shame.parentElement;
-  const shell=document.createElement('div');shell.className='history-shell';shell.innerHTML=`<div class="history-intro"><div><span class="history-eyebrow">1048 ARCHIVES</span><h3>Season-by-Season League Lore</h3><p>Every season gets a full rundown—standings, playoff results, draft recap, and stat leaders—together with champions, rivalries, records, and the moments nobody is allowed to forget.</p></div></div><div class="history-subnav" role="tablist" aria-label="League history sections"><button class="active" type="button" data-history-tab="seasons">Seasons</button><button type="button" data-history-tab="champions">Champions</button><button type="button" data-history-tab="matchups">Matchups</button><button type="button" data-history-tab="records">Record Book</button><button type="button" data-history-tab="shame">Wall of Shame</button></div><div class="history-tab-panels"><section class="history-tab-panel active" data-history-panel="seasons"></section><section class="history-tab-panel" data-history-panel="champions"></section><section class="history-tab-panel" data-history-panel="matchups"></section><section class="history-tab-panel" data-history-panel="records"></section><section class="history-tab-panel" data-history-panel="shame"></section></div>`;
+  const shell=document.createElement('div');shell.className='history-shell';shell.innerHTML=`<div class="history-intro archive-explorer-intro"><div><span class="history-eyebrow">1048 ARCHIVES</span><h3>Choose your way into the league story.</h3><p>Start with a season, a rivalry, a title run, or the league wire. The detailed tables are still here—now they are one deliberate step away instead of the first thing you have to decode.</p></div><div class="archive-intro-note"><span>START HERE</span><strong>One question at a time.</strong><small>Follow a season · compare managers · revisit milestones</small></div></div><div class="history-subnav" role="tablist" aria-label="League history sections"><button class="active" type="button" data-history-tab="overview" role="tab" aria-selected="true">Overview</button><button type="button" data-history-tab="seasons" role="tab" aria-selected="false">Season Vault</button><button type="button" data-history-tab="champions" role="tab" aria-selected="false">Champions</button><button type="button" data-history-tab="matchups" role="tab" aria-selected="false">Rivalries</button><button type="button" data-history-tab="records" role="tab" aria-selected="false">Record Book</button><button type="button" data-history-tab="shame" role="tab" aria-selected="false">Hall of Shame</button></div><div class="history-tab-panels"><section class="history-tab-panel active" data-history-panel="overview"></section><section class="history-tab-panel" data-history-panel="seasons"></section><section class="history-tab-panel" data-history-panel="champions"></section><section class="history-tab-panel" data-history-panel="matchups"></section><section class="history-tab-panel" data-history-panel="records"></section><section class="history-tab-panel" data-history-panel="shame"></section></div>`;
   if(title)title.insertAdjacentElement('afterend',shell);else history.prepend(shell);
-  const champHost=shell.querySelector('[data-history-panel="champions"]'),seasonHost=shell.querySelector('[data-history-panel="seasons"]'),matchupHost=shell.querySelector('[data-history-panel="matchups"]'),recordHost=shell.querySelector('[data-history-panel="records"]'),shameHost=shell.querySelector('[data-history-panel="shame"]');
+  const overviewHost=shell.querySelector('[data-history-panel="overview"]'),champHost=shell.querySelector('[data-history-panel="champions"]'),seasonHost=shell.querySelector('[data-history-panel="seasons"]'),matchupHost=shell.querySelector('[data-history-panel="matchups"]'),recordHost=shell.querySelector('[data-history-panel="records"]'),shameHost=shell.querySelector('[data-history-panel="shame"]');
   championsPanel.classList.add('history-content-panel');recordsPanel.classList.add('history-content-panel');shamePanel.classList.add('history-content-panel');champHost.appendChild(championsPanel);recordHost.appendChild(recordsPanel);shameHost.appendChild(shamePanel);
   const cleanHeading=(panel,label,sub)=>{const old=panel.querySelector(':scope > h3');if(old)old.remove();const head=document.createElement('div');head.className='history-section-head';head.innerHTML=`<div><span>${label}</span><h3>${sub}</h3></div>`;panel.prepend(head)};
   cleanHeading(championsPanel,'CHAMPIONSHIP ARCHIVE','Champions Through the Years');cleanHeading(recordsPanel,'LEAGUE RECORD BOOK','Records & Milestones');cleanHeading(shamePanel,'HALL OF MISFORTUNE','Wall of Shame');
-  function activate(name){shell.querySelectorAll('[data-history-tab]').forEach(b=>b.classList.toggle('active',b.dataset.historyTab===name));shell.querySelectorAll('[data-history-panel]').forEach(p=>p.classList.toggle('active',p.dataset.historyPanel===name))}
+  function activate(name){shell.querySelectorAll('[data-history-tab]').forEach(b=>{const active=b.dataset.historyTab===name;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))});shell.querySelectorAll('[data-history-panel]').forEach(p=>p.classList.toggle('active',p.dataset.historyPanel===name))}
   shell.querySelectorAll('[data-history-tab]').forEach(btn=>btn.addEventListener('click',()=>activate(btn.dataset.historyTab)));
   const {escapeHtml:esc,formatNumber}=window.gateShared;
   const num=value=>formatNumber(value,1,2);
   const clean=value=>String(value??'').trim().replace(/\s+/g,' ');
   const recordText=a=>a&&a[2]?`${a[0]}-${a[1]}-${a[2]}`:a?`${a[0]}-${a[1]}`:'—';
+  async function loadArchiveOverview(){
+    overviewHost.innerHTML='<div class="panel history-content-panel archive-overview-panel"><div class="history-loading">Building the archive map…</div></div>';
+    try{
+      const response=await fetch('data/seasons.json',{cache:'no-store'});
+      if(!response.ok)throw new Error(`seasons.json returned HTTP ${response.status}`);
+      const seasons=((await response.json()).seasons||[]).filter(s=>Array.isArray(s)&&s.length>=5).sort((a,b)=>b[0]-a[0]);
+      if(!seasons.length)throw new Error('No archived seasons found');
+      const titleCounts={};seasons.forEach(s=>{const owner=clean(s[2]);if(owner)titleCounts[owner]=(titleCounts[owner]||0)+1});
+      const titleLeader=Object.entries(titleCounts).sort((a,b)=>b[1]-a[1])[0]||['—',0];
+      const latest=seasons[0],latestYear=latest[0];
+      const cards=seasons.slice(0,5).map((season,index)=>{const [year,leagueName,championOwner,championTeam,standings]=season;const runnerUp=(standings||[]).find(row=>Number(row[0])===2);return `<button type="button" class="archive-season-card ${index===0?'is-latest':''}" data-archive-season="${year}"><span>${index===0?'LATEST ARCHIVE':'SEASON'}</span><strong>${year}</strong><b>${esc(championOwner)}</b><small>${esc(championTeam)}${runnerUp?` · def. ${esc(String(runnerUp[3]||''))}`:''}</small></button>`}).join('');
+      overviewHost.innerHTML=`<div class="panel history-content-panel archive-overview-panel"><div class="archive-overview-head"><div><span>ARCHIVE EXPLORER</span><h3>What do you want to understand?</h3><p>Pick a path first. The site will take you to the right level of detail instead of dropping you into every stat at once.</p></div><div class="archive-overview-metric"><span>COMPLETE SEASONS</span><strong>${seasons.length}</strong><small>Most titles: ${esc(titleLeader[0])} · ${titleLeader[1]}</small></div></div><div class="archive-path-grid"><button type="button" class="archive-path-card primary" data-archive-season="${latestYear}"><span>01 · START WITH A SEASON</span><strong>${latestYear} Season Rundown</strong><small>Champion, final standings, playoffs, draft, and leaders in one guided page.</small></button><button type="button" class="archive-path-card" data-archive-tab="champions"><span>02 · FOLLOW THE TITLES</span><strong>Championship Lineage</strong><small>See who won, how often, and which title runs defined the league.</small></button><button type="button" class="archive-path-card" data-archive-tab="matchups"><span>03 · SETTLE A RIVALRY</span><strong>Head-to-Head Explorer</strong><small>Compare any two managers without scanning a full matrix first.</small></button><button type="button" class="archive-path-card" data-archive-view="transactions"><span>04 · CHECK THE LEAGUE WIRE</span><strong>Moves &amp; Waivers</strong><small>Search verified adds, drops, and successful waiver claims.</small></button></div><div class="archive-timeline-head"><div><span>SEASON TIMELINE</span><h4>Pick a recent chapter</h4></div><small>Every card opens the focused season vault.</small></div><div class="archive-season-strip">${cards}</div></div>`;
+      overviewHost.addEventListener('click',event=>{
+        const seasonButton=event.target.closest('[data-archive-season]');
+        if(seasonButton){activate('seasons');setTimeout(()=>shell.querySelector(`[data-season-year="${seasonButton.dataset.archiveSeason}"]`)?.click(),0);return}
+        const tabButton=event.target.closest('[data-archive-tab]');
+        if(tabButton){activate(tabButton.dataset.archiveTab);return}
+        const viewButton=event.target.closest('[data-archive-view]');
+        if(viewButton)document.querySelector(`[data-view="${viewButton.dataset.archiveView}"]`)?.click();
+      });
+    }catch(error){console.error('Unable to build archive overview:',error);overviewHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Archive overview could not be loaded.</div></div>'}
+  }
+
   function applyRundownStory(block,note){
     block.style.display='';
     if(!block.querySelector('p'))block.insertAdjacentHTML('beforeend',`<p>${esc(note)}</p>`);
@@ -245,7 +268,7 @@
     }
   }
 
-  loadSeasonArchive();loadMatchups();loadTrophyRoom();
+  loadArchiveOverview();loadSeasonArchive();loadMatchups();loadTrophyRoom();
   let shameAttempts=0;
   function placeShameTimeline(){
     const shameTimeline=document.getElementById('shameTimeline');

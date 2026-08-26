@@ -162,6 +162,13 @@ if(!appSource.includes("from('league_members')") || !appSource.includes("fetch('
 if(!appSource.includes('trapFocus(event') || !appSource.includes('memberReturnFocus')){
   throw new Error('The member modal must trap focus and restore it when closed.');
 }
+if(!appSource.includes('const initialView = window.location.hash.slice(1)') || !appSource.includes("history.replaceState({view:'home'}, '', '#home')")){
+  throw new Error('The application must support direct view links and establish a default home route.');
+}
+const historyLayoutSource = readFileSync(new URL('js/history-layout.js', root), 'utf8');
+if(!historyLayoutSource.includes('ARCHIVE EXPLORER') || !historyLayoutSource.includes('data-history-tab="overview"') || !historyLayoutSource.includes('data-archive-season')){
+  throw new Error('League History must provide a guided Archive Explorer before its detailed archive tables.');
+}
 const managerProfilesSource = readFileSync(new URL('js/manager-profiles.js', root), 'utf8');
 if(!appSource.includes("'gate:member-profile-opened'") || !managerProfilesSource.includes("addEventListener('gate:member-profile-opened'")){
   throw new Error('The complete manager résumé must follow the shared member-profile-opened event.');
@@ -214,6 +221,9 @@ for(const type of ['FREEAGENT','WAIVER','TRADE_ACCEPT']){
 }
 if(html.includes('id="transactionType"') || !transactionSource.includes('data-transaction-category') || !transactionSource.includes('renderDayGroup') || !transactionSource.includes('transaction-ledger-row')){
   throw new Error('Transactions must use category navigation and the date-grouped activity ledger.');
+}
+if(!html.includes('class="transaction-guide"') || !html.includes('Completed trades') || !html.includes('Vetoed trades')){
+  throw new Error('Transaction archive must explain its verified-data scope and expose every supported category.');
 }
 const titleOddsSource = readFileSync(new URL('js/title-odds.js', root), 'utf8');
 if(!titleOddsSource.includes('Math.round(value * 100)') || titleOddsSource.includes('count / SIMULATIONS')){

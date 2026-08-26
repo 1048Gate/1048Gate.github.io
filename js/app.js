@@ -50,6 +50,7 @@ window.addEventListener('popstate', () => {
   switchView(name, {updateHash:false});
 });
 
+
 document.querySelectorAll('.filter-pills .pill').forEach(pill => pill.addEventListener('click', () => {
   document.querySelectorAll('.filter-pills .pill').forEach(item => item.classList.remove('active'));
   pill.classList.add('active');

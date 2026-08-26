@@ -38,3 +38,9 @@
 @media(max-width:620px){.transaction-summary{gap:7px;margin-bottom:10px}.transaction-workbench{padding:11px!important}.transaction-controls{grid-template-columns:1fr}}
 .transaction-no-items.is-pending{opacity:.55;animation:transactionPending 1.2s ease-in-out infinite}
 @keyframes transactionPending{50%{opacity:.25}}
+
+/* Transaction archive orientation */
+.transaction-guide{display:flex;align-items:center;gap:14px;margin-bottom:15px;padding:11px 13px;border:1px solid rgba(0,132,135,.3);border-radius:9px;background:rgba(0,132,135,.075)}
+.transaction-guide span{flex:0 0 auto;font:700 8px 'Space Mono',monospace;color:var(--amber);letter-spacing:.12em;text-transform:uppercase}
+.transaction-guide p{margin:0;color:var(--muted);font-size:11px;line-height:1.5}
+@media(max-width:620px){.transaction-guide{align-items:flex-start;flex-direction:column;gap:5px}.transaction-guide p{font-size:10px}}
