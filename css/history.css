@@ -88,3 +88,15 @@ tr.playoff-row td{background:rgba(0,132,135,.06)}
 .archive-season-card small{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-top:3px;color:var(--muted);font-size:9px}
 @media(max-width:980px){.archive-path-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.archive-season-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.archive-season-card:nth-child(n+4){display:none}}
 @media(max-width:620px){.archive-explorer-intro,.archive-overview-head,.archive-timeline-head{align-items:flex-start;flex-direction:column}.archive-intro-note{flex:auto}.archive-overview-panel{padding:16px!important}.archive-path-grid{grid-template-columns:1fr}.archive-path-card{min-height:120px}.archive-season-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.archive-overview-metric{text-align:left}.archive-timeline-head>small{text-align:left}}
+
+/* Responsive Archive Explorer polish: preserve context while bringing the first action closer. */
+@media(max-width:620px){
+  .archive-overview-head{display:grid;grid-template-columns:minmax(0,1fr) 84px;align-items:end;gap:12px;padding-bottom:14px}
+  .archive-overview-head h3{font-size:21px}
+  .archive-overview-head p{font-size:11px;line-height:1.5}
+  .archive-overview-metric{min-width:0;padding:4px 0 4px 11px;border-left:1px solid var(--line);text-align:left}
+  .archive-overview-metric strong{font-size:31px}
+  .archive-overview-metric small{font-size:8px;line-height:1.35;white-space:normal}
+  .archive-path-grid{margin:14px 0 20px}
+  .archive-path-card{min-height:108px;padding:15px 16px}
+}

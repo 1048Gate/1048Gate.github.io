@@ -135,3 +135,16 @@ footer{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap
 .draft-countdown{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 30px;align-items:center;margin:0 0 26px;padding:20px 22px;border:1px solid rgba(195,160,108,.38);border-radius:14px;background:linear-gradient(115deg,rgba(195,160,108,.13),rgba(16,31,32,.96) 38%,rgba(57,169,170,.1));box-shadow:var(--shadow-sm)}
 .draft-countdown-copy{min-width:0}.draft-countdown-kicker{display:block;margin-bottom:4px;color:var(--amber);font:700 8px 'Space Mono',monospace;letter-spacing:.14em;text-transform:uppercase}.draft-countdown h2{font-size:22px;letter-spacing:.01em}.draft-countdown-copy p{margin:4px 0 0;color:var(--muted);font:10px 'Space Mono',monospace;letter-spacing:.04em;text-transform:uppercase}.draft-countdown-clock{display:grid;grid-template-columns:repeat(3,minmax(66px,1fr));gap:8px}.draft-countdown-clock>div{min-width:66px;padding:9px 10px 8px;border:1px solid var(--line);border-radius:9px;background:rgba(7,16,17,.58);text-align:center}.draft-countdown-clock strong{display:block;color:var(--cream);font:400 30px/.95 Anton,sans-serif;letter-spacing:.02em}.draft-countdown-clock span{display:block;margin-top:4px;color:var(--muted);font:700 7px 'Space Mono',monospace;letter-spacing:.1em;text-transform:uppercase}.draft-countdown-status{grid-column:1/-1;margin:-7px 0 0;color:#9fd7d5;font:8px 'Space Mono',monospace;letter-spacing:.06em;text-transform:uppercase}.draft-countdown[data-countdown-state="live"]{border-color:rgba(57,169,170,.6);background:linear-gradient(115deg,rgba(57,169,170,.18),rgba(16,31,32,.98))}.draft-countdown[data-countdown-state="live"] .draft-countdown-clock strong{color:#9fd7d5}
 @media(max-width:620px){.draft-countdown{grid-template-columns:1fr;gap:16px;margin-bottom:20px;padding:18px}.draft-countdown h2{font-size:20px}.draft-countdown-clock{width:100%;grid-template-columns:repeat(3,minmax(0,1fr))}.draft-countdown-clock>div{min-width:0}.draft-countdown-clock strong{font-size:28px}.draft-countdown-status{grid-column:auto;margin:-5px 0 0;font-size:7px}}
+
+/* Mobile navigation polish: clipped tabs are intentional, touch-scrollable continuations. */
+@media(max-width:620px){
+  .tabs{position:relative;overflow-x:auto;overscroll-behavior-x:contain;scroll-padding-inline:13px;-webkit-overflow-scrolling:touch}
+  .tabs:after{content:"";position:sticky;right:0;flex:0 0 24px;align-self:stretch;pointer-events:none;background:linear-gradient(90deg,transparent,var(--bg) 82%)}
+  nav.tabs button{min-height:42px}
+}
+@supports(padding:max(0px)){
+  @media(max-width:620px){
+    .topbar-inner{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+    .tabs{padding-left:max(13px,env(safe-area-inset-left));padding-right:max(13px,env(safe-area-inset-right))}
+  }
+}
