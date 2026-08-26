@@ -179,14 +179,16 @@
   </section>
 
   <section class="view" id="transactions">
-    <div class="section-title"><span class="section-kicker">The league wire</span><h2>Transaction Archive</h2><span class="see-all"><span data-archive-years>2019–2025</span> ESPN history</span></div>
+    <div class="section-title"><span class="section-kicker">The league wire</span><h2>Transaction Archive</h2><span class="see-all"><span data-archive-years>2019–2025</span> verified league moves</span></div>
     <div class="transaction-summary" id="transactionSummary" aria-label="Choose a transaction category">
-      <button class="transaction-summary-card is-loading" type="button" disabled><span>All activity</span><strong>—</strong><small>Loading archive</small></button>
-      <button class="transaction-summary-card is-loading" type="button" disabled><span>Adds &amp; drops</span><strong>—</strong><small>Loading archive</small></button>
-      <button class="transaction-summary-card is-loading" type="button" disabled><span>Successful waivers</span><strong>—</strong><small>Loading archive</small></button>
-      <button class="transaction-summary-card is-loading" type="button" disabled><span>Accepted trades</span><strong>—</strong><small>Loading archive</small></button>
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>All activity</span><strong>—</strong><small>Completed, verified moves</small></button>
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>Adds &amp; drops</span><strong>—</strong><small>Free-agent roster moves</small></button>
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>Won waivers</span><strong>—</strong><small>Successful claims only</small></button>
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>Completed trades</span><strong>—</strong><small>Only complete player detail</small></button>
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>Vetoed trades</span><strong>—</strong><small>Only complete player detail</small></button>
     </div>
     <div class="panel transaction-workbench">
+      <div class="transaction-guide"><span>READ THE WIRE</span><p>Start with a move type, then narrow by season, player, or team. The public archive contains completed, source-supported activity only—failed claims, pending moves, and incomplete trades stay out of the feed.</p></div>
       <div class="transaction-controls">
         <label class="transaction-search"><span>Search player or team</span><input id="transactionSearch" type="search" placeholder="Try The Swifties or a player name" autocomplete="off"></label>
         <label><span>Season</span><select id="transactionSeason"><option value="all">All seasons</option></select></label>
