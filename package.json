@@ -5,6 +5,7 @@
     "test": "npm run check && npm run build",
     "check": "node scripts/check-site.mjs && npm run test:playoffs",
     "test:playoffs": "node scripts/test-playoff-export.mjs",
+    "probe:live": "node scripts/probe-live-playoffs.mjs",
     "test:release": "node scripts/test-supabase-release.mjs",
     "build": "node scripts/build-site.mjs",
     "futures": "node scripts/build-futures.mjs",
