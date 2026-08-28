@@ -1,0 +1,73 @@
+name: Data health and current-season fetch
+
+on:
+  schedule:
+    # Daily at 08:15 UTC.
+    - cron: '15 8 * * *'
+  workflow_dispatch:
+    inputs:
+      season:
+        description: ESPN season year
+        required: true
+        default: '2026'
+      week:
+        description: ESPN matchup/scoring period for the scoreboard fetch
+        required: true
+        default: '1'
+
+permissions:
+  contents: read
+
+jobs:
+  live-probe:
+    name: Probe deployed playoff artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Run live playoff probe
+        run: npm run probe:live
+
+  fetch-current-season:
+    name: Fetch current standings and scoreboard
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Fetch standings
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+        run: |
+          mkdir -p artifacts
+          python3 scripts/fetch_current.py standings \
+            --season "${{ inputs.season }}" \
+            --output "artifacts/standings-${{ inputs.season }}.json"
+      - name: Fetch scoreboard
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+        run: |
+          python3 scripts/fetch_current.py scoreboard \
+            --season "${{ inputs.season }}" \
+            --week "${{ inputs.week }}" \
+            --output "artifacts/scoreboard-${{ inputs.season }}-week${{ inputs.week }}.json"
+      - name: Upload normalized current-season artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: current-season-${{ inputs.season }}-week-${{ inputs.week }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 14
