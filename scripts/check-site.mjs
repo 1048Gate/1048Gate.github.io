@@ -227,6 +227,12 @@ const authSource = readFileSync(new URL('js/auth.js', root), 'utf8');
 if(!authSource.includes('trapFocus(event') || !authSource.includes("setAttribute('aria-hidden'")){
   throw new Error('The staff login modal must manage focus and aria-hidden.');
 }
+if(!authSource.includes('resetPasswordForEmail') || !authSource.includes("event === 'PASSWORD_RECOVERY'") || !authSource.includes('auth.updateUser({password})')){
+  throw new Error('Staff authentication must support password recovery and secure password updates.');
+}
+if(!authSource.includes("password.length < 12") || !authSource.includes('If that account exists')){
+  throw new Error('Password recovery must enforce the client minimum and avoid account enumeration.');
+}
 const adminSource = readFileSync(new URL('js/admin.js', root), 'utf8');
 if(!adminSource.includes('league-announcement') || !adminSource.includes('memberPresentation.initialsFor')){
   throw new Error('Commissioner updates must use the clean initials-based league-office cards.');

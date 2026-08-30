@@ -1,0 +1,25 @@
+.auth-help-row {
+  display: flex;
+  justify-content: flex-end;
+  margin: -8px 0 16px;
+}
+
+.auth-help-link {
+  border: 0;
+  background: transparent;
+  color: var(--amber);
+  cursor: pointer;
+  font: 11px 'Space Mono', monospace;
+  padding: 4px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.auth-help-link:hover,
+.auth-help-link:focus-visible {
+  color: var(--cream);
+}
+
+.auth-status {
+  line-height: 1.45;
+}
