@@ -133,5 +133,12 @@
       "number": "03",
       "name": "Kyle Fowler"
     }
-  ]
+  ],
+  "draftNight": {
+    "startsAt": "2026-09-01T00:00:00Z",
+    "currentPick": 1,
+    "note": "Be in the ESPN lobby at 8:00 ET. Keepers are locked. Hash is up first — don't be late.",
+    "where": "ESPN draft room",
+    "status": "upcoming"
+  }
 }

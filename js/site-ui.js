@@ -32,6 +32,8 @@
     renderDraftOrder(config);
     renderFutures(config);
     renderLiveStats();
+    window.gateSiteConfig = config;
+    document.dispatchEvent(new CustomEvent('gate:site-ready', {detail:config}));
   }catch(error){
     console.warn('Unable to load site season settings; keeping the HTML fallback labels.', error);
   }
@@ -90,13 +92,17 @@ function renderDraftOrder(config){
   const shared = window.gateShared || {};
   const escapeHtml = shared.escapeHtml || (value => String(value ?? ''));
   const initialsFor = shared.memberPresentation?.initialsFor || (() => '—');
+  const currentPick = Number(config.draftNight?.currentPick) || 1;
   target.innerHTML = order.map(entry => {
     const pick = Number(entry.pick);
     const name = String(entry.name ?? '');
-    return `<div class="draft-pick-card${pick === 1 ? ' is-first' : ''}">
+    const onClock = pick === currentPick;
+    return `<div class="draft-pick-card${onClock ? ' is-on-clock' : ''}${pick === 1 ? ' is-first' : ''}" data-draft-pick="${escapeHtml(pick || '')}">
       <span class="draft-pick-num" aria-hidden="true">${escapeHtml(pick || '')}</span>
       <span class="member-avatar draft-pick-avatar"><span class="member-initials">${escapeHtml(initialsFor(name))}</span></span>
-      <div class="draft-pick-meta"><strong>${escapeHtml(name)}</strong><span>Pick ${escapeHtml(pick || '')}${pick === 1 ? ' · On the clock' : ''}</span></div>
+      <div class="draft-pick-meta"><strong>${escapeHtml(name)}</strong><span>Pick ${escapeHtml(pick || '')}${onClock ? ' · On the clock' : ''}</span></div>
+      ${onClock ? '<span class="draft-clock-badge">On the clock</span>' : ''}
     </div>`;
   }).join('');
+  window.gateDraftNight?.paintBoard?.();
 }

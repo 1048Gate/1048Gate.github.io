@@ -5,9 +5,14 @@
   const missingStarterColumn=error=>error?.code==='42703'||String(error?.message||'').includes('is_starter');
 
   const tabs=document.getElementById('tabs');
-  const staffTab=document.createElement('button');staffTab.dataset.view='staff';staffTab.className='staff-nav';staffTab.textContent='Staff';tabs?.appendChild(staffTab);
+  let staffTab=tabs?.querySelector('[data-view="staff"]');
+  if(!staffTab){
+    staffTab=document.createElement('button');staffTab.dataset.view='staff';staffTab.className='staff-nav';staffTab.textContent='Staff';tabs?.appendChild(staffTab);
+  }
   const main=document.querySelector('main');
-  const staffView=document.createElement('section');staffView.className='view';staffView.id='staff';staffView.innerHTML='<div class="section-title"><h2>Staff Tools</h2><span class="see-all" id="staffRoleLabel"></span></div><div id="staffContent"></div>';main?.appendChild(staffView);
+  if(!document.getElementById('staff')){
+    const staffView=document.createElement('section');staffView.className='view';staffView.id='staff';staffView.innerHTML='<div class="section-title"><h2>Staff Tools</h2><span class="see-all" id="staffRoleLabel"></span></div><div id="staffContent"></div>';main?.appendChild(staffView);
+  }
   staffTab.addEventListener('click',()=>window.switchView?.('staff'));
 
   async function loadAnnouncementsHome(){
@@ -119,7 +124,7 @@
 
   async function handleRoleChange(e){const select=e.target.closest('[data-role-user]');if(!select||currentProfile?.role!=='site_admin')return;select.disabled=true;const {error}=await supabase.from('profiles').update({role:select.value}).eq('id',select.dataset.roleUser);if(error)alert(error.message);select.disabled=false}
 
-  window.addEventListener('gate-auth-changed',e=>{currentProfile=e.detail.profile;const staff=currentProfile&&['site_admin','commissioner'].includes(currentProfile.role);staffTab.classList.toggle('visible',!!staff);if(!staff&&document.getElementById('staff')?.classList.contains('active'))window.switchView?.('home');if(staff)renderDashboard()});
+  window.addEventListener('gate-auth-changed',e=>{currentProfile=e.detail.profile;const staff=currentProfile&&['site_admin','commissioner'].includes(currentProfile.role);document.querySelectorAll('.staff-nav').forEach(el=>el.classList.toggle('visible',!!staff));if(!staff&&document.getElementById('staff')?.classList.contains('active'))window.switchView?.('home');if(staff)renderDashboard()});
   loadAnnouncementsHome();
   supabase.channel('1048-staff-live')
     .on('postgres_changes',{event:'*',schema:'public',table:'announcements'},()=>{loadAnnouncementsHome();if(currentProfile){loadAnnouncements();loadSummary()}})

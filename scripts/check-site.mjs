@@ -80,6 +80,9 @@ const siteConfig = JSON.parse(readFileSync(new URL('data/site.json', root), 'utf
 if(!Number.isInteger(siteConfig.seasonYear) || !Number.isInteger(siteConfig.seasonNumber) || !siteConfig.phase || !siteConfig.competition){
   throw new Error('data/site.json must define the current season year, number, phase, and competition.');
 }
+if(!siteConfig.draftNight?.startsAt || !Number.isInteger(siteConfig.draftNight.currentPick)){
+  throw new Error('data/site.json must define draftNight.startsAt and currentPick.');
+}
 if(!html.includes('data-site-phase') || !html.includes('data-site-season') || !scriptAssets.includes('js/site-ui.js')){
   throw new Error('The season display must be driven by data/site.json through site-ui.js.');
 }
@@ -97,6 +100,16 @@ if([...html.matchAll(/<button[^>]+class="accordion-head"[^>]+aria-expanded=/g)].
 }
 if(!html.includes('id="authControlMount"') || !html.includes('class="member-modal-card" role="dialog" aria-modal="true"')){
   throw new Error('Stable authentication and accessible member-modal markup is missing.');
+}
+if(!html.includes('viewport-fit=cover')) throw new Error('iOS viewport-fit=cover is missing from the document head.');
+if(!html.includes('rel="apple-touch-icon"') || !html.includes('images/apple-touch-icon.png')){
+  throw new Error('The 180x180 apple-touch-icon is missing from index.html.');
+}
+if(!html.includes('id="playoffs"') || !html.includes('id="staff"') || !html.includes('id="phoneDock"') || !html.includes('id="phoneMore"')){
+  throw new Error('Playoffs, Staff, and the phone dock must be present in index.html so hash routes resolve on first paint.');
+}
+if(!html.includes('data-draft-night') || !html.includes('data-countdown-seconds') || !scriptAssets.includes('js/draft-countdown.js')){
+  throw new Error('Draft-night countdown markup or script is missing.');
 }
 
 function webpDimensions(fileUrl){
@@ -138,6 +151,18 @@ function checkWebp(fileUrl, {maxBytes, maxDimension}){
 const mainLogo = new URL('images/1048-gate-logo.webp', root);
 checkWebp(mainLogo, {maxBytes: 100 * 1024, maxDimension: 512});
 
+const appleIcon = new URL('images/apple-touch-icon.png', root);
+if(!existsSync(appleIcon)) throw new Error('images/apple-touch-icon.png is missing.');
+const appleBytes = readFileSync(appleIcon);
+if(appleBytes.length < 24 || appleBytes.toString('ascii', 1, 4) !== 'PNG'){
+  throw new Error('apple-touch-icon must be a PNG.');
+}
+const appleWidth = appleBytes.readUInt32BE(16);
+const appleHeight = appleBytes.readUInt32BE(20);
+if(appleWidth !== 180 || appleHeight !== 180){
+  throw new Error(`apple-touch-icon is ${appleWidth}x${appleHeight}; required 180x180.`);
+}
+
 const jsDir = new URL('js/', root);
 let supabaseClientCreations = 0;
 for(const entry of readdirSync(jsDir, {withFileTypes:true})){
@@ -158,6 +183,9 @@ if(supabaseClientCreations !== 1) throw new Error(`Expected one shared Supabase 
 const appSource = readFileSync(new URL('js/app.js', root), 'utf8');
 if(!appSource.includes("from('league_members')") || !appSource.includes("fetch('data/members.json'")){
   throw new Error('app.js must use Supabase first and members.json as its fallback.');
+}
+if(!appSource.includes('closePhoneMore') || !appSource.includes('phoneDock') || !appSource.includes('data-more-toggle')){
+  throw new Error('Phone dock navigation handlers are missing from app.js.');
 }
 if(!appSource.includes('trapFocus(event') || !appSource.includes('memberReturnFocus')){
   throw new Error('The member modal must trap focus and restore it when closed.');
@@ -272,9 +300,13 @@ for(const entry of readdirSync(new URL('scripts/', root), {withFileTypes:true}))
 }
 
 const views = new Set([...html.matchAll(/<section[^>]+id="([^"]+)"/g)].map(match => match[1]));
-views.add('playoffs'); // Created synchronously by the explicit playoffs feature script.
 for(const [, view] of html.matchAll(/<button[^>]+data-view="([^"]+)"/g)){
   if(!views.has(view)) throw new Error(`Navigation target does not exist: ${view}`);
+}
+
+const buildSource = readFileSync(new URL('scripts/build-site.mjs', root), 'utf8');
+if(!buildSource.includes('apple-touch-icon.png')){
+  throw new Error('build-site.mjs must copy apple-touch-icon.png into dist.');
 }
 
 console.log(`Site checks passed: ${localAssets.length} ordered CSS/JS assets, ${normalizedMembers.length} normalized members, 1 optimized image, and ${views.size} public views.`);
