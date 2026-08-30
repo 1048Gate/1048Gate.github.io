@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="icon" type="image/webp" href="images/1048-gate-logo.webp">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="1048 Gate">
 <meta name="description" content="1048 Gate — the league's official fantasy football hub. Scores, standings, matchups, draft history, records, and Wall of Shame.">
 <meta name="theme-color" content="#070b0c">
 <meta property="og:type" content="website">
@@ -36,8 +41,8 @@
 <script defer src="js/site-ui.js"></script>
 <script defer src="js/supabase-config.js"></script>
 <script defer src="js/auth.js"></script>
-  <script defer src="js/app.js"></script>
-  <script defer src="js/draft-countdown.js"></script>
+<script defer src="js/app.js"></script>
+<script defer src="js/draft-countdown.js"></script>
 
 <script defer src="js/transactions.js"></script>
 <script defer src="js/trade-talk.js"></script>
@@ -114,18 +119,41 @@
       </aside>
     </div>
 
-    <section class="draft-countdown" aria-labelledby="draftCountdownHeading" data-draft-countdown>
-      <div class="draft-countdown-copy">
-        <span class="draft-countdown-kicker">Szn 10 keeper draft</span>
-        <h2 id="draftCountdownHeading">Draft night is almost here.</h2>
-        <p><time datetime="2026-09-01T00:00:00Z">August 31 · 8:00 PM ET</time></p>
-      </div>
-      <div class="draft-countdown-clock" aria-live="polite" aria-atomic="true">
-        <div><strong data-countdown-days>—</strong><span>Days</span></div>
-        <div><strong data-countdown-hours>—</strong><span>Hours</span></div>
-        <div><strong data-countdown-minutes>—</strong><span>Minutes</span></div>
-      </div>
-      <p class="draft-countdown-status" data-countdown-status>Setting the clock…</p>
+    <section class="draft-night" data-draft-night aria-label="Szn 10 keeper draft">
+      <section class="draft-countdown" aria-labelledby="draftCountdownHeading" data-draft-countdown data-draft-start="2026-09-01T00:00:00Z">
+        <div class="draft-countdown-copy">
+          <span class="draft-countdown-kicker">Szn 10 keeper draft</span>
+          <h2 id="draftCountdownHeading">Draft night is almost here.</h2>
+          <p><time datetime="2026-09-01T00:00:00Z">August 31 · 8:00 PM ET</time></p>
+        </div>
+        <div class="draft-countdown-clock" aria-live="polite" aria-atomic="true">
+          <div><strong data-countdown-days>—</strong><span>Days</span></div>
+          <div><strong data-countdown-hours>—</strong><span>Hours</span></div>
+          <div><strong data-countdown-minutes>—</strong><span>Minutes</span></div>
+          <div class="draft-countdown-seconds"><strong data-countdown-seconds>—</strong><span>Seconds</span></div>
+        </div>
+        <p class="draft-countdown-status" data-countdown-status>Setting the clock…</p>
+      </section>
+
+      <aside class="draft-night-note" data-draft-note>
+        <span class="draft-night-kicker">Commissioner note</span>
+        <p data-draft-note-body>Be in the ESPN lobby at 8:00 ET. Keepers are locked. Hash is up first — don’t be late.</p>
+        <small data-draft-note-where>ESPN draft room</small>
+      </aside>
+
+      <section class="home-section draft-order-section" aria-label="Current season draft order">
+        <header class="home-section-head"><div><span>The <span data-site-year>2026</span> keeper draft</span><h2>The Board</h2></div><small data-draft-board-meta>First round</small></header>
+        <div class="draft-order-grid" data-draft-order aria-live="polite">
+          <div class="draft-order-empty">Loading draft order…</div>
+        </div>
+        <div class="draft-board-controls" data-draft-controls hidden>
+          <p>Advance the board for everyone currently on the site.</p>
+          <div class="draft-board-control-row">
+            <button type="button" class="btn btn-ghost" data-draft-prev>Previous</button>
+            <button type="button" class="btn btn-primary" data-draft-next>Next pick</button>
+          </div>
+        </div>
+      </section>
     </section>
 
     <div class="home-dashboard">
@@ -145,13 +173,6 @@
         </div>
       </aside>
     </div>
-
-    <section class="home-section draft-order-section" aria-label="Current season draft order">
-      <header class="home-section-head"><div><span>The <span data-site-year>2026</span> keeper draft</span><h2>Draft Order</h2></div><small>First round</small></header>
-      <div class="draft-order-grid" data-draft-order aria-live="polite">
-        <div class="draft-order-empty">Loading draft order…</div>
-      </div>
-    </section>
 
     <section class="home-section banner-wall-section" aria-label="Championship banners">
       <header class="home-section-head"><div><span>Ring count since 2017</span><h2>Championship Banners</h2></div><small>One banner per title</small></header>
@@ -182,7 +203,7 @@
     <div class="section-title"><span class="section-kicker">The league wire</span><h2>Transaction Archive</h2><span class="see-all"><span data-archive-years>2019–2025</span> verified league moves</span></div>
     <div class="transaction-summary" id="transactionSummary" aria-label="Choose a transaction category">
       <button class="transaction-summary-card is-loading" type="button" disabled><span>All activity</span><strong>—</strong><small>Completed, verified moves</small></button>
-      <button class="transaction-summary-card is-loading" type="button" disabled><span>Adds &amp; drops</span><strong>—</strong><small>Free-agent roster moves</small></button>
+      <button class="transaction-summary-card is-loading" type="button" disabled><span>Adds & drops</span><strong>—</strong><small>Free-agent roster moves</small></button>
       <button class="transaction-summary-card is-loading" type="button" disabled><span>Won waivers</span><strong>—</strong><small>Successful claims only</small></button>
       <button class="transaction-summary-card is-loading" type="button" disabled><span>Completed trades</span><strong>—</strong><small>Only complete player detail</small></button>
       <button class="transaction-summary-card is-loading" type="button" disabled><span>Vetoed trades</span><strong>—</strong><small>Only complete player detail</small></button>
@@ -306,14 +327,28 @@
     <div class="panel"><h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:12px;">Wall of Shame</h3><div class="shame"><div class="txt"><strong>The Bad Decisions — Last Place, 2025</strong><span>Sentenced to this year's punishment. Details TBD by the committee.</span></div><div class="trophy">💩</div></div></div>
   </section>
 
+  <section class="view" id="playoffs">
+    <div class="section-title"><h2>Playoffs</h2><span class="see-all">Winners & consolation bracket history</span></div>
+    <div class="playoff-toolbar panel">
+      <div>
+        <label for="playoffYear">Season</label>
+        <select id="playoffYear"></select>
+      </div>
+      <div class="playoff-season-status" id="playoffSeasonStatus"></div>
+    </div>
+    <div id="playoffPublicContent">
+      <div class="panel community-empty">Playoff history is being loaded…</div>
+    </div>
+  </section>
+
   <section class="view" id="rules">
     <div class="section-title"><h2>Rules</h2></div>
     <div class="panel"><div class="accordion" id="accordion">
-      <div class="accordion-item open"><button type="button" class="accordion-head" aria-expanded="true"><h3><span class="idx">§1</span>Scoring Format</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>Full PPR scoring</strong> with 6-point passing touchdowns. Players earn 1 point per 10 rushing or receiving yards, 1 point per reception, and 1 point per 25 passing yards. Defensive scoring rewards sacks and takeaways, with additional bonuses and penalties based on points and total yards allowed.</div><div class="rule-group"><h4>Passing</h4><div class="rule-grid"><div class="rule-row"><span>Passing yards</span><span>0.04 / yd</span></div><div class="rule-row"><span>Passing touchdown</span><span>6 pts</span></div><div class="rule-row"><span>Interception thrown</span><span>-2 pts</span></div><div class="rule-row"><span>2-point passing conversion</span><span>2 pts</span></div></div></div><div class="rule-group"><h4>Rushing &amp; Receiving</h4><div class="rule-grid"><div class="rule-row"><span>Rushing yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Receiving yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Reception</span><span>1 pt</span></div><div class="rule-row"><span>Rushing or receiving TD</span><span>6 pts</span></div><div class="rule-row"><span>2-point rush or reception</span><span>2 pts</span></div><div class="rule-row"><span>Fumble lost</span><span>-2 pts</span></div></div></div><div class="rule-group"><h4>Kicking</h4><div class="rule-grid"><div class="rule-row"><span>Extra point made</span><span>1 pt</span></div><div class="rule-row"><span>Field goal missed</span><span>-1 pt</span></div><div class="rule-row"><span>Field goal: 0–39 yards</span><span>3 pts</span></div><div class="rule-row"><span>Field goal: 40–49 yards</span><span>4 pts</span></div><div class="rule-row"><span>Field goal: 50+ yards</span><span>5 pts</span></div></div></div></div></div></div>
-      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§2</span>Roster &amp; Lineup</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">1 QB · 2 RB · 2 WR · 1 TE · 1 FLEX · 1 DST · 1 K · 7 bench spots. Lineups lock at each game's individual kickoff, not Thursday for the whole week.</div></div></div>
-      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§3</span>Waivers &amp; Trades</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Waiver period</span><span>1 day</span></div><div class="rule-row"><span>Waiver order</span><span>Inverse standings</span></div><div class="rule-row"><span>Trade review period</span><span>2 days</span></div><div class="rule-row"><span>Votes required to veto</span><span>4 votes</span></div><div class="rule-row"><span>Trade deadline</span><span>TBA</span></div></div><div class="rule-note">Waiver priority resets each week to the inverse order of the standings.</div></div></div></div>
+      <div class="accordion-item open"><button type="button" class="accordion-head" aria-expanded="true"><h3><span class="idx">§1</span>Scoring Format</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>Full PPR scoring</strong> with 6-point passing touchdowns. Players earn 1 point per 10 rushing or receiving yards, 1 point per reception, and 1 point per 25 passing yards. Defensive scoring rewards sacks and takeaways, with additional bonuses and penalties based on points and total yards allowed.</div><div class="rule-group"><h4>Passing</h4><div class="rule-grid"><div class="rule-row"><span>Passing yards</span><span>0.04 / yd</span></div><div class="rule-row"><span>Passing touchdown</span><span>6 pts</span></div><div class="rule-row"><span>Interception thrown</span><span>-2 pts</span></div><div class="rule-row"><span>2-point passing conversion</span><span>2 pts</span></div></div></div><div class="rule-group"><h4>Rushing & Receiving</h4><div class="rule-grid"><div class="rule-row"><span>Rushing yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Receiving yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Reception</span><span>1 pt</span></div><div class="rule-row"><span>Rushing or receiving TD</span><span>6 pts</span></div><div class="rule-row"><span>2-point rush or reception</span><span>2 pts</span></div><div class="rule-row"><span>Fumble lost</span><span>-2 pts</span></div></div></div><div class="rule-group"><h4>Kicking</h4><div class="rule-grid"><div class="rule-row"><span>Extra point made</span><span>1 pt</span></div><div class="rule-row"><span>Field goal missed</span><span>-1 pt</span></div><div class="rule-row"><span>Field goal: 0–39 yards</span><span>3 pts</span></div><div class="rule-row"><span>Field goal: 40–49 yards</span><span>4 pts</span></div><div class="rule-row"><span>Field goal: 50+ yards</span><span>5 pts</span></div></div></div></div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§2</span>Roster & Lineup</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">1 QB · 2 RB · 2 WR · 1 TE · 1 FLEX · 1 DST · 1 K · 7 bench spots. Lineups lock at each game's individual kickoff, not Thursday for the whole week.</div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§3</span>Waivers & Trades</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Waiver period</span><span>1 day</span></div><div class="rule-row"><span>Waiver order</span><span>Inverse standings</span></div><div class="rule-row"><span>Trade review period</span><span>2 days</span></div><div class="rule-row"><span>Votes required to veto</span><span>4 votes</span></div><div class="rule-row"><span>Trade deadline</span><span>TBA</span></div></div><div class="rule-note">Waiver priority resets each week to the inverse order of the standings.</div></div></div></div>
       <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§4</span>Playoffs</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Playoff teams</span><span>6</span></div><div class="rule-row"><span>Seeding tiebreaker</span><span>Total points for</span></div></div></div></div></div>
-      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§5</span>Punishments &amp; Payouts</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">League punishment is determined by a league vote. The prize pool is paid 100% to first place unless the two teams in the championship matchup agree to a different split before the game.</div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§5</span>Punishments & Payouts</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">League punishment is determined by a league vote. The prize pool is paid 100% to first place unless the two teams in the championship matchup agree to a different split before the game.</div></div></div>
     </div></div>
   </section>
 
@@ -321,6 +356,11 @@
     <div class="section-title"><h2>Members</h2></div>
     <div class="member-help"><strong><span data-stat-seasons>9</span> seasons. <span data-stat-managers>12</span> managers. One league.</strong> Open a manager card for career results, team history, rivalries, signature games, draft results, and top players. <span id="memberDataSource" class="mono">Loading history…</span></div>
     <div class="members-grid" id="membersGrid"></div>
+  </section>
+
+  <section class="view" id="staff">
+    <div class="section-title"><h2>Staff Tools</h2><span class="see-all" id="staffRoleLabel"></span></div>
+    <div id="staffContent"></div>
   </section>
 
   <div class="member-modal" id="memberModal" aria-hidden="true">
@@ -345,5 +385,41 @@
 </main>
 
 <footer><strong data-site-footer>1048 Gate Szn 10</strong><span>Brotherhood • Competition • Tradition</span></footer>
+
+<nav class="phone-dock" id="phoneDock" aria-label="Primary mobile navigation">
+  <button type="button" data-view="home" class="active">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1z"/></svg>
+    <span>Home</span>
+  </button>
+  <button type="button" data-view="history">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v3H7zm0 5h10v11H7zm2 2v7h6v-7z"/></svg>
+    <span>History</span>
+  </button>
+  <button type="button" data-view="transactions">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v2H4zm0 5h11v2H4zm0 5h16v2H4z"/></svg>
+    <span>Wire</span>
+  </button>
+  <button type="button" data-view="trades">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h7V4l6 5-6 5V11H7zm10 10H10v3l-6-5 6-5v3h7z"/></svg>
+    <span>Trades</span>
+  </button>
+  <button type="button" data-more-toggle aria-expanded="false" aria-controls="phoneMore">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11.2h3.6V14.8H5zm5.2 0h3.6V14.8h-3.6zm5.2 0H19V14.8h-3.6z"/></svg>
+    <span>More</span>
+  </button>
+</nav>
+
+<div class="phone-more" id="phoneMore" hidden>
+  <button type="button" class="phone-more-backdrop" data-more-close aria-label="Close menu"></button>
+  <div class="phone-more-sheet" role="dialog" aria-label="More league sections">
+    <div class="phone-more-handle" aria-hidden="true"></div>
+    <strong>More</strong>
+    <button type="button" data-view="playoffs">Playoffs</button>
+    <button type="button" data-view="members">Members</button>
+    <button type="button" data-view="votes">Votes</button>
+    <button type="button" data-view="rules">Rules</button>
+    <button type="button" data-view="staff" class="staff-nav">Staff</button>
+  </div>
+</div>
 </body>
 </html>

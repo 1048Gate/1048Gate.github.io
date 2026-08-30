@@ -10,6 +10,26 @@ const {
   memberPresentation
 } = window.gateShared;
 
+function closePhoneMore() {
+  const sheet = document.getElementById('phoneMore');
+  const toggle = document.querySelector('[data-more-toggle]');
+  if (!sheet) return;
+  sheet.hidden = true;
+  sheet.classList.remove('open');
+  toggle?.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('phone-more-open');
+}
+
+function openPhoneMore() {
+  const sheet = document.getElementById('phoneMore');
+  const toggle = document.querySelector('[data-more-toggle]');
+  if (!sheet) return;
+  sheet.hidden = false;
+  sheet.classList.add('open');
+  toggle?.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('phone-more-open');
+}
+
 function switchView(name, {updateHash = true, scroll = true} = {}) {
   const target = document.getElementById(name);
   if (!target) return;
@@ -21,6 +41,15 @@ function switchView(name, {updateHash = true, scroll = true} = {}) {
     button.classList.toggle('active', active);
     button.setAttribute('aria-current', active ? 'page' : 'false');
   });
+  const dockViews = new Set(['home', 'history', 'transactions', 'trades']);
+  document.querySelectorAll('.phone-dock [data-view]').forEach(button => {
+    button.classList.toggle('active', button.dataset.view === name);
+  });
+  document.querySelector('[data-more-toggle]')?.classList.toggle('active', !dockViews.has(name));
+  document.querySelectorAll('.phone-more [data-view]').forEach(button => {
+    button.classList.toggle('active', button.dataset.view === name);
+  });
+  closePhoneMore();
   const activeButton = [...document.querySelectorAll('#tabs button[data-view]')]
     .find(button => button.dataset.view === name);
   activeButton?.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
@@ -33,6 +62,31 @@ window.switchView = switchView;
 document.getElementById('tabs')?.addEventListener('click', event => {
   const button = event.target.closest('button[data-view]');
   if (button) switchView(button.dataset.view);
+});
+
+document.getElementById('phoneDock')?.addEventListener('click', event => {
+  const more = event.target.closest('[data-more-toggle]');
+  if (more) {
+    const sheet = document.getElementById('phoneMore');
+    if (sheet?.hidden) openPhoneMore();
+    else closePhoneMore();
+    return;
+  }
+  const button = event.target.closest('button[data-view]');
+  if (button) switchView(button.dataset.view);
+});
+
+document.getElementById('phoneMore')?.addEventListener('click', event => {
+  if (event.target.closest('[data-more-close]')) {
+    closePhoneMore();
+    return;
+  }
+  const button = event.target.closest('button[data-view]');
+  if (button) switchView(button.dataset.view);
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closePhoneMore();
 });
 
 document.querySelector('.quick-grid')?.addEventListener('click', event => {
