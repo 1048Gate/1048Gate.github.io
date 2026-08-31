@@ -1,12 +1,12 @@
 (function(){
   const MEMBER_ROLE_OVERRIDES = Object.freeze({'10': 'Admin'});
 
-  const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, character => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
+  const escapeHtml = value => String(value ?? '').replace(/[&<>'\"]/g, character => ({
+    '&': '&',
+    '<': '<',
+    '>': '>',
     "'": '&#39;',
-    '"': '&quot;'
+    '"': '"'
   }[character]));
 
   function parseRecord(record){
@@ -63,11 +63,32 @@
   }
 
   const normalizeMemberNumber = value => String(value ?? '').trim().padStart(2, '0');
-  const memberInitials = name => {
+  let initialsRoster = [];
+  const setInitialsRoster = names => {
+    initialsRoster = Array.isArray(names) ? names.map(name => String(name || '').trim()).filter(Boolean) : [];
+  };
+  const baseMemberInitials = name => {
     const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
     if(!parts.length) return '—';
     if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
     return `${parts[0][0]}${parts.at(-1)[0]}`.toUpperCase();
+  };
+  const memberInitials = (name, roster) => {
+    const base = baseMemberInitials(name);
+    const pool = Array.isArray(roster) ? roster : initialsRoster;
+    const collisions = pool.filter(other => baseMemberInitials(other) === base);
+    if(collisions.length <= 1) return base;
+    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if(parts.length >= 2){
+      const lastTwo = `${parts[0][0]}${parts.at(-1).slice(0, 2)}`.toUpperCase();
+      const lastTwoHits = collisions.filter(other => {
+        const otherParts = String(other).trim().split(/\s+/).filter(Boolean);
+        return otherParts.length >= 2 && `${otherParts[0][0]}${otherParts.at(-1).slice(0, 2)}`.toUpperCase() === lastTwo;
+      });
+      if(lastTwoHits.length <= 1) return lastTwo;
+      return `${parts[0].slice(0, 2)}${parts.at(-1)[0]}`.toUpperCase();
+    }
+    return base;
   };
   const memberRole = member => MEMBER_ROLE_OVERRIDES[normalizeMemberNumber(member.number ?? member.member_number)]
     || member.role
@@ -165,6 +186,7 @@
   const memberPresentation = Object.freeze({
     normalizeNumber: normalizeMemberNumber,
     initialsFor: memberInitials,
+    setRoster: setInitialsRoster,
     roleFor: memberRole,
     applyModal: applyMemberModal
   });
@@ -250,7 +272,7 @@
         espn_transaction_id:group.dealId,
         transaction_type:'TRADE_ACCEPT',
         status:'EXECUTED',
-        team_name:teams.length ? teams.join(' ↔ ') : 'League trade',
+        team_name:teams.length ? teams.join(' \u2194 ') : 'League trade',
         acceptance_count:group.acceptances.length,
         source_acceptance_ids:group.acceptances.map(row => row.espn_transaction_id),
         items:tradeItems,
