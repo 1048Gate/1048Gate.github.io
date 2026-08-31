@@ -9,7 +9,8 @@ permissions:
   contents: write
 
 jobs:
-  aggregate-history:
+  build-recovery-sql:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -18,46 +19,64 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Test trade-history normalizer
-        run: python3 scripts/test_fetch_trade_history.py
-      - name: Fetch and aggregate executed team-to-team trades
-        env:
-          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
-          ESPN_S2: ${{ secrets.ESPN_S2 }}
-          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+      - name: Generate season SQL from audited recovery JSON
         run: |
-          mkdir -p artifacts audit
-          for season in 2019 2020 2021 2022 2023 2024 2025; do
-            python3 scripts/fetch_trade_history.py \
-              --season "$season" \
-              --output "artifacts/trade-history-$season.json"
-          done
           python3 - <<'PY'
           import json
           from pathlib import Path
 
-          output = {
-              'schema_version': 1,
-              'source': 'ESPN kona_playercard audit',
-              'seasons': {},
-          }
-          for season in range(2019, 2026):
-              payload = json.loads(Path(f'artifacts/trade-history-{season}.json').read_text())
-              candidates = [row for row in payload['transactions'] if row['has_team_to_team_move']]
-              output['seasons'][str(season)] = {
-                  'player_count': payload['player_count'],
-                  'transaction_count': payload['transaction_count'],
-                  'executed_trade_count': len(candidates),
-                  'trades': candidates,
-              }
-          Path('audit/recovered-trades.json').write_text(json.dumps(output, indent=2) + '\n')
-          for season, data in output['seasons'].items():
-              print(f"{season}: {data['executed_trade_count']} executed trades")
+          source = json.loads(Path('audit/recovered-trades.json').read_text())
+          outdir = Path('audit/sql')
+          outdir.mkdir(parents=True, exist_ok=True)
+
+          def q(value):
+              if value is None:
+                  return 'null'
+              if isinstance(value, (int, float)):
+                  return str(value)
+              return "'" + str(value).replace("'", "''") + "'"
+
+          for season, data in source['seasons'].items():
+              rows = []
+              item_rows = []
+              for trade in data['trades']:
+                  tx = trade['espn_transaction_id']
+                  rows.append('(' + ','.join([
+                      season,
+                      q(tx),
+                      q(trade.get('related_transaction_id')),
+                      q(trade.get('scoring_period')),
+                      q(trade.get('transaction_date_ms')),
+                      q(trade.get('team_id')),
+                  ]) + ')')
+                  trade_items = [item for item in trade.get('items', []) if item.get('item_type') == 'TRADE']
+                  for idx, item in enumerate(trade_items):
+                      item_rows.append('(' + ','.join([
+                          season,
+                          q(tx),
+                          str(idx),
+                          q(item.get('item_type')),
+                          q(item.get('player_id')),
+                          q(item.get('player_name')),
+                          q(item.get('from_team_id')),
+                          q(item.get('to_team_id')),
+                      ]) + ')')
+
+              sql = ['begin;']
+              sql.append(f'delete from private.transaction_trade_recovery where season_year = {season};')
+              if rows:
+                  sql.append('insert into private.transaction_trade_recovery (season_year,espn_transaction_id,related_transaction_id,scoring_period,transaction_date_ms,team_id) values\n' + ',\n'.join(rows) + ';')
+              if item_rows:
+                  sql.append('insert into private.transaction_trade_recovery_items (season_year,espn_transaction_id,item_index,item_type,player_id,player_name,from_team_id,to_team_id) values\n' + ',\n'.join(item_rows) + ';')
+              sql.append('commit;')
+              path = outdir / f'trade-recovery-{season}.sql'
+              path.write_text('\n'.join(sql) + '\n')
+              print(f'{season}: {len(rows)} trades, {len(item_rows)} traded-player rows')
           PY
-      - name: Commit temporary recovery evidence
+      - name: Commit temporary SQL evidence
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add audit/recovered-trades.json
-          git commit -m "Store temporary trade recovery evidence [skip ci]"
+          git add audit/sql
+          git commit -m "Generate temporary trade recovery SQL [skip ci]"
           git push origin HEAD:fix/trade-history-recovery
