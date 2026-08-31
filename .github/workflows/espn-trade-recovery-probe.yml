@@ -1,0 +1,69 @@
+name: ESPN trade recovery probe
+
+on:
+  push:
+    branches:
+      - diagnostic/espn-trade-recovery
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out diagnostic branch
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Verify protected credential availability
+        env:
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+        run: |
+          mkdir -p artifacts/espn-trade-recovery
+          if [[ -z "$ESPN_S2" || -z "$ESPN_SWID" || -z "$ESPN_LEAGUE_ID" ]]; then
+            printf '{"credentials_configured":false}\n' > artifacts/espn-trade-recovery/credential-status.json
+            echo "Required protected ESPN secrets are not configured."
+            exit 2
+          fi
+          printf '{"credentials_configured":true}\n' > artifacts/espn-trade-recovery/credential-status.json
+      - name: Pull sanitized historical trade data
+        env:
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+        run: |
+          python3 scripts/probe_espn_trades.py \
+            --start 2019 \
+            --end 2025 \
+            --output artifacts/espn-trade-recovery
+      - name: Reject credential leakage
+        env:
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          for path in Path('artifacts/espn-trade-recovery').glob('*.json'):
+              text = path.read_text(encoding='utf-8')
+              for name in ('ESPN_S2', 'ESPN_SWID'):
+                  value = os.environ.get(name, '')
+                  if value and value in text:
+                      raise SystemExit(f'Credential leakage detected in {path.name}')
+          print('Credential leakage check passed.')
+          PY
+      - name: Upload sanitized recovery artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: espn-trade-recovery
+          path: artifacts/espn-trade-recovery/
+          if-no-files-found: error
+          retention-days: 7
