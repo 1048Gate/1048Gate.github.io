@@ -27,12 +27,18 @@ jobs:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
         run: |
           mkdir -p artifacts/espn-trade-recovery
-          if [[ -z "$ESPN_S2" || -z "$ESPN_SWID" || -z "$ESPN_LEAGUE_ID" ]]; then
-            printf '{"credentials_configured":false}\n' > artifacts/espn-trade-recovery/credential-status.json
-            echo "Required protected ESPN secrets are not configured."
+          if [[ -z "$ESPN_S2" || -z "$ESPN_SWID" ]]; then
+            printf '{"espn_s2_configured":%s,"espn_swid_configured":%s,"league_id_configured":%s}\n' \
+              "$([[ -n "$ESPN_S2" ]] && echo true || echo false)" \
+              "$([[ -n "$ESPN_SWID" ]] && echo true || echo false)" \
+              "$([[ -n "$ESPN_LEAGUE_ID" ]] && echo true || echo false)" \
+              > artifacts/espn-trade-recovery/credential-status.json
+            echo "Required protected ESPN cookie secrets are not configured."
             exit 2
           fi
-          printf '{"credentials_configured":true}\n' > artifacts/espn-trade-recovery/credential-status.json
+          printf '{"espn_s2_configured":true,"espn_swid_configured":true,"league_id_configured":%s}\n' \
+            "$([[ -n "$ESPN_LEAGUE_ID" ]] && echo true || echo false)" \
+            > artifacts/espn-trade-recovery/credential-status.json
       - name: Pull sanitized historical trade data
         env:
           ESPN_S2: ${{ secrets.ESPN_S2 }}

@@ -235,7 +235,7 @@ def recover_season(season: int, league_id: int) -> tuple[list[dict[str, Any]], d
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--league-id", type=int, default=int(os.getenv("ESPN_LEAGUE_ID", DEFAULT_LEAGUE_ID)))
+    parser.add_argument("--league-id", type=int, default=int(os.getenv("ESPN_LEAGUE_ID") or DEFAULT_LEAGUE_ID))
     parser.add_argument("--start", type=int, default=2019)
     parser.add_argument("--end", type=int, default=2025)
     parser.add_argument("--output", type=Path, required=True)
