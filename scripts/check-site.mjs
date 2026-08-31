@@ -105,6 +105,16 @@ if([...html.matchAll(/<button[^>]+class="accordion-head"[^>]+aria-expanded=/g)].
 if(!html.includes('§2</span>Keepers') || !html.includes('Szn 10 locked keepers') || !html.includes('Bijan Robinson')){
   throw new Error('The Rules handbook must include the Szn 10 keeper section and locked keeper list.');
 }
+if(!html.includes('id="homeKeepers"') || !html.includes('id="membersKeepers"') || !html.includes('id="pastMembers"')){
+  throw new Error('Home and Members must expose Keepers and Past members subsections.');
+}
+if(!html.includes('Ronnie Coiro') || !html.includes('Joey Dwulet') || !html.includes('Brian James') || !html.includes('Chardo BRYCE') || !html.includes('Ed Perrine') || !html.includes('Thomas Connelly')){
+  throw new Error('Past members must list the six alumni.');
+}
+if(!html.includes('>Keepers</h2>') || !html.includes('>Past members</h2>')){
+  throw new Error('Keepers and Past members subsection headings are missing.');
+}
+
 if(!html.includes('Lamb Fried Rice') || !html.includes('German Haro')){
   throw new Error('Wall of Shame fallback must name 2025 last place as Lamb Fried Rice / German Haro.');
 }

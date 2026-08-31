@@ -315,3 +315,19 @@ body.edition-sources-open{overflow:hidden}
 @media(max-width:520px){
   main{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 }
+
+/* Members keepers + past members subsections */
+.keepers-section{margin-bottom:26px}
+.keepers-home-body{padding:16px 18px 20px}
+.keepers-home-body .rule-summary{margin-bottom:12px}
+.keepers-home-body .keeper-list{margin-bottom:14px}
+.keepers-subsection,.alumni-section{margin-top:32px}
+.keepers-subsection .rule-summary{margin-bottom:14px}
+.keepers-subsection .rule-note,.alumni-note{margin:12px 0 0;color:var(--muted);font-size:12px;line-height:1.55}
+.alumni-card{cursor:default}
+.alumni-card:hover{transform:none;box-shadow:var(--shadow-sm)}
+.alumni-card .alumni-note{padding:0 2px}
+@media(max-width:620px){
+  .keepers-subsection,.alumni-section{margin-top:24px}
+  .keepers-home-body{padding:14px 16px 16px}
+}
