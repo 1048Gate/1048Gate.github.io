@@ -43,6 +43,7 @@
 <script defer src="js/supabase-config.js"></script>
 <script defer src="js/auth.js"></script>
 <script defer src="js/app.js"></script>
+<script defer src="js/newspaper.js"></script>
 <script defer src="js/draft-countdown.js"></script>
 
 <script defer src="js/transactions.js"></script>
@@ -364,12 +365,25 @@
     <div class="section-title">
       <h2>Newspaper Editions</h2>
     </div>
-    <div id="editionTabs">
-      <button class="edition-tab active" data-edition="historical">Historical</button>
-      <button class="edition-tab" data-edition="weekly_fallback">Weekly (Archive Demo)</button>
+    <div id="editionTabs" class="edition-tabs" role="tablist" aria-label="Newspaper editions">
+      <button type="button" class="edition-tab active" data-edition="historical" role="tab" aria-selected="true">Historical</button>
+      <button type="button" class="edition-tab" data-edition="weekly_fallback" role="tab" aria-selected="false">Weekly (Archive Demo)</button>
     </div>
-    <div id="editionContent" class="edition-content"></div>
-    <a href="#" class="toggle-sources" aria-label="View sources">View Sources</a>
+    <div id="editionContent" class="edition-content" aria-live="polite">
+      <div class="edition-loading"><span>Open an edition to load the newspaper.</span></div>
+    </div>
+    <button type="button" id="editionSourcesToggle" class="toggle-sources" aria-controls="editionSourcesDrawer" aria-expanded="false" hidden>View Sources</button>
+    <div id="editionSourcesBackdrop" class="edition-drawer-backdrop" hidden></div>
+    <aside id="editionSourcesDrawer" class="edition-drawer" aria-labelledby="editionSourcesTitle" aria-hidden="true">
+      <div class="drawer-header">
+        <h3 id="editionSourcesTitle">Edition Sources</h3>
+        <button type="button" id="editionSourcesClose" class="drawer-close" aria-label="Close edition sources">×</button>
+      </div>
+      <div class="drawer-content">
+        <p>Every newspaper claim below points back to a checked-in 1048 Gate archive file.</p>
+        <ul id="editionSourcesList" class="sources-list"></ul>
+      </div>
+    </aside>
   </section>
 
   <section class="view" id="staff">
@@ -430,6 +444,7 @@
     <strong>More</strong>
     <button type="button" data-view="playoffs">Playoffs</button>
     <button type="button" data-view="members">Members</button>
+    <button type="button" data-view="newspaper">Newspaper Editions</button>
     <button type="button" data-view="votes">Votes</button>
     <button type="button" data-view="rules">Rules</button>
     <button type="button" data-view="staff" class="staff-nav">Staff</button>

@@ -1,13 +1,70 @@
 {
+  "schema_version": 2,
   "league_name": "1048 Gate",
   "season": 2023,
   "edition_year": 2023,
-  "generated_at": "2026-08-30T23:01:46.109153Z",
+  "generated_at": "2026-08-31T00:00:00Z",
   "mode": "historical",
-  "stories": [],
+  "source_status": "historical_archive",
+  "stories": [
+    {
+      "story_type": "playoff_picture",
+      "title": "Crown The King Survives a Classic to Claim the 2023 Crown",
+      "body": "Jared Hall's Crown The King finished the job as the No. 1 seed, defeating JD Daley's ZAZA FLOWERS 126.12–121.20 in the championship. The 4.92-point margin closed a 9–5 season and delivered Hall his second 1048 Gate title.",
+      "source": {"dataset": "data/playoffs.json", "locator": "seasons[2023] · Championship", "description": "Champion, runner-up, seeds, managers, and final score"}
+    },
+    {
+      "story_type": "playoff_elimination",
+      "title": "The Five and Six Seeds Crash the Semifinal Party",
+      "body": "The 2023 quarterfinals belonged to the lower seeds. No. 5 Jigalos Jims eliminated No. 4 Daddy DickemDowns 147.06–108.62, while No. 6 Tony 2 Step knocked out No. 3 TomBoy NeverBrokeAgain 123.46–113.72. Both underdogs advanced before the top two seeds restored order in the semifinals.",
+      "source": {"dataset": "data/playoffs.json", "locator": "seasons[2023] · Week 15 Quarterfinals", "description": "Seeds, teams, managers, and matchup scores"}
+    },
+    {
+      "story_type": "record_watch",
+      "title": "Week 13 Produces the Wildest Shootout in League History",
+      "body": "Jared Hall and Vincent Cannarozzi combined for 363.06 points in Week 13 of 2023. Hall scored 184.46 and Cannarozzi answered with 178.60, setting the highest combined score in the nine-season matchup archive.",
+      "source": {"dataset": "data/matchups.json", "locator": "records.highestCombined", "description": "All-time combined-score record with managers, points, season, and week"}
+    },
+    {
+      "story_type": "power_rankings",
+      "title": "The Final Five: 2023's Top Finishers",
+      "body": "Crown The King and ZAZA FLOWERS finished first and second after matching 9–5 regular-season records. Jigalos Jims climbed from the No. 5 seed to third, Tony 2 Step rose from No. 6 to fourth, and Daddy DickemDowns completed the final top five.",
+      "source": {"dataset": "data/seasons.json", "locator": "seasons[2023] · standings", "description": "Final finish, playoff seed, team, manager, and record"}
+    },
+    {
+      "story_type": "championship_contender",
+      "title": "Top Seed, Top Scorer, Champion",
+      "body": "Crown The King entered the postseason with the league's best finish, a 9–5 record, 1,815.90 points for, and a +150.28 point differential. After a first-round bye, Hall beat Jigalos Jims 131.96–85.42 and then survived ZAZA FLOWERS in the title game.",
+      "source": {"dataset": "data/seasons.json + data/playoffs.json", "locator": "seasons[2023]", "description": "Regular-season totals and complete championship path"}
+    },
+    {
+      "story_type": "rivalry",
+      "title": "Hall–Daley Rivalry Adds a Championship Chapter",
+      "body": "The 2023 final became the 16th archived meeting between Jared Hall and JD Daley. Hall leads the all-time series 9–7, while Daley holds a narrow 1,986.98–1,967.40 edge in total points scored across those matchups.",
+      "source": {"dataset": "data/matchups.json", "locator": "pairs[Jared Hall, JD Daley]", "description": "All-time head-to-head wins, losses, ties, and points"}
+    },
+    {
+      "story_type": "transactions",
+      "title": "Transaction Desk: Archive Gap Preserved",
+      "body": "The verified 2023 newspaper sources do not include a complete transaction ledger. No waiver claim, free-agent move, or trade grade is presented in this edition because the archive cannot support those claims.",
+      "source": {"dataset": "data/newspaper_editions/historical_2023.json", "locator": "transactions limitation", "description": "Explicit source-coverage notice; no transaction claims generated"}
+    },
+    {
+      "story_type": "manager_spotlight",
+      "title": "Manager Spotlight: Jared Hall Reaches Ring Number Two",
+      "body": "The 2023 championship joined Hall's 2017 title and gave him two rings through the end of that season. He reached the playoffs in each of the league's first seven completed campaigns, turning consistency into another championship run.",
+      "source": {"dataset": "data/manager-profiles.json", "locator": "profiles[Jared Hall] · titleYears and playoffYears through 2023", "description": "Manager postseason résumé bounded to the 2023 edition"}
+    },
+    {
+      "story_type": "next_week",
+      "title": "Next Chapter: Hall Turns One Crown Into a Repeat",
+      "body": "The story did not stop in 2023. Hall returned in 2024 as The Diddlers, finished 11–3, and defeated George Travis 161.22–135.48 to become the league's second repeat champion and raise his career total to three titles.",
+      "source": {"dataset": "data/champion-notes.json + data/seasons.json", "locator": "notes[2024] and seasons[2024]", "description": "Verified follow-up to the 2023 historical edition"}
+    }
+  ],
   "source_trace": {
-    "source": "sqlite",
-    "source_id": "fantasy_history.db",
-    "generated_at": null
+    "dataset": "1048 Gate checked-in archive",
+    "locator": "data/seasons.json, data/playoffs.json, data/matchups.json, data/manager-profiles.json, data/champion-notes.json",
+    "description": "Nine completed seasons covering 2017–2025"
   }
 }

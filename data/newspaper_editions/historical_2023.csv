@@ -1,10 +1,10 @@
 title,story_type,priority,source
-Playoff Picture: River City Rockets Clinches Postseason Berth,playoff_picture,2,(story_detection id=playoff_picture_2023 season=2023 @=2026-08-30T23:01:46.082770Z)
-Eliminated: Fourth & Long Falls Out of contention,playoff_elimination,3,(story_detection id=playoff_elimination_2023 season=2023 @=2026-08-30T23:01:46.082814Z)
-Record Watch: Hail Mary Heroes's 160.0-Point Game,record_watch,3,(story_detection id=record_watch_Highest single-game score_2023 season=2023 @=2026-08-30T23:01:46.082833Z)
-Power Rankings: League Standings,power_rankings,3,(story_detection id=power_rankings_2023 season=2023 @=2026-08-30T23:01:46.083106Z)
-Cinderella Story: River City Rockets in Title Contention,championship_contender,4,(story_detection id=championship_contender_2023 season=2023 @=2026-08-30T23:01:46.082876Z)
-Cinderella Story: Midnight Owls in Title Contention,championship_contender,4,(story_detection id=championship_contender_2023 season=2023 @=2026-08-30T23:01:46.082886Z)
-Rivalry Corner: 1 vs 4,rivalry,4,(story_detection id=rivalry_2023 season=2023 @=2026-08-30T23:01:46.082966Z)
-Transactions: League Activity This Week,transactions,5,(story_detection id=transactions_gap_2023 season=2023 @=2026-08-30T23:01:46.082976Z)
-Manager Spotlight: League's Most Tenured Owner,manager_spotlight,5,(story_detection id=tenured_owners_2023 season=2023 @=2026-08-30T23:01:46.083015Z)
+"Crown The King Survives a Classic to Claim the 2023 Crown",playoff_picture,1,"data/playoffs.json seasons[2023] Championship"
+"The Five and Six Seeds Crash the Semifinal Party",playoff_elimination,2,"data/playoffs.json seasons[2023] Week 15 Quarterfinals"
+"Week 13 Produces the Wildest Shootout in League History",record_watch,2,"data/matchups.json records.highestCombined"
+"The Final Five: 2023's Top Finishers",power_rankings,3,"data/seasons.json seasons[2023] standings"
+"Top Seed, Top Scorer, Champion",championship_contender,3,"data/seasons.json + data/playoffs.json seasons[2023]"
+"Hall–Daley Rivalry Adds a Championship Chapter",rivalry,4,"data/matchups.json pairs[Jared Hall, JD Daley]"
+"Transaction Desk: Archive Gap Preserved",transactions,5,"historical_2023.json transactions limitation"
+"Manager Spotlight: Jared Hall Reaches Ring Number Two",manager_spotlight,4,"data/manager-profiles.json profiles[Jared Hall] through 2023"
+"Next Chapter: Hall Turns One Crown Into a Repeat",next_week,5,"data/champion-notes.json + data/seasons.json 2024"

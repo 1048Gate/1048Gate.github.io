@@ -1,13 +1,22 @@
 {
-  "league_name": "1048 Gate Weekly (Fallback)",
+  "schema_version": 2,
+  "league_name": "1048 Gate",
   "season": 2023,
   "edition_year": 2023,
-  "generated_at": "2026-08-30T23:01:46.109153Z",
-  "mode": "weekly",
-  "stories": [],
+  "generated_at": "2026-08-31T00:00:00Z",
+  "mode": "weekly_fallback",
+  "source_status": "archive_demonstration",
+  "stories": [
+    {
+      "story_type": "data_status",
+      "title": "Weekly Press Is in Demonstration Mode",
+      "body": "This tab demonstrates the Weekly edition layout with archived metadata only. It does not contain current 2026 scores, standings, transactions, or ESPN claims. A future authenticated publishing job can replace this notice with a verified static weekly issue.",
+      "source": {"dataset": "data/newspaper_editions/weekly_fallback_2023.json", "locator": "archive demonstration notice", "description": "No live ESPN data is represented"}
+    }
+  ],
   "source_trace": {
-    "source": "cache",
-    "source_id": "weekly_cache_snapshot",
-    "generated_at": null
+    "dataset": "1048 Gate newspaper configuration",
+    "locator": "weekly archive demonstration",
+    "description": "Static limitation notice; no authenticated ESPN snapshot bundled"
   }
 }
