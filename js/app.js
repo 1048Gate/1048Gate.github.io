@@ -326,3 +326,276 @@ if(initialView && document.getElementById(initialView)){
 }else if(!window.location.hash){
   history.replaceState({view:'home'}, '', '#home');
 }
+
+/**
+ * 1048 Gate Newspaper Editions Integration
+ * Loads and displays Historical and Weekly editions
+ */
+
+// Edition state
+let currentEdition = null;
+
+// Edition data paths
+const editionDataPaths = {
+  historical: 'data/newspaper_editions/historical_2023.json',
+  weekly_fallback: 'data/newspaper_editions/weekly_fallback_2023.json',
+};
+
+// Edition display names
+const editionLabels = {
+  historical: 'Historical Editions',
+  weekly_fallback: 'Weekly Edition (Archive Demonstration)',
+};
+
+// Edition status types
+const editionStatusTypes = {
+  live: 'live espn',
+  cached: 'cached espn snapshot',
+  archive: 'historical archive',
+};
+
+// Initialize newspaper editions
+async function initNewspaperEditions() {
+  // Check if we're on a newspaper edition page
+  const editionView = document.getElementById('newspaper');
+  if (!editionView) return;
+
+  // Try to load the preferred edition (historical first)
+  await loadEdition('historical');
+}
+
+// Load a specific edition
+async function loadEdition(editionKey) {
+  const editionPath = editionDataPaths[editionKey];
+  const editionLabel = editionLabels[editionKey];
+
+  if (!editionPath) {
+    showEditionError('Edition data not found');
+    return;
+  }
+
+  // Show loading state
+  const editionContainer = document.getElementById('editionContent');
+  if (editionContainer) {
+    editionContainer.innerHTML = `
+      <div class="edition-loading">
+        <div class="spinner"></div>
+        <span>Loading ${editionLabel}...</span>
+      </div>
+    `;
+  }
+
+  try {
+    const response = await fetch(editionPath, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const data = await response.json();
+
+    // Reset previous edition state
+    if (currentEdition) {
+      document.querySelectorAll('.edition-status').forEach(el => el.remove());
+    }
+
+    // Display the edition
+    currentEdition = editionKey;
+    displayEdition(data, editionLabel);
+
+    // Add edition status badge
+    addEditionStatusBadge(editionKey, data);
+
+    // Add sources drawer toggle
+    addSourcesDrawer(data);
+
+  } catch (error) {
+    console.error('Failed to load edition:', error);
+    showEditionError(`Failed to load ${editionLabel}: ${error.message}`);
+  }
+}
+
+// Display the edition content
+function displayEdition(data, label) {
+  const editionContainer = document.getElementById('editionContent');
+  if (!editionContainer) return;
+
+  // Generate the edition HTML from the data
+  let editionTitle = '';
+  if (editionKey === 'historical') {
+    editionTitle = `${data.league_name || '1048 Gate'} — 2023 Season Historical Edition`;
+  } else {
+    editionTitle = `${data.league_name || '1048 Gate'} — Weekly Archive Demonstration`;
+  }
+  let html = `
+    <div class="edition-header">
+      <h2>${esc(editionTitle)}</h2>
+      <div class="edition-meta">
+        <span>Season: ${data.season} · Edition: ${data.edition_year}</span>
+        ${data.week !== undefined ? `<span>Week: ${data.week}</span>` : ''}
+      </div>
+    </div>
+
+    <div class="edition-stories">
+  `;
+
+  // Generate story cards
+  const stories = data.stories || [];
+  if (stories.length === 0) {
+    html += `<p class="empty-state">No stories available for this edition.</p>`;
+  } else {
+    html += `<ol class="story-list">`;
+    for (const story of stories) {
+      const sourceStr = typeof story.source === 'string' ? story.source : JSON.stringify(story.source);
+      const safeBody = esc(story.body.substring(0, 200) + (story.body.length > 200 ? '...' : ''));
+      html += `
+        <li class="story-item" tabindex="0" role="article">
+          <h3 class="story-title">${esc(story.title)}</h3>
+          <div class="story-meta">
+            <span class="story-type">${esc(story.story_type)}</span>
+            <span class="story-source">${esc(sourceStr)}</span>
+          </div>
+          <p class="story-body">${safeBody}</p>
+        </li>`;
+    }
+    html += `</ol>`;
+  }
+
+  html += `</div>`;
+
+  // Add footer with edition info
+  html += `
+    <div class="edition-footer">
+      <small>
+        Generated: ${new Date(data.generated_at).toLocaleString()}<br>
+        Mode: ${data.mode || 'unknown'}
+      </small>
+    </div>
+  `;
+
+  editionContainer.innerHTML = html;
+}
+
+// Add edition status badge
+function addEditionStatusBadge(editionKey, data) {
+  const statusTypes = {
+    historical: editionStatusTypes.archive,
+    weekly_fallback: editionStatusTypes.cached,
+  };
+
+  const statusType = statusTypes[editionKey] || editionStatusTypes.archive;
+  const statusLabel = `${statusType} data`;
+
+  // Insert badge after the edition header
+  const header = document.querySelector('.edition-header');
+  if (header) {
+    const badge = document.createElement('div');
+    badge.className = 'edition-status';
+    badge.setAttribute('aria-label', `${statusLabel} for this edition`);
+    badge.innerHTML = `<span class="status-dot"></span>${statusLabel}`;
+    header.insertAdjacentElement('afterend', badge);
+  }
+}
+
+// Add Sources drawer
+function addSourcesDrawer(data) {
+  const mainContent = document.querySelector('main');
+  if (!mainContent) return;
+
+  // Check if drawer already exists
+  if (document.getElementById('edition-sources-drawer')) return;
+
+  const drawer = document.createElement('div');
+  drawer.id = 'edition-sources-drawer';
+  drawer.className = 'edition-drawer';
+  drawer.innerHTML = `
+    <div class="drawer-header">
+      <h3>Sources</h3>
+      <button class="drawer-close" aria-label="Close sources"><span>&times;</span></button>
+    </div>
+    <div class="drawer-content">
+      <p>The following source traces verify all facts in this edition:</p>
+      <ul class="sources-list">
+      `;
+
+  const stories = data.stories || [];
+  for (const story of stories) {
+    const sourceStr = typeof story.source === 'string' ? story.source : JSON.stringify(story.source);
+    html += `<li>${esc(sourceStr)}</li>`;
+  }
+
+  html += `</ul></div>`;
+  drawer.innerHTML += html;
+
+  mainContent.appendChild(drawer);
+
+  // Toggle drawer
+  const drawerToggle = document.createElement('button');
+  drawerToggle.className = 'drawer-toggle';
+  drawerToggle.setAttribute('aria-label', 'Toggle sources drawer');
+  drawerToggle.innerHTML = 'Sources';
+  header.insertAdjacentElement('afterend', drawerToggle);
+
+  drawerToggle.addEventListener('click', () => {
+    drawer.classList.toggle('open');
+  });
+
+  const closeBtn = drawer.querySelector('.drawer-close');
+  closeBtn.addEventListener('click', () => {
+    drawer.classList.remove('open');
+  });
+
+  // Close on outside click
+  drawer.addEventListener('click', (e) => {
+    if (e.target === drawer) {
+      drawer.classList.remove('open');
+    }
+  });
+}
+
+// Show edition error state
+function showEditionError(message) {
+  const editionContainer = document.getElementById('editionContent');
+  if (!editionContainer) return;
+
+  editionContainer.innerHTML = `
+    <div class="edition-error">
+      <h2>Edition Unavailable</h2>
+      <p>${esc(message)}</p>
+      <p class="error-help">
+        This edition could not be loaded. The Historical edition is available
+        as a public preview. The Weekly edition requires authenticated ESPN access.
+      </p>
+    </div>
+  `;
+}
+
+// Edition tab switching
+const editionTabs = document.querySelectorAll('#editionTabs .edition-tab');
+if (editionTabs.length > 0) {
+  editionTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      editionTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const editionKey = tab.dataset.edition;
+      loadEdition(editionKey).catch(() => {});
+      if (editionKey === 'weekly_fallback') {
+        document.querySelector('.toggle-sources')?.setAttribute('aria-label', 'View sources (cached edition)');
+      } else {
+        document.querySelector('.toggle-sources')?.setAttribute('aria-label', 'View sources');
+      }
+    });
+  });
+}
+
+// Set initial active tab based on hash
+const editionHash = window.location.hash.replace('#', '');
+if (editionHash) {
+  const hashTab = document.querySelector(`#editionTabs .edition-tab[data-edition="${editionHash}"]`);
+  if (hashTab) {
+    editionTabs.forEach(t => t.classList.remove('active'));
+    hashTab.classList.add('active');
+    loadEdition(editionHash).catch(() => {});
+  }
+}
+
+// Make functions globally available for inline events
+window.loadEdition = loadEdition;
+window.switchView = window.switchView || function(name) {};

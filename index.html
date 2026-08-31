@@ -88,6 +88,7 @@
     <button data-view="transactions">Transactions</button>
     <button data-view="playoffs">Playoffs</button>
     <button data-view="members">Members</button>
+    <button data-view="newspaper">Newspaper Editions</button>
     <button data-view="trades">Trades</button>
     <button data-view="votes">Votes</button>
     <button data-view="rules">Rules</button>
@@ -357,6 +358,18 @@
     <div class="section-title"><h2>Members</h2></div>
     <div class="member-help"><strong><span data-stat-seasons>9</span> seasons. <span data-stat-managers>12</span> managers. One league.</strong> Open a manager card for career results, team history, rivalries, signature games, draft results, and top players. <span id="memberDataSource" class="mono">Loading history…</span></div>
     <div class="members-grid" id="membersGrid"></div>
+  </section>
+
+  <section class="view" id="newspaper">
+    <div class="section-title">
+      <h2>Newspaper Editions</h2>
+    </div>
+    <div id="editionTabs">
+      <button class="edition-tab active" data-edition="historical">Historical</button>
+      <button class="edition-tab" data-edition="weekly_fallback">Weekly (Archive Demo)</button>
+    </div>
+    <div id="editionContent" class="edition-content"></div>
+    <a href="#" class="toggle-sources" aria-label="View sources">View Sources</a>
   </section>
 
   <section class="view" id="staff">

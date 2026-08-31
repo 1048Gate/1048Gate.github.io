@@ -1,0 +1,13 @@
+{
+  "league_name": "1048 Gate Weekly (Fallback)",
+  "season": 2023,
+  "edition_year": 2023,
+  "generated_at": "2026-08-30T23:01:46.109153Z",
+  "mode": "weekly",
+  "stories": [],
+  "source_trace": {
+    "source": "cache",
+    "source_id": "weekly_cache_snapshot",
+    "generated_at": null
+  }
+}

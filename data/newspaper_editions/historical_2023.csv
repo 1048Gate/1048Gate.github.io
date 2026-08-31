@@ -1,0 +1,10 @@
+title,story_type,priority,source
+Playoff Picture: River City Rockets Clinches Postseason Berth,playoff_picture,2,(story_detection id=playoff_picture_2023 season=2023 @=2026-08-30T23:01:46.082770Z)
+Eliminated: Fourth & Long Falls Out of contention,playoff_elimination,3,(story_detection id=playoff_elimination_2023 season=2023 @=2026-08-30T23:01:46.082814Z)
+Record Watch: Hail Mary Heroes's 160.0-Point Game,record_watch,3,(story_detection id=record_watch_Highest single-game score_2023 season=2023 @=2026-08-30T23:01:46.082833Z)
+Power Rankings: League Standings,power_rankings,3,(story_detection id=power_rankings_2023 season=2023 @=2026-08-30T23:01:46.083106Z)
+Cinderella Story: River City Rockets in Title Contention,championship_contender,4,(story_detection id=championship_contender_2023 season=2023 @=2026-08-30T23:01:46.082876Z)
+Cinderella Story: Midnight Owls in Title Contention,championship_contender,4,(story_detection id=championship_contender_2023 season=2023 @=2026-08-30T23:01:46.082886Z)
+Rivalry Corner: 1 vs 4,rivalry,4,(story_detection id=rivalry_2023 season=2023 @=2026-08-30T23:01:46.082966Z)
+Transactions: League Activity This Week,transactions,5,(story_detection id=transactions_gap_2023 season=2023 @=2026-08-30T23:01:46.082976Z)
+Manager Spotlight: League's Most Tenured Owner,manager_spotlight,5,(story_detection id=tenured_owners_2023 season=2023 @=2026-08-30T23:01:46.083015Z)
