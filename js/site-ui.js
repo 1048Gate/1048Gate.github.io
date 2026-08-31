@@ -18,7 +18,7 @@
     document.querySelectorAll('[data-site-year]').forEach(element => {element.textContent = String(config.seasonYear)});
     document.querySelectorAll('[data-site-season-label]').forEach(element => {element.textContent = `Season ${config.seasonNumber}`});
     document.querySelectorAll('[data-site-phase]').forEach(element => {element.textContent = phase});
-    document.querySelectorAll('[data-site-season]').forEach(element => {element.textContent = `${config.seasonYear} SEASON · ${phase.toUpperCase()}`});
+    document.querySelectorAll('[data-site-season]').forEach(element => {element.textContent = `${config.seasonYear} SEASON \u00b7 ${phase.toUpperCase()}`});
     document.querySelectorAll('[data-site-footer]').forEach(element => {element.textContent = `${leagueName} Szn ${config.seasonNumber}`});
     document.querySelectorAll('[data-site-season-number]').forEach(element => {element.textContent = String(config.seasonNumber)});
     document.querySelectorAll('meta[name="description"],meta[property="og:description"],meta[name="twitter:description"]').forEach(element => {
@@ -91,6 +91,8 @@ function renderDraftOrder(config){
   }
   const shared = window.gateShared || {};
   const escapeHtml = shared.escapeHtml || (value => String(value ?? ''));
+  const names = order.map(entry => String(entry.name ?? '')).filter(Boolean);
+  shared.memberPresentation?.setRoster?.(names);
   const initialsFor = shared.memberPresentation?.initialsFor || (() => '—');
   const currentPick = Number(config.draftNight?.currentPick) || 1;
   target.innerHTML = order.map(entry => {
@@ -100,7 +102,7 @@ function renderDraftOrder(config){
     return `<div class="draft-pick-card${onClock ? ' is-on-clock' : ''}${pick === 1 ? ' is-first' : ''}" data-draft-pick="${escapeHtml(pick || '')}">
       <span class="draft-pick-num" aria-hidden="true">${escapeHtml(pick || '')}</span>
       <span class="member-avatar draft-pick-avatar"><span class="member-initials">${escapeHtml(initialsFor(name))}</span></span>
-      <div class="draft-pick-meta"><strong>${escapeHtml(name)}</strong><span>Pick ${escapeHtml(pick || '')}${onClock ? ' · On the clock' : ''}</span></div>
+      <div class="draft-pick-meta"><strong>${escapeHtml(name)}</strong><span>Pick ${escapeHtml(pick || '')}${onClock ? ' \u00b7 On the clock' : ''}</span></div>
       ${onClock ? '<span class="draft-clock-badge">On the clock</span>' : ''}
     </div>`;
   }).join('');
