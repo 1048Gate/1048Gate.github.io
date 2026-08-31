@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from fetch_current import normalize_scoreboard, normalize_standings
+from fetch_current import normalize_bundle, normalize_scoreboard, normalize_standings
 
 
 class CurrentFetchTests(unittest.TestCase):
@@ -29,6 +29,25 @@ class CurrentFetchTests(unittest.TestCase):
         self.assertEqual(len(result["games"]), 1)
         self.assertEqual(result["games"][0]["matchup_id"], 10)
         self.assertEqual(result["games"][0]["home"]["team_name"], "Team One")
+
+    def test_bundle_splits_previous_current_and_upcoming_weeks(self):
+        payload = {
+            **self.payload,
+            "scoringPeriodId": 2,
+            "teams": [
+                {"id": 1, "name": "Team One", "playoffSeed": 1, "record": {"overall": {"wins": 1, "losses": 0, "ties": 0, "pointsFor": 101, "pointsAgainst": 99}}},
+                {"id": 2, "name": "Team Two", "playoffSeed": 2, "record": {"overall": {"wins": 0, "losses": 1, "ties": 0, "pointsFor": 99, "pointsAgainst": 101}}},
+            ],
+        }
+        result = normalize_bundle(payload, 2026, 1237285, None)
+        self.assertEqual(result["current_week"], 2)
+        self.assertEqual(result["phase"], "regular")
+        self.assertEqual(result["previous"]["week"], 1)
+        self.assertEqual(result["current"]["week"], 2)
+        self.assertEqual(result["upcoming"]["week"], 3)
+        self.assertEqual(result["previous"]["games"][0]["matchup_id"], 10)
+        self.assertEqual(result["current"]["games"][0]["matchup_id"], 11)
+        self.assertEqual(result["upcoming"]["games"], [])
 
 
 if __name__ == "__main__":
