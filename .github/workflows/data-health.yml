@@ -14,6 +14,15 @@ on:
         description: ESPN matchup/scoring period for the scoreboard fetch
         required: true
         default: '1'
+      fetch_trade_history:
+        description: Also build an ESPN player-card trade-history audit
+        required: false
+        type: boolean
+        default: false
+      trade_season:
+        description: ESPN season year for the trade-history audit
+        required: false
+        default: '2025'
 
 permissions:
   contents: read
@@ -69,5 +78,37 @@ jobs:
         with:
           name: current-season-${{ inputs.season }}-week-${{ inputs.week }}
           path: artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  fetch-trade-history:
+    name: Build trade-history recovery audit
+    if: github.event_name == 'workflow_dispatch' && inputs.fetch_trade_history
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test trade-history normalizer
+        run: python3 scripts/test_fetch_trade_history.py
+      - name: Fetch and normalize ESPN player-card transactions
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+        run: |
+          mkdir -p artifacts
+          python3 scripts/fetch_trade_history.py \
+            --season "${{ inputs.trade_season }}" \
+            --output "artifacts/trade-history-${{ inputs.trade_season }}.json"
+      - name: Upload trade-history audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trade-history-${{ inputs.trade_season }}
+          path: artifacts/trade-history-${{ inputs.trade_season }}.json
           if-no-files-found: error
           retention-days: 14
