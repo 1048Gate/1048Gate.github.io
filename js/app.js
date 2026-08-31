@@ -99,6 +99,15 @@ document.querySelector('.quick-grid')?.addEventListener('click', event => {
 document.addEventListener('click', event => {
   const link = event.target.closest('[data-view-link]');
   if(link) switchView(link.dataset.viewLink);
+  const jump = event.target.closest('[data-scroll-to]');
+  if(jump){
+    const target = document.getElementById(jump.dataset.scrollTo);
+    if(!target) return;
+    if(!document.getElementById('home')?.classList.contains('active')) switchView('home', {scroll:false});
+    requestAnimationFrame(() => target.scrollIntoView({behavior:'smooth', block:'start'}));
+  }
+  const staffLogin = event.target.closest('[data-staff-login]');
+  if(staffLogin) document.getElementById('authButton')?.click();
 });
 
 window.addEventListener('popstate', () => {
@@ -133,6 +142,7 @@ function setMemberSource(label) {
 function renderMembers() {
   const grid = document.getElementById('membersGrid');
   if (!grid) return;
+  memberPresentation.setRoster?.(leagueMembers.map(member => member.name));
 
   grid.innerHTML = leagueMembers.map((member, index) => {
     const stats = memberTotals(member);
