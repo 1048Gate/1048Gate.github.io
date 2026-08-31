@@ -9,8 +9,12 @@ permissions:
   contents: read
 
 jobs:
-  audit-2025:
+  audit-history:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        season: [2019, 2020, 2021, 2022, 2023, 2024, 2025]
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -20,7 +24,7 @@ jobs:
           python-version: '3.12'
       - name: Test trade-history normalizer
         run: python3 scripts/test_fetch_trade_history.py
-      - name: Fetch 2025 ESPN player-card transactions
+      - name: Fetch ESPN player-card transactions
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
           ESPN_S2: ${{ secrets.ESPN_S2 }}
@@ -28,19 +32,29 @@ jobs:
         run: |
           mkdir -p artifacts
           python3 scripts/fetch_trade_history.py \
-            --season 2025 \
-            --output artifacts/trade-history-2025.json
+            --season "${{ matrix.season }}" \
+            --output "artifacts/trade-history-${{ matrix.season }}.json"
       - name: Summarize team-to-team candidates
+        env:
+          SEASON: ${{ matrix.season }}
         run: |
           python3 - <<'PY'
           import json
+          import os
           from pathlib import Path
 
-          payload = json.loads(Path('artifacts/trade-history-2025.json').read_text())
+          season = os.environ['SEASON']
+          payload = json.loads(Path(f'artifacts/trade-history-{season}.json').read_text())
           candidates = [row for row in payload['transactions'] if row['has_team_to_team_move']]
-          print(f"team_to_team_candidates={len(candidates)}")
+          print(json.dumps({
+              'season': int(season),
+              'player_count': payload['player_count'],
+              'transaction_count': payload['transaction_count'],
+              'team_to_team_candidates': len(candidates),
+          }, sort_keys=True))
           for row in candidates:
-              print(json.dumps({
+              print('RECOVERED_TRADE ' + json.dumps({
+                  'season': int(season),
                   'espn_transaction_id': row['espn_transaction_id'],
                   'transaction_type': row['transaction_type'],
                   'status': row['status'],
@@ -62,7 +76,7 @@ jobs:
       - name: Upload audit artifact
         uses: actions/upload-artifact@v4
         with:
-          name: trade-history-2025
-          path: artifacts/trade-history-2025.json
+          name: trade-history-${{ matrix.season }}
+          path: artifacts/trade-history-${{ matrix.season }}.json
           if-no-files-found: error
           retention-days: 14
