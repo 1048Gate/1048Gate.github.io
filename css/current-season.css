@@ -1,0 +1,24 @@
+.season-home{margin:0 0 22px}
+.season-board-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px 0;color:var(--muted);font:8px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+.season-board-meta strong{color:var(--amber)}
+.season-board-grid{display:grid;grid-template-columns:minmax(240px,.9fr) repeat(3,minmax(180px,1fr));gap:0}
+.season-board-grid.is-compact{grid-template-columns:minmax(240px,1fr) repeat(2,minmax(180px,1fr))}
+.season-board-grid.is-compact .season-panel:last-child{display:none}
+.season-panel{min-width:0;padding:16px 18px 18px;border-top:1px solid var(--line)}
+.season-panel + .season-panel{border-left:1px solid var(--line)}
+.season-panel header span{display:block;color:var(--amber);font:700 7px 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase}
+.season-panel header h3{margin:4px 0 12px;font:15px Oswald,sans-serif;text-transform:uppercase}
+.season-standings-table{width:100%;border-collapse:collapse}
+.season-standings-table th,.season-standings-table td{padding:7px 4px;border-bottom:1px solid #172829;text-align:left;font-size:12px}
+.season-standings-table th{color:var(--muted);font:700 7px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+.season-standings-table td:first-child,.season-standings-table td:nth-child(3),.season-standings-table td:last-child{font:600 11px 'Space Mono',monospace;color:var(--cream)}
+.season-week-grid{display:grid;gap:8px}
+.season-game{display:grid;gap:6px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:rgba(7,16,17,.35)}
+.season-game-side{display:flex;justify-content:space-between;gap:10px}
+.season-game-side strong{font:600 12px Oswald,sans-serif;text-transform:uppercase}
+.season-game-side span{font:600 12px 'Space Mono',monospace;color:var(--cream)}
+.season-empty,.season-more{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+.season-more{margin-top:10px}
+#season .season-board{margin-top:8px}
+@media(max-width:1100px){.season-board-grid,.season-board-grid.is-compact{grid-template-columns:1fr 1fr}.season-panel + .season-panel{border-left:0}.season-panel:nth-child(odd){border-right:1px solid var(--line)}}
+@media(max-width:700px){.season-board-grid,.season-board-grid.is-compact{grid-template-columns:1fr}.season-panel:nth-child(odd){border-right:0}}

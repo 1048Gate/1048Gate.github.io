@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "season": 2026,
+  "phase": "preseason",
+  "current_week": null,
+  "fetched_at": null,
+  "league_id": 1237285,
+  "source": "placeholder",
+  "note": "Szn 10 standings and weekly scores open after the keeper draft and Week 1.",
+  "standings": [],
+  "previous": null,
+  "current": null,
+  "upcoming": {
+    "week": 1,
+    "games": []
+  }
+}
