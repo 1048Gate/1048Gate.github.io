@@ -6,15 +6,11 @@ on:
       - fix/trade-history-recovery
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  audit-history:
+  aggregate-history:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        season: [2019, 2020, 2021, 2022, 2023, 2024, 2025]
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -24,59 +20,44 @@ jobs:
           python-version: '3.12'
       - name: Test trade-history normalizer
         run: python3 scripts/test_fetch_trade_history.py
-      - name: Fetch ESPN player-card transactions
+      - name: Fetch and aggregate executed team-to-team trades
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
           ESPN_S2: ${{ secrets.ESPN_S2 }}
           ESPN_SWID: ${{ secrets.ESPN_SWID }}
         run: |
-          mkdir -p artifacts
-          python3 scripts/fetch_trade_history.py \
-            --season "${{ matrix.season }}" \
-            --output "artifacts/trade-history-${{ matrix.season }}.json"
-      - name: Summarize team-to-team candidates
-        env:
-          SEASON: ${{ matrix.season }}
-        run: |
+          mkdir -p artifacts audit
+          for season in 2019 2020 2021 2022 2023 2024 2025; do
+            python3 scripts/fetch_trade_history.py \
+              --season "$season" \
+              --output "artifacts/trade-history-$season.json"
+          done
           python3 - <<'PY'
           import json
-          import os
           from pathlib import Path
 
-          season = os.environ['SEASON']
-          payload = json.loads(Path(f'artifacts/trade-history-{season}.json').read_text())
-          candidates = [row for row in payload['transactions'] if row['has_team_to_team_move']]
-          print(json.dumps({
-              'season': int(season),
-              'player_count': payload['player_count'],
-              'transaction_count': payload['transaction_count'],
-              'team_to_team_candidates': len(candidates),
-          }, sort_keys=True))
-          for row in candidates:
-              print('RECOVERED_TRADE ' + json.dumps({
-                  'season': int(season),
-                  'espn_transaction_id': row['espn_transaction_id'],
-                  'transaction_type': row['transaction_type'],
-                  'status': row['status'],
-                  'scoring_period': row['scoring_period'],
-                  'transaction_date_ms': row['transaction_date_ms'],
-                  'related_transaction_id': row['related_transaction_id'],
-                  'items': [
-                      {
-                          'item_type': item['item_type'],
-                          'player_id': item['player_id'],
-                          'player_name': item['player_name'],
-                          'from_team_id': item['from_team_id'],
-                          'to_team_id': item['to_team_id'],
-                      }
-                      for item in row['items']
-                  ],
-              }, sort_keys=True))
+          output = {
+              'schema_version': 1,
+              'source': 'ESPN kona_playercard audit',
+              'seasons': {},
+          }
+          for season in range(2019, 2026):
+              payload = json.loads(Path(f'artifacts/trade-history-{season}.json').read_text())
+              candidates = [row for row in payload['transactions'] if row['has_team_to_team_move']]
+              output['seasons'][str(season)] = {
+                  'player_count': payload['player_count'],
+                  'transaction_count': payload['transaction_count'],
+                  'executed_trade_count': len(candidates),
+                  'trades': candidates,
+              }
+          Path('audit/recovered-trades.json').write_text(json.dumps(output, indent=2) + '\n')
+          for season, data in output['seasons'].items():
+              print(f"{season}: {data['executed_trade_count']} executed trades")
           PY
-      - name: Upload audit artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: trade-history-${{ matrix.season }}
-          path: artifacts/trade-history-${{ matrix.season }}.json
-          if-no-files-found: error
-          retention-days: 14
+      - name: Commit temporary recovery evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/recovered-trades.json
+          git commit -m "Store temporary trade recovery evidence [skip ci]"
+          git push origin HEAD:fix/trade-history-recovery
