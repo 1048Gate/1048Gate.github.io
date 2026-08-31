@@ -45,7 +45,7 @@ for(const asset of assets){
   }
   const hashedAsset = await writeHashedAsset(asset, contents);
   const escapedAsset = asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  html = html.replace(new RegExp(`"${escapedAsset}(?:\?[^"#]*)?"`, 'g'), `"${hashedAsset}"`);
+  html = html.replace(new RegExp(`"${escapedAsset}(?:\\?[^"#]*)?"`, 'g'), `"${hashedAsset}"`);
 }
 
 await cp(new URL('data/', root), new URL('data/', dist), {recursive:true});
