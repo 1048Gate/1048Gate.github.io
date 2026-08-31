@@ -72,6 +72,10 @@ if(liveShape.number !== '07' || liveShape.seasons[0]?.team !== 'Test Team') thro
 if(shared.memberPresentation.initialsFor('George Travis') !== 'GT' || shared.memberPresentation.initialsFor('Tommy') !== 'TO'){
   throw new Error('Member initials must use first and last initials, with a safe one-name fallback.');
 }
+shared.memberPresentation.setRoster(['Bryan Hunt', 'Brian Heino', 'George Travis']);
+if(shared.memberPresentation.initialsFor('Bryan Hunt') !== 'BHU' || shared.memberPresentation.initialsFor('Brian Heino') !== 'BHE'){
+  throw new Error('Bryan Hunt and Brian Heino must use distinct initials (BHU / BHE).');
+}
 if(/images\/team-logos|member-logo/.test(`${html}\n${sharedSource}`)){
   throw new Error('Public member presentation must use initials instead of team logo assets.');
 }
@@ -95,8 +99,26 @@ if([...html.matchAll(/<button[^>]+class="quick-card"[^>]+data-quick-view=/g)].le
 if([...html.matchAll(/class="quick-kicker"/g)].length !== 6 || html.includes('class="corkboard commissioner-board"')){
   throw new Error('Home directory labels or the clean league-office presentation regressed.');
 }
-if([...html.matchAll(/<button[^>]+class="accordion-head"[^>]+aria-expanded=/g)].length !== 5){
+if([...html.matchAll(/<button[^>]+class="accordion-head"[^>]+aria-expanded=/g)].length !== 6){
   throw new Error('Every rules accordion trigger must be an accessible button with aria-expanded.');
+}
+if(!html.includes('§2</span>Keepers') || !html.includes('Szn 10 locked keepers') || !html.includes('Bijan Robinson')){
+  throw new Error('The Rules handbook must include the Szn 10 keeper section and locked keeper list.');
+}
+if(!html.includes('Lamb Fried Rice') || !html.includes('German Haro')){
+  throw new Error('Wall of Shame fallback must name 2025 last place as Lamb Fried Rice / German Haro.');
+}
+if(!html.includes('id="draftBoard"') || !html.includes('data-scroll-to="draftBoard"')){
+  throw new Error('Home must expose a draft-board jump target.');
+}
+if(!scriptAssets.includes('js/staff-loader.js')){
+  throw new Error('Staff tools must load through js/staff-loader.js.');
+}
+if(scriptAssets.includes('js/admin.js') || scriptAssets.includes('js/league-admin.js') || scriptAssets.includes('js/playoffs-admin.js')){
+  throw new Error('Admin scripts must stay off the guest path.');
+}
+if(html.includes('css/playoffs-admin.css')){
+  throw new Error('playoffs-admin.css must not load on the guest path.');
 }
 if(!html.includes('id="authControlMount"') || !html.includes('class="member-modal-card" role="dialog" aria-modal="true"')){
   throw new Error('Stable authentication and accessible member-modal markup is missing.');
@@ -169,7 +191,7 @@ for(const entry of readdirSync(jsDir, {withFileTypes:true})){
   if(!entry.isFile() || !entry.name.endsWith('.js')) continue;
   const fileUrl = new URL(entry.name, jsDir);
   const source = readFileSync(fileUrl, 'utf8');
-  if(/createElement\(['"](?:script|link)['"]\)/.test(source)){
+  if(entry.name !== 'staff-loader.js' && /createElement\(['"](?:script|link)['"]\)/.test(source)){
     throw new Error(`${entry.name} still injects a script or stylesheet at runtime.`);
   }
   supabaseClientCreations += [...source.matchAll(/\bcreateClient\s*\(/g)].length;

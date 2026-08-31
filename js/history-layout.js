@@ -231,7 +231,7 @@
       if(!biggestFall||finish>biggestFall.finish)biggestFall={owner:c.owner,from:c.year,to:c.year+1,finish};
     });
     return [
-      {label:'Most Titles',value:`${maxTitles} apiece`,detail:most},
+      {label:'Most Titles',value:titleCounts.filter(t=>t.count===maxTitles).length>1?`${maxTitles} apiece`:String(maxTitles),detail:most},
       {label:'First Champion',value:String(first.year),detail:`${first.owner} · ${first.team}`},
       {label:'Back-to-Back Champs',value:String(repeats.length),detail:[...repeats].sort((a,b)=>a.from-b.from).map(r=>`${r.owner} '${String(r.from).slice(2)}–'${String(r.to).slice(2)}`).join(' · ')},
       {label:'Best Champion Record',value:best.record,detail:bestRecord},
