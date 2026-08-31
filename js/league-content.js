@@ -155,12 +155,45 @@
     timeline.innerHTML = `<div class="shame-history-head"><h3>Hall of Misfortune</h3><span>Last-place archive</span></div><div class="shame-history-grid">${shame.map(item => `<article class="shame-history-card ${item.is_active ? 'active' : ''}"><div class="shame-history-year">${item.season_year || '—'}</div><div class="shame-history-icon">${esc(item.icon || '💩')}</div><h4>${esc(item.member_team || item.title)}</h4>${item.punishment ? `<strong>${esc(item.punishment)}</strong>` : ''}${item.note && item.note !== item.punishment ? `<p>${esc(item.note)}</p>` : ''}</article>`).join('')}</div>`;
   }
 
+
+  async function loadShameFallback(){
+    const history = document.getElementById('history');
+    if(!history) return;
+    try{
+      const response = await fetch('data/seasons.json', {cache:'no-store'});
+      if(!response.ok) throw new Error(`seasons.json returned HTTP ${response.status}`);
+      const payload = await response.json();
+      const shame = (payload.seasons || []).map(season => {
+        const year = Number(season[0]);
+        const standings = Array.isArray(season[4]) ? season[4] : [];
+        const last = standings.find(row => Number(row[0]) === 12) || standings[standings.length - 1];
+        if(!last) return null;
+        const team = String(last[2] || '').trim();
+        const owner = String(last[3] || '').trim();
+        const record = String(last[4] || '').trim();
+        return {
+          season_year: year,
+          member_team: team,
+          title: `${team} — Last Place, ${year}`,
+          punishment: owner && record ? `${owner} · ${record}` : owner,
+          note: year === 2025 ? "Sentenced to this year's punishment. Details TBD by the committee." : '',
+          icon: '💩',
+          is_active: year === 2025
+        };
+      }).filter(Boolean).sort((a, b) => b.season_year - a.season_year);
+      if(shame.length) renderShame(shame);
+    }catch(error){
+      console.error('Unable to load shame fallback:', error);
+    }
+  }
+
   async function loadHistory(){
     const history = document.getElementById('history');
     if(!history) return;
     if(!supabase){
       window.gateCmsRecords = 'absent';
       loadChampionsFallback();
+      loadShameFallback();
       return;
     }
     try{
@@ -182,11 +215,13 @@
 
       window.gateCmsRecords = renderCmsRecords(records) ? 'rendered' : 'absent';
 
-      renderShame(shame);
+      if(shame?.length) renderShame(shame);
+      else loadShameFallback();
     }catch(error){
       console.error('Unable to load league content:', error);
       window.gateCmsRecords = 'absent';
       loadChampionsFallback();
+      loadShameFallback();
     }
   }
 
