@@ -48,6 +48,7 @@ jobs:
           python3 scripts/probe_espn_trades.py \
             --start 2019 \
             --end 2025 \
+            --player-ids scripts/data/espn-trade-probe-player-ids.json \
             --output artifacts/espn-trade-recovery
       - name: Reject credential leakage
         env:

@@ -88,7 +88,9 @@ def transaction_candidates(value: Any):
             yield from transaction_candidates(nested)
 
 
-def normalize_item(item: dict[str, Any], team_names: dict[int, str]) -> dict[str, Any] | None:
+def normalize_item(
+    item: dict[str, Any], team_names: dict[int, str], player_names: dict[int, str] | None = None
+) -> dict[str, Any] | None:
     action = str(item.get("type") or item.get("action") or "").upper()
     if action not in {"TRADE", "ADD", "DROP"}:
         return None
@@ -98,6 +100,8 @@ def normalize_item(item: dict[str, Any], team_names: dict[int, str]) -> dict[str
     player = player_pool.get("player") or {}
     player_id = player_id if player_id is not None else player.get("id")
     player_name = player_name or player.get("fullName") or player.get("name")
+    if player_name is None and player_id is not None and player_names:
+        player_name = player_names.get(int(player_id))
     from_team = item.get("fromTeamId")
     to_team = item.get("toTeamId")
     return {
@@ -112,7 +116,8 @@ def normalize_item(item: dict[str, Any], team_names: dict[int, str]) -> dict[str
 
 
 def normalize_transaction(
-    row: dict[str, Any], season: int, team_names: dict[int, str]
+    row: dict[str, Any], season: int, team_names: dict[int, str],
+    player_names: dict[int, str] | None = None
 ) -> dict[str, Any] | None:
     transaction_id = str(row.get("id") or row.get("transactionId") or "").strip()
     kind = str(row.get("type") or row.get("transactionType") or "").upper()
@@ -122,7 +127,7 @@ def normalize_transaction(
     for raw_item in row.get("items") or []:
         if not isinstance(raw_item, dict):
             continue
-        item = normalize_item(raw_item, team_names)
+        item = normalize_item(raw_item, team_names, player_names)
         if item:
             items.append(item)
     team_id = row.get("teamId")
@@ -165,7 +170,34 @@ def league_url(season: int, league_id: int, views: list[str], period: int | None
     )
 
 
-def recover_season(season: int, league_id: int) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def playercard_filter(season: int, player_ids: list[int]) -> dict[str, Any]:
+    return {
+        "players": {
+            "filterIds": {"value": player_ids},
+            "filterStatsForTopScoringPeriodIds": {
+                "value": 18,
+                "additionalValue": [f"00{season}", f"10{season}"],
+            },
+        }
+    }
+
+
+def playercard_names(payload: dict[str, Any]) -> dict[int, str]:
+    names: dict[int, str] = {}
+    for entry in payload.get("players", []):
+        if not isinstance(entry, dict):
+            continue
+        player = entry.get("player") or entry
+        player_id = player.get("id")
+        name = player.get("fullName") or player.get("name")
+        if player_id is not None and name:
+            names[int(player_id)] = str(name)
+    return names
+
+
+def recover_season(
+    season: int, league_id: int, player_ids: list[int]
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     requests = 0
     errors: list[str] = []
     recovered: dict[str, dict[str, Any]] = {}
@@ -183,9 +215,6 @@ def recover_season(season: int, league_id: int) -> tuple[list[dict[str, Any]], d
         ("all-periods-filtered", None, transaction_filter(True)),
         ("all-periods-untyped", None, transaction_filter(False)),
     ]
-    strategies.extend(
-        (f"period-{period}", period, transaction_filter(True)) for period in range(1, 19)
-    )
 
     strategy_counts: dict[str, int] = {}
     for label, period, filters in strategies:
@@ -206,6 +235,38 @@ def recover_season(season: int, league_id: int) -> tuple[list[dict[str, Any]], d
         except Exception as exc:  # Continue through alternate historical query shapes.
             errors.append(f"{label}: {type(exc).__name__}: {exc}")
 
+    player_names: dict[int, str] = {}
+    playercard_requests = 0
+    for batch_start in range(0, len(player_ids), 60):
+        batch = player_ids[batch_start:batch_start + 60]
+        label = f"playercard-{batch_start // 60 + 1}"
+        try:
+            payload = request_json(
+                league_url(season, league_id, ["kona_playercard"]),
+                playercard_filter(season, batch),
+            )
+            requests += 1
+            playercard_requests += 1
+            player_names.update(playercard_names(payload))
+            before = len(recovered)
+            for raw in transaction_candidates(payload):
+                normalized = normalize_transaction(
+                    raw, season, team_names, player_names
+                )
+                if not normalized:
+                    continue
+                existing = recovered.get(normalized["transaction_id"])
+                if existing is None or len(normalized["items"]) > len(existing["items"]):
+                    recovered[normalized["transaction_id"]] = normalized
+            strategy_counts[label] = len(recovered) - before
+        except Exception as exc:
+            errors.append(f"{label}: {type(exc).__name__}: {exc}")
+
+    for transaction in recovered.values():
+        for item in transaction["items"]:
+            if item.get("player_name") is None and item.get("player_id") is not None:
+                item["player_name"] = player_names.get(int(item["player_id"]))
+
     rows = sorted(
         recovered.values(),
         key=lambda row: (
@@ -217,6 +278,9 @@ def recover_season(season: int, league_id: int) -> tuple[list[dict[str, Any]], d
         "season_year": season,
         "request_count": requests,
         "team_count": len(team_names),
+        "player_ids_queried": len(player_ids),
+        "player_names_returned": len(player_names),
+        "playercard_request_count": playercard_requests,
         "transaction_count": len(rows),
         "type_counts": dict(sorted(Counter(row["transaction_type"] for row in rows).items())),
         "trade_item_count": sum(
@@ -239,16 +303,20 @@ def main() -> int:
     parser.add_argument("--start", type=int, default=2019)
     parser.add_argument("--end", type=int, default=2025)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--player-ids", type=Path, required=True)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
 
     if not os.getenv("ESPN_S2") or not (os.getenv("ESPN_SWID") or os.getenv("SWID")):
         raise SystemExit("Protected ESPN credentials are not configured")
 
+    player_ids_by_season = json.loads(args.player_ids.read_text(encoding="utf-8"))
+
     all_rows: list[dict[str, Any]] = []
     seasons: list[dict[str, Any]] = []
     for season in range(args.start, args.end + 1):
-        rows, summary = recover_season(season, args.league_id)
+        player_ids = sorted({int(value) for value in player_ids_by_season.get(str(season), [])})
+        rows, summary = recover_season(season, args.league_id, player_ids)
         all_rows.extend(rows)
         seasons.append(summary)
         print(
