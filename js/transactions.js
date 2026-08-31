@@ -14,7 +14,7 @@
   let loaded = false;
   let loading = false;
   let page = 1;
-  let activeCategory = 'all';
+  let activeCategory = 'TRADE_ACCEPT';
   let searchTimer = null;
   let summaryCounts = null;
   let currentArchive = null;
@@ -121,8 +121,10 @@
 
   function detailNote(row){
     if(row.transaction_type !== 'TRADE_ACCEPT') return '';
-    if(row.source_detail_status === 'verified') return '<span class="transaction-detail-status">Source-verified player movement</span>';
     if(row.source_detail_status === 'proposal_derived') return '<span class="transaction-detail-status">Player movement reconstructed from the recorded proposal</span>';
+    if(row.source_detail_status === 'verified') return '';
+    const related = Array.isArray(row.items) ? row.items : [];
+    if(related.length) return '';
     return '<div class="transaction-no-items">ESPN recorded this accepted deal, but its player details are missing from the source archive.</div>';
   }
 
@@ -204,10 +206,17 @@
     controls.search.value = '';
     controls.season.value = 'all';
     controls.sort.value = 'newest';
-    activeCategory = 'all';
+    activeCategory = 'TRADE_ACCEPT';
     page = 1;
     loadArchive({refreshSummary:true});
     controls.search.focus();
+  });
+  document.getElementById('transactionJumpTrades')?.addEventListener('click', () => {
+    activeCategory = 'TRADE_ACCEPT';
+    page = 1;
+    renderSummary();
+    loadArchive();
+    document.querySelector('.transaction-results-head')?.scrollIntoView({behavior:'smooth', block:'start'});
   });
   document.getElementById('transactionPagination').addEventListener('click', event => {
     const button = event.target.closest('button[data-page]');

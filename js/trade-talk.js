@@ -64,9 +64,17 @@
   }
   const listNames = names => names.length ? names.map(name => `<strong>${esc(name)}</strong>`).join(', ') : '<em>future considerations</em>';
 
+  function latestSeasonWithDeals(){
+    const withDeals = seasons
+      .map(entry => ({year:Number(entry.season_year), count:Number(entry.accepted_trade_count || 0)}))
+      .filter(entry => Number.isFinite(entry.year) && entry.count > 0)
+      .sort((a,b) => b.year - a.year);
+    return withDeals[0]?.year ?? currentSeasonYear;
+  }
+
   function renderDetailStatus(trade){
-    if(trade.source_detail_status === 'verified') return '<span class="transaction-detail-status">Source-verified player movement</span>';
     if(trade.source_detail_status === 'proposal_derived') return '<span class="transaction-detail-status">Player movement reconstructed from the recorded proposal</span>';
+    if(trade.source_detail_status === 'verified' || trade.items.length) return '';
     return '<div class="trade-details-unavailable"><strong>Trade accepted</strong><span>ESPN did not retain player details for this deal in the imported archive.</span></div>';
   }
 
@@ -131,7 +139,7 @@
         if(error) throw error;
         seasons = Array.isArray(data) ? data : [];
         renderNav();
-        const firstYear = activeYear ?? seasons.map(entry => Number(entry.season_year)).sort((a,b) => b-a)[0] ?? currentSeasonYear;
+        const firstYear = activeYear ?? latestSeasonWithDeals();
         if(firstYear) await renderYear(firstYear);
         else document.getElementById('tradeFeed').innerHTML = '<div class="panel transaction-empty"><strong>No trade archive is available yet.</strong><span>Accepted deals will appear here after they are imported.</span></div>';
       }catch(error){
