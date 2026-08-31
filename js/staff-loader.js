@@ -8,27 +8,24 @@
       .some(node => (node.getAttribute('src') || node.getAttribute('href') || '').replace(/^\//, '') === src);
   }
 
+  function appendTag(tagName, attrs){
+    return new Promise((resolve, reject) => {
+      const node = document.createElement(tagName);
+      Object.entries(attrs).forEach(([key, value]) => { node[key] = value; });
+      node.onload = () => resolve();
+      node.onerror = () => reject(new Error(`Unable to load ${attrs.src || attrs.href}`));
+      document.head.appendChild(node);
+    });
+  }
+
   function loadStyle(href){
     if(alreadyPresent(href)) return Promise.resolve();
-    return new Promise((resolve, reject) => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      link.onload = () => resolve();
-      link.onerror = () => reject(new Error(`Unable to load ${href}`));
-      document.head.appendChild(link);
-    });
+    return appendTag('link', {rel:'stylesheet', href});
   }
 
   function loadScript(src){
     if(alreadyPresent(src)) return Promise.resolve();
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`Unable to load ${src}`));
-      document.head.appendChild(script);
-    });
+    return appendTag('script', {src});
   }
 
   function loadStaffTools(){
