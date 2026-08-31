@@ -156,6 +156,28 @@
       </section>
     </section>
 
+    <section class="home-section keepers-section" id="homeKeepers" aria-label="Szn 10 keepers">
+      <header class="home-section-head"><div><span>House rule</span><h2>Keepers</h2></div><small>One per club</small></header>
+      <div class="keepers-home-body">
+        <div class="rule-summary"><strong>One keeper per club.</strong> If you kept someone last year who was your 1st-round pick, you can no longer keep them. If you are keeping someone for the 2nd year in a row, their draft round moves up this year. Example: keeping Saquon as a 2nd-rounder last year and keeping him again this year costs a 1st-round pick.</div>
+        <div class="rule-grid keeper-list">
+          <div class="rule-row"><span>George Travis</span><span>Javonte Williams · 8th</span></div>
+          <div class="rule-row"><span>Trevor Hash</span><span>Chase Brown · 9th</span></div>
+          <div class="rule-row"><span>Kyle Fowler</span><span>Cam Skattebo · 8th</span></div>
+          <div class="rule-row"><span>Jared Hall</span><span>Jaxon Dart · 16th</span></div>
+          <div class="rule-row"><span>Thomas Speer</span><span>Puka Nacua · 9th</span></div>
+          <div class="rule-row"><span>JD Daley</span><span>Rashee Rice · 7th</span></div>
+          <div class="rule-row"><span>Collin Krum</span><span>Bijan Robinson · 1st</span></div>
+          <div class="rule-row"><span>Brian Heino</span><span>Devon Achane · 12th</span></div>
+          <div class="rule-row"><span>Vincent Cannarozzi</span><span>Kyle Pitts · 12th</span></div>
+          <div class="rule-row"><span>James Brochu</span><span>Travis Etienne · 8th</span></div>
+          <div class="rule-row"><span>German Haro</span><span>Michael Pittman · 7th</span></div>
+          <div class="rule-row"><span>Bryan Hunt</span><span>Brock Bowers · 9th</span></div>
+        </div>
+        <button type="button" class="btn btn-ghost" data-view-link="rules">Full keeper rules</button>
+      </div>
+    </section>
+
     <div class="home-dashboard">
       <section class="home-section home-office">
         <header class="home-section-head"><div><span>League office</span><h2>Commissioner Updates</h2></div><small>Official announcements</small></header>
@@ -194,7 +216,7 @@
       <button type="button" class="quick-card" data-quick-view="votes"><span class="num">02</span><span class="quick-kicker">League office</span><h3>Vote Booth</h3><p>Rule proposals, league decisions, and official polls.</p></button>
       <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><span class="quick-kicker">League wire</span><h3>Transactions</h3><p>Adds, drops, successful waivers, and accepted trades.</p></button>
       <button type="button" class="quick-card" data-quick-view="history"><span class="num">04</span><span class="quick-kicker">Archive</span><h3>League History</h3><p>Champions, records, season results, and milestones.</p></button>
-      <button type="button" class="quick-card" data-quick-view="members"><span class="num">05</span><span class="quick-kicker">The league</span><h3>Members</h3><p>Manager profiles, career records, and team history.</p></button>
+      <button type="button" class="quick-card" data-quick-view="members"><span class="num">05</span><span class="quick-kicker">The league</span><h3>Members</h3><p>The twelve, Szn 10 keepers, and past members.</p></button>
       <button type="button" class="quick-card" data-quick-view="playoffs"><span class="num">06</span><span class="quick-kicker">Competition</span><h3>Playoffs</h3><p>Postseason brackets, championship games, and seeds.</p></button>
     </div>
   </section>
@@ -355,8 +377,125 @@
 
   <section class="view" id="members">
     <div class="section-title"><h2>Members</h2></div>
-    <div class="member-help"><strong><span data-stat-seasons>9</span> seasons. <span data-stat-managers>12</span> managers. One league.</strong> Open a manager card for career results, team history, rivalries, signature games, draft results, and top players. <span id="memberDataSource" class="mono">Loading history…</span></div>
+    <div class="member-help"><strong><span data-stat-seasons>9</span> seasons. <span data-stat-managers>12</span> still here. Six who were.</strong> Open a manager card for career results, team history, rivalries, signature games, draft results, and top players. <span id="memberDataSource" class="mono">Loading history…</span></div>
     <div class="members-grid" id="membersGrid"></div>
+
+    <section class="keepers-subsection" id="membersKeepers" aria-labelledby="membersKeepersHeading">
+      <div class="section-title"><span class="section-kicker">Szn 10</span><h2 id="membersKeepersHeading">Keepers</h2><span class="see-all">One per club</span></div>
+      <div class="rule-summary"><strong>One keeper per club.</strong> If you kept someone last year who was your 1st-round pick, you can no longer keep them. If you are keeping someone for the 2nd year in a row, their draft round moves up this year. Example: keeping Saquon as a 2nd-rounder last year and keeping him again this year costs a 1st-round pick.</div>
+      <div class="rule-grid keeper-list">
+        <div class="rule-row"><span>George Travis</span><span>Javonte Williams · 8th</span></div>
+        <div class="rule-row"><span>Trevor Hash</span><span>Chase Brown · 9th</span></div>
+        <div class="rule-row"><span>Kyle Fowler</span><span>Cam Skattebo · 8th</span></div>
+        <div class="rule-row"><span>Jared Hall</span><span>Jaxon Dart · 16th</span></div>
+        <div class="rule-row"><span>Thomas Speer</span><span>Puka Nacua · 9th</span></div>
+        <div class="rule-row"><span>JD Daley</span><span>Rashee Rice · 7th</span></div>
+        <div class="rule-row"><span>Collin Krum</span><span>Bijan Robinson · 1st</span></div>
+        <div class="rule-row"><span>Brian Heino</span><span>Devon Achane · 12th</span></div>
+        <div class="rule-row"><span>Vincent Cannarozzi</span><span>Kyle Pitts · 12th</span></div>
+        <div class="rule-row"><span>James Brochu</span><span>Travis Etienne · 8th</span></div>
+        <div class="rule-row"><span>German Haro</span><span>Michael Pittman · 7th</span></div>
+        <div class="rule-row"><span>Bryan Hunt</span><span>Brock Bowers · 9th</span></div>
+      </div>
+      <p class="rule-note">A used round is skipped on the board so that club does not pick twice in the same round. Full wording lives under Rules §2 Keepers.</p>
+    </section>
+
+    <section class="alumni-section" id="pastMembers" aria-labelledby="pastMembersHeading">
+      <div class="section-title"><span class="section-kicker">No longer on the clock</span><h2 id="pastMembersHeading">Past members</h2><span class="see-all">Six alumni</span></div>
+      <div class="member-help">These six were in 1048 Gate. They are not on the current twelve. Records are regular-season only.</div>
+      <div class="members-grid alumni-grid">
+        <article class="member-card public-member-card alumni-card">
+          <div class="member-head member-head-with-avatar">
+            <div class="member-avatar" aria-hidden="true"><span class="member-initials">RC</span></div>
+            <div class="member-identity"><div class="team">Ronnie Coiro</div><div class="mgr">2017–2021 · Alumni</div></div>
+            <span class="member-title-badge">5 szn</span>
+          </div>
+          <div class="member-latest"><span>Easy Money</span><small>Last club</small></div>
+          <div class="member-stats public-member-stats">
+            <div class="member-stat"><span class="label">Record</span><span class="value accent">27–39</span></div>
+            <div class="member-stat"><span class="label">Best</span><span class="value">3rd</span></div>
+            <div class="member-stat"><span class="label">Seasons</span><span class="value">5</span></div>
+            <div class="member-stat"><span class="label">Span</span><span class="value">’17–’21</span></div>
+          </div>
+          <p class="alumni-note">Two identities — Big Fags, then Easy Money. Third place in Szn 1, then five years in the mix.</p>
+        </article>
+        <article class="member-card public-member-card alumni-card">
+          <div class="member-head member-head-with-avatar">
+            <div class="member-avatar" aria-hidden="true"><span class="member-initials">JD</span></div>
+            <div class="member-identity"><div class="team">Joey Dwulet</div><div class="mgr">2017 · Alumni</div></div>
+            <span class="member-title-badge">1 szn</span>
+          </div>
+          <div class="member-latest"><span>Green Monsters</span><small>Last club</small></div>
+          <div class="member-stats public-member-stats">
+            <div class="member-stat"><span class="label">Record</span><span class="value accent">8–5</span></div>
+            <div class="member-stat"><span class="label">Best</span><span class="value">4th</span></div>
+            <div class="member-stat"><span class="label">Seasons</span><span class="value">1</span></div>
+            <div class="member-stat"><span class="label">Span</span><span class="value">2017</span></div>
+          </div>
+          <p class="alumni-note">Original twelve. Went 8–5 in Grabbing Sheets 2K17 and walked. The Green Monsters never got a sequel.</p>
+        </article>
+        <article class="member-card public-member-card alumni-card">
+          <div class="member-head member-head-with-avatar">
+            <div class="member-avatar" aria-hidden="true"><span class="member-initials">BJ</span></div>
+            <div class="member-identity"><div class="team">Brian James</div><div class="mgr">2017 · Alumni</div></div>
+            <span class="member-title-badge">1 szn</span>
+          </div>
+          <div class="member-latest"><span>PHI 10-2</span><small>Last club</small></div>
+          <div class="member-stats public-member-stats">
+            <div class="member-stat"><span class="label">Record</span><span class="value accent">7–5–1</span></div>
+            <div class="member-stat"><span class="label">Best</span><span class="value">5th</span></div>
+            <div class="member-stat"><span class="label">Seasons</span><span class="value">1</span></div>
+            <div class="member-stat"><span class="label">Span</span><span class="value">2017</span></div>
+          </div>
+          <p class="alumni-note">One of the founders. Tied a game, finished fifth, and left before keepers were even a thing.</p>
+        </article>
+        <article class="member-card public-member-card alumni-card">
+          <div class="member-head member-head-with-avatar">
+            <div class="member-avatar" aria-hidden="true"><span class="member-initials">CB</span></div>
+            <div class="member-identity"><div class="team">Chardo BRYCE</div><div class="mgr">2017 · Alumni</div></div>
+            <span class="member-title-badge">1 szn</span>
+          </div>
+          <div class="member-latest"><span>Hey Yo Party at Beaver</span><small>Last club</small></div>
+          <div class="member-stats public-member-stats">
+            <div class="member-stat"><span class="label">Record</span><span class="value accent">4–9</span></div>
+            <div class="member-stat"><span class="label">Best</span><span class="value">10th</span></div>
+            <div class="member-stat"><span class="label">Seasons</span><span class="value">1</span></div>
+            <div class="member-stat"><span class="label">Span</span><span class="value">2017</span></div>
+          </div>
+          <p class="alumni-note">The name outlived the roster. Szn 1 only. Still the most-quoted team title in the archive.</p>
+        </article>
+        <article class="member-card public-member-card alumni-card">
+          <div class="member-head member-head-with-avatar">
+            <div class="member-avatar" aria-hidden="true"><span class="member-initials">EP</span></div>
+            <div class="member-identity"><div class="team">Ed Perrine</div><div class="mgr">2018 · Alumni</div></div>
+            <span class="member-title-badge">1 szn</span>
+          </div>
+          <div class="member-latest"><span>Team Perrine</span><small>Last club</small></div>
+          <div class="member-stats public-member-stats">
+            <div class="member-stat"><span class="label">Record</span><span class="value accent">7–6</span></div>
+            <div class="member-stat"><span class="label">Best</span><span class="value">6th</span></div>
+            <div class="member-stat"><span class="label">Seasons</span><span class="value">1</span></div>
+            <div class="member-stat"><span class="label">Span</span><span class="value">2018</span></div>
+          </div>
+          <p class="alumni-note">Came in with Hash’s class, went 7–6, and was gone before Szn 3.</p>
+        </article>
+        <article class="member-card public-member-card alumni-card">
+          <div class="member-head member-head-with-avatar">
+            <div class="member-avatar" aria-hidden="true"><span class="member-initials">TC</span></div>
+            <div class="member-identity"><div class="team">Thomas Connelly</div><div class="mgr">2018 · Alumni</div></div>
+            <span class="member-title-badge">1 szn</span>
+          </div>
+          <div class="member-latest"><span>Team Connelly</span><small>Last club</small></div>
+          <div class="member-stats public-member-stats">
+            <div class="member-stat"><span class="label">Record</span><span class="value accent">4–9</span></div>
+            <div class="member-stat"><span class="label">Best</span><span class="value">9th</span></div>
+            <div class="member-stat"><span class="label">Seasons</span><span class="value">1</span></div>
+            <div class="member-stat"><span class="label">Span</span><span class="value">2018</span></div>
+          </div>
+          <p class="alumni-note">One year, two keepers, nine losses. Hash survived the 2018 expansion. Connelly did not.</p>
+        </article>
+      </div>
+    </section>
   </section>
 
   <section class="view" id="newspaper">
