@@ -1,0 +1,39 @@
+name: One-time trade recovery audit
+
+on:
+  push:
+    branches:
+      - fix/trade-history-recovery
+
+permissions:
+  contents: read
+
+jobs:
+  audit-2025:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test trade-history normalizer
+        run: python3 scripts/test_fetch_trade_history.py
+      - name: Fetch 2025 ESPN player-card transactions
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+        run: |
+          mkdir -p artifacts
+          python3 scripts/fetch_trade_history.py \
+            --season 2025 \
+            --output artifacts/trade-history-2025.json
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trade-history-2025
+          path: artifacts/trade-history-2025.json
+          if-no-files-found: error
+          retention-days: 14
