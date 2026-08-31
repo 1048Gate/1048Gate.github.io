@@ -3,7 +3,7 @@
 .season-board-meta strong{color:var(--amber)}
 .season-board-grid{display:grid;grid-template-columns:minmax(240px,.9fr) repeat(3,minmax(180px,1fr));gap:0}
 .season-board-grid.is-compact{grid-template-columns:minmax(240px,1fr) repeat(2,minmax(180px,1fr))}
-.season-board-grid.is-compact .season-panel:last-child{display:none}
+.season-board-grid.is-compact .season-panel-previous{display:none}
 .season-panel{min-width:0;padding:16px 18px 18px;border-top:1px solid var(--line)}
 .season-panel + .season-panel{border-left:1px solid var(--line)}
 .season-panel header span{display:block;color:var(--amber);font:700 7px 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase}
@@ -22,3 +22,9 @@
 #season .season-board{margin-top:8px}
 @media(max-width:1100px){.season-board-grid,.season-board-grid.is-compact{grid-template-columns:1fr 1fr}.season-panel + .season-panel{border-left:0}.season-panel:nth-child(odd){border-right:1px solid var(--line)}}
 @media(max-width:700px){.season-board-grid,.season-board-grid.is-compact{grid-template-columns:1fr}.season-panel:nth-child(odd){border-right:0}}
+
+.season-standings-table td small{display:block;color:var(--muted);font:10px Inter,sans-serif;text-transform:none;letter-spacing:0;font-weight:500}
+
+.season-home .text-link{border:0;background:none;padding:0;color:var(--amber);font:700 10px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.season-home .text-link:hover{color:var(--cream)}
+#season .lede{max-width:62ch;color:var(--muted);margin:0 0 16px}

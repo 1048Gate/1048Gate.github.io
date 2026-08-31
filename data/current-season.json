@@ -6,8 +6,141 @@
   "fetched_at": null,
   "league_id": 1237285,
   "source": "placeholder",
-  "note": "Szn 10 standings and weekly scores open after the keeper draft and Week 1.",
-  "standings": [],
+  "note": "Szn 10 table is set. Live scores and records replace this after Week 1.",
+  "standings": [
+    {
+      "rank": 1,
+      "team_id": 1,
+      "team_name": "Shiesty Szn",
+      "owner_name": "George Travis",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 2,
+      "team_id": 2,
+      "team_name": "Darty at 1048",
+      "owner_name": "Jared Hall",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 3,
+      "team_id": 3,
+      "team_name": "Buckle Up",
+      "owner_name": "Kyle Fowler",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 4,
+      "team_id": 4,
+      "team_name": "Howya Been's",
+      "owner_name": "Bryan Hunt",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 5,
+      "team_id": 5,
+      "team_name": "Meeches Mayhem",
+      "owner_name": "Brian Heino",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 6,
+      "team_id": 6,
+      "team_name": "Like a Good Nabers",
+      "owner_name": "Vincent Cannarozzi",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 7,
+      "team_id": 7,
+      "team_name": "Jigalos Jims",
+      "owner_name": "James Brochu",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 8,
+      "team_id": 8,
+      "team_name": "Ja'Marr-a-Lago",
+      "owner_name": "JD Daley",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 9,
+      "team_id": 9,
+      "team_name": "The Swifties",
+      "owner_name": "Thomas Speer",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 10,
+      "team_id": 10,
+      "team_name": "Breezin’ with Bijan",
+      "owner_name": "Collin Krum",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 11,
+      "team_id": 11,
+      "team_name": "Lamb Fried Rice",
+      "owner_name": "German Haro",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    },
+    {
+      "rank": 12,
+      "team_id": 12,
+      "team_name": "Team Hash",
+      "owner_name": "Trevor Hash",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "points_for": 0,
+      "points_against": 0
+    }
+  ],
   "previous": null,
   "current": null,
   "upcoming": {
