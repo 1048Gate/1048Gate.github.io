@@ -30,6 +30,35 @@ jobs:
           python3 scripts/fetch_trade_history.py \
             --season 2025 \
             --output artifacts/trade-history-2025.json
+      - name: Summarize team-to-team candidates
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(Path('artifacts/trade-history-2025.json').read_text())
+          candidates = [row for row in payload['transactions'] if row['has_team_to_team_move']]
+          print(f"team_to_team_candidates={len(candidates)}")
+          for row in candidates:
+              print(json.dumps({
+                  'espn_transaction_id': row['espn_transaction_id'],
+                  'transaction_type': row['transaction_type'],
+                  'status': row['status'],
+                  'scoring_period': row['scoring_period'],
+                  'transaction_date_ms': row['transaction_date_ms'],
+                  'related_transaction_id': row['related_transaction_id'],
+                  'items': [
+                      {
+                          'item_type': item['item_type'],
+                          'player_id': item['player_id'],
+                          'player_name': item['player_name'],
+                          'from_team_id': item['from_team_id'],
+                          'to_team_id': item['to_team_id'],
+                      }
+                      for item in row['items']
+                  ],
+              }, sort_keys=True))
+          PY
       - name: Upload audit artifact
         uses: actions/upload-artifact@v4
         with:
