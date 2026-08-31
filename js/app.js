@@ -398,7 +398,7 @@ async function loadEdition(editionKey) {
 
     // Display the edition
     currentEdition = editionKey;
-    displayEdition(data, editionLabel);
+    displayEdition(data, editionLabel, editionKey);
 
     // Add edition status badge
     addEditionStatusBadge(editionKey, data);
@@ -413,7 +413,7 @@ async function loadEdition(editionKey) {
 }
 
 // Display the edition content
-function displayEdition(data, label) {
+function displayEdition(data, label, editionKey) {
   const editionContainer = document.getElementById('editionContent');
   if (!editionContainer) return;
 
@@ -576,6 +576,19 @@ if (editionTabs.length > 0) {
       tab.classList.add('active');
       const editionKey = tab.dataset.edition;
       loadEdition(editionKey).catch(() => {});
+      const toggleSources = document.querySelector('.toggle-sources');
+      if (toggleSources) {
+        if (editionKey) {
+          toggleSources.style.display = 'inline-block';
+          if (editionKey === 'weekly_fallback') {
+            toggleSources.setAttribute('aria-label', 'View sources (cached edition)');
+          } else {
+            toggleSources.setAttribute('aria-label', 'View sources');
+          }
+        } else {
+          toggleSources.style.display = 'none';
+        }
+      }
       if (editionKey === 'weekly_fallback') {
         document.querySelector('.toggle-sources')?.setAttribute('aria-label', 'View sources (cached edition)');
       } else {
