@@ -36,7 +36,7 @@
     return `<table class="season-standings-table"><thead><tr><th>Rk</th><th>Team</th><th>W-L</th><th>PF</th></tr></thead><tbody>${
       teams.map((team, index) => `<tr>
         <td>${esc(team.rank || index + 1)}</td>
-        <td>${esc(team.team_name || 'Team')}</td>
+        <td>${esc(team.team_name || 'Team')}${team.owner_name ? `<small>${esc(team.owner_name)}</small>` : ''}</td>
         <td>${esc(record(team))}</td>
         <td>${esc(points(team.points_for))}</td>
       </tr>`).join('')
@@ -61,7 +61,7 @@
           ${renderStandings(preview)}
           ${compact && standings.length > 6 ? '<p class="season-more">Open the Season tab for the full table.</p>' : ''}
         </section>
-        <section class="season-panel">
+        <section class="season-panel season-panel-previous">
           <header><span>Last week</span><h3>${data.previous?.week ? `Week ${esc(data.previous.week)}` : 'Previous'}</h3></header>
           ${weekBlock(data.previous, 'No completed week yet. Check back after Monday night.')}
         </section>
