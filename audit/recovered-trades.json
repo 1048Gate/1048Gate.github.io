@@ -1,0 +1,4798 @@
+{
+  "schema_version": 1,
+  "source": "ESPN kona_playercard audit",
+  "seasons": {
+    "2019": {
+      "player_count": 1114,
+      "transaction_count": 602,
+      "executed_trade_count": 35,
+      "trades": [
+        {
+          "espn_transaction_id": "47693fe3-ff58-4a18-b32d-0c6be3463840",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 11,
+          "transaction_date_ms": 1573675886945,
+          "related_transaction_id": "f7555dc9-f372-4e26-b887-902d98ed5376",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 16944,
+              "player_name": "Devonta Freeman",
+              "from_team_id": 9,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241372,
+              "player_name": "Marquise Brown",
+              "from_team_id": 6,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            16944,
+            4241372
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "6949f8ff-40a1-4183-8a0b-59a1d8d65685",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 8,
+          "transaction_date_ms": 1571942277531,
+          "related_transaction_id": "6aad510f-e56c-4306-9520-abca9e693589",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": -16021,
+              "player_name": "Eagles D/ST",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 12514,
+              "player_name": "LeSean McCoy",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 15773,
+              "player_name": "Darren Fells",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 17359,
+              "player_name": "Damien Williams",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2976592,
+              "player_name": "Sterling Shepard",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3066158,
+              "player_name": "Tarik Cohen",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3121023,
+              "player_name": "Dallas Goedert",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3915823,
+              "player_name": "Keke Coutee",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            -16021,
+            12514,
+            15773,
+            17359,
+            2976592,
+            3066158,
+            3121023,
+            3915823
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "0468f30f-96aa-44d3-bfa8-bcccfa4b3372",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 8,
+          "transaction_date_ms": 1571937245657,
+          "related_transaction_id": "8398f5b1-0932-4a0c-b801-b98a0d1f6b5c",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15683,
+              "player_name": "Justin Tucker",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16016,
+              "player_name": "Kenny Stills",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 17372,
+              "player_name": "Chris Boswell",
+              "from_team_id": 11,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3055899,
+              "player_name": "Harrison Butker",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15683,
+            16016,
+            17372,
+            3055899
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "30a09775-eb7b-436c-b0d8-97f40fae28a5",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 8,
+          "transaction_date_ms": 1571754701009,
+          "related_transaction_id": "b0070375-c6c3-4d48-85e4-9872bb3929fe",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 12537,
+              "player_name": "Jared Cook",
+              "from_team_id": 6,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2573079,
+              "player_name": "Carson Wentz",
+              "from_team_id": 13,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            12537,
+            2573079
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "3f7f961a-1760-40df-85dc-61a4774781fd",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 8,
+          "transaction_date_ms": 1571754548404,
+          "related_transaction_id": "1b1e4121-8ef8-4dff-8329-e045c3f5e6a4",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 13982,
+              "player_name": "Julio Jones",
+              "from_team_id": 11,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2576434,
+              "player_name": "Melvin Gordon",
+              "from_team_id": 11,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3045147,
+              "player_name": "James Conner",
+              "from_team_id": 4,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 4036133,
+              "player_name": "T.J. Hockenson",
+              "from_team_id": 4,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            13982,
+            2576434,
+            3045147,
+            4036133
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "dd2e81cd-d3c6-481f-aa72-8d731367ad33",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 8,
+          "transaction_date_ms": 1571753243746,
+          "related_transaction_id": "7ee7ba66-ac14-4605-9e31-dfe497f25a66",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": -16011,
+              "player_name": "Colts D/ST",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 13232,
+              "player_name": "Jimmy Graham",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 13982,
+              "player_name": "Julio Jones",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16944,
+              "player_name": "Devonta Freeman",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3116365,
+              "player_name": "Mark Andrews",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3917846,
+              "player_name": "Mark Walton",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            -16011,
+            13232,
+            13982,
+            16944,
+            3116365,
+            3917846
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "64d0a806-abc7-4d51-836b-9350a8bc25e3",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 8,
+          "scoring_period": 7,
+          "transaction_date_ms": 1571342370583,
+          "related_transaction_id": "3d2cad3f-78de-4819-938b-381a69d5ea41",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 13983,
+              "player_name": "A.J. Green",
+              "from_team_id": 8,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15880,
+              "player_name": "Robert Woods",
+              "from_team_id": 1,
+              "to_team_id": 8,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 3051902,
+              "player_name": "Peyton Barber",
+              "from_team_id": 8,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3068267,
+              "player_name": "Austin Ekeler",
+              "from_team_id": 1,
+              "to_team_id": 8,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3116593,
+              "player_name": "Dalvin Cook",
+              "from_team_id": 8,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4045163,
+              "player_name": "Miles Sanders",
+              "from_team_id": 1,
+              "to_team_id": 8,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            13983,
+            15880,
+            3051902,
+            3068267,
+            3116593,
+            4045163
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "f8a4bcf0-a144-4c05-b2b7-a4dde8a7069a",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 7,
+          "transaction_date_ms": 1571311780838,
+          "related_transaction_id": "32f4e1fc-5924-4376-9043-1d41a8258c9a",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 16944,
+              "player_name": "Devonta Freeman",
+              "from_team_id": 13,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2976212,
+              "player_name": "Stefon Diggs",
+              "from_team_id": 13,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3066158,
+              "player_name": "Tarik Cohen",
+              "from_team_id": 11,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3139477,
+              "player_name": "Patrick Mahomes",
+              "from_team_id": 11,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            16944,
+            2976212,
+            3066158,
+            3139477
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "8f1b4b04-da7f-40aa-9ae1-dabaa18052fd",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 7,
+          "transaction_date_ms": 1571183077090,
+          "related_transaction_id": "bd173965-d27d-4513-9130-1163f3bcdc98",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 14880,
+              "player_name": "Kirk Cousins",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15072,
+              "player_name": "Marvin Jones Jr.",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            14880,
+            15072
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "76295ac3-87a4-44e8-b280-27ebceb59a67",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 6,
+          "scoring_period": 7,
+          "transaction_date_ms": 1571154258985,
+          "related_transaction_id": "9626a6a5-fb84-4d22-972c-3c5756430e16",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 13232,
+              "player_name": "Jimmy Graham",
+              "from_team_id": 6,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 14912,
+              "player_name": "Alshon Jeffery",
+              "from_team_id": 9,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16804,
+              "player_name": "John Brown",
+              "from_team_id": 9,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3115375,
+              "player_name": "Darrel Williams",
+              "from_team_id": 6,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            13232,
+            14912,
+            16804,
+            3115375
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "9c42f0bc-e603-4cec-b11a-9caa4a3dba35",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 6,
+          "transaction_date_ms": 1570738730546,
+          "related_transaction_id": "0a8fbe69-21e0-4c82-8f74-220537b6f0a1",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2580,
+              "player_name": "Drew Brees",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 14924,
+              "player_name": "T.Y. Hilton",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 3122799,
+              "player_name": "Jonathan Hilliman",
+              "from_team_id": 9,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3139477,
+              "player_name": "Patrick Mahomes",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2580,
+            14924,
+            3122799,
+            3139477
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "3eac7a27-1bfa-4808-acd1-171b193c9fd0",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 1,
+          "scoring_period": 6,
+          "transaction_date_ms": 1570639317407,
+          "related_transaction_id": "4b509a36-4bec-4e05-a25e-6264d650fedf",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 16731,
+              "player_name": "Brandin Cooks",
+              "from_team_id": 13,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16913,
+              "player_name": "James White",
+              "from_team_id": 13,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3049916,
+              "player_name": "Matt Breida",
+              "from_team_id": 1,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4035004,
+              "player_name": "Mecole Hardman",
+              "from_team_id": 1,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            16731,
+            16913,
+            3049916,
+            4035004
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "46912be1-1cbe-4c37-8293-dd6bc7329b53",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 5,
+          "transaction_date_ms": 1570130462072,
+          "related_transaction_id": "dd0b262c-4a8c-4daa-8c59-a466ae729636",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 16731,
+              "player_name": "Brandin Cooks",
+              "from_team_id": 3,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16733,
+              "player_name": "Odell Beckham Jr.",
+              "from_team_id": 13,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16777,
+              "player_name": "Carlos Hyde",
+              "from_team_id": 13,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 2971618,
+              "player_name": "Nelson Agholor",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2976212,
+              "player_name": "Stefon Diggs",
+              "from_team_id": 3,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 4035004,
+              "player_name": "Mecole Hardman",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4035538,
+              "player_name": "David Montgomery",
+              "from_team_id": 3,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            16731,
+            16733,
+            16777,
+            2971618,
+            2976212,
+            4035004,
+            4035538
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "53a3c4ff-82b4-436b-af2f-8bc649d94d4b",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 5,
+          "transaction_date_ms": 1570118487800,
+          "related_transaction_id": "269d7df9-a060-4387-bde7-b80ee06b07fc",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": -16009,
+              "player_name": "Packers D/ST",
+              "from_team_id": 4,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": -16003,
+              "player_name": "Bears D/ST",
+              "from_team_id": 9,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 14912,
+              "player_name": "Alshon Jeffery",
+              "from_team_id": 4,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2979477,
+              "player_name": "Tevin Coleman",
+              "from_team_id": 9,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            -16009,
+            -16003,
+            14912,
+            2979477
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "05ab47a6-2fb4-4f26-aa5f-3484c7de5609",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 5,
+          "transaction_date_ms": 1570031182025,
+          "related_transaction_id": "20657510-60f9-42d2-80b3-aa7a9a11ed65",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 13217,
+              "player_name": "Golden Tate",
+              "from_team_id": 9,
+              "to_team_id": 7,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 2578533,
+              "player_name": "Chris Conley",
+              "from_team_id": 7,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2979477,
+              "player_name": "Tevin Coleman",
+              "from_team_id": 7,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3912550,
+              "player_name": "Ronald Jones II",
+              "from_team_id": 9,
+              "to_team_id": 7,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            13217,
+            2578533,
+            2979477,
+            3912550
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "baadce80-707e-4191-ac76-074d187ad29e",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 5,
+          "transaction_date_ms": 1570027464602,
+          "related_transaction_id": "c59a1cad-6bf6-42b1-a8ba-7affbc485c86",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 13982,
+              "player_name": "Julio Jones",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15072,
+              "player_name": "Marvin Jones Jr.",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 15853,
+              "player_name": "Vance McDonald",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 2576491,
+              "player_name": "Adam Humphries",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2976592,
+              "player_name": "Sterling Shepard",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3925357,
+              "player_name": "Calvin Ridley",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            13982,
+            15072,
+            15853,
+            2576491,
+            2976592,
+            3925357
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "0eadd871-ad1a-414f-8e49-131e3b4430b0",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 5,
+          "scoring_period": 5,
+          "transaction_date_ms": 1569913200000,
+          "related_transaction_id": "2bccbdea-c180-437b-8fdd-bcfe96f0e220",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2976212,
+              "player_name": "Stefon Diggs",
+              "from_team_id": 5,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3128429,
+              "player_name": "Courtland Sutton",
+              "from_team_id": 3,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4035538,
+              "player_name": "David Montgomery",
+              "from_team_id": 5,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4047365,
+              "player_name": "Josh Jacobs",
+              "from_team_id": 3,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2976212,
+            3128429,
+            4035538,
+            4047365
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "aa6494ea-7eb8-4540-bbf4-008d6c6bfb4a",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 1,
+          "scoring_period": 5,
+          "transaction_date_ms": 1569913200000,
+          "related_transaction_id": "1de8898a-7a65-451c-8b6f-7e2da5d7c5e2",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3068267,
+              "player_name": "Austin Ekeler",
+              "from_team_id": 11,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3116365,
+              "player_name": "Mark Andrews",
+              "from_team_id": 1,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3068267,
+            3116365
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "5b2a9a0e-a9e3-4534-8060-59a41a536b0a",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 4,
+          "transaction_date_ms": 1569601419692,
+          "related_transaction_id": "e7199f17-5cb5-486f-bba4-96df450d0091",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 12514,
+              "player_name": "LeSean McCoy",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3066158,
+              "player_name": "Tarik Cohen",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3121427,
+              "player_name": "Curtis Samuel",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            12514,
+            3066158,
+            3121427
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "4314d35c-5ae4-4ec0-b8f6-3edfbf6c304e",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 4,
+          "scoring_period": 4,
+          "transaction_date_ms": 1569537740432,
+          "related_transaction_id": "e5e3ceba-010d-4bb2-af70-0bdb0b70ec65",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3121422,
+              "player_name": "Terry McLaurin",
+              "from_team_id": 3,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3122672,
+              "player_name": "Royce Freeman",
+              "from_team_id": 3,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3128429,
+              "player_name": "Courtland Sutton",
+              "from_team_id": 4,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4047365,
+              "player_name": "Josh Jacobs",
+              "from_team_id": 4,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3121422,
+            3122672,
+            3128429,
+            4047365
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "f5b0ccca-6296-4369-a8f8-acbcd83f36ea",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 6,
+          "scoring_period": 4,
+          "transaction_date_ms": 1569433053432,
+          "related_transaction_id": "6783a510-0924-464d-87d1-e4f6959304d6",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15835,
+              "player_name": "Zach Ertz",
+              "from_team_id": 11,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15966,
+              "player_name": "Chris Thompson",
+              "from_team_id": 11,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16800,
+              "player_name": "Davante Adams",
+              "from_team_id": 6,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2508176,
+              "player_name": "David Johnson",
+              "from_team_id": 11,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2576434,
+              "player_name": "Melvin Gordon",
+              "from_team_id": 6,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3068267,
+              "player_name": "Austin Ekeler",
+              "from_team_id": 6,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15835,
+            15966,
+            16800,
+            2508176,
+            2576434,
+            3068267
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "7a427080-7326-460b-8f1e-c380c8f55f9d",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 4,
+          "transaction_date_ms": 1569432992999,
+          "related_transaction_id": "32f627e7-2da4-4972-b712-db8ba7e9d733",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 13981,
+              "player_name": "Mark Ingram II",
+              "from_team_id": 5,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15072,
+              "player_name": "Marvin Jones Jr.",
+              "from_team_id": 5,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2577327,
+              "player_name": "Tyler Lockett",
+              "from_team_id": 9,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4035538,
+              "player_name": "David Montgomery",
+              "from_team_id": 9,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            13981,
+            15072,
+            2577327,
+            4035538
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "e54c9ee9-71e0-4c68-9288-f73e8d22a242",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 4,
+          "transaction_date_ms": 1569426034769,
+          "related_transaction_id": "7119e728-94c9-47af-9c2f-0b1d829ae468",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": 15860,
+              "player_name": "Jordan Reed",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16799,
+              "player_name": "Allen Robinson II",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3043080,
+              "player_name": "O.J. Howard",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4035004,
+              "player_name": "Mecole Hardman",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15860,
+            16799,
+            3043080,
+            4035004
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "4bedf762-ba8c-463d-aa10-22bc661ebbf4",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 4,
+          "transaction_date_ms": 1569352270994,
+          "related_transaction_id": "6f827385-fe00-48e1-a883-d8ed94ea7008",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2976592,
+              "player_name": "Sterling Shepard",
+              "from_team_id": 3,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3040151,
+              "player_name": "George Kittle",
+              "from_team_id": 9,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3043080,
+              "player_name": "O.J. Howard",
+              "from_team_id": 3,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3121427,
+              "player_name": "Curtis Samuel",
+              "from_team_id": 3,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3126486,
+              "player_name": "Deebo Samuel",
+              "from_team_id": 9,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2976592,
+            3040151,
+            3043080,
+            3121427,
+            3126486
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "cbb7408e-7397-47fb-9f45-27defd28251a",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 4,
+          "transaction_date_ms": 1569341881096,
+          "related_transaction_id": "b3cf9ab0-93c6-4200-8ba9-defe49227400",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 16790,
+              "player_name": "Jarvis Landry",
+              "from_team_id": 9,
+              "to_team_id": 14,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2577327,
+              "player_name": "Tyler Lockett",
+              "from_team_id": 14,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3043078,
+              "player_name": "Derrick Henry",
+              "from_team_id": 9,
+              "to_team_id": 14,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 3916430,
+              "player_name": "Nyheim Hines",
+              "from_team_id": 14,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            16790,
+            2577327,
+            3043078,
+            3916430
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "551bbcb7-7959-4959-aae5-a3c1fabc644a",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 4,
+          "transaction_date_ms": 1569340456239,
+          "related_transaction_id": "8baf5c3e-e92f-491f-aa5e-de37a925ca3a",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 16777,
+              "player_name": "Carlos Hyde",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3066158,
+              "player_name": "Tarik Cohen",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            16777,
+            3066158
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "1fc55a38-64ae-4eb7-81ba-7f27362ef168",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 1,
+          "scoring_period": 4,
+          "transaction_date_ms": 1569332940489,
+          "related_transaction_id": "0231db2d-c942-4438-ae38-d1c605d20b51",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15705,
+              "player_name": "Josh Gordon",
+              "from_team_id": 1,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16725,
+              "player_name": "Sammy Watkins",
+              "from_team_id": 11,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2570986,
+              "player_name": "Malcolm Brown",
+              "from_team_id": 1,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3916148,
+              "player_name": "Tony Pollard",
+              "from_team_id": 11,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15705,
+            16725,
+            2570986,
+            3916148
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "797c794f-8cef-4922-a323-27b57bbd627d",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 8,
+          "scoring_period": 3,
+          "transaction_date_ms": 1569009190502,
+          "related_transaction_id": "d35e2228-5e08-4fd1-9b75-7c7fbcb3601f",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 12649,
+              "player_name": "Julian Edelman",
+              "from_team_id": 8,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 13981,
+              "player_name": "Mark Ingram II",
+              "from_team_id": 8,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15072,
+              "player_name": "Marvin Jones Jr.",
+              "from_team_id": 8,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3052117,
+              "player_name": "Phillip Lindsay",
+              "from_team_id": 5,
+              "to_team_id": 8,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3052177,
+              "player_name": "John Ross III",
+              "from_team_id": 5,
+              "to_team_id": 8,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 3115913,
+              "player_name": "Geronimo Allison",
+              "from_team_id": 5,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            12649,
+            13981,
+            15072,
+            3052117,
+            3052177,
+            3115913
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "cdd705cb-547e-4e5c-b122-f02deb5de74c",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 6,
+          "scoring_period": 3,
+          "transaction_date_ms": 1568906864859,
+          "related_transaction_id": "f26db7d0-af3a-438c-b2a9-1137b489e746",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 16737,
+              "player_name": "Mike Evans",
+              "from_team_id": 6,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241372,
+              "player_name": "Marquise Brown",
+              "from_team_id": 3,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            16737,
+            4241372
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "02225f20-1aae-4e47-9fb9-5b44204d1a7c",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 5,
+          "scoring_period": 3,
+          "transaction_date_ms": 1568821802863,
+          "related_transaction_id": "d8a595f9-8d5e-4de9-b858-c245cf0ce00d",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3042519,
+              "player_name": "Aaron Jones",
+              "from_team_id": 4,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3045138,
+              "player_name": "Mike Williams",
+              "from_team_id": 5,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3120348,
+              "player_name": "JuJu Smith-Schuster",
+              "from_team_id": 5,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3139605,
+              "player_name": "Marlon Mack",
+              "from_team_id": 5,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3915416,
+              "player_name": "DJ Moore",
+              "from_team_id": 4,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3042519,
+            3045138,
+            3120348,
+            3139605,
+            3915416
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "568208e5-a365-4b17-9c74-8138523c4a63",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 3,
+          "transaction_date_ms": 1568703600000,
+          "related_transaction_id": "a84c7b99-059c-42f3-a2bd-a909a850d71a",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 14881,
+              "player_name": "Russell Wilson",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3052876,
+              "player_name": "Will Fuller V",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4035538,
+              "player_name": "David Montgomery",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            14881,
+            3052876,
+            4035538
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "79080bea-43fa-454a-b254-37159b65c2b0",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 0,
+          "transaction_date_ms": 1566410906052,
+          "related_transaction_id": null,
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": -16018,
+              "player_name": "Saints D/ST",
+              "from_team_id": 13,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16733,
+              "player_name": "Odell Beckham Jr.",
+              "from_team_id": 3,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            -16018,
+            16733
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "e2abb381-9d42-4dc9-9d7d-b1f878d93911",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 0,
+          "transaction_date_ms": 1566409138060,
+          "related_transaction_id": null,
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 14993,
+              "player_name": "Greg Zuerlein",
+              "from_team_id": 11,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15835,
+              "player_name": "Zach Ertz",
+              "from_team_id": 3,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            14993,
+            15835
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "beb74983-6788-4eb0-b105-46fd9c24d463",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 0,
+          "transaction_date_ms": 1566408633605,
+          "related_transaction_id": null,
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15683,
+              "player_name": "Justin Tucker",
+              "from_team_id": 14,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15795,
+              "player_name": "DeAndre Hopkins",
+              "from_team_id": 3,
+              "to_team_id": 14,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15683,
+            15795
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "21fc9f2e-b6e6-46cd-88e4-f5f5abff2c36",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 0,
+          "transaction_date_ms": 1566408604051,
+          "related_transaction_id": null,
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 1097,
+              "player_name": "Adam Vinatieri",
+              "from_team_id": 13,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 13982,
+              "player_name": "Julio Jones",
+              "from_team_id": 1,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            1097,
+            13982
+          ],
+          "has_team_to_team_move": true
+        }
+      ]
+    },
+    "2020": {
+      "player_count": 1093,
+      "transaction_count": 657,
+      "executed_trade_count": 22,
+      "trades": [
+        {
+          "espn_transaction_id": "4af4fc46-fe32-46cf-a3f6-94d588f37763",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 11,
+          "transaction_date_ms": 1605754357542,
+          "related_transaction_id": "699f2497-cfef-4838-9270-07e7448764ba",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": 15091,
+              "player_name": "Randy Bullock",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16732,
+              "player_name": "Eric Ebron",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16799,
+              "player_name": "Allen Robinson II",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2977644,
+              "player_name": "Todd Gurley II",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15091,
+            16732,
+            16799,
+            2977644
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "81223a72-f29b-4694-9865-5b0240e69011",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 11,
+          "transaction_date_ms": 1605712854376,
+          "related_transaction_id": "7042eaf3-4c84-4d37-8063-234635a84ef9",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 14876,
+              "player_name": "Ryan Tannehill",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3025433,
+              "player_name": "Mike Davis",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            14876,
+            3025433
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "59384420-8953-4ae2-914d-18a4caf95043",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 10,
+          "transaction_date_ms": 1605193306434,
+          "related_transaction_id": "0d41cf5a-d879-421b-afaa-ec98ea4c7001",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 14876,
+              "player_name": "Ryan Tannehill",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3025433,
+              "player_name": "Mike Davis",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            14876,
+            3025433
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "7210f2cf-7b86-4980-998a-bb44cd26a118",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 10,
+          "transaction_date_ms": 1605193301052,
+          "related_transaction_id": "82824436-b525-48a0-af54-5f4c66a9bd0b",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 4035676,
+              "player_name": "Zack Moss",
+              "from_team_id": 13,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4036133,
+              "player_name": "T.J. Hockenson",
+              "from_team_id": 11,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            4035676,
+            4036133
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "ffff943a-eaa9-4b0a-a250-0cf4e8d46262",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 10,
+          "transaction_date_ms": 1604995200000,
+          "related_transaction_id": "faf6958a-e23a-4cb9-8e69-596fe87da65e",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": -16024,
+              "player_name": "Chargers D/ST",
+              "from_team_id": 11,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2576414,
+              "player_name": "Raheem Mostert",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3886818,
+              "player_name": "Myles Gaskin",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4262921,
+              "player_name": "Justin Jefferson",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            -16024,
+            2576414,
+            3886818,
+            4262921
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "3b4d8dd9-0de6-417b-a5ce-9c4c98b9badc",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 9,
+          "transaction_date_ms": 1604681299829,
+          "related_transaction_id": "8dbf512b-0d6f-47f6-8d8a-fe2a728cf29d",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15349,
+              "player_name": "Cole Beasley",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3052117,
+              "player_name": "Phillip Lindsay",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 3071572,
+              "player_name": "Keelan Cole Sr.",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4035676,
+              "player_name": "Zack Moss",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15349,
+            3052117,
+            3071572,
+            4035676
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "0ece8636-8262-4c5a-a9fc-c2c870091322",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 6,
+          "scoring_period": 9,
+          "transaction_date_ms": 1604681294169,
+          "related_transaction_id": "d378538e-869f-4268-b49a-704aeeaff4c2",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2577327,
+              "player_name": "Tyler Lockett",
+              "from_team_id": 9,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4242214,
+              "player_name": "Clyde Edwards-Helaire",
+              "from_team_id": 6,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2577327,
+            4242214
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "03a86757-ad77-4259-b918-32419ecf2de7",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 6,
+          "scoring_period": 7,
+          "transaction_date_ms": 1603319939382,
+          "related_transaction_id": "cfec9f80-d952-4d30-80c0-006c4dbca085",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2580,
+              "player_name": "Drew Brees",
+              "from_team_id": 6,
+              "to_team_id": 15,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15835,
+              "player_name": "Zach Ertz",
+              "from_team_id": 6,
+              "to_team_id": 15,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3115364,
+              "player_name": "Leonard Fournette",
+              "from_team_id": 6,
+              "to_team_id": 15,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3116593,
+              "player_name": "Dalvin Cook",
+              "from_team_id": 6,
+              "to_team_id": 15,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3924365,
+              "player_name": "Hayden Hurst",
+              "from_team_id": 15,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4045163,
+              "player_name": "Miles Sanders",
+              "from_team_id": 15,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4052042,
+              "player_name": "James Robinson",
+              "from_team_id": 15,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4242214,
+              "player_name": "Clyde Edwards-Helaire",
+              "from_team_id": 15,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2580,
+            15835,
+            3115364,
+            3116593,
+            3924365,
+            4045163,
+            4052042,
+            4242214
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "24b31fac-18b8-4cb2-8901-c7973cf6737a",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 6,
+          "scoring_period": 6,
+          "transaction_date_ms": 1602677757537,
+          "related_transaction_id": "170c1a4b-f3e4-4b21-bf93-be60bcc777e9",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2580,
+              "player_name": "Drew Brees",
+              "from_team_id": 5,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 8439,
+              "player_name": "Aaron Rodgers",
+              "from_team_id": 6,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16733,
+              "player_name": "Odell Beckham Jr.",
+              "from_team_id": 6,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2508176,
+              "player_name": "David Johnson",
+              "from_team_id": 5,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3045144,
+              "player_name": "Tyler Boyd",
+              "from_team_id": 5,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4035538,
+              "player_name": "David Montgomery",
+              "from_team_id": 6,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2580,
+            8439,
+            16733,
+            2508176,
+            3045144,
+            4035538
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "dcb2d487-e959-4663-80c9-c6cbeb1f9d7c",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 5,
+          "transaction_date_ms": 1602081133047,
+          "related_transaction_id": "bb999d6e-5e43-4737-b637-4aa6c8dfa103",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2977644,
+              "player_name": "Todd Gurley II",
+              "from_team_id": 11,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3116406,
+              "player_name": "Tyreek Hill",
+              "from_team_id": 13,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3120348,
+              "player_name": "JuJu Smith-Schuster",
+              "from_team_id": 11,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2977644,
+            3116406,
+            3120348
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "3c16cc2e-f8b5-4f60-975d-7114b2ee29dc",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 5,
+          "transaction_date_ms": 1602079621895,
+          "related_transaction_id": "d72f248d-5a30-42f2-87b2-c28b6cb1df1b",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15920,
+              "player_name": "Latavius Murray",
+              "from_team_id": 11,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4262921,
+              "player_name": "Justin Jefferson",
+              "from_team_id": 3,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15920,
+            4262921
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "b5ca8ac5-e3bd-41a1-bd37-94cac8b0e2b8",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 4,
+          "transaction_date_ms": 1601657879879,
+          "related_transaction_id": "1c83dac1-122a-4641-a686-7f52c9df327d",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": -16022,
+              "player_name": "Cardinals D/ST",
+              "from_team_id": 14,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15971,
+              "player_name": "Rex Burkhead",
+              "from_team_id": 9,
+              "to_team_id": 14,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            -16022,
+            15971
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "23d4d4f1-1c6e-4cc2-8b30-f11cf5f6f173",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 3,
+          "transaction_date_ms": 1600875943973,
+          "related_transaction_id": "a604b5b9-918a-4f77-9e8a-f13e6b2bb964",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": -16024,
+              "player_name": "Chargers D/ST",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3025433,
+              "player_name": "Mike Davis",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3054212,
+              "player_name": "Jonnu Smith",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3071572,
+              "player_name": "Keelan Cole Sr.",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            -16024,
+            3025433,
+            3054212,
+            3071572
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "a6ccef9d-6f5e-4ae7-bd32-822cbf91cbd9",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 3,
+          "transaction_date_ms": 1600827994142,
+          "related_transaction_id": "83361fa8-7fec-4cd4-9140-97ec9d8b8420",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2580,
+              "player_name": "Drew Brees",
+              "from_team_id": 9,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 11237,
+              "player_name": "Matt Ryan",
+              "from_team_id": 5,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2508176,
+              "player_name": "David Johnson",
+              "from_team_id": 9,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241985,
+              "player_name": "J.K. Dobbins",
+              "from_team_id": 5,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2580,
+            11237,
+            2508176,
+            4241985
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "6ccada80-a141-4226-bb60-264d8e0bc857",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 3,
+          "transaction_date_ms": 1600778301172,
+          "related_transaction_id": "3edf40b0-3bb3-4e83-aa74-355ff184b5d5",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": -16016,
+              "player_name": "Vikings D/ST",
+              "from_team_id": 11,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 13981,
+              "player_name": "Mark Ingram II",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15825,
+              "player_name": "Le'Veon Bell",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4047839,
+              "player_name": "N'Keal Harry",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            -16016,
+            13981,
+            15825,
+            4047839
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "58a7799e-4b11-4923-9a77-762f42be045c",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 2,
+          "transaction_date_ms": 1600286347553,
+          "related_transaction_id": "32c62d40-188c-4929-9a07-9fe619e9fc23",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 5528,
+              "player_name": "Larry Fitzgerald",
+              "from_team_id": 9,
+              "to_team_id": 14,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16799,
+              "player_name": "Allen Robinson II",
+              "from_team_id": 14,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2570986,
+              "player_name": "Malcolm Brown",
+              "from_team_id": 9,
+              "to_team_id": 14,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 3916925,
+              "player_name": "Kerryon Johnson",
+              "from_team_id": 14,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            5528,
+            16799,
+            2570986,
+            3916925
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "24c74398-59bd-4245-a42d-b28570ae7442",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 2,
+          "transaction_date_ms": 1600224544667,
+          "related_transaction_id": "8a40767d-4c26-4639-a6d6-321e75f3f582",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2576414,
+              "player_name": "Raheem Mostert",
+              "from_team_id": 1,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2976212,
+              "player_name": "Stefon Diggs",
+              "from_team_id": 9,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3043275,
+              "player_name": "Austin Hooper",
+              "from_team_id": 9,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 3931398,
+              "player_name": "Bryce Love",
+              "from_team_id": 1,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2576414,
+            2976212,
+            3043275,
+            3931398
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "b1f6cb53-7776-44c0-a0b1-6d7576264b50",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 15,
+          "scoring_period": 1,
+          "transaction_date_ms": 1599166915812,
+          "related_transaction_id": "e3db4a51-a610-4c84-8659-ac1ca7114bc6",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 13295,
+              "player_name": "Emmanuel Sanders",
+              "from_team_id": 13,
+              "to_team_id": 15,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3115364,
+              "player_name": "Leonard Fournette",
+              "from_team_id": 15,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3128720,
+              "player_name": "Nick Chubb",
+              "from_team_id": 15,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4242214,
+              "player_name": "Clyde Edwards-Helaire",
+              "from_team_id": 13,
+              "to_team_id": 15,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            13295,
+            3115364,
+            3128720,
+            4242214
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "6ba32a5e-a700-4e51-bb1a-a22233be4efd",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 1,
+          "transaction_date_ms": 1599095087394,
+          "related_transaction_id": "7c078e75-7fe0-49df-b512-5e6b0d19cbff",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2508176,
+              "player_name": "David Johnson",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2577327,
+              "player_name": "Tyler Lockett",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4242214,
+              "player_name": "Clyde Edwards-Helaire",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4259545,
+              "player_name": "D'Andre Swift",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2508176,
+            2577327,
+            4242214,
+            4259545
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "0ecbc882-1b15-4d37-a5c4-057184417089",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 0,
+          "transaction_date_ms": 1598492705765,
+          "related_transaction_id": null,
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15683,
+              "player_name": "Justin Tucker",
+              "from_team_id": 13,
+              "to_team_id": 15,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3116406,
+              "player_name": "Tyreek Hill",
+              "from_team_id": 15,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15683,
+            3116406
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "fdc6f95b-e7f7-49ce-bca5-894a793944c7",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 0,
+          "transaction_date_ms": 1598492620184,
+          "related_transaction_id": null,
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3040151,
+              "player_name": "George Kittle",
+              "from_team_id": 3,
+              "to_team_id": 7,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3055899,
+              "player_name": "Harrison Butker",
+              "from_team_id": 7,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3040151,
+            3055899
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "5ab40edf-6113-4cee-a19c-3ecad119a97d",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 1,
+          "scoring_period": 0,
+          "transaction_date_ms": 1598492424614,
+          "related_transaction_id": null,
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15683,
+              "player_name": "Justin Tucker",
+              "from_team_id": 6,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3116593,
+              "player_name": "Dalvin Cook",
+              "from_team_id": 1,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15683,
+            3116593
+          ],
+          "has_team_to_team_move": true
+        }
+      ]
+    },
+    "2021": {
+      "player_count": 1119,
+      "transaction_count": 530,
+      "executed_trade_count": 5,
+      "trades": [
+        {
+          "espn_transaction_id": "e10accbc-84a9-4a36-8585-15bd4a209b9f",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 10,
+          "transaction_date_ms": 1636656781188,
+          "related_transaction_id": "7089ae9b-62c2-4a82-8e8a-4630b2f97d12",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": 15825,
+              "player_name": "Le'Veon Bell",
+              "from_team_id": 1,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16731,
+              "player_name": "Brandin Cooks",
+              "from_team_id": 3,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16733,
+              "player_name": "Odell Beckham Jr.",
+              "from_team_id": 1,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16799,
+              "player_name": "Allen Robinson II",
+              "from_team_id": 3,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15825,
+            16731,
+            16733,
+            16799
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "3b379768-0815-49fd-aa83-60b655b9455c",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 10,
+          "transaction_date_ms": 1636656735187,
+          "related_transaction_id": "463705ec-aa14-45bc-b9f8-1657e6849c91",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 12483,
+              "player_name": "Matthew Stafford",
+              "from_team_id": 11,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 13295,
+              "player_name": "Emmanuel Sanders",
+              "from_team_id": 11,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 13982,
+              "player_name": "Julio Jones",
+              "from_team_id": 4,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 3122866,
+              "player_name": "Devontae Booker",
+              "from_team_id": 4,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4045163,
+              "player_name": "Miles Sanders",
+              "from_team_id": 4,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            12483,
+            13295,
+            13982,
+            3122866,
+            4045163
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "d04119a8-20ae-4fb2-9d9d-b95a28bedb6b",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 9,
+          "transaction_date_ms": 1636043597661,
+          "related_transaction_id": "4157bed0-922d-4c47-af8a-80609fc382df",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": 3049899,
+              "player_name": "Younghoe Koo",
+              "from_team_id": 13,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3916433,
+              "player_name": "Jakobi Meyers",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4035676,
+              "player_name": "Zack Moss",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4046692,
+              "player_name": "Chase Claypool",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3049899,
+            3916433,
+            4035676,
+            4046692
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "6aefd9e6-9730-412b-b3f3-6dc8693c0c3b",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 4,
+          "transaction_date_ms": 1632847489738,
+          "related_transaction_id": "daa2539f-9314-404c-9be8-d07b70f185f9",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15072,
+              "player_name": "Marvin Jones Jr.",
+              "from_team_id": 3,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 15847,
+              "player_name": "Travis Kelce",
+              "from_team_id": 5,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 16799,
+              "player_name": "Allen Robinson II",
+              "from_team_id": 5,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 2574808,
+              "player_name": "Robby Anderson",
+              "from_team_id": 5,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3115364,
+              "player_name": "Leonard Fournette",
+              "from_team_id": 5,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241372,
+              "player_name": "Marquise Brown",
+              "from_team_id": 3,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241457,
+              "player_name": "Najee Harris",
+              "from_team_id": 3,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4360248,
+              "player_name": "Kyle Pitts",
+              "from_team_id": 3,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15072,
+            15847,
+            16799,
+            2574808,
+            3115364,
+            4241372,
+            4241457,
+            4360248
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "9643b601-763c-4fb0-b81b-2594ef0c2c6c",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 4,
+          "transaction_date_ms": 1632847456560,
+          "related_transaction_id": "32423d60-139e-4199-abd6-200dfb8b39aa",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2576925,
+              "player_name": "Darren Waller",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3040151,
+              "player_name": "George Kittle",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3916433,
+              "player_name": "Jakobi Meyers",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4242214,
+              "player_name": "Clyde Edwards-Helaire",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2576925,
+            3040151,
+            3916433,
+            4242214
+          ],
+          "has_team_to_team_move": true
+        }
+      ]
+    },
+    "2022": {
+      "player_count": 1136,
+      "transaction_count": 537,
+      "executed_trade_count": 8,
+      "trades": [
+        {
+          "espn_transaction_id": "afbfc825-b8b5-4ecd-a5f5-56cc02ac53ba",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 11,
+          "transaction_date_ms": 1668793272744,
+          "related_transaction_id": "cec6f558-4160-461f-b3ed-bebe1b76cc9f",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": 15864,
+              "player_name": "Geno Smith",
+              "from_team_id": 9,
+              "to_team_id": 0,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3915511,
+              "player_name": "Joe Burrow",
+              "from_team_id": 9,
+              "to_team_id": 14,
+              "from_lineup_slot_id": 0,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3917232,
+              "player_name": "Tyler Bass",
+              "from_team_id": 14,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4569618,
+              "player_name": "Garrett Wilson",
+              "from_team_id": 14,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15864,
+            3915511,
+            3917232,
+            4569618
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "67647de9-1f5b-4127-afc9-45b51a8165fe",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 11,
+          "transaction_date_ms": 1668790543976,
+          "related_transaction_id": "2dfe079a-166a-4005-bdfc-4dc6eca2a9df",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3115364,
+              "player_name": "Leonard Fournette",
+              "from_team_id": 9,
+              "to_team_id": 4,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3122976,
+              "player_name": "Jeff Wilson Jr.",
+              "from_team_id": 4,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4047650,
+              "player_name": "DK Metcalf",
+              "from_team_id": 9,
+              "to_team_id": 4,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241479,
+              "player_name": "Tua Tagovailoa",
+              "from_team_id": 4,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3115364,
+            3122976,
+            4047650,
+            4241479
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "13796102-bca0-4dbd-8f01-d9a7d2809a4e",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 4,
+          "scoring_period": 11,
+          "transaction_date_ms": 1668646443551,
+          "related_transaction_id": "37b4d656-acaa-4d81-b257-722fa08adfb9",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 15920,
+              "player_name": "Latavius Murray",
+              "from_team_id": 4,
+              "to_team_id": 3,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3121422,
+              "player_name": "Terry McLaurin",
+              "from_team_id": 3,
+              "to_team_id": 4,
+              "from_lineup_slot_id": 4,
+              "to_lineup_slot_id": 4,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 4039050,
+              "player_name": "Devin Duvernay",
+              "from_team_id": 3,
+              "to_team_id": 0,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4040655,
+              "player_name": "Darnell Mooney",
+              "from_team_id": 4,
+              "to_team_id": 3,
+              "from_lineup_slot_id": 4,
+              "to_lineup_slot_id": 4,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15920,
+            3121422,
+            4039050,
+            4040655
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "069d6482-3c65-4d5a-b34f-8c0952f28e67",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 6,
+          "scoring_period": 7,
+          "transaction_date_ms": 1666103655628,
+          "related_transaction_id": "cb138aed-d720-4995-92d6-47dd5d6941c3",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3045147,
+              "player_name": "James Conner",
+              "from_team_id": 6,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3116593,
+              "player_name": "Dalvin Cook",
+              "from_team_id": 9,
+              "to_team_id": 6,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 3918639,
+              "player_name": "Gerald Everett",
+              "from_team_id": 9,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4047650,
+              "player_name": "DK Metcalf",
+              "from_team_id": 6,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3045147,
+            3116593,
+            3918639,
+            4047650
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "69e30f7b-8ac8-4507-aaae-3d0bd677435f",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 7,
+          "transaction_date_ms": 1666103651022,
+          "related_transaction_id": "adc1150d-1cb8-4073-a81b-61ee7d661527",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2576434,
+              "player_name": "Melvin Gordon III",
+              "from_team_id": 4,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3042519,
+              "player_name": "Aaron Jones",
+              "from_team_id": 11,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3126486,
+              "player_name": "Deebo Samuel",
+              "from_team_id": 4,
+              "to_team_id": 11,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4243537,
+              "player_name": "Gabe Davis",
+              "from_team_id": 11,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2576434,
+            3042519,
+            3126486,
+            4243537
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "150ca355-07c7-4308-bd97-0966c24faa0e",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 5,
+          "scoring_period": 6,
+          "transaction_date_ms": 1665776153284,
+          "related_transaction_id": "5e371ee1-adbf-46ab-aa54-49348d51e0c8",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2573401,
+              "player_name": "Tyler Higbee",
+              "from_team_id": 9,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2576414,
+              "player_name": "Raheem Mostert",
+              "from_team_id": 9,
+              "to_team_id": 5,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2976316,
+              "player_name": "Michael Thomas",
+              "from_team_id": 5,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3040151,
+              "player_name": "George Kittle",
+              "from_team_id": 5,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2573401,
+            2576414,
+            2976316,
+            3040151
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "70cc6b70-cfc3-4bd9-ad98-0d7a1732726b",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 5,
+          "transaction_date_ms": 1664992023291,
+          "related_transaction_id": "e151df3a-3423-43b4-9d2f-736442e58da3",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": 15349,
+              "player_name": "Cole Beasley",
+              "from_team_id": 3,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3116365,
+              "player_name": "Mark Andrews",
+              "from_team_id": 3,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3121422,
+              "player_name": "Terry McLaurin",
+              "from_team_id": 9,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4036133,
+              "player_name": "T.J. Hockenson",
+              "from_team_id": 9,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4360939,
+              "player_name": "Rashod Bateman",
+              "from_team_id": 3,
+              "to_team_id": 9,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4426502,
+              "player_name": "Drake London",
+              "from_team_id": 9,
+              "to_team_id": 3,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            15349,
+            3116365,
+            3121422,
+            4036133,
+            4360939,
+            4426502
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "883fde64-18bf-4311-8652-a6984d81afe8",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 1,
+          "scoring_period": 2,
+          "transaction_date_ms": 1663464641809,
+          "related_transaction_id": "7a351133-248b-4b78-b150-86bfa5f44043",
+          "items": [
+            {
+              "item_type": "DROP",
+              "player_id": 3115378,
+              "player_name": "Russell Gage",
+              "from_team_id": 4,
+              "to_team_id": 0,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241389,
+              "player_name": "CeeDee Lamb",
+              "from_team_id": 4,
+              "to_team_id": 1,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241985,
+              "player_name": "J.K. Dobbins",
+              "from_team_id": 1,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4426354,
+              "player_name": "George Pickens",
+              "from_team_id": 1,
+              "to_team_id": 4,
+              "from_lineup_slot_id": -1,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3115378,
+            4241389,
+            4241985,
+            4426354
+          ],
+          "has_team_to_team_move": true
+        }
+      ]
+    },
+    "2023": {
+      "player_count": 1132,
+      "transaction_count": 488,
+      "executed_trade_count": 4,
+      "trades": [
+        {
+          "espn_transaction_id": "50b32384-d4b7-456a-b8db-3cb8127e83c3",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 10,
+          "transaction_date_ms": 1699461565031,
+          "related_transaction_id": "cd33e361-782e-49d1-8470-45f9f2bf3339",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 4360310,
+              "player_name": "Trevor Lawrence",
+              "from_team_id": 3,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 0,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4569987,
+              "player_name": "Jaylen Warren",
+              "from_team_id": 9,
+              "to_team_id": 3,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            4360310,
+            4569987
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "8abb2bbe-a621-4400-b0d7-a526e30b0889",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 10,
+          "transaction_date_ms": 1699461558956,
+          "related_transaction_id": "e8b5b4e8-fba6-42c3-a6d6-a1754b59ca65",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3051876,
+              "player_name": "Evan Engram",
+              "from_team_id": 3,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 23,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4258173,
+              "player_name": "Nico Collins",
+              "from_team_id": 11,
+              "to_team_id": 3,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 23,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3051876,
+            4258173
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "30628c14-766f-4adc-808d-5d2ae483f874",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 7,
+          "transaction_date_ms": 1697639262744,
+          "related_transaction_id": "8d3c4b52-ba53-4823-b947-5fdde9aff903",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3932905,
+              "player_name": "Diontae Johnson",
+              "from_team_id": 3,
+              "to_team_id": 4,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4432577,
+              "player_name": "C.J. Stroud",
+              "from_team_id": 4,
+              "to_team_id": 3,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3932905,
+            4432577
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "a09ba2f0-f048-472e-8996-d6bbcaddda66",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 1,
+          "scoring_period": 3,
+          "transaction_date_ms": 1695405621616,
+          "related_transaction_id": "c03554ee-f772-468d-a972-31ab43618542",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 12483,
+              "player_name": "Matthew Stafford",
+              "from_team_id": 1,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 2577417,
+              "player_name": "Dak Prescott",
+              "from_team_id": 11,
+              "to_team_id": 1,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            12483,
+            2577417
+          ],
+          "has_team_to_team_move": true
+        }
+      ]
+    },
+    "2024": {
+      "player_count": 1099,
+      "transaction_count": 535,
+      "executed_trade_count": 9,
+      "trades": [
+        {
+          "espn_transaction_id": "eb5d4a98-fb9f-4a66-a0b0-ae11b3f17694",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 13,
+          "scoring_period": 12,
+          "transaction_date_ms": 1732415801883,
+          "related_transaction_id": "c5842d7c-57d9-4948-bed4-cfd8fd692ec9",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 4426385,
+              "player_name": "Zach Charbonnet",
+              "from_team_id": 4,
+              "to_team_id": 13,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4430807,
+              "player_name": "Bijan Robinson",
+              "from_team_id": 4,
+              "to_team_id": 13,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4430878,
+              "player_name": "Jaxon Smith-Njigba",
+              "from_team_id": 13,
+              "to_team_id": 4,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4596448,
+              "player_name": "Bucky Irving",
+              "from_team_id": 13,
+              "to_team_id": 4,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            4426385,
+            4430807,
+            4430878,
+            4596448
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "70a339ff-ae20-4b6c-88df-f0d9f0341224",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 12,
+          "transaction_date_ms": 1732413240690,
+          "related_transaction_id": "6d29d076-7d60-4937-b8b3-69f5ebae89e0",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3886598,
+              "player_name": "Jauan Jennings",
+              "from_team_id": 6,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 23,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 4249417,
+              "player_name": "Jalen Tolbert",
+              "from_team_id": 6,
+              "to_team_id": 0,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4432773,
+              "player_name": "Brian Thomas Jr.",
+              "from_team_id": 11,
+              "to_team_id": 6,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4612826,
+              "player_name": "Ladd McConkey",
+              "from_team_id": 11,
+              "to_team_id": 6,
+              "from_lineup_slot_id": 23,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3886598,
+            4249417,
+            4432773,
+            4612826
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "a2bc96c1-61e4-4695-820f-2106bdb9bee3",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 11,
+          "scoring_period": 12,
+          "transaction_date_ms": 1732065924356,
+          "related_transaction_id": "8aebfc77-b447-470f-982c-5a91ac9d5ced",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3915511,
+              "player_name": "Joe Burrow",
+              "from_team_id": 11,
+              "to_team_id": 1,
+              "from_lineup_slot_id": 0,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4038941,
+              "player_name": "Justin Herbert",
+              "from_team_id": 1,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 0,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4239996,
+              "player_name": "Travis Etienne Jr.",
+              "from_team_id": 11,
+              "to_team_id": 1,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4374302,
+              "player_name": "Amon-Ra St. Brown",
+              "from_team_id": 11,
+              "to_team_id": 1,
+              "from_lineup_slot_id": 4,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4426515,
+              "player_name": "Puka Nacua",
+              "from_team_id": 1,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 4,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4612826,
+              "player_name": "Ladd McConkey",
+              "from_team_id": 1,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3915511,
+            4038941,
+            4239996,
+            4374302,
+            4426515,
+            4612826
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "43ea94ed-58af-421c-86f0-6f5ba6e628ff",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 11,
+          "transaction_date_ms": 1731862371602,
+          "related_transaction_id": "87da025e-46e6-454a-b9d2-6b4a806c9d07",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3128429,
+              "player_name": "Courtland Sutton",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 23,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241985,
+              "player_name": "J.K. Dobbins",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 23,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4429501,
+              "player_name": "Ray Davis",
+              "from_team_id": 11,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 4430834,
+              "player_name": "Jalen McMillan",
+              "from_team_id": 9,
+              "to_team_id": 0,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4678008,
+              "player_name": "Jonathon Brooks",
+              "from_team_id": 9,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 21,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3128429,
+            4241985,
+            4429501,
+            4430834,
+            4678008
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "3a8e7202-b990-46d5-b2b0-aabd1a142a92",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 3,
+          "scoring_period": 8,
+          "transaction_date_ms": 1729738016343,
+          "related_transaction_id": "4512fc0a-a0a0-4852-9c1a-7a51daa43362",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 4036133,
+              "player_name": "T.J. Hockenson",
+              "from_team_id": 3,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 23,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4239993,
+              "player_name": "Tee Higgins",
+              "from_team_id": 11,
+              "to_team_id": 3,
+              "from_lineup_slot_id": 23,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241401,
+              "player_name": "Trey Sermon",
+              "from_team_id": 11,
+              "to_team_id": 3,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 23,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241416,
+              "player_name": "Chuba Hubbard",
+              "from_team_id": 3,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 23,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            4036133,
+            4239993,
+            4241401,
+            4241416
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "ef08a17b-7a9e-49c1-a1c8-0267e73faabe",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 8,
+          "transaction_date_ms": 1729738008887,
+          "related_transaction_id": "6ceee248-f7bc-4ad3-b080-8a4c26e35f71",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3128720,
+              "player_name": "Nick Chubb",
+              "from_team_id": 9,
+              "to_team_id": 14,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 2,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 4038441,
+              "player_name": "Justice Hill",
+              "from_team_id": 14,
+              "to_team_id": 0,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241985,
+              "player_name": "J.K. Dobbins",
+              "from_team_id": 14,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 2,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4361741,
+              "player_name": "Brock Purdy",
+              "from_team_id": 9,
+              "to_team_id": 14,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3128720,
+            4038441,
+            4241985,
+            4361741
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "7668a72b-cd49-4b54-84e4-6a85fdb0eeb5",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 6,
+          "scoring_period": 6,
+          "transaction_date_ms": 1728576723707,
+          "related_transaction_id": "a9e98005-45a4-409f-a265-70f4735229c5",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 2976212,
+              "player_name": "Stefon Diggs",
+              "from_team_id": 6,
+              "to_team_id": 13,
+              "from_lineup_slot_id": 4,
+              "to_lineup_slot_id": 23,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3916148,
+              "player_name": "Tony Pollard",
+              "from_team_id": 13,
+              "to_team_id": 6,
+              "from_lineup_slot_id": 23,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            2976212,
+            3916148
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "c12755a4-193e-43ca-abf7-523569673966",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 6,
+          "transaction_date_ms": 1728575154925,
+          "related_transaction_id": "1608b95e-9bda-4fcb-8066-bb17b55c0338",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 4372016,
+              "player_name": "Jaylen Waddle",
+              "from_team_id": 13,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4596448,
+              "player_name": "Bucky Irving",
+              "from_team_id": 9,
+              "to_team_id": 13,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            4372016,
+            4596448
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "08c5ea9a-c215-4e4f-a7ba-d40b189ad8ce",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 9,
+          "scoring_period": 6,
+          "transaction_date_ms": 1728575148230,
+          "related_transaction_id": "76e15c13-409d-4da9-8626-098897681082",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3128720,
+              "player_name": "Nick Chubb",
+              "from_team_id": 3,
+              "to_team_id": 9,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 3895856,
+              "player_name": "Christian Kirk",
+              "from_team_id": 9,
+              "to_team_id": 3,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241416,
+              "player_name": "Chuba Hubbard",
+              "from_team_id": 9,
+              "to_team_id": 3,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 2,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 4373626,
+              "player_name": "Tyler Allgeier",
+              "from_team_id": 3,
+              "to_team_id": 0,
+              "from_lineup_slot_id": 2,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3128720,
+            3895856,
+            4241416,
+            4373626
+          ],
+          "has_team_to_team_move": true
+        }
+      ]
+    },
+    "2025": {
+      "player_count": 1091,
+      "transaction_count": 491,
+      "executed_trade_count": 2,
+      "trades": [
+        {
+          "espn_transaction_id": "e21a4aa3-67d6-4ef4-b530-d5b461b5b115",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 4,
+          "scoring_period": 6,
+          "transaction_date_ms": 1760038787982,
+          "related_transaction_id": "7ecfd0dc-f163-4f5d-8938-9bc793c4e69c",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 3916433,
+              "player_name": "Jakobi Meyers",
+              "from_team_id": 11,
+              "to_team_id": 4,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 23,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4426388,
+              "player_name": "Jameson Williams",
+              "from_team_id": 4,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 23,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4429615,
+              "player_name": "Zay Flowers",
+              "from_team_id": 11,
+              "to_team_id": 4,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "DROP",
+              "player_id": 4430871,
+              "player_name": "Sean Tucker",
+              "from_team_id": 4,
+              "to_team_id": 0,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": -1,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4685382,
+              "player_name": "Omarion Hampton",
+              "from_team_id": 4,
+              "to_team_id": 11,
+              "from_lineup_slot_id": 21,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            3916433,
+            4426388,
+            4429615,
+            4430871,
+            4685382
+          ],
+          "has_team_to_team_move": true
+        },
+        {
+          "espn_transaction_id": "3bea5014-1149-4812-aa79-a42b62c38d6b",
+          "transaction_type": "TRADE_ACCEPT",
+          "status": "EXECUTED",
+          "team_id": 1,
+          "scoring_period": 5,
+          "transaction_date_ms": 1759440508927,
+          "related_transaction_id": "cdc58db5-a0c3-417f-aa9b-50cb1da5b9ee",
+          "items": [
+            {
+              "item_type": "TRADE",
+              "player_id": 4035687,
+              "player_name": "Michael Pittman Jr.",
+              "from_team_id": 1,
+              "to_team_id": 14,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4241389,
+              "player_name": "CeeDee Lamb",
+              "from_team_id": 14,
+              "to_team_id": 1,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4360569,
+              "player_name": "Jordan Mason",
+              "from_team_id": 1,
+              "to_team_id": 14,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            },
+            {
+              "item_type": "TRADE",
+              "player_id": 4685415,
+              "player_name": "Travis Hunter",
+              "from_team_id": 14,
+              "to_team_id": 1,
+              "from_lineup_slot_id": 20,
+              "to_lineup_slot_id": 20,
+              "overall_pick_number": 0
+            }
+          ],
+          "observed_on_player_ids": [
+            4035687,
+            4241389,
+            4360569,
+            4685415
+          ],
+          "has_team_to_team_move": true
+        }
+      ]
+    }
+  }
+}
