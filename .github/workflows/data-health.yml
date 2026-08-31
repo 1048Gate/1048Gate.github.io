@@ -25,7 +25,7 @@ on:
         default: '2025'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   live-probe:
@@ -112,3 +112,36 @@ jobs:
           path: artifacts/trade-history-${{ inputs.trade_season }}.json
           if-no-files-found: error
           retention-days: 14
+
+  publish-season-board:
+    name: Refresh committed season board
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test current-season normalizer
+        run: python3 scripts/test_fetch_current.py
+      - name: Fetch ESPN season bundle
+        id: fetch_bundle
+        continue-on-error: true
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+        run: python3 scripts/fetch_current.py bundle --season 2026 --output data/current-season.json
+      - name: Commit season board if it changed
+        if: steps.fetch_bundle.outcome == 'success'
+        run: |
+          git config user.name "1048Gate"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/current-season.json
+          if git diff --cached --quiet; then
+            echo "Season board unchanged"
+            exit 0
+          fi
+          git commit -m "Refresh Szn 10 live season board"
+          git push
