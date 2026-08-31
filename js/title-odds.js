@@ -74,7 +74,6 @@
       const field = order.slice(0, PLAYOFF_TEAMS);
       field.forEach(i => made[i]++);
       bye[field[0]]++; bye[field[1]]++;
-      // QF: 3v6 and 4v5; SF: 1 vs w(3v6), 2 vs w(4v5); then the final.
       const qf1 = play(field[2], field[5]);
       const qf2 = play(field[3], field[4]);
       const sf1 = play(field[0], qf1);
@@ -92,15 +91,15 @@
       .sort((a, b) => b.titlePct - a.titlePct || b.madePct - a.madePct);
     const maxTitle = Math.max(...rows.map(r => r.titlePct)) || 1;
     const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
-    host.innerHTML = `<div class="history-section-head"><div><span>SZN ${seasonNumber} PROJECTION</span><h3>Playoff Probability Board</h3></div><small>${SIMULATIONS.toLocaleString('en-US')} simulated seasons</small></div><div class="title-odds-grid">${rows.map(r => `
+    host.innerHTML = `<div class="history-section-head"><div><span>SZN ${seasonNumber} PRE-DRAFT BOARD</span><h3>Playoff Probability Board</h3></div><small>${SIMULATIONS.toLocaleString('en-US')} simulated seasons · career power ratings, not 2026 rosters</small></div><div class="title-odds-grid">${rows.map(r => `
       <div class="title-odds-card${r.titlePct === maxTitle ? ' is-favorite' : ''}">
         <div class="title-odds-name"><strong>${escapeHtml(r.name)}</strong>${r.titlePct === maxTitle ? '<em>Favorite</em>' : ''}</div>
         <div class="title-odds-bars">
           <div class="title-odds-bar" title="Chance to make the six-team bracket"><span>Playoff</span><div style="--w:${Math.round(r.madePct * 100)}%"><i></i></div><b>${pct(r.madePct)}</b></div>
           <div class="title-odds-bar" title="Chance at a top-two seed and first-round bye"><span>Bye</span><div style="--w:${Math.round(r.byePct * 100)}%"><i></i></div><b>${pct(r.byePct)}</b></div>
-          <div class="title-odds-bar is-title" title="Chance to win the title"><span>Title</span><div style="--w:${Math.max(Math.round(r.titlePct * 1000) / 10, 1.5)}%"><i></i></div><b>${r.titlePct < 0.0005 ? '&lt;0.1%' : pct(r.titlePct)}</b></div>
+          <div class="title-odds-bar is-title" title="Chance to win the title"><span>Title</span><div style="--w:${Math.max(Math.round(r.titlePct * 1000) / 10, 1.5)}%"><i></i></div><b>${r.titlePct < 0.0005 ? '<0.1%' : pct(r.titlePct)}</b></div>
         </div>
-      </div>`).join('')}</div><p class="title-odds-note">Projected from current power ratings: every simulated season draws a fresh ${GAMES_PER_SEASON}-game schedule, the top six reach the bracket, and the top two earn first-round byes.</p>`;
+      </div>`).join('')}</div><p class="title-odds-note">Pre-draft projection only. These percentages come from career power ratings and a random ${GAMES_PER_SEASON}-game schedule — not keepers, the 2026 draft, or current rosters. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.</p>`;
   }
 
   load();
