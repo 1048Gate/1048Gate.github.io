@@ -74,8 +74,8 @@
       </div>
     </div>
     <div class="week-chip" aria-label="Current league season">
-      <span class="digit" data-site-phase>Post-Draft</span>
-      <span class="label" data-site-season>2026 SEASON · POST-DRAFT</span>
+      <span class="digit" data-site-phase>Week 1</span>
+      <span class="label" data-site-season>2026 SEASON · WEEK 1</span>
     </div>
     <div class="auth-control-slot" id="authControlMount" aria-live="polite"></div>
   </div>
@@ -99,17 +99,17 @@
         <span class="eyebrow">Official League Headquarters</span>
         <h1>1048 GATE<br><span>FANTASY FOOTBALL</span></h1>
         <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
-        <p>The <span data-site-year>2026</span> campaign is locked. 192 picks are in, keepers are set, and the championship odds are live off the rosters.</p>
+        <p>Week 1 is on the board. Six matchups, a 0–0 table, and the championship odds are live off the rosters.</p>
         <div class="hero-buttons">
-          <button class="btn btn-primary" data-scroll-to="championshipOdds">Championship Odds</button>
-          <button class="btn btn-ghost" data-view-link="history">Draft Archive</button>
+          <button class="btn btn-primary" data-scroll-to="weekBoard">This Week</button>
+          <button class="btn btn-ghost" data-scroll-to="championshipOdds">Championship Odds</button>
         </div>
       </div>
       <aside class="hero-season-card" aria-label="Current league campaign">
         <span class="hero-season-kicker">Current campaign</span>
         <strong class="hero-season-year" data-site-year>2026</strong>
         <span class="hero-season-edition" data-site-season-label>Season 10</span>
-        <span class="hero-season-phase" data-site-phase>Post-Draft</span>
+        <span class="hero-season-phase" data-site-phase>Week 1</span>
         <div class="hero-meta-grid">
           <div><strong data-stat-managers>12</strong><span>Managers</span></div>
           <div><strong data-stat-seasons>9</strong><span>Completed seasons</span></div>
@@ -120,10 +120,118 @@
     </div>
 
     <section class="home-pulse" aria-label="Szn 10 status">
-      <div><span>Phase</span><strong data-site-phase>Post-Draft</strong></div>
-      <div><span>Draft</span><strong>192 picks in</strong></div>
+      <div><span>Phase</span><strong data-site-phase>Week 1</strong></div>
+      <div><span>This week</span><strong>6 games</strong></div>
       <div><span>Favorite</span><strong data-home-favorite>Thomas Speer +300</strong></div>
-      <div><span>Archive</span><strong>History → Drafts</strong></div>
+      <div><span>Table</span><strong>All 0–0</strong></div>
+    </section>
+
+    <section class="home-section week-board" id="weekBoard" aria-label="Week 1 matchups and standings">
+      <header class="home-section-head"><div><span>Regular season</span><h2>Week 1</h2></div><small>Kickoff Wednesday, Sept 9</small></header>
+      <div class="week-board-grid">
+        <div class="week-matchups" data-week-matchups>
+          <article class="week-game">
+            <div class="week-game-side is-away">
+              <strong>Ja'Marr-a-Lago</strong>
+              <span>JD Daley</span>
+              <b>—</b>
+            </div>
+            <div class="week-game-vs">at</div>
+            <div class="week-game-side is-home">
+              <strong>Howya Been's</strong>
+              <span>Bryan Hunt</span>
+              <b>—</b>
+            </div>
+          </article>
+          <article class="week-game">
+            <div class="week-game-side is-away">
+              <strong>Your Reigning Champ</strong>
+              <span>Thomas Speer</span>
+              <b>—</b>
+            </div>
+            <div class="week-game-vs">at</div>
+            <div class="week-game-side is-home">
+              <strong>Madison Beer Garden</strong>
+              <span>George Travis</span>
+              <b>—</b>
+            </div>
+          </article>
+          <article class="week-game">
+            <div class="week-game-side is-away">
+              <strong>Team Hash</strong>
+              <span>Trevor Hash</span>
+              <b>—</b>
+            </div>
+            <div class="week-game-vs">at</div>
+            <div class="week-game-side is-home">
+              <strong>1912 Titanic Swimteam</strong>
+              <span>Kyle Fowler</span>
+              <b>—</b>
+            </div>
+          </article>
+          <article class="week-game">
+            <div class="week-game-side is-away">
+              <strong>Breezin’ with Bijan</strong>
+              <span>Collin Krum</span>
+              <b>—</b>
+            </div>
+            <div class="week-game-vs">at</div>
+            <div class="week-game-side is-home">
+              <strong>Ice Has Me Running Back</strong>
+              <span>German Haro</span>
+              <b>—</b>
+            </div>
+          </article>
+          <article class="week-game">
+            <div class="week-game-side is-away">
+              <strong>Love Thy Nabers</strong>
+              <span>Jared Hall</span>
+              <b>—</b>
+            </div>
+            <div class="week-game-vs">at</div>
+            <div class="week-game-side is-home">
+              <strong>Like a Good Nabers</strong>
+              <span>Vincent Cannarozzi</span>
+              <b>—</b>
+            </div>
+          </article>
+          <article class="week-game">
+            <div class="week-game-side is-away">
+              <strong>Meeches Mayhem</strong>
+              <span>Brian Heino</span>
+              <b>—</b>
+            </div>
+            <div class="week-game-vs">at</div>
+            <div class="week-game-side is-home">
+              <strong>Jigalos Jims</strong>
+              <span>James Brochu</span>
+              <b>—</b>
+            </div>
+          </article>
+        </div>
+        <div class="week-standings" data-week-standings>
+          <div class="week-standings-wrap">
+            <table class="week-standings-table">
+              <thead><tr><th>Team</th><th>Mgr</th><th>Rec</th><th>PF</th></tr></thead>
+              <tbody>
+                <tr><td>Madison Beer Garden</td><td>George Travis</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Love Thy Nabers</td><td>Jared Hall</td><td>0-0</td><td>0</td></tr>
+                <tr><td>1912 Titanic Swimteam</td><td>Kyle Fowler</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Howya Been's</td><td>Bryan Hunt</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Meeches Mayhem</td><td>Brian Heino</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Like a Good Nabers</td><td>Vincent Cannarozzi</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Jigalos Jims</td><td>James Brochu</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Ja'Marr-a-Lago</td><td>JD Daley</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Your Reigning Champ</td><td>Thomas Speer</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Breezin’ with Bijan</td><td>Collin Krum</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Ice Has Me Running Back</td><td>German Haro</td><td>0-0</td><td>0</td></tr>
+                <tr><td>Team Hash</td><td>Trevor Hash</td><td>0-0</td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="week-standings-note">Everyone is 0–0 until the first game is official.</p>
+        </div>
+      </div>
     </section>
 
     <section class="home-section futures-section" id="championshipOdds" aria-label="Championship futures odds">
@@ -168,7 +276,7 @@
           <div><span>Established</span><strong data-stat-established>2017</strong></div>
           <div><span>Completed seasons</span><strong data-stat-seasons>9</strong></div>
           <div><span>Archived games</span><strong data-stat-games>885</strong></div>
-          <div><span>Season phase</span><strong data-site-phase>Post-Draft</strong></div>
+          <div><span>Season phase</span><strong data-site-phase>Week 1</strong></div>
           <div><span>Szn 10 draft</span><strong>Complete</strong></div>
           <div><span>League format</span><strong>12-team keeper</strong></div>
         </div>
@@ -339,7 +447,7 @@
     <div class="section-title"><h2>Rules</h2></div>
     <div class="panel"><div class="accordion" id="accordion">
       <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§1</span>Scoring Format</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>Full PPR scoring</strong> with 6-point passing touchdowns. Players earn 1 point per 10 rushing or receiving yards, 1 point per reception, and 1 point per 25 passing yards. Defensive scoring rewards sacks and takeaways, with additional bonuses and penalties based on points and total yards allowed.</div><div class="rule-group"><h4>Passing</h4><div class="rule-grid"><div class="rule-row"><span>Passing yards</span><span>0.04 / yd</span></div><div class="rule-row"><span>Passing touchdown</span><span>6 pts</span></div><div class="rule-row"><span>Interception thrown</span><span>-2 pts</span></div><div class="rule-row"><span>2-point passing conversion</span><span>2 pts</span></div></div></div><div class="rule-group"><h4>Rushing & Receiving</h4><div class="rule-grid"><div class="rule-row"><span>Rushing yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Receiving yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Reception</span><span>1 pt</span></div><div class="rule-row"><span>Rushing or receiving TD</span><span>6 pts</span></div><div class="rule-row"><span>2-point rush or reception</span><span>2 pts</span></div><div class="rule-row"><span>Fumble lost</span><span>-2 pts</span></div></div></div><div class="rule-group"><h4>Kicking</h4><div class="rule-grid"><div class="rule-row"><span>Extra point made</span><span>1 pt</span></div><div class="rule-row"><span>Field goal missed</span><span>-1 pt</span></div><div class="rule-row"><span>Field goal: 0–39 yards</span><span>3 pts</span></div><div class="rule-row"><span>Field goal: 40–49 yards</span><span>4 pts</span></div><div class="rule-row"><span>Field goal: 50+ yards</span><span>5 pts</span></div></div></div></div></div></div>
-      <div class="accordion-item open"><button type="button" class="accordion-head" aria-expanded="true"><h3><span class="idx">§2</span>Keepers</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>One keeper per club.</strong> Each of the 12 teams locks a single player into the Szn 10 draft. The round listed with that player is the pick you surrender; the rest of the snake stays live. Keepers were due by the end of the night on August 30. Draft night is August 31 at 8:00 PM ET.</div><div class="rule-group"><h4>How a keep works</h4><div class="rule-grid"><div class="rule-row"><span>Keepers per team</span><span>1</span></div><div class="rule-row"><span>Cost</span><span>The listed draft round</span></div><div class="rule-row"><span>Draft rounds</span><span>16-round snake</span></div><div class="rule-row"><span>Deadline</span><span>Aug 30, end of night</span></div><div class="rule-row"><span>Prior 1st-round keep</span><span>Cannot keep again</span></div><div class="rule-row"><span>2nd straight year</span><span>Round cost moves up 1</span></div></div><div class="rule-note">If you kept someone last year who was your 1st-round pick, you can no longer keep them. If you are keeping someone for the 2nd year in a row, their draft round moves up this year. Example: keeping Saquon as a 2nd-rounder last year and keeping him again this year costs a 1st-round pick. A used round is skipped on the board so that club does not pick twice in the same round.</div></div><div class="rule-group"><h4>Szn 10 locked keepers</h4><div class="rule-grid keeper-list"><div class="rule-row"><span>George Travis</span><span>Javonte Williams · 8th</span></div><div class="rule-row"><span>Trevor Hash</span><span>Chase Brown · 9th</span></div><div class="rule-row"><span>Kyle Fowler</span><span>Cam Skattebo · 8th</span></div><div class="rule-row"><span>Jared Hall</span><span>Jaxon Dart · 16th</span></div><div class="rule-row"><span>Thomas Speer</span><span>Puka Nacua · 9th</span></div><div class="rule-row"><span>JD Daley</span><span>Rashee Rice · 7th</span></div><div class="rule-row"><span>Collin Krum</span><span>Bijan Robinson · 1st</span></div><div class="rule-row"><span>Brian Heino</span><span>Devon Achane · 12th</span></div><div class="rule-row"><span>Vincent Cannarozzi</span><span>Kyle Pitts · 12th</span></div><div class="rule-row"><span>James Brochu</span><span>Travis Etienne · 8th</span></div><div class="rule-row"><span>German Haro</span><span>Michael Pittman · 7th</span></div><div class="rule-row"><span>Bryan Hunt</span><span>Brock Bowers · 9th</span></div></div></div></div></div></div>
+      <div class="accordion-item open"><button type="button" class="accordion-head" aria-expanded="true"><h3><span class="idx">§2</span>Keepers</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>One keeper per club.</strong> Each of the 12 teams locks a single player into the Szn 10 draft. The round listed with that player is the pick you surrender; the rest of the snake stays live. Keepers locked August 30. The Szn 10 draft completed August 31.</div><div class="rule-group"><h4>How a keep works</h4><div class="rule-grid"><div class="rule-row"><span>Keepers per team</span><span>1</span></div><div class="rule-row"><span>Cost</span><span>The listed draft round</span></div><div class="rule-row"><span>Draft rounds</span><span>16-round snake</span></div><div class="rule-row"><span>Deadline</span><span>Locked Aug 30</span></div><div class="rule-row"><span>Prior 1st-round keep</span><span>Cannot keep again</span></div><div class="rule-row"><span>2nd straight year</span><span>Round cost moves up 1</span></div></div><div class="rule-note">If you kept someone last year who was your 1st-round pick, you can no longer keep them. If you are keeping someone for the 2nd year in a row, their draft round moves up this year. Example: keeping Saquon as a 2nd-rounder last year and keeping him again this year costs a 1st-round pick. A used round is skipped on the board so that club does not pick twice in the same round.</div></div><div class="rule-group"><h4>Szn 10 locked keepers</h4><div class="rule-grid keeper-list"><div class="rule-row"><span>George Travis</span><span>Javonte Williams · 8th</span></div><div class="rule-row"><span>Trevor Hash</span><span>Chase Brown · 9th</span></div><div class="rule-row"><span>Kyle Fowler</span><span>Cam Skattebo · 8th</span></div><div class="rule-row"><span>Jared Hall</span><span>Jaxon Dart · 16th</span></div><div class="rule-row"><span>Thomas Speer</span><span>Puka Nacua · 9th</span></div><div class="rule-row"><span>JD Daley</span><span>Rashee Rice · 7th</span></div><div class="rule-row"><span>Collin Krum</span><span>Bijan Robinson · 1st</span></div><div class="rule-row"><span>Brian Heino</span><span>Devon Achane · 12th</span></div><div class="rule-row"><span>Vincent Cannarozzi</span><span>Kyle Pitts · 12th</span></div><div class="rule-row"><span>James Brochu</span><span>Travis Etienne · 8th</span></div><div class="rule-row"><span>German Haro</span><span>Michael Pittman · 7th</span></div><div class="rule-row"><span>Bryan Hunt</span><span>Brock Bowers · 9th</span></div></div></div></div></div></div>
       <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§3</span>Roster & Lineup</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">1 QB · 2 RB · 2 WR · 1 TE · 1 FLEX · 1 DST · 1 K · 7 bench spots. Lineups lock at each game's individual kickoff, not Thursday for the whole week.</div></div></div>
       <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§4</span>Waivers & Trades</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Waiver period</span><span>1 day</span></div><div class="rule-row"><span>Waiver order</span><span>Inverse standings</span></div><div class="rule-row"><span>Trade review period</span><span>2 days</span></div><div class="rule-row"><span>Votes required to veto</span><span>4 votes</span></div><div class="rule-row"><span>Trade deadline</span><span>TBA</span></div></div><div class="rule-note">Waiver priority resets each week to the inverse order of the standings.</div></div></div></div>
       <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§5</span>Playoffs</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Playoff teams</span><span>6</span></div><div class="rule-row"><span>Seeding tiebreaker</span><span>Total points for</span></div></div></div></div></div>

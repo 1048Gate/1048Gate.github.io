@@ -87,8 +87,8 @@ if(!Number.isInteger(siteConfig.seasonYear) || !Number.isInteger(siteConfig.seas
 if(!siteConfig.draftNight?.startsAt || !Number.isInteger(siteConfig.draftNight.currentPick)){
   throw new Error('data/site.json must define draftNight.startsAt and currentPick.');
 }
-if(siteConfig.phase !== 'Post-Draft' || siteConfig.draftNight.status !== 'complete'){
-  throw new Error('Szn 10 must be marked Post-Draft with a completed draft night.');
+if(siteConfig.phase !== 'Week 1' || siteConfig.draftNight.status !== 'complete'){
+  throw new Error('Szn 10 must be marked Week 1 with a completed draft night.');
 }
 if(!siteConfig.draftOrder?.[0]?.player || siteConfig.draftOrder[0].player !== 'Jahmyr Gibbs'){
   throw new Error('First-round recap must include the 1.01 player from the Szn 10 draft.');
@@ -173,7 +173,42 @@ if(html.includes('data-draft-order') || html.includes('id="draftBoard"') || html
   throw new Error('Home must not show the draft-order board after Szn 10.');
 }
 if(!html.includes('id="championshipOdds"') || !html.includes('data-scroll-to="championshipOdds"') || !html.includes('class="home-pulse"')){
-  throw new Error('Home must lead with the post-draft pulse and championship odds.');
+  throw new Error('Home must keep the championship odds and season pulse.');
+}
+if(!html.includes('id="weekBoard"') || !html.includes('data-week-matchups') || !html.includes('data-week-standings') || !html.includes('data-scroll-to="weekBoard"')){
+  throw new Error('Home must show the Week 1 matchups and standings board.');
+}
+if(html.includes('Draft night is August 31') || html.includes('Keepers were due by the end of the night')){
+  throw new Error('Rules §2 must speak in the past tense now that the draft is over.');
+}
+if(!html.includes('Keepers locked August 30') || !html.includes('draft completed August 31')){
+  throw new Error('Rules §2 must record the locked keepers and completed draft.');
+}
+if(html.includes('data-view="season"') || /<section[^>]+id="season"/.test(html)){
+  throw new Error('Do not add a Season tab. Week 1 lives on Home.');
+}
+const currentSeason = JSON.parse(readFileSync(new URL('data/current-season.json', root), 'utf8'));
+if(currentSeason.season !== 2026 || currentSeason.week !== 1 || currentSeason.phase !== 'Week 1'){
+  throw new Error('current-season.json must be the Szn 10 Week 1 board.');
+}
+if(!Array.isArray(currentSeason.matchups) || currentSeason.matchups.length !== 6){
+  throw new Error('Week 1 board must include six matchups.');
+}
+if(!Array.isArray(currentSeason.standings) || currentSeason.standings.length !== 12){
+  throw new Error('Week 1 standings must include all 12 managers.');
+}
+if(!currentSeason.matchups.some(game => game.away?.owner === 'Collin Krum' && game.home?.owner === 'German Haro')){
+  throw new Error('Week 1 slate must include Krum at Haro.');
+}
+if(!currentSeason.standings.every(team => Number(team.wins) === 0 && Number(team.losses) === 0)){
+  throw new Error('Week 1 standings must start 0-0 before kickoff.');
+}
+if(!html.includes('Madison Beer Garden') || !html.includes('1912 Titanic Swimteam') || !html.includes('Your Reigning Champ')){
+  throw new Error('Home Week 1 fallback must use the 2026 club names.');
+}
+const siteUiSource = readFileSync(new URL('js/site-ui.js', root), 'utf8');
+if(!siteUiSource.includes('renderWeekBoard') || !siteUiSource.includes('data/current-season.json')){
+  throw new Error('site-ui.js must render the Week 1 board from current-season.json.');
 }
 
 function webpDimensions(fileUrl){
