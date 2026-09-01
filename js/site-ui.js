@@ -31,6 +31,7 @@
 
     renderPulse(config);
     renderFutures(config);
+    renderWeekBoard();
     renderLiveStats();
     window.gateSiteConfig = config;
     document.dispatchEvent(new CustomEvent('gate:site-ready', {detail:config}));
@@ -86,5 +87,64 @@ function renderPulse(config){
   const target = document.querySelector('[data-home-favorite]');
   if(target && favorite?.name && favorite?.odds){
     target.textContent = `${favorite.name} ${favorite.odds}`;
+  }
+}
+
+function recordLine(team){
+  const wins = Number(team.wins || 0);
+  const losses = Number(team.losses || 0);
+  const ties = Number(team.ties || 0);
+  return ties ? `${wins}-${losses}-${ties}` : `${wins}-${losses}`;
+}
+
+function pointsLine(value){
+  if(value == null || value === '') return '\u2014';
+  const number = Number(value);
+  if(!Number.isFinite(number)) return '\u2014';
+  return Number.isInteger(number) ? String(number) : number.toFixed(1).replace(/\.0$/, '');
+}
+
+function gameSide(side, className, escapeHtml){
+  const score = side?.score == null ? '\u2014' : pointsLine(side.score);
+  return `<div class="week-game-side ${className}">
+    <strong>${escapeHtml(side?.team || 'Team')}</strong>
+    <span>${escapeHtml(side?.owner || '')}</span>
+    <b>${escapeHtml(score)}</b>
+  </div>`;
+}
+
+function renderWeekBoardFrom(payload){
+  const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
+  const matchupsHost = document.querySelector('[data-week-matchups]');
+  const standingsHost = document.querySelector('[data-week-standings]');
+  const matchups = Array.isArray(payload.matchups) ? payload.matchups : [];
+  const standings = Array.isArray(payload.standings) ? payload.standings : [];
+  if(matchupsHost && matchups.length){
+    matchupsHost.innerHTML = matchups.map(game => `<article class="week-game">
+      ${gameSide(game.away, 'is-away', escapeHtml)}
+      <div class="week-game-vs">at</div>
+      ${gameSide(game.home, 'is-home', escapeHtml)}
+    </article>`).join('');
+  }
+  if(standingsHost && standings.length){
+    standingsHost.innerHTML = `<div class="week-standings-wrap"><table class="week-standings-table"><thead><tr><th>Team</th><th>Mgr</th><th>Rec</th><th>PF</th></tr></thead><tbody>${
+      standings.map(team => `<tr>
+        <td>${escapeHtml(team.team || 'Team')}</td>
+        <td>${escapeHtml(team.owner || '')}</td>
+        <td>${escapeHtml(recordLine(team))}</td>
+        <td>${escapeHtml(pointsLine(team.pointsFor))}</td>
+      </tr>`).join('')
+    }</tbody></table></div><p class="week-standings-note">${escapeHtml(payload.note || 'Records stay 0-0 until kickoff.')}</p>`;
+  }
+}
+
+async function renderWeekBoard(){
+  if(!document.querySelector('[data-week-matchups]') && !document.querySelector('[data-week-standings]')) return;
+  try{
+    const response = await fetch('data/current-season.json', {cache:'no-store'});
+    if(!response.ok) throw new Error(`current-season.json returned HTTP ${response.status}`);
+    renderWeekBoardFrom(await response.json());
+  }catch(error){
+    console.warn('Unable to refresh the Week 1 board; keeping the HTML fallback.', error);
   }
 }

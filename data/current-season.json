@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "season": 2026,
+  "seasonNumber": 10,
+  "week": 1,
+  "phase": "Week 1",
+  "fetchedAt": "2026-09-01T01:46:14.000743+00:00",
+  "source": "ESPN league endpoint",
+  "note": "Week 1 slate. Records stay 0-0 until kickoff.",
+  "standings": [
+    {
+      "locker": 1,
+      "teamId": 1,
+      "team": "Madison Beer Garden",
+      "owner": "George Travis",
+      "abbrev": "BDS",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 2,
+      "teamId": 3,
+      "team": "Love Thy Nabers",
+      "owner": "Jared Hall",
+      "abbrev": "HALL",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 3,
+      "teamId": 4,
+      "team": "1912 Titanic Swimteam",
+      "owner": "Kyle Fowler",
+      "abbrev": "Kyle",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 4,
+      "teamId": 5,
+      "team": "Howya Been's",
+      "owner": "Bryan Hunt",
+      "abbrev": "HUNT",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 5,
+      "teamId": 6,
+      "team": "Meeches Mayhem",
+      "owner": "Brian Heino",
+      "abbrev": "HEIN",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 6,
+      "teamId": 7,
+      "team": "Like a Good Nabers",
+      "owner": "Vincent Cannarozzi",
+      "abbrev": "CANN",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 7,
+      "teamId": 8,
+      "team": "Jigalos Jims",
+      "owner": "James Brochu",
+      "abbrev": "JIM",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 8,
+      "teamId": 9,
+      "team": "Ja'Marr-a-Lago",
+      "owner": "JD Daley",
+      "abbrev": "MAGA",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 9,
+      "teamId": 11,
+      "team": "Your Reigning Champ",
+      "owner": "Thomas Speer",
+      "abbrev": "SPEE",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 10,
+      "teamId": 13,
+      "team": "Breezin’ with Bijan",
+      "owner": "Collin Krum",
+      "abbrev": "BB",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 11,
+      "teamId": 14,
+      "team": "Ice Has Me Running Back",
+      "owner": "German Haro",
+      "abbrev": "HARO",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    },
+    {
+      "locker": 12,
+      "teamId": 15,
+      "team": "Team Hash",
+      "owner": "Trevor Hash",
+      "abbrev": "HASH",
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 0,
+      "pointsAgainst": 0
+    }
+  ],
+  "matchups": [
+    {
+      "id": 1,
+      "week": 1,
+      "away": {
+        "teamId": 9,
+        "team": "Ja'Marr-a-Lago",
+        "owner": "JD Daley",
+        "score": null
+      },
+      "home": {
+        "teamId": 5,
+        "team": "Howya Been's",
+        "owner": "Bryan Hunt",
+        "score": null
+      }
+    },
+    {
+      "id": 2,
+      "week": 1,
+      "away": {
+        "teamId": 11,
+        "team": "Your Reigning Champ",
+        "owner": "Thomas Speer",
+        "score": null
+      },
+      "home": {
+        "teamId": 1,
+        "team": "Madison Beer Garden",
+        "owner": "George Travis",
+        "score": null
+      }
+    },
+    {
+      "id": 3,
+      "week": 1,
+      "away": {
+        "teamId": 15,
+        "team": "Team Hash",
+        "owner": "Trevor Hash",
+        "score": null
+      },
+      "home": {
+        "teamId": 4,
+        "team": "1912 Titanic Swimteam",
+        "owner": "Kyle Fowler",
+        "score": null
+      }
+    },
+    {
+      "id": 4,
+      "week": 1,
+      "away": {
+        "teamId": 13,
+        "team": "Breezin’ with Bijan",
+        "owner": "Collin Krum",
+        "score": null
+      },
+      "home": {
+        "teamId": 14,
+        "team": "Ice Has Me Running Back",
+        "owner": "German Haro",
+        "score": null
+      }
+    },
+    {
+      "id": 5,
+      "week": 1,
+      "away": {
+        "teamId": 3,
+        "team": "Love Thy Nabers",
+        "owner": "Jared Hall",
+        "score": null
+      },
+      "home": {
+        "teamId": 7,
+        "team": "Like a Good Nabers",
+        "owner": "Vincent Cannarozzi",
+        "score": null
+      }
+    },
+    {
+      "id": 6,
+      "week": 1,
+      "away": {
+        "teamId": 6,
+        "team": "Meeches Mayhem",
+        "owner": "Brian Heino",
+        "score": null
+      },
+      "home": {
+        "teamId": 8,
+        "team": "Jigalos Jims",
+        "owner": "James Brochu",
+        "score": null
+      }
+    }
+  ]
+}
