@@ -48,4 +48,17 @@ ESPN_LEAGUE_ID=1237285 ESPN_S2="$ESPN_S2" ESPN_SWID="$ESPN_SWID" \
 
 The scoreboard command filters ESPN’s full schedule by `matchupPeriodId` and returns only that week’s six league matchups. It retries transient transport failures up to three times with bounded backoff and exits nonzero on authentication, HTTP, timeout, or malformed-response errors.
 
-The `Data health and current-season fetch` GitHub Actions workflow runs the public live playoff probe daily at 08:15 UTC. A manual workflow dispatch additionally fetches standings and a selected matchup period, then uploads the normalized JSON files as a 14-day artifact. Configure the repository secrets `ESPN_LEAGUE_ID`, `ESPN_S2`, and `ESPN_SWID`; do not commit these values or print them in logs.
+## Current-season draft recap
+
+After draft night, fetch the compact archive (same shape as `data/drafts/*.json`) plus a ratings-ready recap:
+
+```bash
+ESPN_LEAGUE_ID=1237285 ESPN_S2="$ESPN_S2" ESPN_SWID="$ESPN_SWID" \
+  python3 scripts/fetch_draft.py --season 2026 \
+  --output data/drafts/2026.json \
+  --full-output artifacts/draft-2026-full.json
+```
+
+The recap maps ESPN owner IDs onto the current twelve, marks keepers, and keeps PPR ranks for the post-draft futures board. It never writes credentials or the raw ESPN payload.
+
+The `Data health and current-season fetch` GitHub Actions workflow runs the public live playoff probe daily at 08:15 UTC. A manual workflow dispatch additionally fetches standings, a selected matchup period, and the draft recap, then uploads the normalized JSON files as a 14-day artifact. Configure the repository secrets `ESPN_LEAGUE_ID`, `ESPN_S2`, and `ESPN_SWID`; do not commit these values or print them in logs.

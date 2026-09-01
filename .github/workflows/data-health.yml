@@ -42,7 +42,7 @@ jobs:
         run: npm run probe:live
 
   fetch-current-season:
-    name: Fetch current standings and scoreboard
+    name: Fetch current standings, scoreboard, and draft
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
@@ -52,6 +52,9 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - name: Test ESPN normalizers
+        run: |
+          python3 -m unittest scripts/test_fetch_current.py scripts/test_fetch_draft.py
       - name: Fetch standings
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
@@ -72,6 +75,16 @@ jobs:
             --season "${{ inputs.season }}" \
             --week "${{ inputs.week }}" \
             --output "artifacts/scoreboard-${{ inputs.season }}-week${{ inputs.week }}.json"
+      - name: Fetch draft recap
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+        run: |
+          python3 scripts/fetch_draft.py \
+            --season "${{ inputs.season }}" \
+            --output "artifacts/draft-${{ inputs.season }}.json" \
+            --full-output "artifacts/draft-${{ inputs.season }}-full.json"
       - name: Upload normalized current-season artifacts
         if: always()
         uses: actions/upload-artifact@v4
