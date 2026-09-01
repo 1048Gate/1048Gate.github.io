@@ -166,8 +166,11 @@ if(!html.includes('rel="apple-touch-icon"') || !html.includes('images/apple-touc
 if(!html.includes('id="playoffs"') || !html.includes('id="staff"') || !html.includes('id="phoneDock"') || !html.includes('id="phoneMore"')){
   throw new Error('Playoffs, Staff, and the phone dock must be present in index.html so hash routes resolve on first paint.');
 }
-if(!html.includes('data-draft-night') || !html.includes('data-countdown-seconds') || !scriptAssets.includes('js/draft-countdown.js')){
-  throw new Error('Draft-night countdown markup or script is missing.');
+if(html.includes('data-countdown-seconds') || html.includes('draft-countdown') || scriptAssets.includes('js/draft-countdown.js')){
+  throw new Error('The draft countdown must be gone now that Szn 10 is drafted.');
+}
+if(!html.includes('data-draft-night') || !html.includes('id="draftBoard"')){
+  throw new Error('Home must keep the first-round recap after the countdown is removed.');
 }
 
 function webpDimensions(fileUrl){

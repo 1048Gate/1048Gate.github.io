@@ -30,6 +30,7 @@
     }
 
     renderDraftOrder(config);
+    renderDraftNote(config);
     renderFutures(config);
     renderLiveStats();
     window.gateSiteConfig = config;
@@ -81,6 +82,14 @@ async function renderLiveStats(){
   }
 }
 
+function renderDraftNote(config){
+  const draft = config?.draftNight || {};
+  const noteBody = document.querySelector('[data-draft-note-body]');
+  const noteWhere = document.querySelector('[data-draft-note-where]');
+  if(noteBody && draft.note) noteBody.textContent = draft.note;
+  if(noteWhere && draft.where) noteWhere.textContent = draft.where;
+}
+
 function renderDraftOrder(config){
   const target = document.querySelector('[data-draft-order]');
   if(!target) return;
@@ -94,21 +103,17 @@ function renderDraftOrder(config){
   const names = order.map(entry => String(entry.name ?? '')).filter(Boolean);
   shared.memberPresentation?.setRoster?.(names);
   const initialsFor = shared.memberPresentation?.initialsFor || (() => '—');
-  const currentPick = Number(config.draftNight?.currentPick) || 1;
-  const complete = config.draftNight?.status === 'complete';
   target.innerHTML = order.map(entry => {
     const pick = Number(entry.pick);
     const name = String(entry.name ?? '');
     const player = String(entry.player ?? '');
     const keeper = Boolean(entry.keeper);
-    const onClock = !complete && pick === currentPick;
-    const detail = [player ? player : `Pick ${pick || ''}`, keeper ? 'Keeper' : '', onClock ? 'On the clock' : ''].filter(Boolean).join(' · ');
-    return `<div class="draft-pick-card${onClock ? ' is-on-clock' : ''}${pick === 1 ? ' is-first' : ''}${complete ? ' is-complete' : ''}" data-draft-pick="${escapeHtml(pick || '')}">
+    const detail = [player || `Pick ${pick || ''}`, keeper ? 'Keeper' : ''].filter(Boolean).join(' · ');
+    return `<div class="draft-pick-card${pick === 1 ? ' is-first' : ''}" data-draft-pick="${escapeHtml(pick || '')}">
       <span class="draft-pick-num" aria-hidden="true">${escapeHtml(pick || '')}</span>
       <span class="member-avatar draft-pick-avatar"><span class="member-initials">${escapeHtml(initialsFor(name))}</span></span>
       <div class="draft-pick-meta"><strong>${escapeHtml(name)}</strong><span>${escapeHtml(detail)}</span></div>
-      ${onClock ? '<span class="draft-clock-badge">On the clock</span>' : (keeper ? '<span class="draft-clock-badge is-keeper">Keeper</span>' : '')}
+      ${keeper ? '<span class="draft-clock-badge is-keeper">Keeper</span>' : ''}
     </div>`;
   }).join('');
-  window.gateDraftNight?.paintBoard?.();
 }
