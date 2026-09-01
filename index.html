@@ -74,8 +74,8 @@
       </div>
     </div>
     <div class="week-chip" aria-label="Current league season">
-      <span class="digit" data-site-phase>Pre-Season</span>
-      <span class="label" data-site-season>2026 SEASON · REGULAR</span>
+      <span class="digit" data-site-phase>Post-Draft</span>
+      <span class="label" data-site-season>2026 SEASON · POST-DRAFT</span>
     </div>
     <div class="auth-control-slot" id="authControlMount" aria-live="polite"></div>
   </div>
@@ -99,16 +99,17 @@
         <span class="eyebrow">Official League Headquarters</span>
         <h1>1048 GATE<br><span>FANTASY FOOTBALL</span></h1>
         <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
-        <p>The <span data-site-year>2026</span> campaign is underway—scope the draft order below, then dig through every completed season of standings, playoffs, drafts, and records in the archive.</p>
+        <p>The <span data-site-year>2026</span> campaign is locked. 192 picks are in, keepers are set, and the championship odds are live off the rosters.</p>
         <div class="hero-buttons">
-          <button class="btn btn-primary" data-scroll-to="draftBoard">The Board</button>
-          <button class="btn btn-ghost" data-view-link="rules">League Rules</button>
+          <button class="btn btn-primary" data-scroll-to="championshipOdds">Championship Odds</button>
+          <button class="btn btn-ghost" data-view-link="history">Draft Archive</button>
         </div>
       </div>
       <aside class="hero-season-card" aria-label="Current league campaign">
         <span class="hero-season-kicker">Current campaign</span>
         <strong class="hero-season-year" data-site-year>2026</strong>
         <span class="hero-season-edition" data-site-season-label>Season 10</span>
+        <span class="hero-season-phase" data-site-phase>Post-Draft</span>
         <div class="hero-meta-grid">
           <div><strong data-stat-managers>12</strong><span>Managers</span></div>
           <div><strong data-stat-seasons>9</strong><span>Completed seasons</span></div>
@@ -118,25 +119,24 @@
       </aside>
     </div>
 
-    <section class="draft-night" data-draft-night aria-label="Szn 10 first-round recap">
-      <aside class="draft-night-note" data-draft-note>
-        <span class="draft-night-kicker">Commissioner note</span>
-        <p data-draft-note-body>192 picks are in. Gibbs went 1.01, Puka came back in the 9th, Achane in the 12th. Odds are live off the rosters.</p>
-        <small data-draft-note-where>Draft archive · History → Drafts</small>
-      </aside>
+    <section class="home-pulse" aria-label="Szn 10 status">
+      <div><span>Phase</span><strong data-site-phase>Post-Draft</strong></div>
+      <div><span>Draft</span><strong>192 picks in</strong></div>
+      <div><span>Favorite</span><strong data-home-favorite>Thomas Speer +300</strong></div>
+      <div><span>Archive</span><strong>History → Drafts</strong></div>
+    </section>
 
-      <section class="home-section draft-order-section" id="draftBoard" aria-label="Szn 10 first-round recap">
-        <header class="home-section-head"><div><span>The <span data-site-year>2026</span> keeper draft</span><h2>First Round</h2></div><small data-draft-board-meta>Szn 10 recap</small></header>
-        <div class="draft-order-grid" data-draft-order aria-live="polite">
-          <div class="draft-order-empty">Loading first round…</div>
-        </div>
-      </section>
+    <section class="home-section futures-section" id="championshipOdds" aria-label="Championship futures odds">
+      <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small>Post-draft board</small></header>
+      <div class="futures-grid" data-futures aria-live="polite">
+        <div class="futures-empty">Setting the lines…</div>
+      </div>
     </section>
 
     <section class="home-section keepers-section" id="homeKeepers" aria-label="Szn 10 keepers">
       <header class="home-section-head"><div><span>House rule</span><h2>Keepers</h2></div><small>One per club</small></header>
       <div class="keepers-home-body">
-        <div class="rule-summary"><strong>One keeper per club.</strong> If you kept someone last year who was your 1st-round pick, you can no longer keep them. If you are keeping someone for the 2nd year in a row, their draft round moves up this year. Example: keeping Saquon as a 2nd-rounder last year and keeping him again this year costs a 1st-round pick.</div>
+        <div class="rule-summary">One keeper per club. If you kept a 1st-rounder last year, you cannot keep them again. A second straight keep moves the round cost up one.</div>
         <div class="rule-grid keeper-list">
           <div class="rule-row"><span>George Travis</span><span>Javonte Williams · 8th</span></div>
           <div class="rule-row"><span>Trevor Hash</span><span>Chase Brown · 9th</span></div>
@@ -168,6 +168,8 @@
           <div><span>Established</span><strong data-stat-established>2017</strong></div>
           <div><span>Completed seasons</span><strong data-stat-seasons>9</strong></div>
           <div><span>Archived games</span><strong data-stat-games>885</strong></div>
+          <div><span>Season phase</span><strong data-site-phase>Post-Draft</strong></div>
+          <div><span>Szn 10 draft</span><strong>Complete</strong></div>
           <div><span>League format</span><strong>12-team keeper</strong></div>
         </div>
       </aside>
@@ -177,13 +179,6 @@
       <header class="home-section-head"><div><span>Ring count since 2017</span><h2>Championship Banners</h2></div><small>One banner per title</small></header>
       <div class="banner-wall" data-banner-wall aria-live="polite">
         <div class="banner-wall-empty">Raising the banners…</div>
-      </div>
-    </section>
-
-    <section class="home-section futures-section" aria-label="Championship futures odds">
-      <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small>Post-draft board</small></header>
-      <div class="futures-grid" data-futures aria-live="polite">
-        <div class="futures-empty">Setting the lines…</div>
       </div>
     </section>
 
