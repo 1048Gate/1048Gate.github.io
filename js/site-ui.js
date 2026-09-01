@@ -29,8 +29,7 @@
       document.querySelectorAll('[data-archive-years]').forEach(element => {element.textContent = range});
     }
 
-    renderDraftOrder(config);
-    renderDraftNote(config);
+    renderPulse(config);
     renderFutures(config);
     renderLiveStats();
     window.gateSiteConfig = config;
@@ -82,38 +81,10 @@ async function renderLiveStats(){
   }
 }
 
-function renderDraftNote(config){
-  const draft = config?.draftNight || {};
-  const noteBody = document.querySelector('[data-draft-note-body]');
-  const noteWhere = document.querySelector('[data-draft-note-where]');
-  if(noteBody && draft.note) noteBody.textContent = draft.note;
-  if(noteWhere && draft.where) noteWhere.textContent = draft.where;
-}
-
-function renderDraftOrder(config){
-  const target = document.querySelector('[data-draft-order]');
-  if(!target) return;
-  const order = Array.isArray(config.draftOrder) ? config.draftOrder : [];
-  if(!order.length){
-    target.innerHTML = '<div class="draft-order-empty">Draft order will be announced before the draft.</div>';
-    return;
+function renderPulse(config){
+  const favorite = Array.isArray(config.futures) ? config.futures[0] : null;
+  const target = document.querySelector('[data-home-favorite]');
+  if(target && favorite?.name && favorite?.odds){
+    target.textContent = `${favorite.name} ${favorite.odds}`;
   }
-  const shared = window.gateShared || {};
-  const escapeHtml = shared.escapeHtml || (value => String(value ?? ''));
-  const names = order.map(entry => String(entry.name ?? '')).filter(Boolean);
-  shared.memberPresentation?.setRoster?.(names);
-  const initialsFor = shared.memberPresentation?.initialsFor || (() => '—');
-  target.innerHTML = order.map(entry => {
-    const pick = Number(entry.pick);
-    const name = String(entry.name ?? '');
-    const player = String(entry.player ?? '');
-    const keeper = Boolean(entry.keeper);
-    const detail = [player || `Pick ${pick || ''}`, keeper ? 'Keeper' : ''].filter(Boolean).join(' · ');
-    return `<div class="draft-pick-card${pick === 1 ? ' is-first' : ''}" data-draft-pick="${escapeHtml(pick || '')}">
-      <span class="draft-pick-num" aria-hidden="true">${escapeHtml(pick || '')}</span>
-      <span class="member-avatar draft-pick-avatar"><span class="member-initials">${escapeHtml(initialsFor(name))}</span></span>
-      <div class="draft-pick-meta"><strong>${escapeHtml(name)}</strong><span>${escapeHtml(detail)}</span></div>
-      ${keeper ? '<span class="draft-clock-badge is-keeper">Keeper</span>' : ''}
-    </div>`;
-  }).join('');
 }

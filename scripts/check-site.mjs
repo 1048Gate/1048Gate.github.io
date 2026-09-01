@@ -144,8 +144,8 @@ if(!html.includes('>Keepers</h2>') || !html.includes('>Past members</h2>')){
 if(!html.includes('Lamb Fried Rice') || !html.includes('German Haro')){
   throw new Error('Wall of Shame fallback must name 2025 last place as Lamb Fried Rice / German Haro.');
 }
-if(!html.includes('id="draftBoard"') || !html.includes('data-scroll-to="draftBoard"')){
-  throw new Error('Home must expose a draft-board jump target.');
+if(!html.includes('id="homeKeepers"') || !html.includes('id="membersKeepers"') || !html.includes('id="pastMembers"')){
+  throw new Error('Home and Members must expose Keepers and Past members subsections.');
 }
 if(!scriptAssets.includes('js/staff-loader.js')){
   throw new Error('Staff tools must load through js/staff-loader.js.');
@@ -169,8 +169,11 @@ if(!html.includes('id="playoffs"') || !html.includes('id="staff"') || !html.incl
 if(html.includes('data-countdown-seconds') || html.includes('draft-countdown') || scriptAssets.includes('js/draft-countdown.js')){
   throw new Error('The draft countdown must be gone now that Szn 10 is drafted.');
 }
-if(!html.includes('data-draft-night') || !html.includes('id="draftBoard"')){
-  throw new Error('Home must keep the first-round recap after the countdown is removed.');
+if(html.includes('data-draft-order') || html.includes('id="draftBoard"') || html.includes('data-draft-night')){
+  throw new Error('Home must not show the draft-order board after Szn 10.');
+}
+if(!html.includes('id="championshipOdds"') || !html.includes('data-scroll-to="championshipOdds"') || !html.includes('class="home-pulse"')){
+  throw new Error('Home must lead with the post-draft pulse and championship odds.');
 }
 
 function webpDimensions(fileUrl){
