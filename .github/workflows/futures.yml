@@ -32,10 +32,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet data/site.json; then
+          if git diff --quiet data/site.json data/power-rankings.json; then
             echo "Odds unchanged — nothing to commit."
           else
-            git add data/site.json
+            git add data/site.json data/power-rankings.json
             git commit -m "Refresh championship futures odds"
             git push
           fi

@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "seasonRoman": "X",
   "seasonYear": 2026,
-  "phase": "Pre-Season",
+  "phase": "Post-Draft",
   "competition": "Regular",
   "transactionRange": [
     2019,
@@ -14,131 +14,155 @@
     {
       "name": "Thomas Speer",
       "odds": "+300",
-      "case": "Reigning champion chasing his fourth ring. The Swifties keep finding WR1s in the late rounds."
-    },
-    {
-      "name": "Jared Hall",
-      "odds": "+400",
-      "case": "Three rings and the league's deepest résumé. A 7-7 reset year, and nobody wants to see him in the bracket."
-    },
-    {
-      "name": "Collin Krum",
-      "odds": "+750",
-      "case": "11-3 and a title-game trip in 2025. The best roster he has ever had — one piece away."
-    },
-    {
-      "name": "George Travis",
-      "odds": "+900",
-      "case": "The commissioner is always in it. Eight playoff trips in nine seasons and a title in 2022."
+      "case": "Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."
     },
     {
       "name": "Brian Heino",
-      "odds": "+1100",
-      "case": "Nine wins and a third-place run in 2025. Still chasing ring number one."
+      "odds": "+750",
+      "case": "Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window."
     },
     {
       "name": "Bryan Hunt",
-      "odds": "+1100",
-      "case": "Perennial contender still chasing his first ring — the 11-3 Kenya(n) Pass The Jay season lives in infamy."
+      "odds": "+850",
+      "case": "Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé."
+    },
+    {
+      "name": "Collin Krum",
+      "odds": "+900",
+      "case": "Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip."
     },
     {
       "name": "JD Daley",
-      "odds": "+1500",
-      "case": "Boom or bust personified — a title in 2019 and more roster chaos since than anyone else in the league."
+      "odds": "+1150",
+      "case": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
     },
     {
       "name": "James Brochu",
-      "odds": "+2200",
-      "case": "Jigalos Jims strung together winning seasons in 2023 and 2024 before 2025 took a step back."
+      "odds": "+1150",
+      "case": "Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix."
     },
     {
-      "name": "Trevor Hash",
-      "odds": "+2500",
-      "case": "10-4 in 2024, then the wheels came off. Team Hash always drafts the same roster, and sometimes that works."
+      "name": "George Travis",
+      "odds": "+1250",
+      "case": "CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."
+    },
+    {
+      "name": "Jared Hall",
+      "odds": "+1250",
+      "case": "Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset."
     },
     {
       "name": "Vincent Cannarozzi",
-      "odds": "+2500",
-      "case": "Nine seasons, zero titles, eternal hope. The Nabers era was supposed to be the jump."
+      "odds": "+2150",
+      "case": "JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit."
     },
     {
-      "name": "Kyle Fowler",
-      "odds": "+2500",
-      "case": "A 2018 title and a 3-11 hangover. The roster is young, the hope is thin."
+      "name": "Trevor Hash",
+      "odds": "+2150",
+      "case": "Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up."
     },
     {
       "name": "German Haro",
       "odds": "+2500",
-      "case": "Back-to-back two-win seasons. The only way out is through — and the draft is in August."
+      "case": "Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence."
+    },
+    {
+      "name": "Kyle Fowler",
+      "odds": "+2500",
+      "case": "AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin."
     }
   ],
   "draftOrder": [
     {
       "pick": 1,
       "number": "12",
-      "name": "Trevor Hash"
+      "name": "Trevor Hash",
+      "player": "Jahmyr Gibbs",
+      "keeper": false
     },
     {
       "pick": 2,
       "number": "01",
-      "name": "George Travis"
+      "name": "George Travis",
+      "player": "Christian McCaffrey",
+      "keeper": false
     },
     {
       "pick": 3,
       "number": "04",
-      "name": "Bryan Hunt"
+      "name": "Bryan Hunt",
+      "player": "Ja'Marr Chase",
+      "keeper": false
     },
     {
       "pick": 4,
       "number": "02",
-      "name": "Jared Hall"
+      "name": "Jared Hall",
+      "player": "Jonathan Taylor",
+      "keeper": false
     },
     {
       "pick": 5,
       "number": "06",
-      "name": "Vincent Cannarozzi"
+      "name": "Vincent Cannarozzi",
+      "player": "Jaxon Smith-Njigba",
+      "keeper": false
     },
     {
       "pick": 6,
       "number": "09",
-      "name": "Thomas Speer"
+      "name": "Thomas Speer",
+      "player": "Amon-Ra St. Brown",
+      "keeper": false
     },
     {
       "pick": 7,
       "number": "07",
-      "name": "James Brochu"
+      "name": "James Brochu",
+      "player": "CeeDee Lamb",
+      "keeper": false
     },
     {
       "pick": 8,
       "number": "08",
-      "name": "JD Daley"
+      "name": "JD Daley",
+      "player": "Justin Jefferson",
+      "keeper": false
     },
     {
       "pick": 9,
       "number": "11",
-      "name": "German Haro"
+      "name": "German Haro",
+      "player": "James Cook III",
+      "keeper": false
     },
     {
       "pick": 10,
       "number": "10",
-      "name": "Collin Krum"
+      "name": "Collin Krum",
+      "player": "Bijan Robinson",
+      "keeper": true
     },
     {
       "pick": 11,
       "number": "05",
-      "name": "Brian Heino"
+      "name": "Brian Heino",
+      "player": "Saquon Barkley",
+      "keeper": false
     },
     {
       "pick": 12,
       "number": "03",
-      "name": "Kyle Fowler"
+      "name": "Kyle Fowler",
+      "player": "A.J. Brown",
+      "keeper": false
     }
   ],
   "draftNight": {
     "startsAt": "2026-09-01T00:00:00Z",
-    "currentPick": 1,
-    "note": "Be in the ESPN lobby at 8:00 ET. Keepers are locked. Hash is up first — don't be late.",
-    "where": "ESPN draft room",
-    "status": "upcoming"
+    "currentPick": 12,
+    "note": "192 picks are in. Gibbs went 1.01, Puka came back in the 9th, Achane in the 12th. Odds are live off the rosters.",
+    "where": "Draft archive · History → Drafts",
+    "status": "complete"
   }
 }

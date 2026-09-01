@@ -2,15 +2,19 @@
 //
 // Usage: npm run futures   (rewrites data/site.json `futures` in place)
 //
-// Rating inputs (last 3 completed seasons, recency-weighted .5/.3/.2):
+// Career inputs (last 3 completed seasons, recency-weighted .5/.3/.2):
 //   regular-season win%            weight .40
 //   scoring rate vs league avg     weight .25
 //   playoff result points          weight .20   (title 1.0 · runner-up .6 · bracket .22)
 // plus a career win% prior        weight .15
 //
+// After a completed current-season draft, blend 45% career / 55% roster.
+// Roster value uses ESPN PPR ranks from data/draft-ranks.json: best 1QB/2RB/2WR/1TE/1FLEX
+// plus a discounted bench, DST, and kicker.
+//
 // Odds conversion: implied probability p_i ∝ rating^K, K tuned so the
 // favorite lands near 24%, then rendered as American odds rounded to $50.
-import {readFileSync, writeFileSync} from 'node:fs';
+import {existsSync, readFileSync, writeFileSync} from 'node:fs';
 
 const root = new URL('..', import.meta.url);
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
@@ -106,18 +110,102 @@ recent.forEach((summary, i) => {
   });
 });
 
-const ratings = [...managers.values()]
-  .filter(m => memberNames.has(m.name)) // futures board is for current managers only
+const careerRatings = [...managers.values()]
+  .filter(m => memberNames.has(m.name))
   .map(m => {
   const careerWinPct = m.games ? m.wins / m.games : 0.5;
   const recentWin = m.weightedWinW ? m.weightedWin / m.weightedWinW : careerWinPct;
   const scoreScore = m.weightedScoreW ? m.weightedScore / m.weightedScoreW : 0.5;
-  const playoffNorm = Math.min(m.playoffScore / 1.0, 1); // .5/.3/.2 weights sum to 1.0 max
-  const rating = 100 * (0.40 * recentWin + 0.25 * scoreScore + 0.20 * playoffNorm + 0.15 * careerWinPct);
-  return {...m, careerWinPct, recentWin, scoreScore, playoffRaw: m.playoffScore, rating};
+  const playoffNorm = Math.min(m.playoffScore / 1.0, 1);
+  const careerRating = 100 * (0.40 * recentWin + 0.25 * scoreScore + 0.20 * playoffNorm + 0.15 * careerWinPct);
+  return {...m, careerWinPct, recentWin, scoreScore, playoffRaw: m.playoffScore, careerRating};
+});
+
+function playerValue(rank, position){
+  const raw = Math.pow(Math.max(0, 240 - Number(rank || 250)), 1.05);
+  if(position === 'D/ST') return raw * 0.22;
+  if(position === 'K') return raw * 0.12;
+  if(position === 'QB') return raw * 0.92;
+  return raw;
+}
+
+function rosterScore(players){
+  const byPos = new Map();
+  players.forEach(player => {
+    const list = byPos.get(player.position) || [];
+    list.push(player);
+    byPos.set(player.position, list);
+  });
+  byPos.forEach(list => list.sort((a, b) => (a.rank || 999) - (b.rank || 999)));
+  const used = new Set();
+  const take = (position, count) => {
+    const chosen = [];
+    for(const player of byPos.get(position) || []){
+      if(used.has(player)) continue;
+      chosen.push(player);
+      used.add(player);
+      if(chosen.length === count) break;
+    }
+    return chosen;
+  };
+  const starters = [
+    ...take('QB', 1),
+    ...take('RB', 2),
+    ...take('WR', 2),
+    ...take('TE', 1)
+  ];
+  const flex = players
+    .filter(player => ['RB', 'WR', 'TE'].includes(player.position) && !used.has(player))
+    .sort((a, b) => (a.rank || 999) - (b.rank || 999))[0];
+  if(flex){
+    starters.push(flex);
+    used.add(flex);
+  }
+  starters.push(...take('D/ST', 1), ...take('K', 1));
+  const starterTotal = starters.reduce((sum, player) => sum + playerValue(player.rank, player.position), 0);
+  const benchTotal = players
+    .filter(player => !used.has(player))
+    .map(player => playerValue(player.rank, player.position))
+    .sort((a, b) => b - a)
+    .slice(0, 7)
+    .reduce((sum, value) => sum + value, 0);
+  return starterTotal + 0.20 * benchTotal;
+}
+
+function loadRosterRatings(seasonYear){
+  const ranksUrl = new URL('data/draft-ranks.json', root);
+  if(!existsSync(ranksUrl)) return null;
+  const payload = JSON.parse(readFileSync(ranksUrl, 'utf8'));
+  if(Number(payload.season) !== Number(seasonYear)) return null;
+  const byOwner = new Map();
+  (payload.players || []).forEach(player => {
+    const owner = clean(player.owner);
+    if(!owner) return;
+    const list = byOwner.get(owner) || [];
+    list.push({
+      position: String(player.position || 'FLEX'),
+      rank: Number(player.rank) || 250
+    });
+    byOwner.set(owner, list);
+  });
+  if(byOwner.size < 4) return null;
+  const raw = [...byOwner.entries()].map(([name, players]) => ({name, value: rosterScore(players)}));
+  const mean = raw.reduce((sum, row) => sum + row.value, 0) / raw.length;
+  const variance = raw.reduce((sum, row) => sum + ((row.value - mean) ** 2), 0) / raw.length;
+  const sd = Math.sqrt(variance) || 1;
+  return new Map(raw.map(row => [row.name, 45 + 12 * ((row.value - mean) / sd)]));
+}
+
+const rosterRatings = loadRosterRatings(config.seasonYear);
+const ROSTER_WEIGHT = 0.55;
+const ratings = careerRatings.map(m => {
+  const rosterRating = rosterRatings?.get(m.name);
+  const rating = rosterRating == null
+    ? m.careerRating
+    : ((1 - ROSTER_WEIGHT) * m.careerRating) + (ROSTER_WEIGHT * rosterRating);
+  return {...m, rosterRating, rating};
 }).sort((a, b) => b.rating - a.rating);
 
-// Tune exponent K so the favorite's implied probability lands near 24%.
 let lo = 1, hi = 14, K = 6;
 const probFor = k => {
   const exps = ratings.map(r => Math.pow(r.rating / 100, k));
@@ -137,16 +225,19 @@ const americanOdds = p => {
   return Math.round(Math.min(Math.max(rounded, -400), 2500));
 };
 
-console.log('Rating model — last 3 seasons weighted .5/.3/.2\n');
-console.log('Manager               Rating  Win%   PtsRel  Playoff  Career  Odds');
+const basis = rosterRatings ? 'post-draft' : 'career';
+console.log(rosterRatings
+  ? 'Rating model — 45% career form / 55% 2026 roster ranks\n'
+  : 'Rating model — last 3 seasons weighted .5/.3/.2\n');
+console.log('Manager               Rating  Career  Roster  Odds');
 ratings.forEach((r, i) => {
+  const roster = r.rosterRating == null ? '   —' : r.rosterRating.toFixed(1).padStart(6);
   console.log(
-    `${r.name.padEnd(21)} ${r.rating.toFixed(1).padStart(6)}  ${(r.recentWin * 100).toFixed(1).padStart(5)}%  ${r.scoreScore.toFixed(2).padStart(6)}  ${r.playoffRaw.toFixed(2).padStart(7)}  ${(r.careerWinPct * 100).toFixed(1).padStart(5)}%  +${americanOdds(probs[i])}`
+    `${r.name.padEnd(21)} ${r.rating.toFixed(1).padStart(6)}  ${r.careerRating.toFixed(1).padStart(6)}  ${roster}  +${americanOdds(probs[i])}`
   );
 });
-console.log(`\nExponent K=${K.toFixed(2)} (favorite implied ${(probs[0] * 100).toFixed(1)}%)`);
+console.log(`\nExponent K=${K.toFixed(2)} (favorite implied ${(probs[0] * 100).toFixed(1)}%) · basis ${basis}`);
 
-// Rewrite site.json futures: order by model ranking, refresh odds, keep blurbs.
 const previous = new Map((config.futures || []).map(f => [clean(f.name), f]));
 config.futures = ratings.map((r, i) => ({
   name: r.name,
@@ -160,10 +251,10 @@ if(unmatched.length) console.warn('\nKept at end (not matched by model):', unmat
 writeFileSync(new URL('data/site.json', root), JSON.stringify(config, null, 2) + '\n');
 console.log(`\nWrote ${config.futures.length} futures entries to data/site.json`);
 
-// Machine-readable ratings feed for the client-side playoff projector.
 writeFileSync(new URL('data/power-rankings.json', root), JSON.stringify({
   schemaVersion: 1,
   generatedForSeason: config.seasonNumber,
+  basis,
   ratings: ratings.map(r => ({name: r.name, rating: Math.round(r.rating * 10) / 10}))
 }, null, 2) + '\n');
 console.log(`Wrote ${ratings.length} power ratings to data/power-rankings.json`);

@@ -87,6 +87,32 @@ if(!Number.isInteger(siteConfig.seasonYear) || !Number.isInteger(siteConfig.seas
 if(!siteConfig.draftNight?.startsAt || !Number.isInteger(siteConfig.draftNight.currentPick)){
   throw new Error('data/site.json must define draftNight.startsAt and currentPick.');
 }
+if(siteConfig.phase !== 'Post-Draft' || siteConfig.draftNight.status !== 'complete'){
+  throw new Error('Szn 10 must be marked Post-Draft with a completed draft night.');
+}
+if(!siteConfig.draftOrder?.[0]?.player || siteConfig.draftOrder[0].player !== 'Jahmyr Gibbs'){
+  throw new Error('First-round recap must include the 1.01 player from the Szn 10 draft.');
+}
+
+const draft2026 = JSON.parse(readFileSync(new URL('data/drafts/2026.json', root), 'utf8'));
+if(draft2026.year !== 2026 || !Array.isArray(draft2026.picks) || draft2026.picks.length !== 192){
+  throw new Error('Szn 10 draft archive must include 192 picks.');
+}
+if(draft2026.keepers !== 12 || !draft2026.picks.some(pick => pick[2] === 'Bijan Robinson' && pick[3] === 1)){
+  throw new Error('Szn 10 draft archive must mark 12 keepers including Bijan Robinson.');
+}
+const draftIndex = JSON.parse(readFileSync(new URL('data/drafts/index.json', root), 'utf8'));
+if(!draftIndex.seasons.some(row => row[0] === 2026 && row[3] === 192)){
+  throw new Error('Draft index must include the 2026 season.');
+}
+const powerRankings = JSON.parse(readFileSync(new URL('data/power-rankings.json', root), 'utf8'));
+if(powerRankings.basis !== 'post-draft' || !Array.isArray(powerRankings.ratings) || powerRankings.ratings.length !== 12){
+  throw new Error('Power rankings must be the post-draft 12-manager board.');
+}
+const draftRanks = JSON.parse(readFileSync(new URL('data/draft-ranks.json', root), 'utf8'));
+if(draftRanks.season !== 2026 || !Array.isArray(draftRanks.players) || draftRanks.players.length !== 192){
+  throw new Error('Draft ranks feed must include all 192 Szn 10 picks.');
+}
 if(!html.includes('data-site-phase') || !html.includes('data-site-season') || !scriptAssets.includes('js/site-ui.js')){
   throw new Error('The season display must be driven by data/site.json through site-ui.js.');
 }
