@@ -1,2 +1,4 @@
 /1048_gate.db
 /dist/
+__pycache__/
+*.pyc

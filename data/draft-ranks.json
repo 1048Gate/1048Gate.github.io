@@ -1,0 +1,1542 @@
+{
+  "schemaVersion": 1,
+  "season": 2026,
+  "players": [
+    {
+      "owner": "Trevor Hash",
+      "player": "Jahmyr Gibbs",
+      "position": "RB",
+      "rank": 1,
+      "overall": 1,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Christian McCaffrey",
+      "position": "RB",
+      "rank": 7,
+      "overall": 2,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Ja'Marr Chase",
+      "position": "WR",
+      "rank": 3,
+      "overall": 3,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Jonathan Taylor",
+      "position": "RB",
+      "rank": 5,
+      "overall": 4,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Jaxon Smith-Njigba",
+      "position": "WR",
+      "rank": 6,
+      "overall": 5,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Amon-Ra St. Brown",
+      "position": "WR",
+      "rank": 8,
+      "overall": 6,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "CeeDee Lamb",
+      "position": "WR",
+      "rank": 11,
+      "overall": 7,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Justin Jefferson",
+      "position": "WR",
+      "rank": 12,
+      "overall": 8,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "James Cook III",
+      "position": "RB",
+      "rank": 9,
+      "overall": 9,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Bijan Robinson",
+      "position": "RB",
+      "rank": 2,
+      "overall": 10,
+      "keeper": 1
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Saquon Barkley",
+      "position": "RB",
+      "rank": 15,
+      "overall": 11,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "A.J. Brown",
+      "position": "WR",
+      "rank": 19,
+      "overall": 12,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "DeVonta Smith",
+      "position": "WR",
+      "rank": 35,
+      "overall": 13,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "George Pickens",
+      "position": "WR",
+      "rank": 28,
+      "overall": 14,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Drake London",
+      "position": "WR",
+      "rank": 17,
+      "overall": 15,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Derrick Henry",
+      "position": "RB",
+      "rank": 16,
+      "overall": 16,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Josh Allen",
+      "position": "QB",
+      "rank": 26,
+      "overall": 17,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Nico Collins",
+      "position": "WR",
+      "rank": 23,
+      "overall": 18,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Omarion Hampton",
+      "position": "RB",
+      "rank": 13,
+      "overall": 19,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Ashton Jeanty",
+      "position": "RB",
+      "rank": 18,
+      "overall": 20,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Malik Nabers",
+      "position": "WR",
+      "rank": 33,
+      "overall": 21,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Kenneth Walker III",
+      "position": "RB",
+      "rank": 25,
+      "overall": 22,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Kyren Williams",
+      "position": "RB",
+      "rank": 32,
+      "overall": 23,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Lamar Jackson",
+      "position": "QB",
+      "rank": 49,
+      "overall": 24,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Chris Olave",
+      "position": "WR",
+      "rank": 24,
+      "overall": 25,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Garrett Wilson",
+      "position": "WR",
+      "rank": 29,
+      "overall": 26,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Emeka Egbuka",
+      "position": "WR",
+      "rank": 39,
+      "overall": 27,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Jeremiyah Love",
+      "position": "RB",
+      "rank": 21,
+      "overall": 28,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Ladd McConkey",
+      "position": "WR",
+      "rank": 41,
+      "overall": 29,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Trey McBride",
+      "position": "TE",
+      "rank": 20,
+      "overall": 30,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Breece Hall",
+      "position": "RB",
+      "rank": 30,
+      "overall": 31,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Zay Flowers",
+      "position": "WR",
+      "rank": 38,
+      "overall": 32,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Tetairoa McMillan",
+      "position": "WR",
+      "rank": 36,
+      "overall": 33,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Quinshon Judkins",
+      "position": "RB",
+      "rank": 40,
+      "overall": 34,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Terry McLaurin",
+      "position": "WR",
+      "rank": 52,
+      "overall": 35,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Bucky Irving",
+      "position": "RB",
+      "rank": 50,
+      "overall": 36,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Davante Adams",
+      "position": "WR",
+      "rank": 45,
+      "overall": 37,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Tyler Warren",
+      "position": "TE",
+      "rank": 56,
+      "overall": 38,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Colston Loveland",
+      "position": "TE",
+      "rank": 43,
+      "overall": 39,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Drake Maye",
+      "position": "QB",
+      "rank": 62,
+      "overall": 40,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Harold Fannin Jr.",
+      "position": "TE",
+      "rank": 77,
+      "overall": 41,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Joe Burrow",
+      "position": "QB",
+      "rank": 70,
+      "overall": 42,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Jaylen Waddle",
+      "position": "WR",
+      "rank": 46,
+      "overall": 43,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "DJ Moore",
+      "position": "WR",
+      "rank": 53,
+      "overall": 44,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Tee Higgins",
+      "position": "WR",
+      "rank": 44,
+      "overall": 45,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "D'Andre Swift",
+      "position": "RB",
+      "rank": 47,
+      "overall": 46,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Jadarian Price",
+      "position": "RB",
+      "rank": 54,
+      "overall": 47,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Christian Watson",
+      "position": "WR",
+      "rank": 85,
+      "overall": 48,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Luther Burden III",
+      "position": "WR",
+      "rank": 66,
+      "overall": 49,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Rome Odunze",
+      "position": "WR",
+      "rank": 58,
+      "overall": 50,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "DK Metcalf",
+      "position": "WR",
+      "rank": 75,
+      "overall": 51,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Carnell Tate",
+      "position": "WR",
+      "rank": 67,
+      "overall": 52,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Jameson Williams",
+      "position": "WR",
+      "rank": 55,
+      "overall": 53,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Bhayshul Tuten",
+      "position": "RB",
+      "rank": 48,
+      "overall": 54,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "David Montgomery",
+      "position": "RB",
+      "rank": 51,
+      "overall": 55,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "TreVeyon Henderson",
+      "position": "RB",
+      "rank": 64,
+      "overall": 56,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Jaylen Warren",
+      "position": "RB",
+      "rank": 81,
+      "overall": 57,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Jayden Daniels",
+      "position": "QB",
+      "rank": 60,
+      "overall": 58,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Jalen Hurts",
+      "position": "QB",
+      "rank": 76,
+      "overall": 59,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Marvin Harrison Jr.",
+      "position": "WR",
+      "rank": 72,
+      "overall": 60,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Sam LaPorta",
+      "position": "TE",
+      "rank": 92,
+      "overall": 61,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Tony Pollard",
+      "position": "RB",
+      "rank": 74,
+      "overall": 62,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Courtland Sutton",
+      "position": "WR",
+      "rank": 78,
+      "overall": 63,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "George Kittle",
+      "position": "TE",
+      "rank": 89,
+      "overall": 64,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Rico Dowdle",
+      "position": "RB",
+      "rank": 95,
+      "overall": 65,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Rhamondre Stevenson",
+      "position": "RB",
+      "rank": 69,
+      "overall": 66,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Dak Prescott",
+      "position": "QB",
+      "rank": 80,
+      "overall": 67,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "MarShawn Lloyd",
+      "position": "RB",
+      "rank": 90,
+      "overall": 68,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Josh Jacobs",
+      "position": "RB",
+      "rank": 93,
+      "overall": 69,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Caleb Williams",
+      "position": "QB",
+      "rank": 107,
+      "overall": 70,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Parker Washington",
+      "position": "WR",
+      "rank": 87,
+      "overall": 71,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Mike Evans",
+      "position": "WR",
+      "rank": 68,
+      "overall": 72,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Jonathon Brooks",
+      "position": "RB",
+      "rank": 104,
+      "overall": 73,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Justin Herbert",
+      "position": "QB",
+      "rank": 102,
+      "overall": 74,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Alec Pierce",
+      "position": "WR",
+      "rank": 111,
+      "overall": 75,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Matthew Golden",
+      "position": "WR",
+      "rank": 117,
+      "overall": 76,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Trevor Lawrence",
+      "position": "QB",
+      "rank": 120,
+      "overall": 77,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Michael Wilson",
+      "position": "WR",
+      "rank": 97,
+      "overall": 78,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Tucker Kraft",
+      "position": "TE",
+      "rank": 126,
+      "overall": 79,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Rashee Rice",
+      "position": "WR",
+      "rank": 27,
+      "overall": 80,
+      "keeper": 1
+    },
+    {
+      "owner": "German Haro",
+      "player": "Michael Pittman Jr.",
+      "position": "WR",
+      "rank": 73,
+      "overall": 81,
+      "keeper": 1
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "J.K. Dobbins",
+      "position": "RB",
+      "rank": 122,
+      "overall": 82,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Wan'Dale Robinson",
+      "position": "WR",
+      "rank": 91,
+      "overall": 83,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Chuba Hubbard",
+      "position": "RB",
+      "rank": 108,
+      "overall": 84,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Cam Skattebo",
+      "position": "RB",
+      "rank": 42,
+      "overall": 85,
+      "keeper": 1
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Kenny Gainwell",
+      "position": "RB",
+      "rank": 88,
+      "overall": 86,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Aaron Jones Sr.",
+      "position": "RB",
+      "rank": 110,
+      "overall": 87,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Jakobi Meyers",
+      "position": "WR",
+      "rank": 112,
+      "overall": 88,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Kyle Monangai",
+      "position": "RB",
+      "rank": 125,
+      "overall": 89,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Travis Etienne Jr.",
+      "position": "RB",
+      "rank": 34,
+      "overall": 90,
+      "keeper": 1
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Texans D/ST",
+      "position": "D/ST",
+      "rank": 179,
+      "overall": 91,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "RJ Harvey",
+      "position": "RB",
+      "rank": 133,
+      "overall": 92,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Dallas Goedert",
+      "position": "TE",
+      "rank": 134,
+      "overall": 93,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Stefon Diggs",
+      "position": "WR",
+      "rank": 106,
+      "overall": 94,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Javonte Williams",
+      "position": "RB",
+      "rank": 31,
+      "overall": 95,
+      "keeper": 1
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Isaiah Likely",
+      "position": "TE",
+      "rank": 147,
+      "overall": 96,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Chase Brown",
+      "position": "RB",
+      "rank": 14,
+      "overall": 97,
+      "keeper": 1
+    },
+    {
+      "owner": "George Travis",
+      "player": "Travis Kelce",
+      "position": "TE",
+      "rank": 131,
+      "overall": 98,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Brock Bowers",
+      "position": "TE",
+      "rank": 22,
+      "overall": 99,
+      "keeper": 1
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Blake Corum",
+      "position": "RB",
+      "rank": 138,
+      "overall": 100,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Brian Thomas Jr.",
+      "position": "WR",
+      "rank": 114,
+      "overall": 101,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Puka Nacua",
+      "position": "WR",
+      "rank": 4,
+      "overall": 102,
+      "keeper": 1
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Chris Godwin Jr.",
+      "position": "WR",
+      "rank": 118,
+      "overall": 103,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Makai Lemon",
+      "position": "WR",
+      "rank": 137,
+      "overall": 104,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Xavier Worthy",
+      "position": "WR",
+      "rank": 151,
+      "overall": 105,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Jordan Addison",
+      "position": "WR",
+      "rank": 119,
+      "overall": 106,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Jalen Coker",
+      "position": "WR",
+      "rank": 156,
+      "overall": 107,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Patrick Mahomes",
+      "position": "QB",
+      "rank": 132,
+      "overall": 108,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Steelers D/ST",
+      "position": "D/ST",
+      "rank": 239,
+      "overall": 109,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Deebo Samuel Sr.",
+      "position": "WR",
+      "rank": 163,
+      "overall": 110,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Khalil Shakir",
+      "position": "WR",
+      "rank": 130,
+      "overall": 111,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Rachaad White",
+      "position": "RB",
+      "rank": 121,
+      "overall": 112,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Matthew Stafford",
+      "position": "QB",
+      "rank": 141,
+      "overall": 113,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Josh Downs",
+      "position": "WR",
+      "rank": 127,
+      "overall": 114,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Jayden Reed",
+      "position": "WR",
+      "rank": 150,
+      "overall": 115,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Jacory Croskey-Merritt",
+      "position": "RB",
+      "rank": 145,
+      "overall": 116,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "De'Zhaun Stribling",
+      "position": "WR",
+      "rank": 152,
+      "overall": 117,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Dalton Kincaid",
+      "position": "TE",
+      "rank": 157,
+      "overall": 118,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Brandon Aubrey",
+      "position": "K",
+      "rank": 146,
+      "overall": 119,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "KC Concepcion",
+      "position": "WR",
+      "rank": 164,
+      "overall": 120,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Rams D/ST",
+      "position": "D/ST",
+      "rank": 241,
+      "overall": 121,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Brock Purdy",
+      "position": "QB",
+      "rank": 124,
+      "overall": 122,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Broncos D/ST",
+      "position": "D/ST",
+      "rank": 182,
+      "overall": 123,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Ravens D/ST",
+      "position": "D/ST",
+      "rank": 242,
+      "overall": 124,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Zach Charbonnet",
+      "position": "RB",
+      "rank": 165,
+      "overall": 125,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Bo Nix",
+      "position": "QB",
+      "rank": 139,
+      "overall": 126,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Jordan Mason",
+      "position": "RB",
+      "rank": 161,
+      "overall": 127,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Mark Andrews",
+      "position": "TE",
+      "rank": 153,
+      "overall": 128,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Seahawks D/ST",
+      "position": "D/ST",
+      "rank": 240,
+      "overall": 129,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Quentin Johnston",
+      "position": "WR",
+      "rank": 148,
+      "overall": 130,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Alvin Kamara",
+      "position": "RB",
+      "rank": 189,
+      "overall": 131,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Tyjae Spears",
+      "position": "RB",
+      "rank": 160,
+      "overall": 132,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Ja'Kobi Lane",
+      "position": "WR",
+      "rank": 276,
+      "overall": 133,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "De'Von Achane",
+      "position": "RB",
+      "rank": 10,
+      "overall": 134,
+      "keeper": 1
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Woody Marks",
+      "position": "RB",
+      "rank": 167,
+      "overall": 135,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Jake Ferguson",
+      "position": "TE",
+      "rank": 140,
+      "overall": 136,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Romeo Doubs",
+      "position": "WR",
+      "rank": 154,
+      "overall": 137,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Eagles D/ST",
+      "position": "D/ST",
+      "rank": 243,
+      "overall": 138,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Isiah Pacheco",
+      "position": "RB",
+      "rank": 184,
+      "overall": 139,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Kyle Pitts Sr.",
+      "position": "TE",
+      "rank": 79,
+      "overall": 140,
+      "keeper": 1
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Keenan Allen",
+      "position": "WR",
+      "rank": 201,
+      "overall": 141,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Calvin Ridley",
+      "position": "WR",
+      "rank": 205,
+      "overall": 142,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Travis Hunter",
+      "position": "WR",
+      "rank": 109,
+      "overall": 143,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Tank Bigsby",
+      "position": "RB",
+      "rank": 237,
+      "overall": 144,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Kaelon Black",
+      "position": "RB",
+      "rank": 306,
+      "overall": 145,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Mike Washington Jr.",
+      "position": "RB",
+      "rank": 229,
+      "overall": 146,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Brian Robinson Jr.",
+      "position": "RB",
+      "rank": 207,
+      "overall": 147,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Tyler Allgeier",
+      "position": "RB",
+      "rank": 195,
+      "overall": 148,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Jason Myers",
+      "position": "K",
+      "rank": 187,
+      "overall": 149,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Cameron Dicker",
+      "position": "K",
+      "rank": 181,
+      "overall": 150,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Juwan Johnson",
+      "position": "TE",
+      "rank": 191,
+      "overall": 151,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Chris Rodriguez Jr.",
+      "position": "RB",
+      "rank": 183,
+      "overall": 152,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Harrison Mevis",
+      "position": "K",
+      "rank": 198,
+      "overall": 153,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Lions D/ST",
+      "position": "D/ST",
+      "rank": 249,
+      "overall": 154,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Rashid Shaheed",
+      "position": "WR",
+      "rank": 214,
+      "overall": 155,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Jordyn Tyson",
+      "position": "WR",
+      "rank": 223,
+      "overall": 156,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Najee Harris",
+      "position": "RB",
+      "rank": 270,
+      "overall": 157,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Patriots D/ST",
+      "position": "D/ST",
+      "rank": 248,
+      "overall": 158,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Jalen McMillan",
+      "position": "WR",
+      "rank": 171,
+      "overall": 159,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Denzel Boston",
+      "position": "WR",
+      "rank": 215,
+      "overall": 160,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Braelon Allen",
+      "position": "RB",
+      "rank": 230,
+      "overall": 161,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Ka'imi Fairbairn",
+      "position": "K",
+      "rank": 190,
+      "overall": 162,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Terrance Ferguson",
+      "position": "TE",
+      "rank": 213,
+      "overall": 163,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Adonai Mitchell",
+      "position": "WR",
+      "rank": 220,
+      "overall": 164,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Kenyon Sadiq",
+      "position": "TE",
+      "rank": 200,
+      "overall": 165,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Chargers D/ST",
+      "position": "D/ST",
+      "rank": 252,
+      "overall": 166,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Chiefs D/ST",
+      "position": "D/ST",
+      "rank": 250,
+      "overall": 167,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Jonah Coleman",
+      "position": "RB",
+      "rank": 173,
+      "overall": 168,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Chris Bell",
+      "position": "WR",
+      "rank": 331,
+      "overall": 169,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Malik Davis",
+      "position": "RB",
+      "rank": 324,
+      "overall": 170,
+      "keeper": 0
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Jared Goff",
+      "position": "QB",
+      "rank": 159,
+      "overall": 171,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Eddy Pineiro",
+      "position": "K",
+      "rank": 254,
+      "overall": 172,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Browns D/ST",
+      "position": "D/ST",
+      "rank": 246,
+      "overall": 173,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Keaton Mitchell",
+      "position": "RB",
+      "rank": 228,
+      "overall": 174,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Tre Tucker",
+      "position": "WR",
+      "rank": 226,
+      "overall": 175,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Jake Bates",
+      "position": "K",
+      "rank": 260,
+      "overall": 176,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Tank Dell",
+      "position": "WR",
+      "rank": 176,
+      "overall": 177,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Daniel Jones",
+      "position": "QB",
+      "rank": 177,
+      "overall": 178,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Harrison Butker",
+      "position": "K",
+      "rank": 256,
+      "overall": 179,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Kyler Murray",
+      "position": "QB",
+      "rank": 143,
+      "overall": 180,
+      "keeper": 0
+    },
+    {
+      "owner": "Kyle Fowler",
+      "player": "Chris Boswell",
+      "position": "K",
+      "rank": 338,
+      "overall": 181,
+      "keeper": 0
+    },
+    {
+      "owner": "Brian Heino",
+      "player": "Baker Mayfield",
+      "position": "QB",
+      "rank": 175,
+      "overall": 182,
+      "keeper": 0
+    },
+    {
+      "owner": "Collin Krum",
+      "player": "Cam Little",
+      "position": "K",
+      "rank": 259,
+      "overall": 183,
+      "keeper": 0
+    },
+    {
+      "owner": "German Haro",
+      "player": "Justice Hill",
+      "position": "RB",
+      "rank": 273,
+      "overall": 184,
+      "keeper": 0
+    },
+    {
+      "owner": "JD Daley",
+      "player": "Buccaneers D/ST",
+      "position": "D/ST",
+      "rank": 336,
+      "overall": 185,
+      "keeper": 0
+    },
+    {
+      "owner": "James Brochu",
+      "player": "Jordan Love",
+      "position": "QB",
+      "rank": 203,
+      "overall": 186,
+      "keeper": 0
+    },
+    {
+      "owner": "Thomas Speer",
+      "player": "Jerry Jeudy",
+      "position": "WR",
+      "rank": 216,
+      "overall": 187,
+      "keeper": 0
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "player": "Tyrone Tracy Jr.",
+      "position": "RB",
+      "rank": 346,
+      "overall": 188,
+      "keeper": 0
+    },
+    {
+      "owner": "Jared Hall",
+      "player": "Jaxson Dart",
+      "position": "QB",
+      "rank": 100,
+      "overall": 189,
+      "keeper": 1
+    },
+    {
+      "owner": "Bryan Hunt",
+      "player": "Nick Folk",
+      "position": "K",
+      "rank": 364,
+      "overall": 190,
+      "keeper": 0
+    },
+    {
+      "owner": "George Travis",
+      "player": "Malachi Fields",
+      "position": "WR",
+      "rank": 287,
+      "overall": 191,
+      "keeper": 0
+    },
+    {
+      "owner": "Trevor Hash",
+      "player": "Tyler Loop",
+      "position": "K",
+      "rank": 263,
+      "overall": 192,
+      "keeper": 0
+    }
+  ]
+}

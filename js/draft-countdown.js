@@ -23,13 +23,14 @@
   let timer = null;
   let channel = null;
   let staff = false;
+  let complete = false;
 
   const formatUnit = value => String(Math.max(0, value)).padStart(2, '0');
 
   function paintBoard(){
     document.querySelectorAll('[data-draft-pick]').forEach(card => {
       const pick = Number(card.dataset.draftPick);
-      const onClock = pick === currentPick;
+      const onClock = !complete && pick === currentPick;
       card.classList.toggle('is-on-clock', onClock);
       let badge = card.querySelector('.draft-clock-badge');
       if(onClock && !badge){
@@ -37,13 +38,17 @@
         badge.className = 'draft-clock-badge';
         badge.textContent = 'On the clock';
         card.appendChild(badge);
-      }else if(!onClock && badge){
+      }else if(!onClock && badge && !badge.classList.contains('is-keeper')){
         badge.remove();
       }
     });
     if(boardMeta){
-      const onCard = document.querySelector('[data-draft-pick].is-on-clock .draft-pick-meta strong');
-      boardMeta.textContent = onCard ? `Pick ${currentPick} · ${onCard.textContent}` : `Pick ${currentPick}`;
+      if(complete){
+        boardMeta.textContent = 'First-round recap';
+      }else{
+        const onCard = document.querySelector('[data-draft-pick].is-on-clock .draft-pick-meta strong');
+        boardMeta.textContent = onCard ? `Pick ${currentPick} · ${onCard.textContent}` : `Pick ${currentPick}`;
+      }
     }
   }
 
@@ -64,6 +69,7 @@
 
   function applyConfig(config){
     const draft = config?.draftNight || {};
+    complete = draft.status === 'complete';
     if(draft.startsAt){
       const parsed = new Date(draft.startsAt);
       if(!Number.isNaN(parsed.getTime())) start = parsed;
@@ -77,6 +83,19 @@
 
   function update(){
     if(Number.isNaN(start.getTime())) return;
+    if(complete){
+      if(days) days.textContent = '00';
+      if(hours) hours.textContent = '00';
+      if(minutes) minutes.textContent = '00';
+      if(seconds) seconds.textContent = '00';
+      if(status) status.textContent = '192 picks are locked. Odds are live off the rosters.';
+      if(heading) heading.textContent = 'The draft is in the books.';
+      root.dataset.countdownState = 'complete';
+      night?.setAttribute('data-draft-state', 'complete');
+      paintBoard();
+      window.clearInterval(timer);
+      return;
+    }
     const remaining = start.getTime() - Date.now();
     const live = remaining <= 0;
 

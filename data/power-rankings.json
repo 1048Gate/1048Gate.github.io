@@ -1,54 +1,55 @@
 {
   "schemaVersion": 1,
   "generatedForSeason": 10,
+  "basis": "post-draft",
   "ratings": [
     {
       "name": "Thomas Speer",
-      "rating": 59.9
-    },
-    {
-      "name": "Jared Hall",
-      "rating": 57.9
-    },
-    {
-      "name": "Collin Krum",
-      "rating": 52.2
-    },
-    {
-      "name": "George Travis",
-      "rating": 50.3
+      "rating": 68.2
     },
     {
       "name": "Brian Heino",
-      "rating": 48.4
+      "rating": 52.4
     },
     {
       "name": "Bryan Hunt",
-      "rating": 48.3
+      "rating": 50.7
+    },
+    {
+      "name": "Collin Krum",
+      "rating": 50
     },
     {
       "name": "JD Daley",
-      "rating": 45.7
+      "rating": 45.9
     },
     {
       "name": "James Brochu",
-      "rating": 42.5
+      "rating": 45.7
     },
     {
-      "name": "Trevor Hash",
-      "rating": 39.7
+      "name": "George Travis",
+      "rating": 44.9
+    },
+    {
+      "name": "Jared Hall",
+      "rating": 44.7
     },
     {
       "name": "Vincent Cannarozzi",
-      "rating": 38.4
+      "rating": 37.2
     },
     {
-      "name": "Kyle Fowler",
-      "rating": 26.8
+      "name": "Trevor Hash",
+      "rating": 37.2
     },
     {
       "name": "German Haro",
-      "rating": 19.8
+      "rating": 31.2
+    },
+    {
+      "name": "Kyle Fowler",
+      "rating": 27.4
     }
   ]
 }

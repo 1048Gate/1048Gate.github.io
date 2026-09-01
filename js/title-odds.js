@@ -23,7 +23,11 @@
       const payload = await response.json();
       const teams = (payload.ratings || []).filter(t => Number.isFinite(Number(t.rating)));
       if(teams.length < 4) throw new Error('Not enough rated teams to project.');
-      render(teams.map(t => ({name:String(t.name), rating:Number(t.rating)})), Number(payload.generatedForSeason) || '');
+      render(
+        teams.map(t => ({name:String(t.name), rating:Number(t.rating)})),
+        Number(payload.generatedForSeason) || '',
+        String(payload.basis || 'career')
+      );
     }catch(error){
       console.warn('Title projection unavailable:', error);
       host.classList.add('hidden');
@@ -83,7 +87,7 @@
     return {made, bye, title};
   }
 
-  function render(teams, seasonNumber){
+  function render(teams, seasonNumber, basis){
     const {made, bye, title} = simulate(teams);
     const pct = value => `${Math.round(value * 100)}%`;
     const rows = teams
@@ -91,7 +95,15 @@
       .sort((a, b) => b.titlePct - a.titlePct || b.madePct - a.madePct);
     const maxTitle = Math.max(...rows.map(r => r.titlePct)) || 1;
     const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
-    host.innerHTML = `<div class="history-section-head"><div><span>SZN ${seasonNumber} PRE-DRAFT BOARD</span><h3>Playoff Probability Board</h3></div><small>${SIMULATIONS.toLocaleString('en-US')} simulated seasons · career power ratings, not 2026 rosters</small></div><div class="title-odds-grid">${rows.map(r => `
+    const postDraft = basis === 'post-draft';
+    const kicker = postDraft ? `SZN ${seasonNumber} POST-DRAFT BOARD` : `SZN ${seasonNumber} PRE-DRAFT BOARD`;
+    const sub = postDraft
+      ? `${SIMULATIONS.toLocaleString('en-US')} simulated seasons · 2026 roster ranks blended with career form`
+      : `${SIMULATIONS.toLocaleString('en-US')} simulated seasons · career power ratings, not 2026 rosters`;
+    const note = postDraft
+      ? `Post-draft projection. These percentages blend ESPN PPR ranks from the Szn 10 draft with career power ratings and a random ${GAMES_PER_SEASON}-game schedule. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.`
+      : `Pre-draft projection only. These percentages come from career power ratings and a random ${GAMES_PER_SEASON}-game schedule — not keepers, the 2026 draft, or current rosters. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.`;
+    host.innerHTML = `<div class="history-section-head"><div><span>${kicker}</span><h3>Playoff Probability Board</h3></div><small>${sub}</small></div><div class="title-odds-grid">${rows.map(r => `
       <div class="title-odds-card${r.titlePct === maxTitle ? ' is-favorite' : ''}">
         <div class="title-odds-name"><strong>${escapeHtml(r.name)}</strong>${r.titlePct === maxTitle ? '<em>Favorite</em>' : ''}</div>
         <div class="title-odds-bars">
@@ -99,7 +111,7 @@
           <div class="title-odds-bar" title="Chance at a top-two seed and first-round bye"><span>Bye</span><div style="--w:${Math.round(r.byePct * 100)}%"><i></i></div><b>${pct(r.byePct)}</b></div>
           <div class="title-odds-bar is-title" title="Chance to win the title"><span>Title</span><div style="--w:${Math.max(Math.round(r.titlePct * 1000) / 10, 1.5)}%"><i></i></div><b>${r.titlePct < 0.0005 ? '<0.1%' : pct(r.titlePct)}</b></div>
         </div>
-      </div>`).join('')}</div><p class="title-odds-note">Pre-draft projection only. These percentages come from career power ratings and a random ${GAMES_PER_SEASON}-game schedule — not keepers, the 2026 draft, or current rosters. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.</p>`;
+      </div>`).join('')}</div><p class="title-odds-note">${note}</p>`;
   }
 
   load();
