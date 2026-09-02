@@ -36,6 +36,7 @@
 <link rel="stylesheet" href="css/community.css">
 <link rel="stylesheet" href="css/transactions.css">
 <link rel="stylesheet" href="css/trades.css">
+<link rel="stylesheet" href="css/intelligence.css">
 
 <script defer src="js/shared.js"></script>
 <script defer src="js/site-ui.js"></script>
@@ -52,6 +53,7 @@
 <script defer src="js/manager-profiles.js"></script>
 <script defer src="js/league-content.js"></script>
 <script defer src="js/history-layout.js"></script>
+<script defer src="js/intelligence.js"></script>
 <script defer src="js/draft-history.js"></script>
 <script defer src="js/player-history.js"></script>
 <script defer src="js/game-records-layout.js"></script>
@@ -82,6 +84,7 @@
   <nav class="tabs" id="tabs" aria-label="Primary league navigation">
     <button data-view="home" class="active" aria-current="page">Home</button>
     <button data-view="history">History</button>
+    <button data-view="intel">Intel</button>
     <button data-view="transactions">Transactions</button>
     <button data-view="playoffs">Playoffs</button>
     <button data-view="members">Members</button>
@@ -429,6 +432,20 @@
     <div class="panel"><h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:12px;">Wall of Shame</h3><div class="shame"><div class="txt"><strong>Lamb Fried Rice — Last Place, 2025</strong><span>German Haro · 2-12. Sentenced to this year's punishment. Details TBD by the committee.</span></div><div class="trophy">💩</div></div></div>
   </section>
 
+
+  <section class="view" id="intel">
+    <div class="section-title"><span class="section-kicker">League Intelligence Engine</span><h2>The book, computed</h2><span class="see-all" id="intelMeta">885 games · 85 scored trades</span></div>
+    <nav class="history-subnav" id="intelNav" role="tablist" aria-label="Intelligence sections">
+      <button type="button" class="active" data-intel-slice="wire" role="tab" aria-selected="true">Wire</button>
+      <button type="button" data-intel-slice="rivalries" role="tab" aria-selected="false">Rivalries</button>
+      <button type="button" data-intel-slice="book" role="tab" aria-selected="false">Book</button>
+      <button type="button" data-intel-slice="draft" role="tab" aria-selected="false">Draft</button>
+      <button type="button" data-intel-slice="trades" role="tab" aria-selected="false">Trades</button>
+      <button type="button" data-intel-slice="power" role="tab" aria-selected="false">Power</button>
+    </nav>
+    <div id="intelBody" aria-live="polite"><div class="panel"><div class="history-loading">Open Intel to load the computed book.</div></div></div>
+  </section>
+
   <section class="view" id="playoffs">
     <div class="section-title"><h2>Playoffs</h2><span class="see-all">Winners & consolation bracket history</span></div>
     <div class="playoff-toolbar panel">
@@ -660,6 +677,7 @@
     <div class="phone-more-handle" aria-hidden="true"></div>
     <strong>More</strong>
     <button type="button" data-view="playoffs">Playoffs</button>
+    <button type="button" data-view="intel">Intel</button>
     <button type="button" data-view="members">Members</button>
     <button type="button" data-view="newspaper">Newspaper Editions</button>
     <button type="button" data-view="votes">Votes</button>
