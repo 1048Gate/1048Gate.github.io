@@ -187,6 +187,17 @@ if(!html.includes('Keepers locked August 30') || !html.includes('draft completed
 if(html.includes('data-view="season"') || /<section[^>]+id="season"/.test(html)){
   throw new Error('Do not add a Season tab. Week 1 lives on Home.');
 }
+const intelligence = JSON.parse(readFileSync(new URL('data/intelligence.json', root), 'utf8'));
+if(intelligence.schemaVersion !== 2 || intelligence.generatedFor?.tradeCount !== 85 || intelligence.generatedFor?.gameCount !== 885){
+  throw new Error('intelligence.json must be schema 2 covering 885 games and 85 executed trades.');
+}
+if(!Array.isArray(intelligence.powerRankings) || intelligence.powerRankings[0]?.owner !== 'Jared Hall'){
+  throw new Error('Power rankings must still rank Jared Hall first.');
+}
+if(!html.includes('id="intel"') || !html.includes('data-view="intel"') || !scriptAssets.includes('js/intelligence.js') || !localAssets.includes('css/intelligence.css')){
+  throw new Error('Intel view, stylesheet, navigation, or script is missing.');
+}
+
 const currentSeason = JSON.parse(readFileSync(new URL('data/current-season.json', root), 'utf8'));
 if(currentSeason.season !== 2026 || currentSeason.week !== 1 || currentSeason.phase !== 'Week 1'){
   throw new Error('current-season.json must be the Szn 10 Week 1 board.');
