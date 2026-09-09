@@ -76,9 +76,11 @@
         <p class="story-source">Source: ${esc(formatSourceTrace(story.source))}</p>
       </article>`).join('');
 
+    const demo = historical ? '' : '<span class="edition-demo">Archive Demo</span>';
     return `
       <header class="edition-header">
         <span class="edition-kicker">1048 Gate Newspaper Archive</span>
+        ${demo}
         <h2>${esc(title)}</h2>
         <p>${esc(notice)}</p>
         <div class="edition-meta">

@@ -19,6 +19,7 @@
         .sort((a,b) => b.year - a.year);
       if(!banners.length) throw new Error('No champions found');
 
+      host.classList.toggle('is-collapsed', banners.length > 3);
       host.innerHTML = banners.map(banner => `
         <div class="champ-banner" role="img" aria-label="${esc(banner.year)} champions: ${esc(banner.team)}, ${esc(banner.owner)}${banner.record ? `, ${esc(banner.record)}` : ''}">
           <span class="champ-banner-hook" aria-hidden="true"></span>
@@ -27,6 +28,21 @@
           <span class="champ-banner-owner">${esc(banner.owner)}</span>
           ${banner.record ? `<span class="champ-banner-record">${esc(banner.record)}</span>` : ''}
         </div>`).join('');
+      document.getElementById('bannerExpand')?.remove();
+      if(banners.length > 3){
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.id = 'bannerExpand';
+        button.className = 'btn btn-ghost home-expand-btn';
+        button.textContent = 'See all titles';
+        button.setAttribute('aria-expanded', 'false');
+        button.addEventListener('click', () => {
+          const collapsed = host.classList.toggle('is-collapsed');
+          button.textContent = collapsed ? 'See all titles' : 'Show last 3';
+          button.setAttribute('aria-expanded', String(!collapsed));
+        });
+        host.insertAdjacentElement('afterend', button);
+      }
     }catch(error){
       console.error('Unable to load banner wall:', error);
       host.innerHTML = '<div class="banner-wall-empty">Banners could not be loaded.</div>';

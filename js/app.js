@@ -30,34 +30,83 @@ function openPhoneMore() {
   document.body.classList.add('phone-more-open');
 }
 
-function switchView(name, {updateHash = true, scroll = true} = {}) {
-  const routeName = name;
+const gateRoutes = {
+  home: {view: 'home', nav: 'home', event: 'home'},
+  league: {view: 'league', nav: 'league', event: 'league'},
+  members: {view: 'league', nav: 'league', event: 'league'},
+  memberskeepers: {view: 'league', nav: 'league', event: 'league', scroll: 'membersKeepers'},
+  homekeepers: {view: 'league', nav: 'league', event: 'league', scroll: 'membersKeepers'},
+  wire: {view: 'wire', nav: 'wire', tab: 'transactions', event: 'transactions'},
+  transactions: {view: 'wire', nav: 'wire', tab: 'transactions', event: 'transactions'},
+  trades: {view: 'wire', nav: 'wire', tab: 'trades', event: 'trades'},
+  history: {view: 'history', nav: 'history', tab: 'overview', event: 'history'},
+  playoffs: {view: 'history', nav: 'history', tab: 'playoffs', event: 'history'},
+  book: {view: 'intel', nav: 'intel', event: 'intel'},
+  intel: {view: 'intel', nav: 'intel', event: 'intel'},
+  office: {view: 'office', nav: 'office', tab: 'rules', event: 'office'},
+  rules: {view: 'office', nav: 'office', tab: 'rules', event: 'office'},
+  votes: {view: 'office', nav: 'office', tab: 'votes', event: 'votes'},
+  newspaper: {view: 'office', nav: 'office', tab: 'newspaper', event: 'newspaper'},
+  weekly: {view: 'office', nav: 'office', tab: 'newspaper', event: 'newspaper'},
+  staff: {view: 'staff', nav: 'staff', event: 'staff'}
+};
+const dockViews = new Set(['home', 'league', 'wire', 'history']);
+
+function activateSubnav(rootSelector, tabAttr, panelAttr, tab){
+  const root = document.querySelector(rootSelector);
+  if(!root || !tab) return;
+  root.querySelectorAll(`[${tabAttr}]`).forEach(button => {
+    const active = button.getAttribute(tabAttr) === tab;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-selected', String(active));
+  });
+  root.querySelectorAll(`[${panelAttr}]`).forEach(panel => {
+    const active = panel.getAttribute(panelAttr) === tab;
+    panel.classList.toggle('active', active);
+    panel.hidden = !active;
+  });
+}
+
+function switchView(name, {updateHash = true, scroll = true, scrollTarget = null} = {}) {
+  const alias = String(name || 'home').replace(/^#/, '').split(/[?#]/)[0];
   if (name === 'weekly') name = 'newspaper';
-  const target = document.getElementById(name);
-  if (!target) return;
+  const key = (alias.toLowerCase() === 'weekly' ? 'weekly' : String(name || 'home').replace(/^#/, '').split(/[?#]/)[0]).toLowerCase();
+  const route = gateRoutes[key];
+  if(!route) return;
+  const target = document.getElementById(route.view);
+  if(!target) return;
 
   document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
   target.classList.add('active');
+  if(route.view === 'wire') activateSubnav('#wire', 'data-wire-tab', 'data-wire-panel', route.tab || 'transactions');
+  if(route.view === 'office') activateSubnav('#office', 'data-office-tab', 'data-office-panel', route.tab || 'rules');
+  if(route.view === 'history'){
+    target.dataset.historyTab = route.tab || 'overview';
+    window.gateHistory?.show?.(route.tab || 'overview');
+  }
+
+  const navName = route.nav;
   document.querySelectorAll('#tabs button[data-view]').forEach(button => {
-    const active = button.dataset.view === name;
+    const active = button.dataset.view === navName;
     button.classList.toggle('active', active);
     button.setAttribute('aria-current', active ? 'page' : 'false');
   });
-  const dockViews = new Set(['home', 'history', 'transactions', 'trades']);
   document.querySelectorAll('.phone-dock [data-view]').forEach(button => {
-    button.classList.toggle('active', button.dataset.view === name);
+    button.classList.toggle('active', button.dataset.view === navName);
   });
-  document.querySelector('[data-more-toggle]')?.classList.toggle('active', !dockViews.has(name));
+  document.querySelector('[data-more-toggle]')?.classList.toggle('active', !dockViews.has(route.view));
   document.querySelectorAll('.phone-more [data-view]').forEach(button => {
-    button.classList.toggle('active', button.dataset.view === name);
+    button.classList.toggle('active', button.dataset.view === navName);
   });
   closePhoneMore();
   const activeButton = [...document.querySelectorAll('#tabs button[data-view]')]
-    .find(button => button.dataset.view === name);
+    .find(button => button.dataset.view === navName);
   activeButton?.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
-  if (updateHash && window.location.hash !== `#${routeName}`) history.pushState({view:name}, '', `#${routeName}`);
-  if (scroll) window.scrollTo({top: 0, behavior: 'smooth'});
-  document.dispatchEvent(new CustomEvent('gate:viewchange', {detail:{name}}));
+  if(updateHash && window.location.hash !== `#${key}`) history.pushState({view:key}, '', `#${key}`);
+  if(scroll && !scrollTarget && !route.scroll) window.scrollTo({top: 0, behavior: 'smooth'});
+  const jump = scrollTarget || route.scroll;
+  if(jump) requestAnimationFrame(() => document.getElementById(jump)?.scrollIntoView({behavior:'smooth', block:'start'}));
+  document.dispatchEvent(new CustomEvent('gate:viewchange', {detail:{name:route.event, parent:route.view, tab:route.tab || null, route:key}}));
 }
 
 window.switchView = switchView;
@@ -96,9 +145,21 @@ document.querySelector('.quick-grid')?.addEventListener('click', event => {
   if(card) switchView(card.dataset.quickView);
 });
 
+document.getElementById('wire')?.addEventListener('click', event => {
+  const button = event.target.closest('[data-wire-tab]');
+  if(button) switchView(button.dataset.wireTab);
+});
+document.getElementById('office')?.addEventListener('click', event => {
+  const button = event.target.closest('[data-office-tab]');
+  if(button) switchView(button.dataset.officeTab);
+});
+
 document.addEventListener('click', event => {
   const link = event.target.closest('[data-view-link]');
-  if(link) switchView(link.dataset.viewLink);
+  if(link){
+    switchView(link.dataset.viewLink, {scroll:!link.dataset.scrollTo, scrollTarget:link.dataset.scrollTo || null});
+    return;
+  }
   const jump = event.target.closest('[data-scroll-to]');
   if(jump){
     const target = document.getElementById(jump.dataset.scrollTo);
@@ -332,11 +393,9 @@ document.addEventListener('keydown', event => {
 
 initializeMembers();
 
-const initialView = window.location.hash.slice(1);
-if(initialView && document.getElementById(initialView)){
+const initialView = window.location.hash.slice(1).split(/[?#]/)[0];
+if(initialView && gateRoutes[initialView.toLowerCase()]){
   switchView(initialView, {updateHash:false, scroll:false});
-}else if(initialView === 'weekly'){
-  switchView('weekly', {updateHash:false, scroll:false});
 }else if(!window.location.hash){
   history.replaceState({view:'home'}, '', '#home');
 }

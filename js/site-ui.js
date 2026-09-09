@@ -49,6 +49,8 @@ function renderFutures(config){
     return;
   }
   const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
+  const preview = 3;
+  target.classList.toggle('is-collapsed', futures.length > preview);
   target.innerHTML = futures.map((entry, index) => `
     <div class="futures-row${index === 0 ? ' is-favorite' : ''}">
       <span class="futures-odds">${escapeHtml(entry.odds || '')}</span>
@@ -57,6 +59,20 @@ function renderFutures(config){
         <p>${escapeHtml(entry.case || '')}</p>
       </div>
     </div>`).join('');
+  document.getElementById('futuresExpand')?.remove();
+  if(futures.length <= preview) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.id = 'futuresExpand';
+  button.className = 'btn btn-ghost home-expand-btn';
+  button.textContent = 'Show the rest';
+  button.setAttribute('aria-expanded', 'false');
+  button.addEventListener('click', () => {
+    const collapsed = target.classList.toggle('is-collapsed');
+    button.textContent = collapsed ? 'Show the rest' : 'Show top 3';
+    button.setAttribute('aria-expanded', String(!collapsed));
+  });
+  target.insertAdjacentElement('afterend', button);
 }
 
 async function renderLiveStats(){
@@ -148,3 +164,50 @@ async function renderWeekBoard(){
     console.warn('Unable to refresh the Week 1 board; keeping the HTML fallback.', error);
   }
 }
+
+function hideCommissionerBoard(){
+  const board = document.getElementById('commissionerBoard');
+  const office = board?.closest('.home-office');
+  board?.setAttribute('hidden', '');
+  office?.setAttribute('hidden', '');
+}
+
+function showCommissionerBoard(){
+  const board = document.getElementById('commissionerBoard');
+  const office = board?.closest('.home-office');
+  board?.removeAttribute('hidden');
+  office?.removeAttribute('hidden');
+}
+
+async function loadAnnouncementsHome(){
+  const board = document.getElementById('commissionerBoard');
+  if(!board) return;
+  const supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
+  if(!supabase){
+    hideCommissionerBoard();
+    return;
+  }
+  const missingStarterColumn = error => error?.code === '42703' || String(error?.message || '').includes('is_starter');
+  const esc = window.gateShared?.escapeHtml || (value => String(value ?? ''));
+  const initialsFor = name => window.gateShared?.memberPresentation?.initialsFor?.(name) || '';
+  let {data, error} = await supabase.from('announcements').select('id,author_name,body,is_starter,created_at').eq('is_pinned', true).order('created_at', {ascending:false}).limit(3);
+  if(missingStarterColumn(error)){
+    ({data, error} = await supabase.from('announcements').select('id,author_name,body,created_at').eq('is_pinned', true).order('created_at', {ascending:false}).limit(3));
+  }
+  if(error || !data?.length){
+    hideCommissionerBoard();
+    if(error) console.warn('Pinned commissioner announcements could not load.', error);
+    return;
+  }
+  board.innerHTML = data.map(announcement => {
+    const [headline, ...lines] = String(announcement.body).split('\n');
+    const body = lines.join('\n').trim();
+    const date = new Date(announcement.created_at).toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
+    return `<article class="league-announcement"><div class="announcement-avatar" aria-hidden="true">${esc(initialsFor(announcement.author_name))}</div><div class="announcement-content"><div class="announcement-meta"><span>League office</span><time datetime="${esc(announcement.created_at)}">${esc(date)}</time></div>${announcement.is_starter ? '<span class="announcement-starter">Starter announcement</span>' : ''}<h3>${esc(headline)}</h3>${body ? `<p>${esc(body).replace(/\n/g, '<br>')}</p>` : ''}<small>${esc(announcement.author_name)}</small></div></article>`;
+  }).join('');
+  showCommissionerBoard();
+}
+
+window.gateHomeAnnouncements = Object.freeze({load: loadAnnouncementsHome});
+window.addEventListener('gate-supabase-ready', () => loadAnnouncementsHome());
+if(window.gateSupabase) loadAnnouncementsHome();

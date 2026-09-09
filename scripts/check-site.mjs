@@ -119,20 +119,23 @@ if(!html.includes('data-site-phase') || !html.includes('data-site-season') || !s
 if(!html.includes('class="hero-season-card"') || !html.includes('data-site-year') || !html.includes('data-site-season-label') || !html.includes('class="home-dashboard"')){
   throw new Error('The professional home dashboard and data-driven season card are missing.');
 }
-if([...html.matchAll(/<button[^>]+class="quick-card"[^>]+data-quick-view=/g)].length !== 6 || /class="quick-card"[^>]+onclick=/.test(html)){
-  throw new Error('All six home quick cards must be native buttons without inline handlers.');
+if(html.includes('class="quick-card"') || html.includes('home-directory-title') || html.includes('class="corkboard commissioner-board"')){
+  throw new Error('Home directory cards must stay off the landing page.');
 }
-if([...html.matchAll(/class="quick-kicker"/g)].length !== 6 || html.includes('class="corkboard commissioner-board"')){
-  throw new Error('Home directory labels or the clean league-office presentation regressed.');
+if(!html.includes('Szn 10 keepers') || html.includes('id="homeKeepers"')){
+  throw new Error('Home must link to the League keeper list instead of repeating it.');
 }
 if([...html.matchAll(/<button[^>]+class="accordion-head"[^>]+aria-expanded=/g)].length !== 6){
   throw new Error('Every rules accordion trigger must be an accessible button with aria-expanded.');
 }
-if(!html.includes('§2</span>Keepers') || !html.includes('Szn 10 locked keepers') || !html.includes('Bijan Robinson')){
-  throw new Error('The Rules handbook must include the Szn 10 keeper section and locked keeper list.');
+if(!html.includes('§2</span>Keepers') || !html.includes('How a keep works') || !html.includes('Bijan Robinson')){
+  throw new Error('Rules §2 must keep the keeper wording, and the only locked list stays on League.');
 }
-if(!html.includes('id="homeKeepers"') || !html.includes('id="membersKeepers"') || !html.includes('id="pastMembers"')){
-  throw new Error('Home and Members must expose Keepers and Past members subsections.');
+if(html.includes('Szn 10 locked keepers')){
+  throw new Error('Rules §2 must not duplicate the League keeper list.');
+}
+if(!html.includes('id="membersKeepers"') || !html.includes('id="pastMembers"')){
+  throw new Error('League must expose the keeper list and Past members.');
 }
 if(!html.includes('Ronnie Coiro') || !html.includes('Joey Dwulet') || !html.includes('Brian James') || !html.includes('Chardo BRYCE') || !html.includes('Ed Perrine') || !html.includes('Thomas Connelly')){
   throw new Error('Past members must list the six alumni.');
@@ -144,8 +147,8 @@ if(!html.includes('>Keepers</h2>') || !html.includes('>Past members</h2>')){
 if(!html.includes('Lamb Fried Rice') || !html.includes('German Haro')){
   throw new Error('Wall of Shame fallback must name 2025 last place as Lamb Fried Rice / German Haro.');
 }
-if(!html.includes('id="homeKeepers"') || !html.includes('id="membersKeepers"') || !html.includes('id="pastMembers"')){
-  throw new Error('Home and Members must expose Keepers and Past members subsections.');
+if(!html.includes('id="membersKeepers"') || !html.includes('id="pastMembers"') || html.includes('id="homeKeepers"')){
+  throw new Error('League must keep one keeper list and Past members; Home must not repeat the list.');
 }
 if(!scriptAssets.includes('js/staff-loader.js')){
   throw new Error('Staff tools must load through js/staff-loader.js.');
@@ -196,6 +199,9 @@ if(!Array.isArray(intelligence.powerRankings) || intelligence.powerRankings[0]?.
 }
 if(!html.includes('id="intel"') || !html.includes('data-view="intel"') || !scriptAssets.includes('js/intelligence.js') || !localAssets.includes('css/intelligence.css')){
   throw new Error('Intel view, stylesheet, navigation, or script is missing.');
+}
+if(!html.includes('>Book</button>') || !html.includes('data-view="office"') || !html.includes('id="wire"') || !html.includes('id="league"')){
+  throw new Error('Desktop navigation must be Home, League, Wire, History, Book, and Office.');
 }
 
 const currentSeason = JSON.parse(readFileSync(new URL('data/current-season.json', root), 'utf8'));
@@ -344,8 +350,11 @@ if(!authSource.includes("password.length < 12") || !authSource.includes('If that
   throw new Error('Password recovery must enforce the client minimum and avoid account enumeration.');
 }
 const adminSource = readFileSync(new URL('js/admin.js', root), 'utf8');
-if(!adminSource.includes('league-announcement') || !adminSource.includes('memberPresentation.initialsFor')){
-  throw new Error('Commissioner updates must use the clean initials-based league-office cards.');
+if(!siteUiSource.includes('league-announcement') || !siteUiSource.includes('initialsFor') || !siteUiSource.includes('loadAnnouncementsHome') || !siteUiSource.includes("eq('is_pinned', true)")){
+  throw new Error('Pinned commissioner announcements must load for visitors from site-ui.js.');
+}
+if(adminSource.includes('async function loadAnnouncementsHome')){
+  throw new Error('Home announcements must not stay trapped in the staff-only admin bundle.');
 }
 const transactionSource = readFileSync(new URL('js/transactions.js', root), 'utf8');
 if(!html.includes('id="transactions"') || !html.includes('data-view="transactions"')){

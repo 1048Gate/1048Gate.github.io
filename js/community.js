@@ -13,8 +13,8 @@
   }
 
   votesSection.innerHTML = `
-    <div class="section-title"><span class="section-kicker">League pulse</span><h2>Informal Vote Booth</h2><span class="see-all">One device, one response</span></div>
-    <div class="community-intro"><div><strong>Take the league’s temperature</strong><p>These are informal feedback polls for draft plans, rule discussion, payouts, and punishments. Official league votes will use authenticated voting in a future release.</p></div><div class="community-count"><b id="pollCount">0</b>polls</div></div>
+    <div class="section-title"><span class="section-kicker">League office</span><h2>Informal polls</h2><span class="see-all">One device, one response</span></div>
+    <div class="community-intro"><div><strong>Informal Vote Booth</strong><p>These are informal feedback polls for draft plans, rule discussion, payouts, and punishments. Aggregate results are public. Your response stays on this device.</p></div><div class="community-count"><b id="pollCount">0</b>polls</div></div>
     <div id="pollNotice" role="status"></div><div class="poll-grid" id="livePolls"></div>`;
 
   const notice = (text, type='live') => {

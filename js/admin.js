@@ -15,26 +15,7 @@
   }
   staffTab.addEventListener('click',()=>window.switchView?.('staff'));
 
-  async function loadAnnouncementsHome(){
-    const board=document.getElementById('commissionerBoard');if(!board)return;
-    let {data,error}=await supabase.from('announcements').select('id,author_name,body,is_starter,created_at').eq('is_pinned',true).order('created_at',{ascending:false}).limit(3);
-    if(missingStarterColumn(error))({data,error}=await supabase.from('announcements').select('id,author_name,body,created_at').eq('is_pinned',true).order('created_at',{ascending:false}).limit(3));
-    if(error){
-      board.innerHTML='<div class="commissioner-empty">Commissioner announcements could not load.</div>';
-      return;
-    }
-    if(!data?.length){
-      board.innerHTML='<div class="commissioner-empty">No commissioner announcements are posted yet.</div>';
-      return;
-    }
-    board.innerHTML=data.map(announcement=>{
-      const [headline,...lines]=String(announcement.body).split('\n');
-      const body=lines.join('\n').trim();
-      const date=new Date(announcement.created_at).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
-      const initials=memberPresentation.initialsFor(announcement.author_name);
-      return `<article class="league-announcement"><div class="announcement-avatar" aria-hidden="true">${esc(initials)}</div><div class="announcement-content"><div class="announcement-meta"><span>League office</span><time datetime="${esc(announcement.created_at)}">${esc(date)}</time></div>${announcement.is_starter?'<span class="announcement-starter">Starter announcement</span>':''}<h3>${esc(headline)}</h3>${body?`<p>${esc(body).replace(/\n/g,'<br>')}</p>`:''}<small>${esc(announcement.author_name)}</small></div></article>`;
-    }).join('');
-  }
+  function loadAnnouncementsHome(){return window.gateHomeAnnouncements?.load?.();}
 
   async function loadSummary(){
     const host=document.getElementById('staffSummary');if(!host)return;

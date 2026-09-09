@@ -83,15 +83,11 @@
   </div>
   <nav class="tabs" id="tabs" aria-label="Primary league navigation">
     <button data-view="home" class="active" aria-current="page">Home</button>
+    <button data-view="league">League</button>
+    <button data-view="wire">Wire</button>
     <button data-view="history">History</button>
-    <button data-view="intel">Intel</button>
-    <button data-view="transactions">Transactions</button>
-    <button data-view="playoffs">Playoffs</button>
-    <button data-view="members">Members</button>
-    <button data-view="newspaper">Newspaper Editions</button>
-    <button data-view="trades">Trades</button>
-    <button data-view="votes">Votes</button>
-    <button data-view="rules">Rules</button>
+    <button data-view="intel">Book</button>
+    <button data-view="office">Office</button>
   </nav>
 </div>
 
@@ -244,34 +240,17 @@
       </div>
     </section>
 
-    <section class="home-section keepers-section" id="homeKeepers" aria-label="Szn 10 keepers">
-      <header class="home-section-head"><div><span>House rule</span><h2>Keepers</h2></div><small>One per club</small></header>
-      <div class="keepers-home-body">
-        <div class="rule-summary">One keeper per club. If you kept a 1st-rounder last year, you cannot keep them again. A second straight keep moves the round cost up one.</div>
-        <div class="rule-grid keeper-list">
-          <div class="rule-row"><span>George Travis</span><span>Javonte Williams · 8th</span></div>
-          <div class="rule-row"><span>Trevor Hash</span><span>Chase Brown · 9th</span></div>
-          <div class="rule-row"><span>Kyle Fowler</span><span>Cam Skattebo · 8th</span></div>
-          <div class="rule-row"><span>Jared Hall</span><span>Jaxon Dart · 16th</span></div>
-          <div class="rule-row"><span>Thomas Speer</span><span>Puka Nacua · 9th</span></div>
-          <div class="rule-row"><span>JD Daley</span><span>Rashee Rice · 7th</span></div>
-          <div class="rule-row"><span>Collin Krum</span><span>Bijan Robinson · 1st</span></div>
-          <div class="rule-row"><span>Brian Heino</span><span>Devon Achane · 12th</span></div>
-          <div class="rule-row"><span>Vincent Cannarozzi</span><span>Kyle Pitts · 12th</span></div>
-          <div class="rule-row"><span>James Brochu</span><span>Travis Etienne · 8th</span></div>
-          <div class="rule-row"><span>German Haro</span><span>Michael Pittman · 7th</span></div>
-          <div class="rule-row"><span>Bryan Hunt</span><span>Brock Bowers · 9th</span></div>
-        </div>
-        <button type="button" class="btn btn-ghost" data-view-link="rules">Full keeper rules</button>
-      </div>
+    <section class="home-section home-keepers-link" aria-label="Szn 10 keepers">
+      <header class="home-section-head">
+        <div><span>House rule</span><h2>Keepers</h2></div>
+        <button type="button" class="btn btn-ghost" data-view-link="members" data-scroll-to="membersKeepers">Szn 10 keepers</button>
+      </header>
     </section>
 
     <div class="home-dashboard">
-      <section class="home-section home-office">
+      <section class="home-section home-office" hidden>
         <header class="home-section-head"><div><span>League office</span><h2>Commissioner Updates</h2></div><small>Official announcements</small></header>
-        <div class="commissioner-board" id="commissionerBoard" aria-label="Commissioner announcements" aria-live="polite">
-          <div class="commissioner-empty">Loading commissioner announcements…</div>
-        </div>
+        <div class="commissioner-board" id="commissionerBoard" aria-label="Commissioner announcements" aria-live="polite" hidden></div>
       </section>
       <aside class="home-section home-snapshot">
         <header class="home-section-head"><div><span>At a glance</span><h2>League Snapshot</h2></div><small>1048 Gate</small></header>
@@ -293,18 +272,18 @@
       </div>
     </section>
 
-    <div class="section-title home-directory-title"><span class="section-kicker">League directory</span><h2>Get Around the League</h2><span class="see-all">Everything 1048</span></div>
-    <div class="quick-grid">
-      <button type="button" class="quick-card" data-quick-view="trades"><span class="num">01</span><span class="quick-kicker">The deal ledger</span><h3>Trade Talk</h3><p>Every accepted trade on record, season by season.</p></button>
-      <button type="button" class="quick-card" data-quick-view="votes"><span class="num">02</span><span class="quick-kicker">League office</span><h3>Vote Booth</h3><p>Rule proposals, league decisions, and official polls.</p></button>
-      <button type="button" class="quick-card" data-quick-view="transactions"><span class="num">03</span><span class="quick-kicker">League wire</span><h3>Transactions</h3><p>Adds, drops, successful waivers, and accepted trades.</p></button>
-      <button type="button" class="quick-card" data-quick-view="history"><span class="num">04</span><span class="quick-kicker">Archive</span><h3>League History</h3><p>Champions, records, season results, and milestones.</p></button>
-      <button type="button" class="quick-card" data-quick-view="members"><span class="num">05</span><span class="quick-kicker">The league</span><h3>Members</h3><p>The twelve, Szn 10 keepers, and past members.</p></button>
-      <button type="button" class="quick-card" data-quick-view="playoffs"><span class="num">06</span><span class="quick-kicker">Competition</span><h3>Playoffs</h3><p>Postseason brackets, championship games, and seeds.</p></button>
-    </div>
   </section>
 
-  <section class="view" id="transactions">
+  
+  
+  
+  <section class="view" id="wire">
+    <div class="section-title"><span class="section-kicker">The league wire</span><h2>Wire</h2><span class="see-all">Transactions and trades</span></div>
+    <nav class="ia-subnav" data-wire-nav role="tablist" aria-label="Wire sections">
+      <button type="button" class="active" data-wire-tab="transactions" data-view="transactions" role="tab" aria-selected="true">Transactions</button>
+      <button type="button" data-wire-tab="trades" role="tab" aria-selected="false">Trades</button>
+    </nav>
+<section class="subpanel" id="transactions" data-wire-panel="transactions">
     <div class="section-title"><span class="section-kicker">The league wire</span><h2>Transaction Archive</h2><span class="see-all"><span data-archive-years>2019–2025</span> verified league moves</span></div>
     <div class="transaction-summary" id="transactionSummary" aria-label="Choose a transaction category">
       <button class="transaction-summary-card is-loading" type="button" disabled><span>All activity</span><strong>—</strong><small>Completed, verified moves</small></button>
@@ -331,8 +310,7 @@
     </div>
     <nav class="transaction-pagination" id="transactionPagination" aria-label="Transaction results pages"></nav>
   </section>
-
-  <section class="view" id="trades">
+<section class="subpanel" id="trades" data-wire-panel="trades" hidden>
     <div class="section-title"><span class="section-kicker">The deal ledger</span><h2>Trade Talk</h2><span class="see-all">Every accepted trade on record</span></div>
     <div class="trade-intro">
       <div>
@@ -413,67 +391,10 @@
       </div>
     </div>
   </section>
-
-  <section class="view" id="votes">
-    <div class="section-title"><h2>Vote Booth</h2></div>
-    <div class="panel poll-card">
-      <div class="poll-head"><div><h3>Vote Booth</h3><div class="poll-meta">Loading polls…</div></div></div>
-    </div>
   </section>
 
-  <section class="view" id="history">
-    <div class="section-title"><h2>League History</h2></div>
-    <div class="panel" style="margin-bottom:16px;">
-      <h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:18px;">Champions Timeline</h3>
-      <div class="trophy-room" data-trophy-room><div class="history-loading">Loading trophy room…</div></div>
-      <div class="timeline"><div class="history-loading">Loading champions…</div></div>
-    </div>
-    <div class="panel" style="margin-bottom:16px;"><h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:18px;">Record Book</h3><div class="record-grid" data-record-grid="placeholder"><div class="history-loading">Loading record book…</div></div></div>
-    <div class="panel"><h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:12px;">Wall of Shame</h3><div class="shame"><div class="txt"><strong>Lamb Fried Rice — Last Place, 2025</strong><span>German Haro · 2-12. Sentenced to this year's punishment. Details TBD by the committee.</span></div><div class="trophy">💩</div></div></div>
-  </section>
-
-
-  <section class="view" id="intel">
-    <div class="section-title"><span class="section-kicker">League Intelligence Engine</span><h2>The book, computed</h2><span class="see-all" id="intelMeta">885 games · 85 scored trades</span></div>
-    <nav class="history-subnav" id="intelNav" role="tablist" aria-label="Intelligence sections">
-      <button type="button" class="active" data-intel-slice="wire" role="tab" aria-selected="true">Wire</button>
-      <button type="button" data-intel-slice="rivalries" role="tab" aria-selected="false">Rivalries</button>
-      <button type="button" data-intel-slice="book" role="tab" aria-selected="false">Book</button>
-      <button type="button" data-intel-slice="draft" role="tab" aria-selected="false">Draft</button>
-      <button type="button" data-intel-slice="trades" role="tab" aria-selected="false">Trades</button>
-      <button type="button" data-intel-slice="power" role="tab" aria-selected="false">Power</button>
-    </nav>
-    <div id="intelBody" aria-live="polite"><div class="panel"><div class="history-loading">Open Intel to load the computed book.</div></div></div>
-  </section>
-
-  <section class="view" id="playoffs">
-    <div class="section-title"><h2>Playoffs</h2><span class="see-all">Winners & consolation bracket history</span></div>
-    <div class="playoff-toolbar panel">
-      <div>
-        <label for="playoffYear">Season</label>
-        <select id="playoffYear"></select>
-      </div>
-      <div class="playoff-season-status" id="playoffSeasonStatus"></div>
-    </div>
-    <div id="playoffPublicContent">
-      <div class="panel community-empty">Playoff history is being loaded…</div>
-    </div>
-  </section>
-
-  <section class="view" id="rules">
-    <div class="section-title"><h2>Rules</h2></div>
-    <div class="panel"><div class="accordion" id="accordion">
-      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§1</span>Scoring Format</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>Full PPR scoring</strong> with 6-point passing touchdowns. Players earn 1 point per 10 rushing or receiving yards, 1 point per reception, and 1 point per 25 passing yards. Defensive scoring rewards sacks and takeaways, with additional bonuses and penalties based on points and total yards allowed.</div><div class="rule-group"><h4>Passing</h4><div class="rule-grid"><div class="rule-row"><span>Passing yards</span><span>0.04 / yd</span></div><div class="rule-row"><span>Passing touchdown</span><span>6 pts</span></div><div class="rule-row"><span>Interception thrown</span><span>-2 pts</span></div><div class="rule-row"><span>2-point passing conversion</span><span>2 pts</span></div></div></div><div class="rule-group"><h4>Rushing & Receiving</h4><div class="rule-grid"><div class="rule-row"><span>Rushing yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Receiving yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Reception</span><span>1 pt</span></div><div class="rule-row"><span>Rushing or receiving TD</span><span>6 pts</span></div><div class="rule-row"><span>2-point rush or reception</span><span>2 pts</span></div><div class="rule-row"><span>Fumble lost</span><span>-2 pts</span></div></div></div><div class="rule-group"><h4>Kicking</h4><div class="rule-grid"><div class="rule-row"><span>Extra point made</span><span>1 pt</span></div><div class="rule-row"><span>Field goal missed</span><span>-1 pt</span></div><div class="rule-row"><span>Field goal: 0–39 yards</span><span>3 pts</span></div><div class="rule-row"><span>Field goal: 40–49 yards</span><span>4 pts</span></div><div class="rule-row"><span>Field goal: 50+ yards</span><span>5 pts</span></div></div></div></div></div></div>
-      <div class="accordion-item open"><button type="button" class="accordion-head" aria-expanded="true"><h3><span class="idx">§2</span>Keepers</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>One keeper per club.</strong> Each of the 12 teams locks a single player into the Szn 10 draft. The round listed with that player is the pick you surrender; the rest of the snake stays live. Keepers locked August 30. The Szn 10 draft completed August 31.</div><div class="rule-group"><h4>How a keep works</h4><div class="rule-grid"><div class="rule-row"><span>Keepers per team</span><span>1</span></div><div class="rule-row"><span>Cost</span><span>The listed draft round</span></div><div class="rule-row"><span>Draft rounds</span><span>16-round snake</span></div><div class="rule-row"><span>Deadline</span><span>Locked Aug 30</span></div><div class="rule-row"><span>Prior 1st-round keep</span><span>Cannot keep again</span></div><div class="rule-row"><span>2nd straight year</span><span>Round cost moves up 1</span></div></div><div class="rule-note">If you kept someone last year who was your 1st-round pick, you can no longer keep them. If you are keeping someone for the 2nd year in a row, their draft round moves up this year. Example: keeping Saquon as a 2nd-rounder last year and keeping him again this year costs a 1st-round pick. A used round is skipped on the board so that club does not pick twice in the same round.</div></div><div class="rule-group"><h4>Szn 10 locked keepers</h4><div class="rule-grid keeper-list"><div class="rule-row"><span>George Travis</span><span>Javonte Williams · 8th</span></div><div class="rule-row"><span>Trevor Hash</span><span>Chase Brown · 9th</span></div><div class="rule-row"><span>Kyle Fowler</span><span>Cam Skattebo · 8th</span></div><div class="rule-row"><span>Jared Hall</span><span>Jaxon Dart · 16th</span></div><div class="rule-row"><span>Thomas Speer</span><span>Puka Nacua · 9th</span></div><div class="rule-row"><span>JD Daley</span><span>Rashee Rice · 7th</span></div><div class="rule-row"><span>Collin Krum</span><span>Bijan Robinson · 1st</span></div><div class="rule-row"><span>Brian Heino</span><span>Devon Achane · 12th</span></div><div class="rule-row"><span>Vincent Cannarozzi</span><span>Kyle Pitts · 12th</span></div><div class="rule-row"><span>James Brochu</span><span>Travis Etienne · 8th</span></div><div class="rule-row"><span>German Haro</span><span>Michael Pittman · 7th</span></div><div class="rule-row"><span>Bryan Hunt</span><span>Brock Bowers · 9th</span></div></div></div></div></div></div>
-      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§3</span>Roster & Lineup</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">1 QB · 2 RB · 2 WR · 1 TE · 1 FLEX · 1 DST · 1 K · 7 bench spots. Lineups lock at each game's individual kickoff, not Thursday for the whole week.</div></div></div>
-      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§4</span>Waivers & Trades</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Waiver period</span><span>1 day</span></div><div class="rule-row"><span>Waiver order</span><span>Inverse standings</span></div><div class="rule-row"><span>Trade review period</span><span>2 days</span></div><div class="rule-row"><span>Votes required to veto</span><span>4 votes</span></div><div class="rule-row"><span>Trade deadline</span><span>TBA</span></div></div><div class="rule-note">Waiver priority resets each week to the inverse order of the standings.</div></div></div></div>
-      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§5</span>Playoffs</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Playoff teams</span><span>6</span></div><div class="rule-row"><span>Seeding tiebreaker</span><span>Total points for</span></div></div></div></div></div>
-      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§6</span>Punishments & Payouts</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">League punishment is determined by a league vote. The prize pool is paid 100% to first place unless the two teams in the championship matchup agree to a different split before the game.</div></div></div>
-    </div></div>
-  </section>
-
-  <section class="view" id="members">
-    <div class="section-title"><h2>Members</h2></div>
+<section class="view" id="league">
+    <div class="section-title" id="members"><span class="section-kicker">The twelve</span><h2>League</h2></div>
     <div class="member-help"><strong><span data-stat-seasons>9</span> seasons. <span data-stat-managers>12</span> still here. Six who were.</strong> Open a manager card for career results, team history, rivalries, signature games, draft results, and top players. <span id="memberDataSource" class="mono">Loading history…</span></div>
     <div class="members-grid" id="membersGrid"></div>
 
@@ -594,14 +515,62 @@
       </div>
     </section>
   </section>
+  <section class="view" id="history">
+    <div class="section-title"><h2>League History</h2></div>
+    <div class="panel" style="margin-bottom:16px;">
+      <h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:18px;">Champions Timeline</h3>
+      <div class="trophy-room" data-trophy-room><div class="history-loading">Loading trophy room…</div></div>
+      <div class="timeline"><div class="history-loading">Loading champions…</div></div>
+    </div>
+    <div class="panel" style="margin-bottom:16px;"><h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:18px;">Record Book</h3><div class="record-grid" data-record-grid="placeholder"><div class="history-loading">Loading record book…</div></div></div>
+    <div class="panel"><h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:12px;">Wall of Shame</h3><div class="shame"><div class="txt"><strong>Lamb Fried Rice — Last Place, 2025</strong><span>German Haro · 2-12. Sentenced to this year's punishment. Details TBD by the committee.</span></div><div class="trophy">💩</div></div></div>
+  </section>
 
-  <section class="view" id="newspaper">
+
+  <section class="view" id="intel">
+    <div class="section-title"><span class="section-kicker">League Intelligence Engine</span><h2>The book, computed</h2><span class="see-all" id="intelMeta">885 games · 85 scored trades</span></div>
+    <nav class="history-subnav" id="intelNav" role="tablist" aria-label="Intelligence sections">
+      <button type="button" class="active" data-intel-slice="wire" role="tab" aria-selected="true">Wire</button>
+      <button type="button" data-intel-slice="rivalries" role="tab" aria-selected="false">Rivalries</button>
+      <button type="button" data-intel-slice="book" role="tab" aria-selected="false">Book</button>
+      <button type="button" data-intel-slice="draft" role="tab" aria-selected="false">Draft</button>
+      <button type="button" data-intel-slice="trades" role="tab" aria-selected="false">Trades</button>
+      <button type="button" data-intel-slice="power" role="tab" aria-selected="false">Power</button>
+    </nav>
+    <div id="intelBody" aria-live="polite"><div class="panel"><div class="history-loading">Open Intel to load the computed book.</div></div></div>
+  </section>
+
+  <section class="view" id="office">
+    <div class="section-title"><span class="section-kicker">League office</span><h2>Office</h2><span class="see-all">Rules, polls, and the paper</span></div>
+    <nav class="ia-subnav" data-office-nav role="tablist" aria-label="Office sections">
+      <button type="button" class="active" data-office-tab="rules" role="tab" aria-selected="true">Rules</button>
+      <button type="button" data-office-tab="votes" role="tab" aria-selected="false">Informal polls</button>
+      <button type="button" data-office-tab="newspaper" role="tab" aria-selected="false">Newspaper</button>
+    </nav>
+<section class="subpanel active" id="rules" data-office-panel="rules">
+    <div class="section-title"><h2>Rules</h2></div>
+    <div class="panel"><div class="accordion" id="accordion">
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§1</span>Scoring Format</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>Full PPR scoring</strong> with 6-point passing touchdowns. Players earn 1 point per 10 rushing or receiving yards, 1 point per reception, and 1 point per 25 passing yards. Defensive scoring rewards sacks and takeaways, with additional bonuses and penalties based on points and total yards allowed.</div><div class="rule-group"><h4>Passing</h4><div class="rule-grid"><div class="rule-row"><span>Passing yards</span><span>0.04 / yd</span></div><div class="rule-row"><span>Passing touchdown</span><span>6 pts</span></div><div class="rule-row"><span>Interception thrown</span><span>-2 pts</span></div><div class="rule-row"><span>2-point passing conversion</span><span>2 pts</span></div></div></div><div class="rule-group"><h4>Rushing & Receiving</h4><div class="rule-grid"><div class="rule-row"><span>Rushing yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Receiving yards</span><span>0.1 / yd</span></div><div class="rule-row"><span>Reception</span><span>1 pt</span></div><div class="rule-row"><span>Rushing or receiving TD</span><span>6 pts</span></div><div class="rule-row"><span>2-point rush or reception</span><span>2 pts</span></div><div class="rule-row"><span>Fumble lost</span><span>-2 pts</span></div></div></div><div class="rule-group"><h4>Kicking</h4><div class="rule-grid"><div class="rule-row"><span>Extra point made</span><span>1 pt</span></div><div class="rule-row"><span>Field goal missed</span><span>-1 pt</span></div><div class="rule-row"><span>Field goal: 0–39 yards</span><span>3 pts</span></div><div class="rule-row"><span>Field goal: 40–49 yards</span><span>4 pts</span></div><div class="rule-row"><span>Field goal: 50+ yards</span><span>5 pts</span></div></div></div></div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§2</span>Keepers</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-summary"><strong>One keeper per club.</strong> Each of the 12 teams locks a single player into the Szn 10 draft. The round listed with that player is the pick you surrender; the rest of the snake stays live. Keepers locked August 30. The Szn 10 draft completed August 31.</div><div class="rule-group"><h4>How a keep works</h4><div class="rule-grid"><div class="rule-row"><span>Keepers per team</span><span>1</span></div><div class="rule-row"><span>Cost</span><span>The listed draft round</span></div><div class="rule-row"><span>Draft rounds</span><span>16-round snake</span></div><div class="rule-row"><span>Deadline</span><span>Locked Aug 30</span></div><div class="rule-row"><span>Prior 1st-round keep</span><span>Cannot keep again</span></div><div class="rule-row"><span>2nd straight year</span><span>Round cost moves up 1</span></div></div><div class="rule-note">If you kept someone last year who was your 1st-round pick, you can no longer keep them. If you are keeping someone for the 2nd year in a row, their draft round moves up this year. Example: keeping Saquon as a 2nd-rounder last year and keeping him again this year costs a 1st-round pick. A used round is skipped on the board so that club does not pick twice in the same round.</div></div><p class="rule-note"><button type="button" class="btn btn-ghost" data-view-link="members" data-scroll-to="membersKeepers">Szn 10 keepers</button> The locked list lives on the League page. Rules here stay the house wording only.</p></div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§3</span>Roster & Lineup</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">1 QB · 2 RB · 2 WR · 1 TE · 1 FLEX · 1 DST · 1 K · 7 bench spots. Lineups lock at each game's individual kickoff, not Thursday for the whole week.</div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§4</span>Waivers & Trades</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Waiver period</span><span>1 day</span></div><div class="rule-row"><span>Waiver order</span><span>Inverse standings</span></div><div class="rule-row"><span>Trade review period</span><span>2 days</span></div><div class="rule-row"><span>Votes required to veto</span><span>4 votes</span></div><div class="rule-row"><span>Trade deadline</span><span>TBA</span></div></div><div class="rule-note">Waiver priority resets each week to the inverse order of the standings.</div></div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§5</span>Playoffs</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner"><div class="rule-grid"><div class="rule-row"><span>Playoff teams</span><span>6</span></div><div class="rule-row"><span>Seeding tiebreaker</span><span>Total points for</span></div></div></div></div></div>
+      <div class="accordion-item"><button type="button" class="accordion-head" aria-expanded="false"><h3><span class="idx">§6</span>Punishments & Payouts</h3><span class="chev" aria-hidden="true">＋</span></button><div class="accordion-body"><div class="accordion-body-inner">League punishment is determined by a league vote. The prize pool is paid 100% to first place unless the two teams in the championship matchup agree to a different split before the game.</div></div></div>
+    </div></div>
+  </section>
+<section class="subpanel" id="votes" data-office-panel="votes" hidden>
+    <div class="section-title"><h2>Vote Booth</h2></div>
+    <div class="panel poll-card">
+      <div class="poll-head"><div><h3>Vote Booth</h3><div class="poll-meta">Loading polls…</div></div></div>
+    </div>
+  </section>
+<section class="subpanel" id="newspaper" data-office-panel="newspaper" hidden>
     <div class="section-title">
       <h2>Newspaper Editions</h2>
     </div>
     <div id="editionTabs" class="edition-tabs" role="tablist" aria-label="Newspaper editions">
       <button type="button" class="edition-tab active" data-edition="historical" role="tab" aria-selected="true">Historical</button>
-      <button type="button" class="edition-tab" data-edition="weekly_fallback" role="tab" aria-selected="false">Weekly (Archive Demo)</button>
+      <button type="button" class="edition-tab" data-edition="weekly_fallback" role="tab" aria-selected="false">Weekly</button>
     </div>
     <div id="editionContent" class="edition-content" aria-live="polite">
       <div class="edition-loading"><span>Open an edition to load the newspaper.</span></div>
@@ -619,6 +588,22 @@
       </div>
     </aside>
   </section>
+  </section>
+
+
+  <section class="history-playoffs" id="playoffs" hidden>
+    <div class="section-title"><h2>Playoffs</h2><span class="see-all">Winners & consolation bracket history</span></div>
+    <div class="playoff-toolbar panel">
+      <div>
+        <label for="playoffYear">Season</label>
+        <select id="playoffYear"></select>
+      </div>
+      <div class="playoff-season-status" id="playoffSeasonStatus"></div>
+    </div>
+    <div id="playoffPublicContent">
+      <div class="panel community-empty">Playoff history is being loaded…</div>
+    </div>
+  </ </ </ </section>
 
   <section class="view" id="staff">
     <div class="section-title"><h2>Staff Tools</h2><span class="see-all" id="staffRoleLabel"></span></div>
@@ -653,17 +638,17 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1z"/></svg>
     <span>Home</span>
   </button>
-  <button type="button" data-view="history">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v3H7zm0 5h10v11H7zm2 2v7h6v-7z"/></svg>
-    <span>History</span>
+  <button type="button" data-view="league">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8 0a2.6 2.6 0 1 0 0-5.2A2.6 2.6 0 0 0 16 11zM4.5 19.5V17c0-1.8 2-3.2 5.5-3.2S15.5 15.2 15.5 17v2.5zm11.2 0V17c0-.7-.2-1.3-.6-1.9 2 .3 3.4 1.3 3.4 2.5v2z"/></svg>
+    <span>League</span>
   </button>
-  <button type="button" data-view="transactions">
+  <button type="button" data-view="wire">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v2H4zm0 5h11v2H4zm0 5h16v2H4z"/></svg>
     <span>Wire</span>
   </button>
-  <button type="button" data-view="trades">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h7V4l6 5-6 5V11H7zm10 10H10v3l-6-5 6-5v3h7z"/></svg>
-    <span>Trades</span>
+  <button type="button" data-view="history">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v3H7zm0 5h10v11H7zm2 2v7h6v-7z"/></svg>
+    <span>History</span>
   </button>
   <button type="button" data-more-toggle aria-expanded="false" aria-controls="phoneMore">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11.2h3.6V14.8H5zm5.2 0h3.6V14.8h-3.6zm5.2 0H19V14.8h-3.6z"/></svg>
@@ -676,13 +661,8 @@
   <div class="phone-more-sheet" role="dialog" aria-label="More league sections">
     <div class="phone-more-handle" aria-hidden="true"></div>
     <strong>More</strong>
-    <button type="button" data-view="playoffs">Playoffs</button>
-    <button type="button" data-view="intel">Intel</button>
-    <button type="button" data-view="members">Members</button>
-    <button type="button" data-view="newspaper">Newspaper Editions</button>
-    <button type="button" data-view="votes">Votes</button>
-    <button type="button" data-view="rules">Rules</button>
-    <button type="button" data-staff-login>Staff Login</button>
+    <button type="button" data-view="intel">Book</button>
+    <button type="button" data-view="office">Office</button>
     <button type="button" data-view="staff" class="staff-nav">Staff</button>
   </div>
 </div>

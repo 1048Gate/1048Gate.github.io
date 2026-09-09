@@ -308,3 +308,21 @@ body.edition-sources-open{overflow:hidden}
   .keepers-home-body{padding:14px 16px 16px}
   .keepers-home-body .keeper-list{grid-template-columns:1fr}
 }
+
+/* Information architecture: six public destinations, grouped panels */
+.ia-subnav{display:flex;gap:6px;margin:0 0 16px;padding:6px;overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:rgba(16,26,27,.96);scrollbar-width:none}
+.ia-subnav::-webkit-scrollbar{display:none}
+.ia-subnav button{flex:0 0 auto;min-height:40px;padding:10px 14px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);font:600 12px Oswald,sans-serif;letter-spacing:.03em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+.ia-subnav button.active,.ia-subnav button[aria-selected="true"]{border-color:rgba(185,138,82,.35);background:linear-gradient(135deg,rgba(0,132,135,.22),rgba(185,138,82,.13));color:var(--amber)}
+.subpanel{display:none}
+.subpanel.active{display:block}
+.home-office[hidden],#commissionerBoard[hidden]{display:none}
+.home-dashboard:has(.home-office[hidden]){grid-template-columns:minmax(0,1fr)}
+.home-expand-btn{margin:12px 16px 16px}
+.futures-grid.is-collapsed .futures-row:nth-child(n+4),.banner-wall.is-collapsed .champ-banner:nth-child(n+4){display:none}
+.home-keepers-link .home-section-head{border-bottom:0}
+.edition-demo{display:inline-block;margin:8px 0 0;padding:4px 8px;border:1px solid rgba(23,24,25,.18);border-radius:999px;color:#6d5840;font:700 10px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+.phone-more-sheet button.staff-nav{display:none}
+.phone-more-sheet button.staff-nav.visible{display:flex}
+
+#membersKeepers{scroll-margin-top:var(--sticky-offset)}

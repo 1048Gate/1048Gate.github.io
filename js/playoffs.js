@@ -2,20 +2,11 @@
   const {escapeHtml:esc}=window.gateShared;
   const score=v=>v===null||v===undefined||v===''?'—':Number(v).toLocaleString(undefined,{maximumFractionDigits:2});
 
-  const tabs=document.getElementById('tabs');
-  if(!tabs)return;
-  let btn=tabs.querySelector('[data-view="playoffs"]');
-  if(!btn){
-    const historyBtn=tabs.querySelector('[data-view="history"]');
-    btn=document.createElement('button');btn.dataset.view='playoffs';btn.textContent='Playoffs';
-    historyBtn?.insertAdjacentElement('afterend',btn);
-  }
-
   let section=document.getElementById('playoffs');
   if(!section){
-    section=document.createElement('section');section.className='view';section.id='playoffs';
+    section=document.createElement('section');section.className='history-playoffs';section.id='playoffs';
     section.innerHTML=`<div class="section-title"><h2>Playoffs</h2><span class="see-all">Winners & consolation bracket history</span></div><div class="playoff-toolbar panel"><div><label for="playoffYear">Season</label><select id="playoffYear"></select></div><div class="playoff-season-status" id="playoffSeasonStatus"></div></div><div id="playoffPublicContent"><div class="panel community-empty">Playoff history is being loaded…</div></div>`;
-    document.querySelector('main')?.appendChild(section);
+    (document.querySelector('[data-history-panel="playoffs"]')||document.querySelector('main'))?.appendChild(section);
   }
   const select=document.getElementById('playoffYear');
   const host=document.getElementById('playoffPublicContent');
