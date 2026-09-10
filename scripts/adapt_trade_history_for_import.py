@@ -14,6 +14,8 @@ def adapt(data: dict, team_names: dict[int, str] | None = None) -> dict:
     transactions = []
     items = []
     for tx in data.get("transactions") or []:
+        if str(tx.get("transaction_type") or "").upper() == "DRAFT":
+            continue
         tx_id = str(tx.get("espn_transaction_id") or "").strip()
         if not tx_id:
             continue

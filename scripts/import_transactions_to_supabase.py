@@ -106,8 +106,9 @@ def main() -> int:
         return 2
 
     data = json.loads(args.input.read_text(encoding="utf-8"))
-    transactions = data.get("transactions") or []
-    items = data.get("items") or []
+    transactions = [row for row in (data.get("transactions") or []) if str(row.get("transaction_type") or "").upper() != "DRAFT"]
+    draft_ids = {row.get("espn_transaction_id") for row in (data.get("transactions") or []) if str(row.get("transaction_type") or "").upper() == "DRAFT"}
+    items = [row for row in (data.get("items") or []) if row.get("espn_transaction_id") not in draft_ids]
     if not isinstance(transactions, list) or not isinstance(items, list):
         print("Input JSON missing transactions/items arrays.", file=sys.stderr)
         return 1

@@ -63,7 +63,12 @@
   async function populateSeasons(){
     const {data, error} = await supabase.rpc('get_transaction_archive_seasons');
     if(error) throw error;
-    const years = (data || []).map(row => Number(row.season_year)).filter(Number.isFinite).sort((a,b) => b-a);
+    const rpcYears = (data || []).map(row => Number(row.season_year)).filter(Number.isFinite);
+    const range = window.gateSiteConfig?.transactionRange;
+    const rangeYears = Array.isArray(range) && range.length === 2
+      ? Array.from({length: Number(range[1]) - Number(range[0]) + 1}, (_, index) => Number(range[1]) - index)
+      : [];
+    const years = [...new Set([...rpcYears, ...rangeYears])].filter(Number.isFinite).sort((a,b) => b-a);
     controls.season.innerHTML = '<option value="all">All seasons</option>' + years.map(year => `<option value="${year}">${year}</option>`).join('');
   }
 
