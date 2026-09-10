@@ -70,3 +70,27 @@ ESPN_LEAGUE_ID=1237285 ESPN_S2="$ESPN_S2" ESPN_SWID="$ESPN_SWID"   npm run publi
 The publisher keeps locker numbers and manager names from the existing board (by ESPN `teamId`), refreshes club names/records/scores, and syncs `data/site.json` phase to `Week N`.
 
 The `Data health and current-season fetch` GitHub Actions workflow runs daily at 08:15 UTC: it health-probes the live site and publishes `current-season.json` from ESPN, committing when the board changes so GitHub Pages redeploys. Manual workflow dispatch can override season/week and optionally build a trade-history audit artifact. Configure the repository secrets `ESPN_LEAGUE_ID`, `ESPN_S2`, and `ESPN_SWID`; do not commit these values or print them in logs.
+
+## Current-season transaction archive (Wire)
+
+Fetch and upsert ESPN free-agent / waiver / trade activity into Supabase so the Wire includes Szn 10:
+
+```bash
+# 1) Normalize from the lighter league endpoint (preferred once names resolve well)
+ESPN_S2=... ESPN_SWID=... python3 scripts/fetch_transactions.py --season 2026 \
+  --output artifacts/transactions-2026.json
+
+# Or adapt a player-card trade-history artifact (richer player names):
+python3 scripts/adapt_trade_history_for_import.py \
+  --input artifacts/trade-history-2026.json \
+  --roster data/current-season.json \
+  --output artifacts/transactions-2026.json
+
+# 2) Upsert with the service role (never the browser anon key)
+SUPABASE_URL=https://YOUR_PROJECT.supabase.co \
+SUPABASE_SERVICE_ROLE_KEY=... \
+  python3 scripts/import_transactions_to_supabase.py --input artifacts/transactions-2026.json
+```
+
+Configure GitHub Actions secrets `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` for automated imports. The importer bumps `data/site.json` `transactionRange` when the new season is first loaded.
+

@@ -14,6 +14,9 @@
     "futures": "node scripts/build-futures.mjs",
     "optimize:image": "node scripts/optimize-image.mjs",
     "publish:current": "python3 scripts/publish_current_season.py",
-    "test:publish-current": "python3 -m unittest scripts/test_publish_current_season.py"
+    "test:publish-current": "python3 -m unittest scripts/test_publish_current_season.py",
+    "fetch:transactions": "python3 scripts/fetch_transactions.py",
+    "import:transactions": "python3 scripts/import_transactions_to_supabase.py",
+    "test:transactions": "python3 -m unittest scripts/test_fetch_transactions.py"
   }
 }
