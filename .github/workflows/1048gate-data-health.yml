@@ -1,0 +1,122 @@
+name: Data health and current-season fetch
+
+on:
+  schedule:
+    # Daily at 08:15 UTC (~4:15 AM ET).
+    - cron: '15 8 * * *'
+  workflow_dispatch:
+    inputs:
+      season:
+        description: ESPN season year
+        required: true
+        default: '2026'
+      week:
+        description: Optional matchup week override (blank = detect from ESPN)
+        required: false
+        default: ''
+      fetch_trade_history:
+        description: Also build an ESPN player-card trade-history audit
+        required: false
+        type: boolean
+        default: false
+      trade_season:
+        description: ESPN season year for the trade-history audit
+        required: false
+        default: '2025'
+
+permissions:
+  contents: read
+
+jobs:
+  live-probe:
+    name: Probe deployed playoff artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Run live playoff probe
+        run: npm run probe:live
+
+  publish-current-season:
+    name: Publish current-season.json from ESPN
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Test ESPN normalizers and publisher
+        run: |
+          python3 -m unittest scripts/test_fetch_current.py scripts/test_publish_current_season.py
+      - name: Publish standings and scoreboard into data/current-season.json
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+        run: |
+          WEEK_ARGS=()
+          if [ -n "${{ inputs.week }}" ]; then
+            WEEK_ARGS=(--week "${{ inputs.week }}")
+          fi
+          SEASON="${{ inputs.season }}"
+          if [ -z "$SEASON" ]; then
+            SEASON=2026
+          fi
+          python3 scripts/publish_current_season.py --season "$SEASON" "${WEEK_ARGS[@]}"
+      - name: Validate site checks still pass
+        run: npm run check
+      - name: Commit updated board when it changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/current-season.json data/site.json
+          if git diff --cached --quiet; then
+            echo "Current-season board unchanged — nothing to commit."
+          else
+            git commit -m "Refresh current-season board from ESPN"
+            git push
+          fi
+
+  fetch-trade-history:
+    name: Build trade-history recovery audit
+    if: github.event_name == 'workflow_dispatch' && inputs.fetch_trade_history
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test trade-history normalizer
+        run: python3 -m unittest scripts/test_fetch_trade_history.py
+      - name: Fetch and normalize ESPN player-card transactions
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+        run: |
+          mkdir -p artifacts
+          python3 scripts/fetch_trade_history.py \
+            --season "${{ inputs.trade_season }}" \
+            --output "artifacts/trade-history-${{ inputs.trade_season }}.json"
+      - name: Upload trade-history audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trade-history-${{ inputs.trade_season }}
+          path: artifacts/trade-history-${{ inputs.trade_season }}.json
+          if-no-files-found: error
+          retention-days: 14
