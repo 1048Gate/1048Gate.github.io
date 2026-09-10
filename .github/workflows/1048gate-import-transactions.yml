@@ -1,0 +1,63 @@
+name: Import current-season transactions
+
+on:
+  schedule:
+    # Daily at 08:25 UTC (~4:25 AM ET), after the scoreboard publish.
+    - cron: '25 8 * * *'
+  workflow_dispatch:
+    inputs:
+      season:
+        description: ESPN season year
+        required: true
+        default: '2026'
+
+permissions:
+  contents: write
+
+jobs:
+  import-transactions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Fetch ESPN player-card transactions
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          SEASON: ${{ github.event.inputs.season || '2026' }}
+        run: |
+          mkdir -p artifacts
+          python3 scripts/fetch_trade_history.py \
+            --season "$SEASON" \
+            --output "artifacts/trade-history-$SEASON.json"
+      - name: Adapt and upsert into Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SEASON: ${{ github.event.inputs.season || '2026' }}
+        run: |
+          python3 scripts/adapt_trade_history_for_import.py \
+            --input "artifacts/trade-history-$SEASON.json" \
+            --roster data/current-season.json \
+            --output "artifacts/transactions-$SEASON.json"
+          python3 scripts/import_transactions_to_supabase.py \
+            --input "artifacts/transactions-$SEASON.json"
+      - name: Validate site checks
+        run: npm run check
+      - name: Commit transactionRange bump when needed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/site.json
+          if git diff --cached --quiet; then
+            echo "No site.json changes."
+          else
+            git commit -m "Extend transaction archive range after ESPN import"
+            git push
+          fi
