@@ -576,17 +576,6 @@
       <div class="edition-loading"><span>Open an edition to load the newspaper.</span></div>
     </div>
     <button type="button" id="editionSourcesToggle" class="toggle-sources" aria-controls="editionSourcesDrawer" aria-expanded="false" hidden>View Sources</button>
-    <div id="editionSourcesBackdrop" class="edition-drawer-backdrop" hidden></div>
-    <aside id="editionSourcesDrawer" class="edition-drawer" aria-labelledby="editionSourcesTitle" aria-hidden="true">
-      <div class="drawer-header">
-        <h3 id="editionSourcesTitle">Edition Sources</h3>
-        <button type="button" id="editionSourcesClose" class="drawer-close" aria-label="Close edition sources">×</button>
-      </div>
-      <div class="drawer-content">
-        <p>Every newspaper claim below points back to a checked-in 1048 Gate archive file.</p>
-        <ul id="editionSourcesList" class="sources-list"></ul>
-      </div>
-    </aside>
   </section>
   </section>
 
@@ -610,6 +599,31 @@
     <div id="staffContent"></div>
   </section>
 
+</main>
+
+<footer>
+  <strong data-site-footer>1048 Gate Szn 10</strong>
+  <span>Brotherhood • Competition • Tradition</span>
+  <span class="thr-footer-credit">
+    <img src="images/two-hounds-mark.png" alt="" width="28" height="28">
+    <span>A Two Hounds Run site</span>
+  </span>
+</footer>
+
+  <!-- Fixed overlays: keep outside .view / [hidden] hosts so they always paint -->
+
+  <div id="editionSourcesBackdrop" class="edition-drawer-backdrop" hidden></div>
+  <aside id="editionSourcesDrawer" class="edition-drawer" aria-labelledby="editionSourcesTitle" aria-hidden="true">
+    <div class="drawer-header">
+      <h3 id="editionSourcesTitle">Edition Sources</h3>
+      <button type="button" id="editionSourcesClose" class="drawer-close" aria-label="Close edition sources">×</button>
+    </div>
+    <div class="drawer-content">
+      <p>Every newspaper claim below points back to a checked-in 1048 Gate archive file.</p>
+      <ul id="editionSourcesList" class="sources-list"></ul>
+    </div>
+  </aside>
+
   <div class="member-modal" id="memberModal" aria-hidden="true">
     <div class="member-modal-card" role="dialog" aria-modal="true" aria-labelledby="memberModalName" tabindex="-1">
       <div class="member-modal-head">
@@ -629,16 +643,6 @@
       <div class="season-table-wrap"><table class="season-table"><thead><tr><th>Year</th><th>Finish</th><th>Team</th><th>Record</th><th>PF</th><th>PA</th><th>Diff</th></tr></thead><tbody id="seasonRows"></tbody></table></div>
     </div>
   </div>
-</main>
-
-<footer>
-  <strong data-site-footer>1048 Gate Szn 10</strong>
-  <span>Brotherhood • Competition • Tradition</span>
-  <span class="thr-footer-credit">
-    <img src="images/two-hounds-mark.png" alt="" width="28" height="28">
-    <span>A Two Hounds Run site</span>
-  </span>
-</footer>
 
 <nav class="phone-dock" id="phoneDock" aria-label="Primary mobile navigation">
   <button type="button" data-view="home" class="active">

@@ -10,6 +10,12 @@ const {
   memberPresentation
 } = window.gateShared;
 
+// Fixed overlays must stay under document.body (never inside .view / [hidden]).
+['memberModal', 'editionSourcesDrawer', 'editionSourcesBackdrop'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el && el.parentElement !== document.body) document.body.appendChild(el);
+});
+
 function closePhoneMore() {
   const sheet = document.getElementById('phoneMore');
   const toggle = document.querySelector('[data-more-toggle]');
