@@ -205,27 +205,30 @@ if(!html.includes('>Book</button>') || !html.includes('data-view="office"') || !
 }
 
 const currentSeason = JSON.parse(readFileSync(new URL('data/current-season.json', root), 'utf8'));
-if(currentSeason.season !== 2026 || currentSeason.week !== 1 || currentSeason.phase !== 'Week 1'){
-  throw new Error('current-season.json must be the Szn 10 Week 1 board.');
+if(currentSeason.season !== 2026 || !Number.isInteger(currentSeason.week) || currentSeason.week < 1){
+  throw new Error('current-season.json must include season 2026 and a positive week.');
+}
+if(currentSeason.phase !== `Week ${currentSeason.week}`){
+  throw new Error('current-season.json phase must match its week.');
 }
 if(!Array.isArray(currentSeason.matchups) || currentSeason.matchups.length !== 6){
-  throw new Error('Week 1 board must include six matchups.');
+  throw new Error('Current-season board must include six matchups.');
 }
 if(!Array.isArray(currentSeason.standings) || currentSeason.standings.length !== 12){
-  throw new Error('Week 1 standings must include all 12 managers.');
+  throw new Error('Current-season standings must include all 12 managers.');
 }
-if(!currentSeason.matchups.some(game => game.away?.owner === 'Collin Krum' && game.home?.owner === 'German Haro')){
-  throw new Error('Week 1 slate must include Krum at Haro.');
+if(!currentSeason.standings.every(team => team.teamId && team.owner && team.team)){
+  throw new Error('Each standing row needs teamId, owner, and team.');
 }
-if(!currentSeason.standings.every(team => Number(team.wins) === 0 && Number(team.losses) === 0)){
-  throw new Error('Week 1 standings must start 0-0 before kickoff.');
+if(!currentSeason.matchups.every(game => game.away?.owner && game.home?.owner && game.away?.teamId && game.home?.teamId)){
+  throw new Error('Each matchup needs home/away owners and teamIds.');
 }
 if(!html.includes('Madison Beer Garden') || !html.includes('1912 Titanic Swimteam') || !html.includes('Your Reigning Champ')){
-  throw new Error('Home Week 1 fallback must use the 2026 club names.');
+  throw new Error('Home board fallback must keep the 2026 club names.');
 }
 const siteUiSource = readFileSync(new URL('js/site-ui.js', root), 'utf8');
 if(!siteUiSource.includes('renderWeekBoard') || !siteUiSource.includes('data/current-season.json')){
-  throw new Error('site-ui.js must render the Week 1 board from current-season.json.');
+  throw new Error('site-ui.js must render the week board from current-season.json.');
 }
 
 function webpDimensions(fileUrl){

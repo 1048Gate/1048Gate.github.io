@@ -61,4 +61,12 @@ ESPN_LEAGUE_ID=1237285 ESPN_S2="$ESPN_S2" ESPN_SWID="$ESPN_SWID" \
 
 The recap maps ESPN owner IDs onto the current twelve, marks keepers, and keeps PPR ranks for the post-draft futures board. It never writes credentials or the raw ESPN payload.
 
-The `Data health and current-season fetch` GitHub Actions workflow runs the public live playoff probe daily at 08:15 UTC. A manual workflow dispatch additionally fetches standings, a selected matchup period, and the draft recap, then uploads the normalized JSON files as a 14-day artifact. Configure the repository secrets `ESPN_LEAGUE_ID`, `ESPN_S2`, and `ESPN_SWID`; do not commit these values or print them in logs.
+Publish the homepage week board (standings + scoreboard) into `data/current-season.json`:
+
+```bash
+ESPN_LEAGUE_ID=1237285 ESPN_S2="$ESPN_S2" ESPN_SWID="$ESPN_SWID"   npm run publish:current
+```
+
+The publisher keeps locker numbers and manager names from the existing board (by ESPN `teamId`), refreshes club names/records/scores, and syncs `data/site.json` phase to `Week N`.
+
+The `Data health and current-season fetch` GitHub Actions workflow runs daily at 08:15 UTC: it health-probes the live site and publishes `current-season.json` from ESPN, committing when the board changes so GitHub Pages redeploys. Manual workflow dispatch can override season/week and optionally build a trade-history audit artifact. Configure the repository secrets `ESPN_LEAGUE_ID`, `ESPN_S2`, and `ESPN_SWID`; do not commit these values or print them in logs.

@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 1,
   "phase": "Week 1",
-  "fetchedAt": "2026-09-01T01:46:14.000743+00:00",
+  "fetchedAt": "2026-09-10T01:50:44.809684+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 1 slate. Records stay 0-0 until kickoff.",
   "standings": [
@@ -17,20 +17,20 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 2,
       "teamId": 3,
-      "team": "Love Thy Nabers",
+      "team": "Darty at 1048",
       "owner": "Jared Hall",
       "abbrev": "HALL",
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 3,
@@ -41,8 +41,8 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 4,
@@ -53,8 +53,8 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 5,
@@ -65,20 +65,20 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 6,
       "teamId": 7,
-      "team": "Like a Good Nabers",
+      "team": "McConkey Tonk Badonkadonk",
       "owner": "Vincent Cannarozzi",
       "abbrev": "CANN",
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 7,
@@ -89,8 +89,8 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 8,
@@ -101,8 +101,8 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 9,
@@ -113,8 +113,8 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 10,
@@ -125,8 +125,8 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 11,
@@ -137,8 +137,8 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     },
     {
       "locker": 12,
@@ -149,8 +149,8 @@
       "wins": 0,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 0,
-      "pointsAgainst": 0
+      "pointsFor": 0.0,
+      "pointsAgainst": 0.0
     }
   ],
   "matchups": [
@@ -223,13 +223,13 @@
       "week": 1,
       "away": {
         "teamId": 3,
-        "team": "Love Thy Nabers",
+        "team": "Darty at 1048",
         "owner": "Jared Hall",
         "score": null
       },
       "home": {
         "teamId": 7,
-        "team": "Like a Good Nabers",
+        "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
         "score": null
       }
