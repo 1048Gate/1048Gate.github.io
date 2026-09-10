@@ -329,46 +329,20 @@ body.edition-sources-open{overflow:hidden}
 
 
 /* Two Hounds Run brand mark */
-.thr-corner-mark{
-  position:fixed;
-  right:16px;
-  bottom:16px;
-  z-index:40;
-  display:block;
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  opacity:.7;
-  box-shadow:0 6px 18px rgba(0,0,0,.35);
-  transition:opacity .2s ease;
-}
-.thr-corner-mark:hover,.thr-corner-mark:focus-visible{opacity:1}
-.thr-corner-mark:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
-.thr-corner-mark img{
-  display:block;
-  width:44px;
-  height:44px;
-  border-radius:50%;
-}
 .thr-footer-credit{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
   color:var(--muted);
-  text-decoration:none;
   font:8px 'Space Mono',monospace;
   text-transform:uppercase;
   letter-spacing:.04em;
-  opacity:.75;
-  transition:color .2s ease,opacity .2s ease;
+  opacity:.85;
 }
-.thr-footer-credit:hover,.thr-footer-credit:focus-visible{
-  color:var(--amber);
-  opacity:1;
-}
-@media(max-width:760px){
-  .thr-corner-mark{
-    bottom:calc(72px + env(safe-area-inset-bottom,0px));
-    right:12px;
-    width:40px;
-    height:40px;
-  }
-  .thr-corner-mark img{width:40px;height:40px}
+.thr-footer-credit img{
+  display:block;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  opacity:.9;
 }
