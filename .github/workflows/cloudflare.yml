@@ -17,7 +17,7 @@ on:
 
 permissions:
   contents: read
-  actions: read
+  statuses: write
 
 concurrency:
   group: cloudflare-${{ github.event.pull_request.number || 'production' }}
@@ -49,18 +49,20 @@ jobs:
               return;
             }
 
-            const { data } = await github.rest.actions.listWorkflowRuns({
+            const { data } = await github.rest.repos.listCommitStatusesForRef({
               ...context.repo,
-              workflow_id: 'cloudflare.yml',
-              head_sha: currentSha,
-              status: 'success',
-              per_page: 1,
+              ref: currentSha,
+              per_page: 100,
             });
 
-            const shouldDeploy = data.total_count === 0;
+            const alreadyDeployed = data.some(
+              ({ context, state }) =>
+                context === 'cloudflare/worker-deployment' && state === 'success',
+            );
+            const shouldDeploy = !alreadyDeployed;
             core.info(
               shouldDeploy
-                ? `No successful Cloudflare run exists for ${currentSha}.`
+                ? `No successful Cloudflare deployment is recorded for ${currentSha}.`
                 : `Cloudflare already deployed ${currentSha}; skipping a duplicate deployment.`,
             );
             core.setOutput('should_deploy', shouldDeploy ? 'true' : 'false');
@@ -80,3 +82,16 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npm run cloudflare:deploy -- --message "github:${{ steps.deployment_guard.outputs.sha }}"
+      - name: Mark commit as deployed to Cloudflare
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.CLOUDFLARE_DEPLOY_ENABLED == 'true' && steps.deployment_guard.outputs.should_deploy == 'true' && success()
+        uses: actions/github-script@v9
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha: '${{ steps.deployment_guard.outputs.sha }}',
+              state: 'success',
+              context: 'cloudflare/worker-deployment',
+              description: 'Deployed to Cloudflare Workers',
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            });

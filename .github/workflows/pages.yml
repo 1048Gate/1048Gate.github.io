@@ -15,7 +15,7 @@ on:
 
 permissions:
   contents: read
-  actions: read
+  statuses: write
   pages: write
   id-token: write
 
@@ -52,18 +52,20 @@ jobs:
               return;
             }
 
-            const { data } = await github.rest.actions.listWorkflowRuns({
+            const { data } = await github.rest.repos.listCommitStatusesForRef({
               ...context.repo,
-              workflow_id: 'pages.yml',
-              head_sha: currentSha,
-              status: 'success',
-              per_page: 1,
+              ref: currentSha,
+              per_page: 100,
             });
 
-            const shouldDeploy = data.total_count === 0;
+            const alreadyPublished = data.some(
+              ({ context, state }) =>
+                context === 'github-pages/fallback-deployment' && state === 'success',
+            );
+            const shouldDeploy = !alreadyPublished;
             core.info(
               shouldDeploy
-                ? `No successful Pages run exists for ${currentSha}.`
+                ? `No successful Pages publication is recorded for ${currentSha}.`
                 : `GitHub Pages already published ${currentSha}; skipping a duplicate deployment.`,
             );
             core.setOutput('should_deploy', shouldDeploy ? 'true' : 'false');
@@ -91,3 +93,16 @@ jobs:
         id: deployment
         if: steps.deployment_guard.outputs.should_deploy == 'true'
         uses: actions/deploy-pages@v5
+      - name: Mark commit as published to GitHub Pages
+        if: steps.deployment_guard.outputs.should_deploy == 'true' && success()
+        uses: actions/github-script@v9
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha: '${{ steps.deployment_guard.outputs.sha }}',
+              state: 'success',
+              context: 'github-pages/fallback-deployment',
+              description: 'Published to the GitHub Pages fallback',
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            });
