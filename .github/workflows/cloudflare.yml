@@ -17,10 +17,11 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: cloudflare-${{ github.event.pull_request.number || 'production' }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   verify:
@@ -31,6 +32,38 @@ jobs:
         with:
           # Fetch the latest data commit, not the upstream workflow's old SHA.
           ref: ${{ github.event_name == 'workflow_run' && 'main' || github.ref }}
+      - name: Check whether this commit is already deployed
+        id: deployment_guard
+        if: github.event_name != 'pull_request'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const currentSha = require('child_process')
+              .execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' })
+              .trim();
+
+            core.setOutput('sha', currentSha);
+
+            if (context.eventName !== 'workflow_run') {
+              core.setOutput('should_deploy', 'true');
+              return;
+            }
+
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              ...context.repo,
+              workflow_id: 'cloudflare.yml',
+              head_sha: currentSha,
+              status: 'success',
+              per_page: 1,
+            });
+
+            const shouldDeploy = data.total_count === 0;
+            core.info(
+              shouldDeploy
+                ? `No successful Cloudflare run exists for ${currentSha}.`
+                : `Cloudflare already deployed ${currentSha}; skipping a duplicate deployment.`,
+            );
+            core.setOutput('should_deploy', shouldDeploy ? 'true' : 'false');
       - uses: actions/setup-node@v6
         with:
           node-version: 22
@@ -42,8 +75,8 @@ jobs:
       - run: npm test
       - run: npm run cloudflare:check
       - name: Deploy alongside GitHub Pages
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.CLOUDFLARE_DEPLOY_ENABLED == 'true'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.CLOUDFLARE_DEPLOY_ENABLED == 'true' && steps.deployment_guard.outputs.should_deploy == 'true'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npm run cloudflare:deploy
+        run: npm run cloudflare:deploy -- --message "github:${{ steps.deployment_guard.outputs.sha }}"

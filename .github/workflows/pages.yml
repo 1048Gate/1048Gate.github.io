@@ -4,9 +4,18 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # GITHUB_TOKEN commits from data jobs do not emit a second push event.
+  workflow_run:
+    workflows:
+      - Data health and current-season fetch
+      - Import current-season transactions
+      - Refresh championship futures
+    types: [completed]
+    branches: [main]
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -16,6 +25,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -23,21 +33,61 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          # Fetch the data commit created by the upstream workflow.
+          ref: ${{ github.event_name == 'workflow_run' && 'main' || github.ref }}
+      - name: Check whether this commit is already published
+        id: deployment_guard
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const currentSha = require('child_process')
+              .execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' })
+              .trim();
+
+            core.setOutput('sha', currentSha);
+
+            if (context.eventName !== 'workflow_run') {
+              core.setOutput('should_deploy', 'true');
+              return;
+            }
+
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              ...context.repo,
+              workflow_id: 'pages.yml',
+              head_sha: currentSha,
+              status: 'success',
+              per_page: 1,
+            });
+
+            const shouldDeploy = data.total_count === 0;
+            core.info(
+              shouldDeploy
+                ? `No successful Pages run exists for ${currentSha}.`
+                : `GitHub Pages already published ${currentSha}; skipping a duplicate deployment.`,
+            );
+            core.setOutput('should_deploy', shouldDeploy ? 'true' : 'false');
       - name: Set up Node.js
+        if: steps.deployment_guard.outputs.should_deploy == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: 22
       - name: Validate source
+        if: steps.deployment_guard.outputs.should_deploy == 'true'
         run: npm run check
       - name: Build cache-safe site
+        if: steps.deployment_guard.outputs.should_deploy == 'true'
         run: npm run build
       - name: Configure Pages
+        if: steps.deployment_guard.outputs.should_deploy == 'true'
         uses: actions/configure-pages@v6
       - name: Upload Pages artifact
+        if: steps.deployment_guard.outputs.should_deploy == 'true'
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist
           include-hidden-files: true
       - name: Deploy to GitHub Pages
         id: deployment
+        if: steps.deployment_guard.outputs.should_deploy == 'true'
         uses: actions/deploy-pages@v5
