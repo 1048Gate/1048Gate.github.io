@@ -1,0 +1,7 @@
+# Only content-hashed CSS/JS are emitted to these directories by the build.
+# HTML, JSON, and images retain Cloudflare's default revalidation policy.
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable

@@ -61,7 +61,14 @@ For a new database, run these files in the Supabase SQL Editor in order:
 
 ## Run locally
 
-Open `index.html` in your browser. For easier editing and automatic browser refresh, use the VS Code Live Server extension.
+Use Node.js 22 or newer and Python 3 for the existing data tests:
+
+```bash
+npm ci
+npm run dev
+```
+
+Open `http://localhost:8787`. This builds and serves `dist/` using Cloudflare's local runtime. Restart the command after editing source files to rebuild the hashed assets. Use an HTTP server rather than opening `index.html` as a local file; the site fetches JSON and imports the Supabase client over HTTP.
 
 Before publishing, validate and build the site:
 
@@ -83,3 +90,16 @@ The build writes `dist/` and gives every CSS and JavaScript file a content-based
 ## GitHub Pages
 
 The `Deploy GitHub Pages` workflow validates the source, builds the content-hashed site, and deploys `dist/` after changes reach `main`. In repository **Settings → Pages**, set **Source** to **GitHub Actions**.
+
+## Cloudflare hosting alongside GitHub Pages
+
+The site also supports Cloudflare Workers Static Assets, with the same Supabase backend and existing hash URLs. No Worker application code, Workers Sites, or database migration is needed.
+
+```bash
+npm test
+npm run cloudflare:check
+npx wrangler login
+npm run cloudflare:deploy
+```
+
+See [the Cloudflare migration runbook](docs/cloudflare-migration.md) for the inspection findings, authentication redirects, optional automated deployment, custom domain cutover, and rollback. Keep GitHub Pages enabled until Cloudflare is verified.

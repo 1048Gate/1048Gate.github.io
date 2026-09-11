@@ -52,7 +52,9 @@ await cp(new URL('data/', root), new URL('data/', dist), {recursive:true});
 await mkdir(new URL('images/', dist), {recursive:true});
 await cp(new URL('images/1048-gate-logo.webp', root), new URL('images/1048-gate-logo.webp', dist));
 await cp(new URL('images/apple-touch-icon.png', root), new URL('images/apple-touch-icon.png', dist));
+await cp(new URL('images/two-hounds-mark.png', root), new URL('images/two-hounds-mark.png', dist));
 await cp(new URL('.nojekyll', root), new URL('.nojekyll', dist));
+await cp(new URL('_headers', root), new URL('_headers', dist));
 await writeFile(new URL('index.html', dist), html);
 await writeFile(new URL('asset-manifest.json', dist), `${JSON.stringify(manifest, null, 2)}\n`);
 
