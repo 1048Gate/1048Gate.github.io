@@ -103,6 +103,14 @@ async function renderLiveStats(){
   }
 }
 
+function firstMatch(selectors){
+  for(const selector of selectors){
+    const node = document.querySelector(selector);
+    if(node) return node;
+  }
+  return null;
+}
+
 function renderPulse(config, board){
   const favorite = Array.isArray(config.futures) ? config.futures[0] : null;
   const favoriteTarget = document.querySelector('[data-home-favorite]');
@@ -111,11 +119,11 @@ function renderPulse(config, board){
   }
   if(!board) return;
   const games = Array.isArray(board.matchups) ? board.matchups.length : 0;
-  const gamesTarget = document.querySelector('[data-home-games]');
+  const gamesTarget = firstMatch(['[data-home-games]', '.home-pulse > div:nth-child(2) strong']);
   if(gamesTarget) gamesTarget.textContent = games === 1 ? '1 game' : `${games} games`;
-  const tableTarget = document.querySelector('[data-home-table]');
+  const tableTarget = firstMatch(['[data-home-table]', '.home-pulse > div:nth-child(4) strong']);
   if(tableTarget) tableTarget.textContent = tableLine(board.standings || []);
-  const lede = document.querySelector('[data-home-lede]');
+  const lede = firstMatch(['[data-home-lede]', '.hero-copy > p:not(.hero-tagline)']);
   if(lede) lede.textContent = homeLede(board, favorite);
 }
 
@@ -193,8 +201,8 @@ function renderWeekBoardFrom(payload){
   const matchups = Array.isArray(payload.matchups) ? payload.matchups : [];
   const standings = sortedStandings(Array.isArray(payload.standings) ? payload.standings : []);
   const weekLabel = payload.phase || (payload.week ? `Week ${payload.week}` : 'This week');
-  document.querySelectorAll('[data-week-heading]').forEach(el => {el.textContent = weekLabel});
-  const stamp = document.querySelector('[data-week-stamp]');
+  document.querySelectorAll('[data-week-heading], #weekBoard h2').forEach(el => {el.textContent = weekLabel});
+  const stamp = firstMatch(['[data-week-stamp]', '#weekBoard .home-section-head small']);
   if(stamp){
     stamp.textContent = payload.note || formatFetchedAt(payload.fetchedAt) || '';
   }
