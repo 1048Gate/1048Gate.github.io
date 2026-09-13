@@ -163,6 +163,16 @@ if(!html.includes('id="authControlMount"') || !html.includes('class="member-moda
   throw new Error('Stable authentication and accessible member-modal markup is missing.');
 }
 if(!html.includes('viewport-fit=cover')) throw new Error('iOS viewport-fit=cover is missing from the document head.');
+if(!html.includes('js/host-redirect.js')) throw new Error('The legacy GitHub Pages hostname redirect is missing.');
+const hostRedirectSource = readFileSync(new URL('js/host-redirect.js', root), 'utf8');
+let redirectedTo = '';
+runInNewContext(hostRedirectSource, {window:{location:{hostname:'1048gate.github.io', pathname:'/index.html', search:'?view=weekly', hash:'#newspaper', replace:value => {redirectedTo = value}}}}, {filename:'js/host-redirect.js'});
+if(redirectedTo !== 'https://1048gate.com/?view=weekly#newspaper'){
+  throw new Error('The GitHub Pages redirect must preserve the requested query and hash route on the primary domain.');
+}
+redirectedTo = '';
+runInNewContext(hostRedirectSource, {window:{location:{hostname:'1048gate.com', pathname:'/', search:'', hash:'#home', replace:value => {redirectedTo = value}}}}, {filename:'js/host-redirect.js'});
+if(redirectedTo) throw new Error('The primary 1048gate.com hostname must never redirect itself.');
 if(!html.includes('js/theme.js') || !html.includes('css/theme.css') || !html.includes('data-theme-toggle')){
   throw new Error('The system-aware light/dark theme assets or toggle are missing.');
 }
