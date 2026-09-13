@@ -80,14 +80,45 @@ def team_map(payload: dict) -> dict[int, dict]:
     return result
 
 
+def _numeric_score(value) -> int | float | None:
+    if value is None or value == "":
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if number != number:  # NaN
+        return None
+    if number.is_integer():
+        return int(number)
+    return number
+
+
 def matchup_score(side: dict) -> int | float | None:
-    """Return a matchup total across current and legacy ESPN response shapes."""
+    """Return a matchup total across current, live, and legacy ESPN shapes.
+
+    In-progress slates often leave totalPoints at 0 and put the running
+    total on totalPointsLive or rosterForCurrentScoringPeriod.appliedStatTotal.
+    """
     if not isinstance(side, dict):
         return None
-    for key in ("totalPoints", "totalScore"):
-        value = side.get(key)
-        if value is not None:
-            return value
+    roster = side.get("rosterForCurrentScoringPeriod") or side.get("rosterForMatchupPeriod")
+    roster_total = _numeric_score(roster.get("appliedStatTotal")) if isinstance(roster, dict) else None
+    official = _numeric_score(side.get("totalPoints"))
+    if official is None:
+        official = _numeric_score(side.get("totalScore"))
+    live = _numeric_score(side.get("totalPointsLive"))
+
+    if official not in (None, 0):
+        return official
+    if live not in (None, 0):
+        return live
+    if roster_total not in (None, 0):
+        return roster_total
+
+    present = [value for value in (official, live, roster_total) if value is not None]
+    if present:
+        return 0
     return None
 
 
@@ -120,11 +151,16 @@ def normalize_scoreboard(payload: dict, season: int, league_id: int, requested_w
             continue
         home_id = int(home_id) if home_id is not None else None
         away_id = int(away_id) if away_id is not None else None
+        winner = item.get("winner")
+        raw_status = item.get("status")
+        if isinstance(raw_status, dict):
+            raw_status = (raw_status.get("type") or {}).get("name") or raw_status.get("type")
         games.append({
             "matchup_id": item.get("id", index),
             "scoring_period": item.get("matchupPeriodId", requested_week),
             "matchup_period": item.get("matchupPeriodId"),
-            "status": item.get("status", {}).get("type", {}).get("name") if isinstance(item.get("status"), dict) else item.get("status"),
+            "status": raw_status,
+            "winner": winner,
             "home": {"team_id": home_id, "team_name": teams.get(home_id, {}).get("team_name"), "score": matchup_score(home)},
             "away": {"team_id": away_id, "team_name": teams.get(away_id, {}).get("team_name"), "score": matchup_score(away)},
         })
