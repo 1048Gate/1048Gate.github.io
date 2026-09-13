@@ -80,6 +80,17 @@ def team_map(payload: dict) -> dict[int, dict]:
     return result
 
 
+def matchup_score(side: dict) -> int | float | None:
+    """Return a matchup total across current and legacy ESPN response shapes."""
+    if not isinstance(side, dict):
+        return None
+    for key in ("totalPoints", "totalScore"):
+        value = side.get(key)
+        if value is not None:
+            return value
+    return None
+
+
 def normalize_standings(payload: dict, season: int, league_id: int) -> dict:
     teams = list(team_map(payload).values())
     teams.sort(key=lambda row: (row["rank"] is None, row["rank"] or 999, row["team_id"]))
@@ -114,8 +125,8 @@ def normalize_scoreboard(payload: dict, season: int, league_id: int, requested_w
             "scoring_period": item.get("matchupPeriodId", requested_week),
             "matchup_period": item.get("matchupPeriodId"),
             "status": item.get("status", {}).get("type", {}).get("name") if isinstance(item.get("status"), dict) else item.get("status"),
-            "home": {"team_id": home_id, "team_name": teams.get(home_id, {}).get("team_name"), "score": home.get("totalScore")},
-            "away": {"team_id": away_id, "team_name": teams.get(away_id, {}).get("team_name"), "score": away.get("totalScore")},
+            "home": {"team_id": home_id, "team_name": teams.get(home_id, {}).get("team_name"), "score": matchup_score(home)},
+            "away": {"team_id": away_id, "team_name": teams.get(away_id, {}).get("team_name"), "score": matchup_score(away)},
         })
     return {
         "fetched_at": datetime.now(timezone.utc).isoformat(),

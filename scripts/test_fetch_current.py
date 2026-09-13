@@ -14,8 +14,8 @@ class CurrentFetchTests(unittest.TestCase):
                 {"id": 2, "name": "Team Two", "record": {"overall": {"wins": 0, "losses": 1, "ties": 0}}},
             ],
             "schedule": [
-                {"id": 10, "matchupPeriodId": 1, "home": {"teamId": 1, "totalScore": 101}, "away": {"teamId": 2, "totalScore": 99}},
-                {"id": 11, "matchupPeriodId": 2, "home": {"teamId": 2, "totalScore": 88}, "away": {"teamId": 1, "totalScore": 90}},
+                {"id": 10, "matchupPeriodId": 1, "home": {"teamId": 1, "totalPoints": 101.25}, "away": {"teamId": 2, "totalPoints": 99.5}},
+                {"id": 11, "matchupPeriodId": 2, "home": {"teamId": 2, "totalPoints": 88}, "away": {"teamId": 1, "totalPoints": 90}},
             ],
         }
 
@@ -24,11 +24,35 @@ class CurrentFetchTests(unittest.TestCase):
         self.assertEqual(result["teams"][0]["team_name"], "Team One")
         self.assertIsNone(result["teams"][0]["rank"])
 
-    def test_scoreboard_filters_requested_week(self):
+    def test_scoreboard_filters_requested_week_and_reads_total_points(self):
         result = normalize_scoreboard(self.payload, 2026, 1237285, 1)
         self.assertEqual(len(result["games"]), 1)
         self.assertEqual(result["games"][0]["matchup_id"], 10)
         self.assertEqual(result["games"][0]["home"]["team_name"], "Team One")
+        self.assertEqual(result["games"][0]["home"]["score"], 101.25)
+        self.assertEqual(result["games"][0]["away"]["score"], 99.5)
+
+    def test_scoreboard_accepts_legacy_total_score_fallback(self):
+        payload = {
+            "teams": self.payload["teams"],
+            "schedule": [
+                {"id": 12, "matchupPeriodId": 1, "home": {"teamId": 1, "totalScore": 77}, "away": {"teamId": 2, "totalScore": 66}},
+            ],
+        }
+        result = normalize_scoreboard(payload, 2026, 1237285, 1)
+        self.assertEqual(result["games"][0]["home"]["score"], 77)
+        self.assertEqual(result["games"][0]["away"]["score"], 66)
+
+    def test_scoreboard_prefers_total_points_when_both_fields_exist(self):
+        payload = {
+            "teams": self.payload["teams"],
+            "schedule": [
+                {"id": 13, "matchupPeriodId": 1, "home": {"teamId": 1, "totalPoints": 55.5, "totalScore": 0}, "away": {"teamId": 2, "totalPoints": 44.25, "totalScore": 0}},
+            ],
+        }
+        result = normalize_scoreboard(payload, 2026, 1237285, 1)
+        self.assertEqual(result["games"][0]["home"]["score"], 55.5)
+        self.assertEqual(result["games"][0]["away"]["score"], 44.25)
 
 
 if __name__ == "__main__":
