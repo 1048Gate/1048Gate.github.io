@@ -2,10 +2,13 @@ name: Data health and current-season fetch
 
 on:
   schedule:
-    # Daily morning catch-up (~4:15 AM ET).
+    # Daily morning catch-up (~4:15 AM ET). Newspaper generation runs after
+    # the board publish and only writes a recap when the week is final.
     - cron: '15 8 * * *'
     # Every 30 minutes Thursday–Monday so Week slates update during the NFL window.
     - cron: '7,37 * * * 0,1,4,5,6'
+    # Tuesday morning (~8:20 AM ET) after Monday night should be final.
+    - cron: '20 12 * * 2'
   workflow_dispatch:
     inputs:
       season:
@@ -25,6 +28,15 @@ on:
         description: ESPN season year for the trade-history audit
         required: false
         default: '2025'
+      newspaper_week:
+        description: Newspaper week override (blank = use current-season week)
+        required: false
+        default: ''
+      newspaper_allow_incomplete:
+        description: Testing only — generate a preview if the week is not final
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -77,17 +89,37 @@ jobs:
             SEASON=2026
           fi
           python3 scripts/publish_current_season.py --season "$SEASON" "${WEEK_ARGS[@]}"
+      - name: Generate weekly newspaper from the verified board
+        env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
+        run: |
+          SEASON="${{ inputs.season }}"
+          if [ -z "$SEASON" ]; then
+            SEASON=2026
+          fi
+          PAPER_ARGS=(--season "$SEASON" --writing auto)
+          if [ -n "${{ inputs.newspaper_week }}" ]; then
+            PAPER_ARGS+=(--week "${{ inputs.newspaper_week }}")
+          elif [ -n "${{ inputs.week }}" ]; then
+            PAPER_ARGS+=(--week "${{ inputs.week }}")
+          fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.newspaper_allow_incomplete }}" = "true" ]; then
+            PAPER_ARGS+=(--allow-incomplete)
+            echo "Manual incomplete override is enabled for this run only."
+          fi
+          python3 scripts/generate_newspaper.py "${PAPER_ARGS[@]}"
       - name: Validate site checks still pass
         run: npm run check
-      - name: Commit updated board when it changes
+      - name: Commit updated board and newspaper when they change
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/current-season.json data/site.json
+          git add data/current-season.json data/site.json data/newspaper_editions
           if git diff --cached --quiet; then
-            echo "Current-season board unchanged — nothing to commit."
+            echo "Current-season board and newspaper unchanged — nothing to commit."
           else
-            git commit -m "Refresh current-season board from ESPN"
+            git commit -m "Refresh current-season board and weekly newspaper"
             git push
           fi
 
