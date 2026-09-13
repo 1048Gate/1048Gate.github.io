@@ -73,6 +73,11 @@ class PublishCurrentSeasonTests(unittest.TestCase):
         self.assertEqual(first["team"], "Club 1")
         self.assertEqual(first["wins"], 1)
         self.assertEqual(board["matchups"][0]["home"]["owner"], "George Travis")
+        ordered_ids = [row["teamId"] for row in board["standings"]]
+        self.assertEqual(ordered_ids[0], 11)
+        self.assertGreaterEqual(board["standings"][0]["wins"], board["standings"][1]["wins"])
+        self.assertGreaterEqual(board["standings"][0]["pointsFor"], board["standings"][1]["pointsFor"])
+        self.assertTrue(board["note"].startswith("Week 2"))
 
 
 if __name__ == "__main__":
