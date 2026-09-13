@@ -107,7 +107,7 @@ def build_board(
 ) -> dict:
     by_id = {int(team["team_id"]): team for team in standings_norm["teams"]}
     standings = []
-    for team_id, meta in sorted(roster.items(), key=lambda item: (item[1].get("locker") is None, item[1].get("locker") or 999)):
+    for team_id, meta in roster.items():
         espn = by_id.get(team_id)
         if not espn:
             raise SystemExit(f"ESPN standings missing teamId {team_id} ({meta.get('owner')})")
@@ -123,14 +123,30 @@ def build_board(
             "pointsFor": float(espn.get("points_for") or 0),
             "pointsAgainst": float(espn.get("points_against") or 0),
         })
+    standings.sort(key=lambda row: (
+        -(row["wins"] + 0.5 * row["ties"]),
+        -row["pointsFor"],
+        row["locker"] if row["locker"] is not None else 999,
+    ))
 
     matchups = []
     for index, game in enumerate(scoreboard_norm.get("games") or [], start=1):
         home = game.get("home") or {}
         away = game.get("away") or {}
+        winner = str(game.get("winner") or "").upper()
+        scores = (away.get("score"), home.get("score"))
+        has_points = any(score not in (None, 0) for score in scores)
+        if winner in {"HOME", "AWAY", "TIE"}:
+            state = "final"
+        elif has_points or winner == "UNDECIDED":
+            state = "live" if has_points else "scheduled"
+        else:
+            state = "scheduled"
         matchups.append({
             "id": game.get("matchup_id", index),
             "week": int(game.get("matchup_period") or game.get("scoring_period") or week),
+            "state": state,
+            "winner": winner or None,
             "away": side_from(away.get("team_id"), away.get("score"), roster, away.get("team_name")),
             "home": side_from(home.get("team_id"), home.get("score"), roster, home.get("team_name")),
         })
@@ -138,10 +154,19 @@ def build_board(
     if len(matchups) != 6:
         raise SystemExit(f"Expected 6 matchups for week {week}, found {len(matchups)}")
 
-    note = f"Week {week} slate from ESPN."
-    if all(row["wins"] == 0 and row["losses"] == 0 and row["ties"] == 0 for row in standings):
-        if all(game["away"]["score"] is None and game["home"]["score"] is None for game in matchups):
-            note = f"Week {week} slate. Records stay 0-0 until kickoff."
+    records_started = any(row["wins"] or row["losses"] or row["ties"] for row in standings)
+    scores = [game[side]["score"] for game in matchups for side in ("away", "home")]
+    has_points = any(score not in (None, 0) for score in scores)
+    any_score = any(score is not None for score in scores)
+    live_games = sum(1 for game in matchups if game["state"] == "live")
+    if not records_started and not any_score:
+        note = f"Week {week} slate. Records stay 0-0 until kickoff."
+    elif live_games:
+        note = f"Week {week} in progress. Live scoring from ESPN."
+    elif has_points and not records_started:
+        note = f"Week {week} scoring is on the board. Records update when ESPN posts the result."
+    else:
+        note = f"Week {week} slate from ESPN."
 
     return {
         "schemaVersion": 1,

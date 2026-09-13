@@ -54,6 +54,35 @@ class CurrentFetchTests(unittest.TestCase):
         self.assertEqual(result["games"][0]["home"]["score"], 55.5)
         self.assertEqual(result["games"][0]["away"]["score"], 44.25)
 
+    def test_scoreboard_uses_live_total_when_official_is_zero(self):
+        payload = {
+            "teams": self.payload["teams"],
+            "schedule": [
+                {
+                    "id": 14,
+                    "matchupPeriodId": 1,
+                    "winner": "UNDECIDED",
+                    "home": {"teamId": 1, "totalPoints": 0, "totalPointsLive": 87.4},
+                    "away": {"teamId": 2, "totalPoints": 0, "rosterForCurrentScoringPeriod": {"appliedStatTotal": 62.1}},
+                },
+            ],
+        }
+        result = normalize_scoreboard(payload, 2026, 1237285, 1)
+        self.assertEqual(result["games"][0]["home"]["score"], 87.4)
+        self.assertEqual(result["games"][0]["away"]["score"], 62.1)
+        self.assertEqual(result["games"][0]["winner"], "UNDECIDED")
+
+    def test_scoreboard_keeps_missing_scores_as_none(self):
+        payload = {
+            "teams": self.payload["teams"],
+            "schedule": [
+                {"id": 15, "matchupPeriodId": 1, "home": {"teamId": 1}, "away": {"teamId": 2}},
+            ],
+        }
+        result = normalize_scoreboard(payload, 2026, 1237285, 1)
+        self.assertIsNone(result["games"][0]["home"]["score"])
+        self.assertIsNone(result["games"][0]["away"]["score"])
+
 
 if __name__ == "__main__":
     unittest.main()
