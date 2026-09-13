@@ -163,6 +163,41 @@ if(!html.includes('id="authControlMount"') || !html.includes('class="member-moda
   throw new Error('Stable authentication and accessible member-modal markup is missing.');
 }
 if(!html.includes('viewport-fit=cover')) throw new Error('iOS viewport-fit=cover is missing from the document head.');
+if(!html.includes('js/theme.js') || !html.includes('css/theme.css') || !html.includes('data-theme-toggle')){
+  throw new Error('The system-aware light/dark theme assets or toggle are missing.');
+}
+const themeSource = readFileSync(new URL('js/theme.js', root), 'utf8');
+if(!themeSource.includes('prefers-color-scheme: dark') || !themeSource.includes('1048-gate-theme') || !themeSource.includes("localStorage.setItem")){
+  throw new Error('Theme selection must follow the system by default and remember a manual choice.');
+}
+const themeStore = new Map();
+const themeMeta = {content:'#070b0c', setAttribute(name, value){if(name === 'content') this.content = value}};
+const themeButton = {attributes:{}, setAttribute(name, value){this.attributes[name] = value}, addEventListener(name, callback){if(name === 'click') this.click = callback}};
+const themeDocument = {
+  documentElement:{dataset:{}, style:{}},
+  readyState:'complete',
+  querySelector:selector => selector === 'meta[name="theme-color"]' ? themeMeta : null,
+  querySelectorAll:selector => selector === '[data-theme-toggle]' ? [themeButton] : [],
+  addEventListener(){},
+  dispatchEvent(){}
+};
+const themeWindow = {
+  matchMedia:() => ({matches:false, addEventListener(){}}),
+  addEventListener(){}
+};
+runInNewContext(themeSource, {
+  window:themeWindow,
+  document:themeDocument,
+  localStorage:{getItem:key => themeStore.get(key) || null, setItem:(key, value) => themeStore.set(key, value)},
+  CustomEvent:class {constructor(type, init){this.type = type; this.detail = init?.detail}}
+}, {filename:'js/theme.js'});
+if(themeDocument.documentElement.dataset.theme !== 'light' || themeMeta.content !== '#f4f0e8'){
+  throw new Error('A first visit with a light system preference must render the light theme before the page loads.');
+}
+themeButton.click();
+if(themeDocument.documentElement.dataset.theme !== 'dark' || themeStore.get('1048-gate-theme') !== 'dark' || themeButton.attributes['aria-label'] !== 'Switch to light mode'){
+  throw new Error('The theme toggle must switch modes, update its accessible label, and remember the choice.');
+}
 if(!html.includes('rel="apple-touch-icon"') || !html.includes('images/apple-touch-icon.png')){
   throw new Error('The 180x180 apple-touch-icon is missing from index.html.');
 }
