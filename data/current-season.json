@@ -4,9 +4,9 @@
   "seasonNumber": 10,
   "week": 1,
   "phase": "Week 1",
-  "fetchedAt": "2026-09-12T12:10:21.575356+00:00",
+  "fetchedAt": "2026-09-13T08:31:54.848820+00:00",
   "source": "ESPN league endpoint",
-  "note": "Week 1 slate. Records stay 0-0 until kickoff.",
+  "note": "Week 1 in progress. Live scoring from ESPN.",
   "standings": [
     {
       "locker": 1,
@@ -157,97 +157,109 @@
     {
       "id": 1,
       "week": 1,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "away": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": null
+        "score": 0
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": null
+        "score": 0
       }
     },
     {
       "id": 2,
       "week": 1,
+      "state": "live",
+      "winner": "UNDECIDED",
       "away": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": null
+        "score": 12.4
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": null
+        "score": 29.3
       }
     },
     {
       "id": 3,
       "week": 1,
+      "state": "live",
+      "winner": "UNDECIDED",
       "away": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": null
+        "score": 1
       },
       "home": {
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": null
+        "score": 11.2
       }
     },
     {
       "id": 4,
       "week": 1,
+      "state": "live",
+      "winner": "UNDECIDED",
       "away": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": null
+        "score": 0
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": null
+        "score": 12.82
       }
     },
     {
       "id": 5,
       "week": 1,
+      "state": "live",
+      "winner": "UNDECIDED",
       "away": {
         "teamId": 3,
         "team": "Darty at 1048",
         "owner": "Jared Hall",
-        "score": null
+        "score": 10
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": null
+        "score": 33.2
       }
     },
     {
       "id": 6,
       "week": 1,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "away": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": null
+        "score": 0
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": null
+        "score": 0
       }
     }
   ]
