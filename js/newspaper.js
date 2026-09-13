@@ -2,22 +2,26 @@
   'use strict';
 
   const {escapeHtml: esc} = window.gateShared;
+  const WEEKLY_INDEX_PATH = 'data/newspaper_editions/index.json';
+  const HISTORICAL_PATH = 'data/newspaper_editions/historical_2023.json';
+
   const editionConfig = Object.freeze({
     historical: {
-      path: 'data/newspaper_editions/historical_2023.json',
+      path: HISTORICAL_PATH,
       label: 'Historical Edition',
       route: 'newspaper',
       status: 'historical archive data'
     },
-    weekly_fallback: {
-      path: 'data/newspaper_editions/weekly_fallback_2023.json',
-      label: 'Weekly Archive Demonstration',
+    weekly: {
+      path: WEEKLY_INDEX_PATH,
+      label: '2026 Weekly Edition',
       route: 'weekly',
-      status: 'cached demonstration data'
+      status: 'verified 2026 weekly edition'
     }
   });
 
   let currentEditionKey = null;
+  let weeklyIndex = null;
   let loadSequence = 0;
   let returnFocus = null;
 
@@ -33,7 +37,20 @@
     const dataset = source.dataset || source.source || '1048 Gate archive';
     const locator = source.locator || source.source_id || source.id || '';
     const detail = source.description || '';
-    return [dataset, locator, detail].filter(Boolean).join(' — ');
+    return [dataset, locator, detail].filter(Boolean).join(' \u2014 ');
+  }
+
+  function weeklyEntries(index){
+    const editions = Array.isArray(index?.editions) ? index.editions : [];
+    return editions
+      .filter(entry => entry && entry.mode !== 'historical' && Number.isInteger(entry.season) && Number.isInteger(entry.week))
+      .filter(entry => entry.validation_status === 'valid' && entry.source_status === 'verified_final')
+      .slice()
+      .sort((left, right) => (right.season - left.season) || (right.week - left.week));
+  }
+
+  function latestWeeklyEntry(index){
+    return weeklyEntries(index)[0] || null;
   }
 
   function validateEdition(data, editionKey){
@@ -52,18 +69,38 @@
     if(editionKey === 'historical' && data.stories.length !== 9){
       throw new Error(`Historical edition expected 9 verified stories; found ${data.stories.length}.`);
     }
+    if(editionKey === 'weekly'){
+      if(!Number.isInteger(data.week)) throw new Error('Weekly edition is missing a week number.');
+      if(data.validation_status && data.validation_status !== 'valid'){
+        throw new Error('Weekly edition is not marked valid.');
+      }
+      if(data.source_status && data.source_status !== 'verified_final'){
+        throw new Error('Weekly edition is not a verified final recap.');
+      }
+    }
     return data;
+  }
+
+  function renderEmptyWeekly(){
+    return `
+      <div class="edition-empty" role="status">
+        <span class="edition-kicker">1048 Gate Weekly Press</span>
+        <h2>No weekly edition has been published yet</h2>
+        <p>The 2026 newspaper publishes after a fantasy week is final. Live or incomplete slates are not printed as recaps. The 2023 demonstration file is not current coverage.</p>
+      </div>`;
   }
 
   function renderEditionMarkup(data, editionKey){
     const historical = editionKey === 'historical';
     const title = historical
-      ? `${data.league_name || '1048 Gate'} — ${data.season} Season Historical Edition`
-      : `${data.league_name || '1048 Gate'} — Weekly Archive Demonstration`;
+      ? `${data.league_name || '1048 Gate'} \u2014 ${data.season} Season Historical Edition`
+      : `${data.league_name || '1048 Gate'} \u2014 ${data.season} Week ${data.week} Edition`;
     const notice = historical
       ? 'A retrospective edition built from the verified league archive.'
-      : 'Demonstration only — this is not current-season ESPN coverage.';
-    const status = editionConfig[editionKey].status;
+      : 'Verified weekly recap built from the finalized 2026 league board.';
+    const status = historical
+      ? editionConfig.historical.status
+      : (data.source_status === 'verified_final' ? 'verified 2026 weekly edition' : editionConfig.weekly.status);
 
     const stories = data.stories.map((story, index) => `
       <article class="story-item${index === 0 ? ' story-lead' : ''}">
@@ -76,22 +113,21 @@
         <p class="story-source">Source: ${esc(formatSourceTrace(story.source))}</p>
       </article>`).join('');
 
-    const demo = historical ? '' : '<span class="edition-demo">Archive Demo</span>';
+    const weekMeta = Number.isInteger(data.week) ? `<span>Week ${esc(data.week)}</span>` : '';
     return `
       <header class="edition-header">
-        <span class="edition-kicker">1048 Gate Newspaper Archive</span>
-        ${demo}
+        <span class="edition-kicker">${historical ? '1048 Gate Newspaper Archive' : '1048 Gate Weekly Newspaper'}</span>
         <h2>${esc(title)}</h2>
         <p>${esc(notice)}</p>
         <div class="edition-meta">
           <span>Season ${esc(data.season)}</span>
           <span>Edition ${esc(data.edition_year)}</span>
-          ${Number.isInteger(data.week) ? `<span>Week ${esc(data.week)}</span>` : ''}
+          ${weekMeta}
         </div>
       </header>
       <div class="edition-status" aria-label="Source status: ${esc(status)}"><span class="status-dot"></span>${esc(status)}</div>
       <div class="edition-stories">${stories}</div>
-      <footer class="edition-footer"><small>Deterministic edition · no generated or paid-AI claims</small></footer>`;
+      <footer class="edition-footer"><small>Deterministic edition \u00b7 claims limited to checked-in sources</small></footer>`;
   }
 
   function renderSourceList(data){
@@ -102,7 +138,7 @@
     const entries = [];
     if(data.source_trace) entries.push(`Edition: ${formatSourceTrace(data.source_trace)}`);
     data.stories.forEach((story, index) => {
-      entries.push(`${String(index + 1).padStart(2, '0')} · ${story.title}: ${formatSourceTrace(story.source)}`);
+      entries.push(`${String(index + 1).padStart(2, '0')} \u00b7 ${story.title}: ${formatSourceTrace(story.source)}`);
     });
     list.innerHTML = entries.map(entry => `<li>${esc(entry)}</li>`).join('');
     toggle.hidden = entries.length === 0;
@@ -114,6 +150,24 @@
       tab.classList.toggle('active', active);
       tab.setAttribute('aria-selected', String(active));
     });
+    const picker = document.getElementById('weeklyEditionPicker');
+    if(picker) picker.hidden = editionKey !== 'weekly';
+  }
+
+  function fillWeeklySelect(index, selectedPath){
+    const select = document.getElementById('weeklyEditionSelect');
+    if(!select) return;
+    const entries = weeklyEntries(index);
+    if(!entries.length){
+      select.innerHTML = '<option value="">No weekly editions</option>';
+      select.disabled = true;
+      return;
+    }
+    select.disabled = false;
+    select.innerHTML = entries.map(entry => {
+      const selected = entry.path === selectedPath ? ' selected' : '';
+      return `<option value="${esc(entry.path)}"${selected}>${esc(entry.season)} \u00b7 Week ${String(entry.week).padStart(2, '0')}</option>`;
+    }).join('');
   }
 
   function showEditionError(config, error){
@@ -130,7 +184,22 @@
       </div>`;
   }
 
-  async function loadEdition(editionKey){
+  async function fetchJson(path){
+    const response = await fetch(path, {cache:'no-store'});
+    if(!response.ok) throw new Error(`edition file returned HTTP ${response.status}`);
+    return response.json();
+  }
+
+  async function loadWeeklyIndex(){
+    try {
+      weeklyIndex = await fetchJson(WEEKLY_INDEX_PATH);
+    }catch(error){
+      weeklyIndex = weeklyIndex || {editions:[]};
+    }
+    return weeklyIndex;
+  }
+
+  async function loadEdition(editionKey, requestedPath){
     const config = editionConfig[editionKey];
     if(!config) throw new Error(`Unknown edition: ${editionKey}`);
     const sequence = ++loadSequence;
@@ -138,12 +207,34 @@
     if(!container) return;
 
     setActiveTab(editionKey);
-    container.innerHTML = `<div class="edition-loading"><span>Loading ${esc(config.label)}…</span></div>`;
+    container.innerHTML = `<div class="edition-loading"><span>Loading ${esc(config.label)}\u2026</span></div>`;
 
     try {
-      const response = await fetch(config.path, {cache:'no-store'});
-      if(!response.ok) throw new Error(`edition file returned HTTP ${response.status}`);
-      const data = validateEdition(await response.json(), editionKey);
+      if(editionKey === 'weekly'){
+        const index = await loadWeeklyIndex();
+        if(sequence !== loadSequence) return;
+        const entries = weeklyEntries(index);
+        const selected = requestedPath
+          ? entries.find(entry => entry.path === requestedPath)
+          : latestWeeklyEntry(index);
+        fillWeeklySelect(index, selected?.path);
+        if(!selected){
+          container.innerHTML = renderEmptyWeekly();
+          const toggle = document.getElementById('editionSourcesToggle');
+          if(toggle) toggle.hidden = true;
+          closeSources();
+          currentEditionKey = 'weekly';
+          return;
+        }
+        const data = validateEdition(await fetchJson(selected.path), 'weekly');
+        if(sequence !== loadSequence) return;
+        currentEditionKey = 'weekly';
+        container.innerHTML = renderEditionMarkup(data, 'weekly');
+        renderSourceList(data);
+        return;
+      }
+
+      const data = validateEdition(await fetchJson(config.path), editionKey);
       if(sequence !== loadSequence) return;
       currentEditionKey = editionKey;
       container.innerHTML = renderEditionMarkup(data, editionKey);
@@ -187,21 +278,25 @@
   }
 
   function editionForRoute(){
-    return window.location.hash === '#weekly' ? 'weekly_fallback' : 'historical';
+    return window.location.hash === '#weekly' ? 'weekly' : 'historical';
   }
 
-  function selectEdition(editionKey, {updateHistory = true} = {}){
+  function selectEdition(editionKey, {updateHistory = true, path} = {}){
     const route = routeForEdition(editionKey);
     if(updateHistory && window.location.hash !== `#${route}`){
       history.pushState({view:'newspaper', edition:editionKey}, '', `#${route}`);
     }
     closeSources();
-    return loadEdition(editionKey);
+    return loadEdition(editionKey, path);
   }
 
   document.getElementById('editionTabs')?.addEventListener('click', event => {
     const tab = event.target.closest('.edition-tab[data-edition]');
     if(tab) selectEdition(tab.dataset.edition);
+  });
+  document.getElementById('weeklyEditionSelect')?.addEventListener('change', event => {
+    const path = event.target.value;
+    if(path) loadEdition('weekly', path);
   });
   document.getElementById('editionSourcesToggle')?.addEventListener('click', openSources);
   document.getElementById('editionSourcesClose')?.addEventListener('click', closeSources);
@@ -224,7 +319,10 @@
   window.gateNewspaper = Object.freeze({
     validateEdition,
     renderEditionMarkup,
+    renderEmptyWeekly,
     formatSourceTrace,
+    weeklyEntries,
+    latestWeeklyEntry,
     loadEdition,
     selectEdition
   });
