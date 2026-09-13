@@ -28,7 +28,7 @@ window.gateSupabaseReady = new Promise(resolve => {
   const authMount = document.getElementById('authControlMount') || document.querySelector('.topbar-inner');
   const authControl = document.createElement('div');
   authControl.className = 'auth-control';
-  authControl.innerHTML = '<span class="auth-user" id="authUserLabel">Guest</span><button class="btn btn-ghost" id="authButton">Staff Login</button>';
+  authControl.innerHTML = '<span class="auth-user" id="authUserLabel">Guest</span><button class="btn btn-ghost" id="authButton">Sign in</button>';
   authMount?.appendChild(authControl);
 
   const modal = document.createElement('div');
@@ -36,7 +36,7 @@ window.gateSupabaseReady = new Promise(resolve => {
   modal.id = 'authModal';
   modal.setAttribute('aria-hidden', 'true');
   modal.innerHTML = `<div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" tabindex="-1">
-    <h2 id="authModalTitle">Member Login</h2>
+    <h2 id="authModalTitle">Sign in</h2>
     <p id="authModalDescription">Anyone can browse the site and vote. Sign in to post on the Trade Board or access authorized staff tools.</p>
     <div id="authLoginPanel">
       <div class="auth-fields">
@@ -49,7 +49,7 @@ window.gateSupabaseReady = new Promise(resolve => {
       <div class="auth-actions">
         <span class="auth-status" id="authStatus" role="status" aria-live="polite"></span>
         <button class="btn btn-ghost" id="authCancel" type="button">Cancel</button>
-        <button class="btn btn-primary" id="authLogin" type="button">Login</button>
+        <button class="btn btn-primary" id="authLogin" type="button">Sign in</button>
       </div>
     </div>
     <div id="authResetPanel" hidden>
@@ -117,7 +117,7 @@ window.gateSupabaseReady = new Promise(resolve => {
       document.getElementById('authNewPassword').focus();
       return;
     }
-    title.textContent = 'Member Login';
+    title.textContent = 'Sign in';
     description.textContent = 'Anyone can browse the site and vote. Sign in to post on the Trade Board or access authorized staff tools.';
     document.getElementById('authEmail').focus();
   }
@@ -176,10 +176,10 @@ window.gateSupabaseReady = new Promise(resolve => {
     const profile = await loadProfile(user);
     if(user){
       label.textContent = profile?.display_name || user.email;
-      btn.textContent = 'Logout';
+      btn.textContent = 'Sign out';
     }else{
       label.textContent = 'Guest';
-      btn.textContent = 'Staff Login';
+      btn.textContent = 'Sign in';
     }
     emitAuth();
   }
