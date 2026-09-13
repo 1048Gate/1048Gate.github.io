@@ -177,8 +177,8 @@ if(!html.includes('js/theme.js') || !html.includes('css/theme.css') || !html.inc
   throw new Error('The system-aware light/dark theme assets or toggle are missing.');
 }
 const themeSource = readFileSync(new URL('js/theme.js', root), 'utf8');
-if(!themeSource.includes('prefers-color-scheme: dark') || !themeSource.includes('1048-gate-theme') || !themeSource.includes("localStorage.setItem")){
-  throw new Error('Theme selection must follow the system by default and remember a manual choice.');
+if(!themeSource.includes("storedTheme() || 'light'") || !themeSource.includes('1048-gate-theme') || !themeSource.includes("localStorage.setItem")){
+  throw new Error('Theme selection must default to light and remember a manual choice.');
 }
 const themeStore = new Map();
 const themeMeta = {content:'#070b0c', setAttribute(name, value){if(name === 'content') this.content = value}};
@@ -192,7 +192,6 @@ const themeDocument = {
   dispatchEvent(){}
 };
 const themeWindow = {
-  matchMedia:() => ({matches:false, addEventListener(){}}),
   addEventListener(){}
 };
 runInNewContext(themeSource, {
@@ -202,7 +201,7 @@ runInNewContext(themeSource, {
   CustomEvent:class {constructor(type, init){this.type = type; this.detail = init?.detail}}
 }, {filename:'js/theme.js'});
 if(themeDocument.documentElement.dataset.theme !== 'light' || themeMeta.content !== '#f4f0e8'){
-  throw new Error('A first visit with a light system preference must render the light theme before the page loads.');
+  throw new Error('A first visit must render the light theme before the page loads.');
 }
 themeButton.click();
 if(themeDocument.documentElement.dataset.theme !== 'dark' || themeStore.get('1048-gate-theme') !== 'dark' || themeButton.attributes['aria-label'] !== 'Switch to light mode'){

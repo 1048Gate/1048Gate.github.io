@@ -15,6 +15,7 @@ html[data-theme="light"]{
   --shadow:0 10px 28px rgba(33,46,43,.12);
   --shadow-sm:0 5px 16px rgba(33,46,43,.08);
   --shadow-lg:0 18px 44px rgba(33,46,43,.14);
+  --surface-glow:linear-gradient(145deg,#fffdf8,#e8f0ec 58%,rgba(133,89,31,.05));
 }
 
 .theme-toggle{
@@ -58,6 +59,8 @@ html[data-theme="light"] .btn-ghost:hover{background:rgba(0,111,114,.06)}
 html[data-theme="light"] .quick-card .num{color:#c6bdaf}
 html[data-theme="light"] .corkboard{background:#d8bd91}
 html[data-theme="light"] .pin-note{box-shadow:0 6px 16px rgba(66,45,25,.13)}
+html[data-theme="light"] :is(.member-initials,.member-modal-initials){color:#f5ebd9;text-shadow:0 3px 10px rgba(0,0,0,.38)}
+html[data-theme="light"] .member-modal-head{background:linear-gradient(180deg,var(--panel) 84%,rgba(255,253,248,.94))}
 
 html[data-theme="light"] :is(input,select,textarea){background:var(--panel);color:var(--cream)}
 html[data-theme="light"] :is(.composer input,.auth-fields input,.staff-form input,.staff-form textarea,.staff-form select,.staff-item select,.content-field input,.content-field textarea,.community-compose input,.community-compose select,.community-compose textarea,.comment-form input,.trade-board-form input,.trade-board-form textarea,.trade-board-comment-form textarea,.player-controls select,.player-controls input,.playoff-toolbar select){background:var(--panel);color:var(--cream)}
@@ -66,12 +69,22 @@ html[data-theme="light"] :is(.bar-track,.poll-vote-option .bar-track,.mock-poll-
 
 html[data-theme="light"] :is(.public-member-card,.transaction-intro,.trade-intro){background:linear-gradient(135deg,#fffdf8,#e8f0ec)}
 html[data-theme="light"] :is(.champ-banner,.content-member-card,.staff-summary-card,.player-record-grid article,.bracket-matchup,.trophy-card){background:linear-gradient(145deg,var(--panel),var(--panel2))}
+html[data-theme="light"] :is(.champion-entry,.public-record-card){background:linear-gradient(145deg,var(--panel2),var(--panel))}
+html[data-theme="light"] .record-rank{color:rgba(24,42,43,.075)}
 html[data-theme="light"] .champ-banner-hook{background:var(--panel);border-color:rgba(24,50,51,.3)}
 html[data-theme="light"] .champ-banner-year{text-shadow:none}
 html[data-theme="light"] .futures-row{background:linear-gradient(145deg,var(--panel),#f5f1e8)}
 html[data-theme="light"] .futures-row.is-favorite{background:linear-gradient(145deg,rgba(133,89,31,.13),var(--panel) 62%)}
 html[data-theme="light"] :is(.season-hero-final,.rundown-block,.playoff-result-row:nth-child(even),.draft-recap-list li:nth-child(even),.archive-path-card,.archive-season-card){background:var(--panel2)}
 html[data-theme="light"] :is(.rundown-story p,.community-thread-main>p,.transaction-item strong){color:var(--cream)}
+html[data-theme="light"] .archive-overview-panel{background:linear-gradient(135deg,rgba(0,111,114,.09),var(--panel) 52%,rgba(133,89,31,.07))!important}
+
+html[data-theme="light"] :is(.ia-subnav,#history .history-subnav){background:rgba(255,253,248,.97);box-shadow:0 8px 20px rgba(33,46,43,.1)}
+html[data-theme="light"] :is(.ia-subnav,#history .history-subnav) button{color:var(--muted)}
+html[data-theme="light"] :is(.ia-subnav,#history .history-subnav) button:hover{background:var(--panel2);color:var(--cream)}
+html[data-theme="light"] :is(.ia-subnav,#history .history-subnav) button.active,
+html[data-theme="light"] :is(.ia-subnav,#history .history-subnav) button[aria-selected="true"]{background:linear-gradient(135deg,rgba(0,111,114,.1),rgba(133,89,31,.1));color:var(--amber)}
+html[data-theme="light"] #history :is(.matchup-record-card,.player-record-grid article){background:linear-gradient(145deg,var(--panel2),var(--panel));border-color:var(--line)}
 
 html[data-theme="light"] #board,
 html[data-theme="light"] #votes{--community-surface:linear-gradient(150deg,rgba(0,111,114,.07),rgba(255,253,248,.98) 52%,rgba(133,89,31,.04))}

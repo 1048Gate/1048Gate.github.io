@@ -3,7 +3,6 @@
 
   const storageKey = '1048-gate-theme';
   const root = document.documentElement;
-  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
 
   function storedTheme(){
     try{
@@ -12,10 +11,6 @@
     }catch(error){
       return null;
     }
-  }
-
-  function resolvedSystemTheme(){
-    return systemTheme.matches ? 'dark' : 'light';
   }
 
   function updateControls(theme){
@@ -54,17 +49,13 @@
     });
   }
 
-  applyTheme(storedTheme() || resolvedSystemTheme(), false);
+  applyTheme(storedTheme() || 'light', false);
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindControls, {once:true});
   else bindControls();
 
-  systemTheme.addEventListener?.('change', event => {
-    if(!storedTheme()) applyTheme(event.matches ? 'dark' : 'light', false);
-  });
-
   window.addEventListener('storage', event => {
-    if(event.key === storageKey) applyTheme(storedTheme() || resolvedSystemTheme(), false);
+    if(event.key === storageKey) applyTheme(storedTheme() || 'light', false);
   });
 
   window.gateTheme = Object.freeze({
