@@ -578,7 +578,13 @@
     </div>
     <div id="editionTabs" class="edition-tabs" role="tablist" aria-label="Newspaper editions">
       <button type="button" class="edition-tab active" data-edition="historical" role="tab" aria-selected="true">Historical</button>
-      <button type="button" class="edition-tab" data-edition="weekly_fallback" role="tab" aria-selected="false">Weekly</button>
+      <button type="button" class="edition-tab" data-edition="weekly" role="tab" aria-selected="false">Weekly</button>
+    </div>
+    <div id="weeklyEditionPicker" class="weekly-edition-picker" hidden>
+      <label for="weeklyEditionSelect">Weekly edition</label>
+      <select id="weeklyEditionSelect" aria-label="Choose a weekly newspaper edition" disabled>
+        <option value="">No weekly editions</option>
+      </select>
     </div>
     <div id="editionContent" class="edition-content" aria-live="polite">
       <div class="edition-loading"><span>Open an edition to load the newspaper.</span></div>

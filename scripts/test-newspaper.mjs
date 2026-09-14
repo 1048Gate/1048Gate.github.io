@@ -5,7 +5,7 @@ import {runInNewContext} from 'node:vm';
 const root = new URL('../', import.meta.url);
 const readJson = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
 const historical = readJson('data/newspaper_editions/historical_2023.json');
-const weekly = readJson('data/newspaper_editions/weekly_fallback_2023.json');
+const weeklyIndex = readJson('data/newspaper_editions/index.json');
 const seasons = readJson('data/seasons.json');
 const playoffs = readJson('data/playoffs.json');
 const matchups = readJson('data/matchups.json');
@@ -19,11 +19,10 @@ assert.deepEqual(new Set(historical.stories.map(story => story.story_type)), new
   'playoff_picture', 'playoff_elimination', 'record_watch', 'power_rankings',
   'championship_contender', 'rivalry', 'transactions', 'manager_spotlight', 'next_week'
 ]));
-assert.equal(weekly.stories.length, 1);
-assert.match(weekly.stories[0].body, /does not contain current 2026 scores/i);
+assert.deepEqual(weeklyIndex.editions, [], 'The repository must not publish an incomplete Week 1 edition.');
 assert.match(appSource, /if \(name === 'weekly'\) name = 'newspaper'/, '#weekly must resolve to the newspaper view.');
 
-const serializedEditions = JSON.stringify({historical, weekly});
+const serializedEditions = JSON.stringify({historical, weeklyIndex});
 for(const placeholder of ['River City Rockets', 'Hail Mary Heroes', 'Fourth & Long', 'Midnight Owls', 'Story Title']){
   assert.ok(!serializedEditions.includes(placeholder), `Placeholder newspaper data remains: ${placeholder}`);
 }
@@ -73,11 +72,12 @@ class FakeElement {
 
 const elements = Object.fromEntries([
   'editionTabs', 'editionContent', 'editionSourcesToggle', 'editionSourcesClose',
-  'editionSourcesBackdrop', 'editionSourcesDrawer', 'editionSourcesList'
+  'editionSourcesBackdrop', 'editionSourcesDrawer', 'editionSourcesList',
+  'weeklyEditionPicker', 'weeklyEditionSelect'
 ].map(id => [id, new FakeElement(id)]));
 const tabs = [new FakeElement(), new FakeElement()];
 tabs[0].dataset.edition = 'historical';
-tabs[1].dataset.edition = 'weekly_fallback';
+tabs[1].dataset.edition = 'weekly';
 const escapeHtml = value => String(value ?? '')
   .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
   .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
@@ -99,7 +99,7 @@ const context = {
   history: {pushState(){}},
   fetch: async path => ({
     ok: true,
-    async json(){ return structuredClone(path.includes('weekly') ? weekly : historical); }
+    async json(){ return structuredClone(path.includes('index.json') ? weeklyIndex : historical); }
   }),
   console: {log: console.log, warn: console.warn, error(){}},
   structuredClone
@@ -113,9 +113,10 @@ assert.ok(!elements.editionContent.innerHTML.includes(historical.generated_at), 
 assert.equal(elements.editionSourcesToggle.hidden, false);
 assert.match(elements.editionSourcesList.innerHTML, /data\/playoffs\.json/);
 
-await context.window.gateNewspaper.loadEdition('weekly_fallback');
-assert.match(elements.editionContent.innerHTML, /Weekly Press Is in Demonstration Mode/);
-assert.match(elements.editionContent.innerHTML, /not current-season ESPN coverage/i);
+await context.window.gateNewspaper.loadEdition('weekly');
+assert.match(elements.editionContent.innerHTML, /No weekly edition has been published yet/);
+assert.match(elements.editionContent.innerHTML, /Live or incomplete slates are not printed/i);
+assert.equal(elements.weeklyEditionSelect.disabled, true);
 
 context.fetch = async () => ({ok:false, status:404});
 await context.window.gateNewspaper.loadEdition('historical');
@@ -123,10 +124,19 @@ assert.match(elements.editionContent.innerHTML, /Edition Unavailable/);
 assert.match(elements.editionContent.innerHTML, /HTTP 404/);
 assert.equal(elements.editionSourcesToggle.hidden, true);
 
-const hostile = structuredClone(weekly);
+const hostile = structuredClone(historical);
+hostile.week = 1;
+hostile.validation_status = 'valid';
+hostile.source_status = 'verified_final';
 hostile.stories[0].title = '<img src=x onerror=alert(1)>';
-const hostileMarkup = context.window.gateNewspaper.renderEditionMarkup(hostile, 'weekly_fallback');
+const hostileMarkup = context.window.gateNewspaper.renderEditionMarkup(hostile, 'weekly');
 assert.ok(!hostileMarkup.includes('<img src=x'));
 assert.match(hostileMarkup, /&lt;img src=x/);
 
-console.log('Newspaper checks passed: verified data, two edition routes, sources, fallback labeling, and HTML escaping.');
+assert.deepEqual(context.window.gateNewspaper.weeklyEntries({editions:[
+  {season:2026,week:1,path:'week-1.json',validation_status:'valid',source_status:'verified_final'},
+  {season:2026,week:2,path:'preview.json',validation_status:'preview',source_status:'incomplete_override'},
+  {season:2025,week:14,path:'week-14.json',validation_status:'valid',source_status:'verified_final'}
+]}).map(entry => entry.path), ['week-1.json','week-14.json']);
+
+console.log('Newspaper checks passed: historical archive, verified weekly index, empty state, picker, sources, and HTML escaping.');
