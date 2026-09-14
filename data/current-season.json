@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 1,
   "phase": "Week 1",
-  "fetchedAt": "2026-09-14T00:08:30.696586+00:00",
+  "fetchedAt": "2026-09-14T05:24:43.791489+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 1 in progress. Live scoring from ESPN.",
   "standings": [
@@ -181,13 +181,13 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 81.7
+        "score": 100.1
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 65.66
+        "score": 91.86
       }
     },
     {
@@ -199,13 +199,13 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 164.76
+        "score": 192.56
       },
       "home": {
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 76.22
+        "score": 90.32
       }
     },
     {
@@ -223,7 +223,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 101.62
+        "score": 104.22
       }
     },
     {
@@ -235,7 +235,7 @@
         "teamId": 3,
         "team": "Darty at 1048",
         "owner": "Jared Hall",
-        "score": 96.5
+        "score": 142
       },
       "home": {
         "teamId": 7,
@@ -253,13 +253,13 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 65.82
+        "score": 71.62
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 124.36
+        "score": 139.76
       }
     }
   ]
