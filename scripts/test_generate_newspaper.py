@@ -93,18 +93,22 @@ class NewspaperTests(unittest.TestCase):
         stories=[{"story_type":s["story_type"],"title":s["title"],"body":s["body"]} for s in edition["stories"]]
         if mutate: stories[0]["body"] += " 999.00"
         response=MagicMock(); response.__enter__.return_value.read.return_value=json.dumps({"choices":[{"message":{"content":json.dumps({"stories":stories})}}]}).encode(); return response
-    def openai_response(self, edition, mutate=False):
+    def openai_response(self, edition, mutate=False, add_week=False):
         stories=[{"story_type":s["story_type"],"title":s["title"],"body":s["body"]} for s in edition["stories"]]
         if mutate: stories[0]["body"] += " 999.00"
+        if add_week: stories[1]["title"] = "Week 1: " + stories[1]["title"]
         text=json.dumps({"stories":stories})
         payload={"output":[{"type":"message","content":[{"type":"output_text","text":text}]}]}
         response=MagicMock(); response.__enter__.return_value.read.return_value=json.dumps(payload).encode(); return response
     def test_grok_down_fallback(self):
         edition=self.make()
         with patch("generate_newspaper.urllib.request.urlopen",side_effect=OSError("down")):self.assertEqual(paper.apply_grok_stories(edition,"key"),edition)
-    def test_grok_bad_numbers_rejected(self):
+    def test_grok_bad_numbers_fall_back_to_verified_story(self):
         edition=self.make()
-        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.grok_response(edition,True)):self.assertEqual(paper.apply_grok_stories(edition,"key"),edition)
+        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.grok_response(edition,True)):result=paper.apply_grok_stories(edition,"key")
+        self.assertEqual(result["writing_mode"],"grok_verified_rewrite")
+        self.assertEqual(result["stories"][0],edition["stories"][0])
+        self.assertEqual(result["rewrite_fallbacks"],[{"story_type":"matchup_recap","reason":"numbers_changed"}])
     def test_grok_valid_keeps_sources(self):
         edition=self.make()
         with patch("generate_newspaper.urllib.request.urlopen",return_value=self.grok_response(edition)):result=paper.apply_grok_stories(edition,"key")
@@ -112,11 +116,14 @@ class NewspaperTests(unittest.TestCase):
     def test_openai_down_fallback(self):
         edition=self.make()
         with patch("generate_newspaper.urllib.request.urlopen",side_effect=OSError("down")):self.assertEqual(paper.apply_openai_stories(edition,"key"),edition)
-    def test_openai_bad_numbers_rejected(self):
+    def test_openai_bad_numbers_fall_back_to_verified_story(self):
         edition=self.make()
         failures=[]
-        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition,True)):self.assertEqual(paper.apply_openai_stories(edition,"key",failures=failures),edition)
-        self.assertEqual(failures[0].stage,"validation"); self.assertIn("story=1",failures[0].detail); self.assertIn("numbers_changed",failures[0].detail)
+        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition,add_week=True)):result=paper.apply_openai_stories(edition,"key",failures=failures)
+        self.assertEqual(result["writing_mode"],"openai_verified_rewrite")
+        self.assertEqual(result["stories"][1],edition["stories"][1])
+        self.assertEqual(result["rewrite_fallbacks"],[{"story_type":"biggest_win","reason":"numbers_changed"}])
+        self.assertEqual(failures,[])
     def test_openai_valid_keeps_sources(self):
         edition=self.make()
         with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition)) as request:

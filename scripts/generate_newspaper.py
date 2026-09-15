@@ -360,6 +360,7 @@ def _verified_rewrite(edition: dict[str, Any], candidates: Any, writing_mode: st
             f"reason=story_count expected={len(edition['stories'])} actual={len(candidates)}",
         )
     result = json.loads(json.dumps(edition))
+    numeric_fallbacks = []
     for index, (original, candidate, output) in enumerate(zip(edition["stories"], candidates, result["stories"]), start=1):
         story_type = original["story_type"]
         if not isinstance(candidate, dict):
@@ -376,14 +377,12 @@ def _verified_rewrite(edition: dict[str, Any], candidates: Any, writing_mode: st
         expected_numbers = sorted(_numbers(original["title"] + " " + original["body"]))
         actual_numbers = sorted(_numbers(title + " " + body))
         if actual_numbers != expected_numbers:
-            raise RewriteFailure(
-                provider,
-                "validation",
-                f"story={index} story_type={story_type} reason=numbers_changed "
-                f"expected={expected_numbers} actual={actual_numbers}",
-            )
+            numeric_fallbacks.append({"story_type": story_type, "reason": "numbers_changed"})
+            continue
         output["title"], output["body"] = title.strip(), body.strip()
     result["writing_mode"] = writing_mode
+    if numeric_fallbacks:
+        result["rewrite_fallbacks"] = numeric_fallbacks
     return result
 
 
@@ -477,7 +476,8 @@ def apply_openai_stories(
         "Keep the same story count, order, and story_type values. Preserve every factual claim, name, and number exactly. "
         "Within each story, every numeric token must appear exactly as supplied and the same number of times; never spell out, "
         "remove, add, round, or move a number to another story. If a sentence cannot be improved without changing a number, "
-        "leave that sentence unchanged. Make each item cover a distinct angle and vary sentence openings. "
+        "leave that sentence unchanged. This applies to titles too: do not add a Week number to a title unless that title "
+        "already contains it. Make each item cover a distinct angle and vary sentence openings. "
         "Treat primary_owner as locked editorial metadata: no manager may be the primary subject of more than two "
         "feature stories, and the full matchup_recap is exempt. When primary_owner is null, keep the story league-wide "
         "instead of turning it into another manager profile. "
