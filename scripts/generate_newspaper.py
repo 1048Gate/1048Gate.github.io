@@ -324,7 +324,7 @@ def existing_valid_edition(path: Path) -> bool:
 
 
 def update_index(index_path: Path, edition: dict[str, Any], path: Path, *, root: Path = ROOT) -> dict[str, Any]:
-    index = _load_optional(index_path) or {"schema_version": 1, "league_name": "1048 Gate", "historical": {"path": "data/newspaper_editions/historical_2023.json", "season": 2023, "mode": "historical"}, "editions": []}
+    index = _load_optional(index_path) or {"schema_version": 1, "league_name": "1048 Gate", "historical": {"path": "data/newspaper_editions/historical_archive.json", "season_start": 2017, "season_end": 2025, "mode": "historical"}, "editions": []}
     relative = path.relative_to(root).as_posix()
     entry = {"path": relative, "season": edition["season"], "week": edition["week"], "mode": "weekly", "published_at": edition["generated_at"], "source_status": edition["source_status"], "validation_status": edition["validation_status"]}
     editions = [item for item in index.get("editions", []) if not (item.get("season") == edition["season"] and item.get("week") == edition["week"])]

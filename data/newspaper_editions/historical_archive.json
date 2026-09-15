@@ -1,0 +1,117 @@
+{
+  "schema_version": 3,
+  "league_name": "1048 Gate",
+  "season": 2025,
+  "season_start": 2017,
+  "season_end": 2025,
+  "edition_year": 2025,
+  "generated_at": "2026-09-15T00:00:00Z",
+  "mode": "historical",
+  "source_status": "historical_archive",
+  "stories": [
+    {
+      "story_type": "season_recap",
+      "season": 2025,
+      "title": "The Swifties Close 2025 With Speer's Third Crown",
+      "body": "Thomas Speer's The Swifties completed an 11–3 season by defeating Collin Krum 129.64–107.88 in the championship. The 21.76-point win delivered Speer's third league title after his back-to-back championships in 2020 and 2021.",
+      "source": {
+        "dataset": "data/seasons.json + data/playoffs.json",
+        "locator": "seasons[2025] · Championship",
+        "description": "Champion, finalist, regular-season record, seeds, and championship score"
+      }
+    },
+    {
+      "story_type": "season_recap",
+      "season": 2024,
+      "title": "Hall Goes Back-to-Back With The Diddlers",
+      "body": "Jared Hall followed his 2023 title with another championship in 2024. The Diddlers finished 11–3 and beat George Travis 161.22–135.48, making Hall the league's second repeat champion and a three-time winner.",
+      "source": {
+        "dataset": "data/seasons.json + data/playoffs.json",
+        "locator": "seasons[2024] · Championship",
+        "description": "Champion, finalist, regular-season record, seeds, and championship score"
+      }
+    },
+    {
+      "story_type": "season_recap",
+      "season": 2023,
+      "title": "Crown The King Survives the Closest Final",
+      "body": "Jared Hall's Crown The King finished 9–5 and edged JD Daley 126.12–121.20 in the 2023 championship. The 4.92-point margin remains the closest title game in the checked-in playoff archive.",
+      "source": {
+        "dataset": "data/seasons.json + data/playoffs.json",
+        "locator": "seasons[2023] · Championship",
+        "description": "Champion, finalist, regular-season record, seeds, and championship score"
+      }
+    },
+    {
+      "story_type": "season_recap",
+      "season": 2022,
+      "title": "Travis Breaks Through From the No. 3 Seed",
+      "body": "George Travis turned an 8–6 regular season into the 2022 championship. His No. 3 seed defeated JD Daley 134.28–81.30 in the final, a 52.98-point victory.",
+      "source": {
+        "dataset": "data/seasons.json + data/playoffs.json",
+        "locator": "seasons[2022] · Championship",
+        "description": "Champion, finalist, regular-season record, seeds, and championship score"
+      }
+    },
+    {
+      "story_type": "season_recap",
+      "season": 2021,
+      "title": "Speer Completes the League's First Repeat",
+      "body": "Thomas Speer made league history in 2021 by winning a second straight championship. After a 9–5 regular season, Has a Nice Ring to it defeated Kyle Fowler 130.60–109.16 in the title game.",
+      "source": {
+        "dataset": "data/seasons.json + data/playoffs.json",
+        "locator": "seasons[2021] · Championship",
+        "description": "Champion, finalist, regular-season record, seeds, and championship score"
+      }
+    },
+    {
+      "story_type": "season_recap",
+      "season": 2020,
+      "title": "Speer Wins the 2020 Title in a Rout",
+      "body": "Thomas Speer's Has a Nice Ring to it entered the playoffs as the No. 2 seed after a 7–6 season. Speer defeated German Haro 165.30–107.16 in the championship, winning by 58.14 points.",
+      "source": {
+        "dataset": "data/seasons.json + data/playoffs.json",
+        "locator": "seasons[2020] · Championship",
+        "description": "Champion, finalist, regular-season record, seeds, and championship score"
+      }
+    },
+    {
+      "story_type": "season_recap",
+      "season": 2019,
+      "title": "Daley Takes the Long Road to the 2019 Crown",
+      "body": "JD Daley won the 2019 championship from the No. 4 seed after an 8–5 regular season. We're on to Cleveland defeated Trevor Hash 136.06–123.10 in the final, a 12.96-point decision.",
+      "source": {
+        "dataset": "data/seasons.json + data/playoffs.json",
+        "locator": "seasons[2019] · Championship",
+        "description": "Champion, finalist, regular-season record, seeds, and championship score"
+      }
+    },
+    {
+      "story_type": "season_recap",
+      "season": 2018,
+      "title": "Fowler Captures the League's Second Championship",
+      "body": "Kyle Fowler's Turn Goff the Lights finished 9–4 and entered the 2018 playoffs as the No. 1 seed. Fowler defeated George Travis 145.64–125.52 in the championship by 20.12 points.",
+      "source": {
+        "dataset": "data/seasons.json + data/playoffs.json",
+        "locator": "seasons[2018] · Championship",
+        "description": "Champion, finalist, regular-season record, seeds, and championship score"
+      }
+    },
+    {
+      "story_type": "season_recap",
+      "season": 2017,
+      "title": "Hall Claims the Inaugural 1048 Gate Crown",
+      "body": "Jared Hall set the first championship standard in 2017. Flash In The Flex finished 10–3, earned the No. 1 seed, and defeated George Travis 155.60–123.82 in the league's inaugural final.",
+      "source": {
+        "dataset": "data/seasons.json + data/playoffs.json",
+        "locator": "seasons[2017] · Championship",
+        "description": "Champion, finalist, regular-season record, seeds, and championship score"
+      }
+    }
+  ],
+  "source_trace": {
+    "dataset": "data/seasons.json + data/playoffs.json",
+    "locator": "completed seasons 2017–2025",
+    "description": "One verified championship recap from each completed 1048 Gate season"
+  }
+}

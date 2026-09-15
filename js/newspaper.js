@@ -3,14 +3,14 @@
 
   const {escapeHtml: esc} = window.gateShared;
   const WEEKLY_INDEX_PATH = 'data/newspaper_editions/index.json';
-  const HISTORICAL_PATH = 'data/newspaper_editions/historical_2023.json';
+  const HISTORICAL_PATH = 'data/newspaper_editions/historical_archive.json';
 
   const editionConfig = Object.freeze({
     historical: {
       path: HISTORICAL_PATH,
-      label: 'Historical Edition',
+      label: 'League History',
       route: 'newspaper',
-      status: 'historical archive data'
+      status: 'verified all-season archive'
     },
     weekly: {
       path: WEEKLY_INDEX_PATH,
@@ -66,8 +66,21 @@
       if(!story.source) throw new Error(`Story ${index + 1} has no source trace.`);
     });
 
-    if(editionKey === 'historical' && data.stories.length !== 9){
-      throw new Error(`Historical edition expected 9 verified stories; found ${data.stories.length}.`);
+    if(editionKey === 'historical'){
+      if(!Number.isInteger(data.season_start) || !Number.isInteger(data.season_end) || data.season_end < data.season_start){
+        throw new Error('Historical edition season range is missing or invalid.');
+      }
+      const expectedSeasons = Array.from(
+        {length:data.season_end - data.season_start + 1},
+        (_, index) => data.season_start + index
+      );
+      const storySeasons = data.stories.map(story => story.season);
+      if(storySeasons.some(season => !Number.isInteger(season)) || new Set(storySeasons).size !== storySeasons.length){
+        throw new Error('Historical edition contains a missing or duplicate season.');
+      }
+      if(expectedSeasons.some(season => !storySeasons.includes(season))){
+        throw new Error(`Historical edition does not cover every season from ${data.season_start} through ${data.season_end}.`);
+      }
     }
     if(editionKey === 'weekly'){
       if(!Number.isInteger(data.week)) throw new Error('Weekly edition is missing a week number.');
@@ -86,17 +99,17 @@
       <div class="edition-empty" role="status">
         <span class="edition-kicker">1048 Gate Weekly Press</span>
         <h2>No weekly edition has been published yet</h2>
-        <p>The 2026 newspaper publishes after a fantasy week is final. Live or incomplete slates are not printed as recaps. The 2023 demonstration file is not current coverage.</p>
+        <p>The 2026 newspaper publishes after a fantasy week is final. Live or incomplete slates are not printed as recaps. The league-history archive is separate from current coverage.</p>
       </div>`;
   }
 
   function renderEditionMarkup(data, editionKey){
     const historical = editionKey === 'historical';
     const title = historical
-      ? `${data.league_name || '1048 Gate'} \u2014 ${data.season} Season Historical Edition`
+      ? `${data.league_name || '1048 Gate'} \u2014 ${data.season_start}\u2013${data.season_end} League History`
       : `${data.league_name || '1048 Gate'} \u2014 ${data.season} Week ${data.week} Edition`;
     const notice = historical
-      ? 'A retrospective edition built from the verified league archive.'
+      ? 'One verified championship recap from every completed league season.'
       : 'Verified weekly recap built from the finalized 2026 league board.';
     const status = historical
       ? editionConfig.historical.status
@@ -105,7 +118,7 @@
     const stories = data.stories.map((story, index) => `
       <article class="story-item${index === 0 ? ' story-lead' : ''}">
         <div class="story-meta">
-          <span>${esc(formatStoryType(story.story_type))}</span>
+          <span>${historical ? `Season ${esc(story.season)} \u00b7 ` : ''}${esc(formatStoryType(story.story_type))}</span>
           <span>Story ${String(index + 1).padStart(2, '0')}</span>
         </div>
         <h3 class="story-title">${esc(story.title)}</h3>
@@ -114,20 +127,22 @@
       </article>`).join('');
 
     const weekMeta = Number.isInteger(data.week) ? `<span>Week ${esc(data.week)}</span>` : '';
+    const seasonMeta = historical
+      ? `<span>Seasons ${esc(data.season_start)}\u2013${esc(data.season_end)}</span><span>${esc(data.stories.length)} completed seasons</span>`
+      : `<span>Season ${esc(data.season)}</span><span>Edition ${esc(data.edition_year)}</span>`;
     return `
       <header class="edition-header">
         <span class="edition-kicker">${historical ? '1048 Gate Newspaper Archive' : '1048 Gate Weekly Newspaper'}</span>
         <h2>${esc(title)}</h2>
         <p>${esc(notice)}</p>
         <div class="edition-meta">
-          <span>Season ${esc(data.season)}</span>
-          <span>Edition ${esc(data.edition_year)}</span>
+          ${seasonMeta}
           ${weekMeta}
         </div>
       </header>
       <div class="edition-status" aria-label="Source status: ${esc(status)}"><span class="status-dot"></span>${esc(status)}</div>
       <div class="edition-stories">${stories}</div>
-      <footer class="edition-footer"><small>Deterministic edition \u00b7 claims limited to checked-in sources</small></footer>`;
+      <footer class="edition-footer"><small>${historical ? 'Verified league archive' : 'Deterministic edition'} \u00b7 claims limited to checked-in sources</small></footer>`;
   }
 
   function renderSourceList(data){

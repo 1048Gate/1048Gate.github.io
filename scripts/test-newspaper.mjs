@@ -4,7 +4,7 @@ import {runInNewContext} from 'node:vm';
 
 const root = new URL('../', import.meta.url);
 const readJson = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
-const historical = readJson('data/newspaper_editions/historical_2023.json');
+const historical = readJson('data/newspaper_editions/historical_archive.json');
 const weeklyIndex = readJson('data/newspaper_editions/index.json');
 const seasons = readJson('data/seasons.json');
 const playoffs = readJson('data/playoffs.json');
@@ -12,13 +12,21 @@ const matchups = readJson('data/matchups.json');
 const managerProfiles = readJson('data/manager-profiles.json');
 const appSource = readFileSync(new URL('js/app.js', root), 'utf8');
 
-assert.equal(historical.season, 2023);
-assert.equal(historical.edition_year, 2023);
-assert.equal(historical.stories.length, 9, 'Historical newspaper must contain nine verified stories.');
-assert.deepEqual(new Set(historical.stories.map(story => story.story_type)), new Set([
-  'playoff_picture', 'playoff_elimination', 'record_watch', 'power_rankings',
-  'championship_contender', 'rivalry', 'transactions', 'manager_spotlight', 'next_week'
-]));
+assert.equal(historical.season_start, 2017);
+assert.equal(historical.season_end, 2025);
+assert.equal(historical.edition_year, 2025);
+assert.equal(historical.stories.length, 9, 'Historical newspaper must contain one story for every completed season.');
+assert.deepEqual(
+  historical.stories.map(story => story.season),
+  [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017]
+);
+assert.ok(historical.stories.every(story => story.story_type === 'season_recap'));
+assert.deepEqual(weeklyIndex.historical, {
+  path:'data/newspaper_editions/historical_archive.json',
+  season_start:2017,
+  season_end:2025,
+  mode:'historical'
+});
 assert.ok(Array.isArray(weeklyIndex.editions), 'The weekly newspaper index must contain an editions array.');
 const indexedWeeks = new Set();
 for(const entry of weeklyIndex.editions){
@@ -122,11 +130,13 @@ const context = {
 runInNewContext(readFileSync(new URL('js/newspaper.js', root), 'utf8'), context, {filename:'js/newspaper.js'});
 
 await context.window.gateNewspaper.loadEdition('historical');
-assert.match(elements.editionContent.innerHTML, /Crown The King Survives a Classic/);
-assert.match(elements.editionContent.innerHTML, /historical archive data/);
+assert.match(elements.editionContent.innerHTML, /2017–2025 League History/);
+assert.match(elements.editionContent.innerHTML, /The Swifties Close 2025/);
+assert.match(elements.editionContent.innerHTML, /Hall Claims the Inaugural/);
+assert.match(elements.editionContent.innerHTML, /verified all-season archive/);
 assert.ok(!elements.editionContent.innerHTML.includes(historical.generated_at), 'Generation timestamp leaked into the public edition.');
 assert.equal(elements.editionSourcesToggle.hidden, false);
-assert.match(elements.editionSourcesList.innerHTML, /data\/playoffs\.json/);
+assert.match(elements.editionSourcesList.innerHTML, /data\/seasons\.json \+ data\/playoffs\.json/);
 
 await context.window.gateNewspaper.loadEdition('weekly');
 assert.match(elements.editionContent.innerHTML, /No weekly edition has been published yet/);
