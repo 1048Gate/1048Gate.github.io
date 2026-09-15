@@ -3,8 +3,9 @@
   "league_name": "1048 Gate",
   "updated_at": "2026-09-15T20:48:59.456906Z",
   "historical": {
-    "path": "data/newspaper_editions/historical_2023.json",
-    "season": 2023,
+    "path": "data/newspaper_editions/historical_archive.json",
+    "season_start": 2017,
+    "season_end": 2025,
     "mode": "historical"
   },
   "editions": [

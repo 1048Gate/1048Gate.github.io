@@ -87,7 +87,7 @@ class NewspaperTests(unittest.TestCase):
     def test_existing_valid(self):
         path=self.root/"edition.json"; paper.write_json(path,self.make()); self.assertTrue(paper.existing_valid_edition(path)); path.write_text("{}"); self.assertFalse(paper.existing_valid_edition(path))
     def test_historical_preserved(self):
-        path=self.root/"data/newspaper_editions/historical_2023.json"; path.parent.mkdir(exist_ok=True); path.write_text('{"sentinel":true}\n'); before=path.read_bytes()
+        path=self.root/"data/newspaper_editions/historical_archive.json"; path.parent.mkdir(exist_ok=True); path.write_text('{"sentinel":true}\n'); before=path.read_bytes()
         paper.write_json(paper.edition_path(2026,1,self.root/"data/newspaper_editions"),self.make()); self.assertEqual(path.read_bytes(),before)
     def grok_response(self, edition, mutate=False):
         stories=[{"story_type":s["story_type"],"title":s["title"],"body":s["body"]} for s in edition["stories"]]
