@@ -99,6 +99,23 @@ class PublishCurrentSeasonTests(unittest.TestCase):
 
         self.assertTrue(all(game["state"] == "final" for game in board["matchups"]))
 
+    def test_playoff_metadata_reaches_published_board(self):
+        scoreboard = copy.deepcopy(self.scoreboard)
+        scoreboard["games"][0]["is_playoff"] = True
+        scoreboard["games"][0]["matchup_type"] = "LOSERS_CONSOLATION_LADDER"
+        roster = {row["teamId"]: row for row in self.roster_seed["standings"]}
+        board = build_board(
+            season=2026,
+            season_number=10,
+            week=15,
+            fetched_at="2026-12-17T00:00:00+00:00",
+            standings_norm=self.standings,
+            scoreboard_norm=scoreboard,
+            roster=roster,
+        )
+        self.assertTrue(board["matchups"][0]["isPlayoff"])
+        self.assertEqual(board["matchups"][0]["matchupType"], "LOSERS_CONSOLATION_LADDER")
+
 
 if __name__ == "__main__":
     unittest.main()

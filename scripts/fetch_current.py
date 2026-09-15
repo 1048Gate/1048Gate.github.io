@@ -136,6 +136,11 @@ def normalize_standings(payload: dict, season: int, league_id: int) -> dict:
 
 def normalize_scoreboard(payload: dict, season: int, league_id: int, requested_week: int | None) -> dict:
     teams = team_map(payload)
+    schedule_settings = ((payload.get("settings") or {}).get("scheduleSettings") or {})
+    try:
+        regular_season_end = int(schedule_settings.get("matchupPeriodCount"))
+    except (TypeError, ValueError):
+        regular_season_end = None
     games = []
     for index, item in enumerate(payload.get("schedule", [])):
         if not isinstance(item, dict):
@@ -155,12 +160,18 @@ def normalize_scoreboard(payload: dict, season: int, league_id: int, requested_w
         raw_status = item.get("status")
         if isinstance(raw_status, dict):
             raw_status = (raw_status.get("type") or {}).get("name") or raw_status.get("type")
+        playoff_tier = str(item.get("playoffTierType") or "NONE").upper()
+        is_playoff = playoff_tier != "NONE"
+        if not is_playoff and regular_season_end is not None and item_period is not None:
+            is_playoff = int(item_period) > regular_season_end
         games.append({
             "matchup_id": item.get("id", index),
             "scoring_period": item.get("matchupPeriodId", requested_week),
             "matchup_period": item.get("matchupPeriodId"),
             "status": raw_status,
             "winner": winner,
+            "is_playoff": is_playoff,
+            "matchup_type": playoff_tier if is_playoff else "NONE",
             "home": {"team_id": home_id, "team_name": teams.get(home_id, {}).get("team_name"), "score": matchup_score(home)},
             "away": {"team_id": away_id, "team_name": teams.get(away_id, {}).get("team_name"), "score": matchup_score(away)},
         })

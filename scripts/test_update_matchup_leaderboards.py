@@ -13,10 +13,10 @@ def archive():
     return {"schemaVersion": 2, "seasonRange": {"from": 2017, "to": 2025}, "gameCount": 885, "archiveGameCount": 885, "records": {}, "leaderboards": {"highestScores": high, "lowestScores": low}, "archiveLeaderboards": {"highestScores": high, "lowestScores": low}, "currentSeasonScores": []}
 
 
-def board(state="final", score=240):
+def board(state="final", score=240, playoff=False):
     games = []
     for index in range(6):
-        games.append({"state": state, "away": {"teamId": index * 2 + 1, "owner": f"Away {index}", "team": f"A{index}", "score": score if index == 0 else 100 + index}, "home": {"teamId": index * 2 + 2, "owner": f"Home {index}", "team": f"H{index}", "score": 90 + index}})
+        games.append({"state": state, "isPlayoff": playoff, "away": {"teamId": index * 2 + 1, "owner": f"Away {index}", "team": f"A{index}", "score": score if index == 0 else 100 + index}, "home": {"teamId": index * 2 + 2, "owner": f"Home {index}", "team": f"H{index}", "score": 90 + index}})
     return {"season": 2026, "week": 1, "matchups": games}
 
 
@@ -43,6 +43,12 @@ class UpdateMatchupLeaderboardsTests(unittest.TestCase):
         self.assertEqual(len(data["currentSeasonScores"]), 12)
         self.assertEqual(data["gameCount"], 891)
         self.assertEqual(data["leaderboards"]["highestScores"][0][0], 235.64)
+
+    def test_playoff_high_qualifies_but_playoff_low_does_not(self):
+        data = archive()
+        self.assertTrue(update_leaderboards(data, board(score=250, playoff=True)))
+        self.assertEqual(data["leaderboards"]["highestScores"][0][0], 250)
+        self.assertTrue(all(row[7] == 0 for row in data["leaderboards"]["lowestScores"]))
 
 
 if __name__ == "__main__":

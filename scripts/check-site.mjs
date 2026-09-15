@@ -255,6 +255,9 @@ if(matchupArchive.schemaVersion < 2 || matchupArchive.archiveGameCount !== 885 |
 if(matchupArchive.leaderboards?.highestScores?.length !== 5 || matchupArchive.leaderboards?.lowestScores?.length !== 5){
   throw new Error('Matchup archive must publish five highest and five lowest team scores.');
 }
+if(matchupArchive.leaderboards.lowestScores.some(row => row[7])){
+  throw new Error('Lowest-score leaderboard must exclude postseason games.');
+}
 if(matchupArchive.leaderboards.highestScores[0][0] !== 235.64 || matchupArchive.leaderboards.highestScores[0][1] !== 'Collin Krum'){
   throw new Error('The verified all-time team scoring record must remain Collin Krum at 235.64.');
 }

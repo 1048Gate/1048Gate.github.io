@@ -28,6 +28,8 @@ The exporter currently builds the Members-page dataset for seasons 2017-2025. It
 
 The SQLite archive has complete matchup scores and draft results for every recorded 1048 Gate season from 2017 through 2025; weekly player and lineup detail begins in 2019. The 2017 league name (`Grabbing Sheets 2K17`) followed by 2018's `1048 Gate Szn 2` identifies 2017 as the first recorded season. Do not route 2019-2020 through the generalized legacy importer: that path intentionally omits `player_weeks` and `player_week_stats` and would replace richer data already present for those seasons. The legacy path is only appropriate for 2017-2018 unless its lineup normalization is independently validated.
 
+Single-team high scores include regular-season and postseason games. Single-team low scores include regular-season games only, preventing inactive consolation or placement lineups from becoming league low-score records.
+
 ## Current-season standings and scoreboard
 
 The current-season fetcher uses the ESPN league endpoint and reads private-league cookies only from environment variables. It never writes raw ESPN responses or credentials. The configured league ID is `1237285`; override it with `ESPN_LEAGUE_ID` when needed.

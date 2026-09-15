@@ -49,9 +49,9 @@
     return matchupsPromise;
   }
 
-  function leaderboardList(title,eyebrow,rows){
+  function leaderboardList(title,eyebrow,scope,rows){
     const num=value=>formatNumber(value,1,2);
-    return `<section class="score-leaderboard"><div class="score-leaderboard-head"><div><span>${esc(eyebrow)}</span><h4>${esc(title)}</h4></div><small>Single-team score</small></div><ol>${rows.map((row,index)=>{
+    return `<section class="score-leaderboard"><div class="score-leaderboard-head"><div><span>${esc(eyebrow)}</span><h4>${esc(title)}</h4></div><small>${esc(scope)}</small></div><ol>${rows.map((row,index)=>{
       const playoff=row[7]?' · Playoffs':'';
       return `<li><span class="score-rank">${String(index+1).padStart(2,'0')}</span><div class="score-performance"><strong>${esc(row[1])}</strong><span>${esc(row[2])}</span><small>vs ${esc(row[3])} · ${esc(row[5])} W${esc(row[6])}${playoff}</small></div><b>${esc(num(row[0]))}</b></li>`;
     }).join('')}</ol></section>`;
@@ -67,7 +67,7 @@
     const section=document.createElement('section');
     section.className='score-leaderboards';
     section.dataset.scoreLeaderboards='';
-    section.innerHTML=`<div class="score-leaderboards-title"><div><span>THE EXTREMES</span><h3>Highest & Lowest Team Scores</h3></div><small>${esc(data.gameCount)} completed games · ${esc(data.seasonRange?.from)}–${esc(data.seasonRange?.to)}</small></div><div class="score-leaderboard-grid">${leaderboardList('Highest Team Scores','TOP FIVE',highest)}${leaderboardList('Lowest Team Scores','BOTTOM FIVE',lowest)}</div>`;
+    section.innerHTML=`<div class="score-leaderboards-title"><div><span>THE EXTREMES</span><h3>Highest & Lowest Team Scores</h3></div><small>${esc(data.gameCount)} completed games · ${esc(data.seasonRange?.from)}–${esc(data.seasonRange?.to)}</small></div><div class="score-leaderboard-grid">${leaderboardList('Highest Team Scores','TOP FIVE','Regular season + playoffs',highest)}${leaderboardList('Lowest Team Scores','BOTTOM FIVE','Regular season only',lowest)}</div>`;
     host.appendChild(section);
   }
 

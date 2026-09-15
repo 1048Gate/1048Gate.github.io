@@ -86,7 +86,8 @@ def update_leaderboards(matchups: dict, board: dict) -> bool:
 
     candidates = historical + saved
     highest = sorted(candidates, key=lambda row: (-row["score"], row["season"], row["week"], row["owner"]))[:LIMIT]
-    lowest = sorted(candidates, key=lambda row: (row["score"], row["season"], row["week"], row["owner"]))[:LIMIT]
+    regular_candidates = [row for row in candidates if not row["isPlayoff"]]
+    lowest = sorted(regular_candidates, key=lambda row: (row["score"], row["season"], row["week"], row["owner"]))[:LIMIT]
     leaderboards = {
         "highestScores": [_leaderboard_row(row) for row in highest],
         "lowestScores": [_leaderboard_row(row) for row in lowest],
