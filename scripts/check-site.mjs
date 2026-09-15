@@ -1,6 +1,7 @@
 import {execFileSync} from 'node:child_process';
 import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {runInNewContext} from 'node:vm';
+import {validatePowerRankings, validateSeasonState} from './data-validation.mjs';
 
 const root = new URL('../', import.meta.url);
 const indexPath = new URL('index.html', root);
@@ -81,15 +82,14 @@ if(/images\/team-logos|member-logo/.test(`${html}\n${sharedSource}`)){
 }
 
 const siteConfig = JSON.parse(readFileSync(new URL('data/site.json', root), 'utf8'));
+const currentSeason = JSON.parse(readFileSync(new URL('data/current-season.json', root), 'utf8'));
 if(!Number.isInteger(siteConfig.seasonYear) || !Number.isInteger(siteConfig.seasonNumber) || !siteConfig.phase || !siteConfig.competition){
   throw new Error('data/site.json must define the current season year, number, phase, and competition.');
 }
 if(!siteConfig.draftNight?.startsAt || !Number.isInteger(siteConfig.draftNight.currentPick)){
   throw new Error('data/site.json must define draftNight.startsAt and currentPick.');
 }
-if(siteConfig.phase !== 'Week 1' || siteConfig.draftNight.status !== 'complete'){
-  throw new Error('Szn 10 must be marked Week 1 with a completed draft night.');
-}
+validateSeasonState(siteConfig, currentSeason);
 if(!siteConfig.draftOrder?.[0]?.player || siteConfig.draftOrder[0].player !== 'Jahmyr Gibbs'){
   throw new Error('First-round recap must include the 1.01 player from the Szn 10 draft.');
 }
@@ -106,9 +106,7 @@ if(!draftIndex.seasons.some(row => row[0] === 2026 && row[3] === 192)){
   throw new Error('Draft index must include the 2026 season.');
 }
 const powerRankings = JSON.parse(readFileSync(new URL('data/power-rankings.json', root), 'utf8'));
-if(powerRankings.basis !== 'post-draft' || !Array.isArray(powerRankings.ratings) || powerRankings.ratings.length !== 12){
-  throw new Error('Power rankings must be the post-draft 12-manager board.');
-}
+validatePowerRankings(powerRankings, siteConfig, currentSeason);
 const draftRanks = JSON.parse(readFileSync(new URL('data/draft-ranks.json', root), 'utf8'));
 if(draftRanks.season !== 2026 || !Array.isArray(draftRanks.players) || draftRanks.players.length !== 192){
   throw new Error('Draft ranks feed must include all 192 Szn 10 picks.');
@@ -279,13 +277,6 @@ if(!scriptAssets.includes('js/game-records-layout.js') || !gameRecordsSource.inc
   throw new Error('Record Book must render the score leaderboards from matchups.json.');
 }
 
-const currentSeason = JSON.parse(readFileSync(new URL('data/current-season.json', root), 'utf8'));
-if(currentSeason.season !== 2026 || !Number.isInteger(currentSeason.week) || currentSeason.week < 1){
-  throw new Error('current-season.json must include season 2026 and a positive week.');
-}
-if(currentSeason.phase !== `Week ${currentSeason.week}`){
-  throw new Error('current-season.json phase must match its week.');
-}
 if(!Array.isArray(currentSeason.matchups) || currentSeason.matchups.length !== 6){
   throw new Error('Current-season board must include six matchups.');
 }
