@@ -28,6 +28,8 @@ EXPECTED_TEAMS = 12
 PLAYOFF_PICTURE_WEEK = 10
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"
 GROK_MODEL = "grok-4-fast-non-reasoning"
+OPENAI_API_URL = "https://api.openai.com/v1/responses"
+OPENAI_MODEL = "gpt-5.6-luna"
 SKIP_LIVE = "week_not_final"
 SKIP_INCOMPLETE = "data_incomplete"
 SKIP_INVALID = "invalid_scores"
@@ -175,8 +177,6 @@ def generate_edition(
     record_body = f"Week {week} broke the archive mark for {', '.join(broken)}." if broken else f"Week {week}'s results did not break the checked-in highest-score, blowout, or closest-game marks."
     stories.append(_story("record_watch", "The record book holds" if not broken else "The record book needs an update", record_body, _source("data/current-season.json + data/matchups.json", f"week={week};records", "Week results compared with archive records")))
 
-    stories.append(_story("manager_spotlight", f"Manager spotlight: {high_team['owner']}", f"{high_team['owner']} owns Week {week}'s highest verified score at {high_score:.2f} points.", scoreboard_source))
-
     pairs = records.get("pairs", [])
     current_owners = {fact[key]["owner"] for fact in facts for key in ("away", "home")}
     for pair in pairs:
@@ -244,30 +244,118 @@ def _numbers(value: str) -> list[str]:
     return re.findall(r"(?<![A-Za-z])\d+(?:\.\d+)?", value)
 
 
+def _facts(edition: dict[str, Any]) -> list[dict[str, str]]:
+    return [{"story_type": story["story_type"], "title": story["title"], "body": story["body"]} for story in edition["stories"]]
+
+
+def _verified_rewrite(edition: dict[str, Any], candidates: Any, writing_mode: str) -> dict[str, Any]:
+    if not isinstance(candidates, list) or len(candidates) != len(edition["stories"]):
+        return edition
+    result = json.loads(json.dumps(edition))
+    for original, candidate, output in zip(edition["stories"], candidates, result["stories"]):
+        if not isinstance(candidate, dict) or candidate.get("story_type") != original["story_type"]:
+            return edition
+        title, body = candidate.get("title"), candidate.get("body")
+        if not isinstance(title, str) or not title.strip() or not isinstance(body, str) or not body.strip():
+            return edition
+        if sorted(_numbers(title + " " + body)) != sorted(_numbers(original["title"] + " " + original["body"])):
+            return edition
+        output["title"], output["body"] = title.strip(), body.strip()
+    result["writing_mode"] = writing_mode
+    return result
+
+
+def _openai_text(payload: dict[str, Any]) -> str:
+    direct = payload.get("output_text")
+    if isinstance(direct, str) and direct.strip():
+        return direct
+    for item in payload.get("output", []):
+        if not isinstance(item, dict) or item.get("type") != "message":
+            continue
+        for part in item.get("content", []):
+            if isinstance(part, dict) and part.get("type") == "output_text" and isinstance(part.get("text"), str):
+                return part["text"]
+    raise KeyError("OpenAI response did not contain output text.")
+
+
+def apply_openai_stories(edition: dict[str, Any], api_key: str | None = None) -> dict[str, Any]:
+    key = api_key or os.getenv("OPENAI_API_KEY")
+    if not key:
+        return edition
+    facts = _facts(edition)
+    story_schema = {
+        "type": "object",
+        "properties": {
+            "stories": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "story_type": {"type": "string"},
+                        "title": {"type": "string"},
+                        "body": {"type": "string"},
+                    },
+                    "required": ["story_type", "title", "body"],
+                    "additionalProperties": False,
+                },
+            }
+        },
+        "required": ["stories"],
+        "additionalProperties": False,
+    }
+    instructions = (
+        "Rewrite these verified fantasy-football newspaper briefs with a lively local sports-column voice. "
+        "Keep the same story count, order, and story_type values. Preserve every factual claim, name, and number exactly. "
+        "Make each item cover a distinct angle, vary sentence openings, and avoid repeating a score when it is not needed. "
+        "Do not add predictions, quotes, injuries, transactions, or facts that are not supplied."
+    )
+    request = urllib.request.Request(
+        OPENAI_API_URL,
+        data=json.dumps({
+            "model": os.getenv("OPENAI_MODEL", OPENAI_MODEL),
+            "input": [
+                {"role": "system", "content": instructions},
+                {"role": "user", "content": json.dumps({"stories": facts}, ensure_ascii=False)},
+            ],
+            "text": {"format": {"type": "json_schema", "name": "newspaper_rewrite", "strict": True, "schema": story_schema}},
+            "max_output_tokens": 4000,
+        }).encode(),
+        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            payload = json.loads(response.read().decode())
+        rewritten = json.loads(_openai_text(payload))
+        return _verified_rewrite(edition, rewritten.get("stories"), "openai_verified_rewrite")
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+        return edition
+
+
 def apply_grok_stories(edition: dict[str, Any], api_key: str | None = None) -> dict[str, Any]:
     key = api_key or os.getenv("XAI_API_KEY") or os.getenv("GROK_API_KEY")
     if not key:
         return edition
-    facts = [{"story_type": s["story_type"], "title": s["title"], "body": s["body"]} for s in edition["stories"]]
+    facts = _facts(edition)
     request = urllib.request.Request(GROK_API_URL, data=json.dumps({"model": GROK_MODEL, "temperature": 0.2, "response_format": {"type": "json_object"}, "messages": [{"role": "system", "content": "Rewrite only for style. Preserve every fact and number. Return JSON with a stories array in the same order."}, {"role": "user", "content": json.dumps({"stories": facts}, ensure_ascii=False)}]}).encode(), headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"}, method="POST")
     try:
         with urllib.request.urlopen(request, timeout=20) as response:
             payload = json.loads(response.read().decode())
         content = payload["choices"][0]["message"]["content"]
         rewritten = json.loads(content) if isinstance(content, str) else content
-        candidates = rewritten.get("stories", [])
-        if len(candidates) != len(edition["stories"]): return edition
-        result = json.loads(json.dumps(edition))
-        for original, candidate, output in zip(edition["stories"], candidates, result["stories"]):
-            if candidate.get("story_type") != original["story_type"]: return edition
-            title, body = candidate.get("title"), candidate.get("body")
-            if not isinstance(title, str) or not isinstance(body, str): return edition
-            if sorted(_numbers(title + " " + body)) != sorted(_numbers(original["title"] + " " + original["body"])): return edition
-            output["title"], output["body"] = title, body
-        result["writing_mode"] = "grok_verified_rewrite"
-        return result
+        return _verified_rewrite(edition, rewritten.get("stories"), "grok_verified_rewrite")
     except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
         return edition
+
+
+def apply_ai_stories(edition: dict[str, Any], writing: str = "auto") -> dict[str, Any]:
+    if writing in {"auto", "openai"}:
+        result = apply_openai_stories(edition)
+        if result.get("writing_mode") == "openai_verified_rewrite" or writing == "openai":
+            return result
+    if writing in {"auto", "grok"}:
+        return apply_grok_stories(edition)
+    return edition
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -275,25 +363,31 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--season", type=int, default=2026)
     parser.add_argument("--week", type=int)
     parser.add_argument("--allow-incomplete", action="store_true")
+    parser.add_argument("--regenerate", action="store_true", help="Replace an existing valid edition only after a verified AI rewrite.")
     parser.add_argument("--stdout", action="store_true")
-    parser.add_argument("--writing", choices=("deterministic", "auto", "grok"), default="deterministic")
+    parser.add_argument("--writing", choices=("deterministic", "auto", "openai", "grok"), default="deterministic")
     args = parser.parse_args(argv)
     try:
         board = read_json(CURRENT_PATH)
         week = args.week or int(board.get("week", 0))
-        edition = generate_edition(board, args.season, week, allow_incomplete=args.allow_incomplete)
-        if args.writing in {"auto", "grok"}: edition = apply_grok_stories(edition)
+        edition = generate_edition(board, args.season, week, allow_incomplete=args.allow_incomplete, root=ROOT)
+        edition = apply_ai_stories(edition, args.writing)
         validate_edition(edition, publish=not args.allow_incomplete)
         if args.allow_incomplete or args.stdout:
             print(json.dumps(edition, indent=2, ensure_ascii=False))
             return 0
-        path = edition_path(args.season, week)
-        if existing_valid_edition(path):
+        path = edition_path(args.season, week, EDITIONS_ROOT)
+        replacing = existing_valid_edition(path)
+        if replacing and not args.regenerate:
             print(f"SKIP {SKIP_DUPLICATE}: {path.relative_to(ROOT)} already contains a valid edition.")
             return 0
+        if replacing and not str(edition.get("writing_mode", "")).endswith("_verified_rewrite"):
+            print(f"SKIP rewrite_failed: Preserved {path.relative_to(ROOT)} because no verified AI rewrite was produced.")
+            return 0
         write_json(path, edition)
-        update_index(EDITIONS_ROOT / "index.json", edition, path)
-        print(f"Published {path.relative_to(ROOT)} with {len(edition['stories'])} sourced stories.")
+        update_index(EDITIONS_ROOT / "index.json", edition, path, root=ROOT)
+        action = "Replaced" if replacing else "Published"
+        print(f"{action} {path.relative_to(ROOT)} with {len(edition['stories'])} sourced stories ({edition.get('writing_mode', 'deterministic')}).")
         return 0
     except GenerationSkip as skip:
         print(f"SKIP {skip.reason}: {skip.detail}")
