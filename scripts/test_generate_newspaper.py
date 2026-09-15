@@ -71,6 +71,12 @@ class NewspaperTests(unittest.TestCase):
         stories=[{"story_type":s["story_type"],"title":s["title"],"body":s["body"]} for s in edition["stories"]]
         if mutate: stories[0]["body"] += " 999.00"
         response=MagicMock(); response.__enter__.return_value.read.return_value=json.dumps({"choices":[{"message":{"content":json.dumps({"stories":stories})}}]}).encode(); return response
+    def openai_response(self, edition, mutate=False):
+        stories=[{"story_type":s["story_type"],"title":s["title"],"body":s["body"]} for s in edition["stories"]]
+        if mutate: stories[0]["body"] += " 999.00"
+        text=json.dumps({"stories":stories})
+        payload={"output":[{"type":"message","content":[{"type":"output_text","text":text}]}]}
+        response=MagicMock(); response.__enter__.return_value.read.return_value=json.dumps(payload).encode(); return response
     def test_grok_down_fallback(self):
         edition=self.make()
         with patch("generate_newspaper.urllib.request.urlopen",side_effect=OSError("down")):self.assertEqual(paper.apply_grok_stories(edition,"key"),edition)
@@ -81,6 +87,31 @@ class NewspaperTests(unittest.TestCase):
         edition=self.make()
         with patch("generate_newspaper.urllib.request.urlopen",return_value=self.grok_response(edition)):result=paper.apply_grok_stories(edition,"key")
         self.assertEqual(result["writing_mode"],"grok_verified_rewrite"); self.assertEqual([s["source"] for s in result["stories"]],[s["source"] for s in edition["stories"]])
+    def test_openai_down_fallback(self):
+        edition=self.make()
+        with patch("generate_newspaper.urllib.request.urlopen",side_effect=OSError("down")):self.assertEqual(paper.apply_openai_stories(edition,"key"),edition)
+    def test_openai_bad_numbers_rejected(self):
+        edition=self.make()
+        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition,True)):self.assertEqual(paper.apply_openai_stories(edition,"key"),edition)
+    def test_openai_valid_keeps_sources(self):
+        edition=self.make()
+        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition)):result=paper.apply_openai_stories(edition,"key")
+        self.assertEqual(result["writing_mode"],"openai_verified_rewrite"); self.assertEqual([s["source"] for s in result["stories"]],[s["source"] for s in edition["stories"]])
+    def test_regenerate_preserves_existing_when_ai_fails(self):
+        current=self.root/"current.json"; paper.write_json(current,board())
+        editions=self.root/"data/newspaper_editions"; existing=paper.edition_path(2026,1,editions); paper.write_json(existing,self.make()); before=existing.read_bytes()
+        with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions),patch.object(paper,"apply_ai_stories",side_effect=lambda edition,writing:edition):
+            output=io.StringIO()
+            with redirect_stdout(output):code=paper.main(["--season","2026","--week","1","--writing","openai","--regenerate"])
+        self.assertEqual(code,0); self.assertIn("SKIP rewrite_failed",output.getvalue()); self.assertEqual(existing.read_bytes(),before)
+    def test_regenerate_replaces_existing_after_verified_rewrite(self):
+        current=self.root/"current.json"; paper.write_json(current,board())
+        editions=self.root/"data/newspaper_editions"; existing=paper.edition_path(2026,1,editions); paper.write_json(existing,self.make())
+        def rewritten(edition,writing): edition["writing_mode"]="openai_verified_rewrite"; return edition
+        with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions),patch.object(paper,"apply_ai_stories",side_effect=rewritten):
+            output=io.StringIO()
+            with redirect_stdout(output):code=paper.main(["--season","2026","--week","1","--writing","openai","--regenerate"])
+        self.assertEqual(code,0); self.assertIn("Replaced",output.getvalue()); self.assertEqual(paper.read_json(existing)["writing_mode"],"openai_verified_rewrite")
     def test_main_live_skip_writes_nothing(self):
         value=board(); value["matchups"][0].update(state="live",winner="UNDECIDED"); current=self.root/"current.json"; paper.write_json(current,value)
         with patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",self.root/"editions"):
