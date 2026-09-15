@@ -134,9 +134,11 @@ def build_board(
         home = game.get("home") or {}
         away = game.get("away") or {}
         winner = str(game.get("winner") or "").upper()
+        status = str(game.get("status") or "").upper()
+        status_is_final = status == "FINAL" or status.endswith("_FINAL")
         scores = (away.get("score"), home.get("score"))
         has_points = any(score not in (None, 0) for score in scores)
-        if winner in {"HOME", "AWAY", "TIE"}:
+        if winner in {"HOME", "AWAY", "TIE"} or status_is_final:
             state = "final"
         elif has_points or winner == "UNDECIDED":
             state = "live" if has_points else "scheduled"

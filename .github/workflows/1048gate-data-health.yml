@@ -73,7 +73,7 @@ jobs:
           node-version: 22
       - name: Test ESPN normalizers and publisher
         run: |
-          python3 -m unittest scripts/test_fetch_current.py scripts/test_publish_current_season.py
+          python3 -m unittest scripts/test_fetch_current.py scripts/test_publish_current_season.py scripts/test_update_matchup_leaderboards.py
       - name: Publish standings and scoreboard into data/current-season.json
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
@@ -111,13 +111,15 @@ jobs:
           python3 scripts/generate_newspaper.py "${PAPER_ARGS[@]}"
       - name: Refresh championship odds from the updated season board
         run: npm run futures
+      - name: Refresh all-time score leaderboards from final results
+        run: python3 scripts/update_matchup_leaderboards.py
       - name: Validate site checks still pass
         run: npm run check
       - name: Commit updated board and newspaper when they change
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/current-season.json data/site.json data/power-rankings.json data/newspaper_editions
+          git add data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/newspaper_editions
           if git diff --cached --quiet; then
             echo "Current-season board and newspaper unchanged — nothing to commit."
           else
