@@ -25,13 +25,35 @@ class NewspaperTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(); self.root = Path(self.tmp.name)
         data = self.root / "data"; data.mkdir()
-        (data / "power-rankings.json").write_text(json.dumps({"ratings":[{"name":"Hash","rating":37.2}]}))
+        ratings = [
+            {"name": owner, "rating": 50-index, "preseasonRating": 50-index}
+            for index, owner in enumerate(OWNERS)
+        ]
+        (data / "power-rankings.json").write_text(json.dumps({"ratings":ratings}))
         (data / "matchups.json").write_text(json.dumps({"records":{"highestScore":[235.64],"biggestBlowout":[137.42],"closestGame":[0.08]},"pairs":[["Hunt","Daley",[5,8,0,0,0]]]}))
     def tearDown(self): self.tmp.cleanup()
     def make(self, value=None, **kw): return paper.generate_edition(value or board(), 2026, 1, root=self.root, now=datetime(2026,9,15,tzinfo=timezone.utc), **kw)
 
     def test_complete_and_sourced(self):
         result=self.make(); self.assertEqual(result["source_status"],"verified_final"); self.assertGreaterEqual(len(result["stories"]),8); self.assertTrue(all(s.get("source") for s in result["stories"]))
+    def test_manager_feature_limit_is_applied(self):
+        result=self.make()
+        counts={}
+        for story in result["stories"]:
+            owner=story.get("primary_owner")
+            if owner: counts[owner]=counts.get(owner,0)+1
+        self.assertEqual(result["editorial_policy"],{"max_primary_features_per_manager":2,"matchup_recap_exempt":True})
+        self.assertTrue(all(count <= 2 for count in counts.values()))
+        self.assertEqual(counts["Hash"],2)
+        standings=next(s for s in result["stories"] if s["story_type"]=="standings")
+        self.assertNotIn("primary_owner",standings); self.assertEqual(standings["title"],"The Week 1 standings take shape")
+        power=next(s for s in result["stories"] if s["story_type"]=="power_rankings")
+        self.assertNotEqual(power.get("primary_owner"),"Hash")
+    def test_manager_feature_limit_is_validated(self):
+        result=self.make()
+        standings=next(s for s in result["stories"] if s["story_type"]=="standings")
+        standings["primary_owner"]="Hash"
+        with self.assertRaisesRegex(ValueError,"Manager feature limit exceeded"):paper.validate_edition(result)
     def test_live_skip(self):
         value=board(); value["matchups"][0].update(state="live",winner="UNDECIDED")
         with self.assertRaises(paper.GenerationSkip) as error:self.make(value)
@@ -97,8 +119,13 @@ class NewspaperTests(unittest.TestCase):
         self.assertEqual(failures[0].stage,"validation"); self.assertIn("story=1",failures[0].detail); self.assertIn("numbers_changed",failures[0].detail)
     def test_openai_valid_keeps_sources(self):
         edition=self.make()
-        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition)):result=paper.apply_openai_stories(edition,"key")
+        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition)) as request:
+            result=paper.apply_openai_stories(edition,"key")
         self.assertEqual(result["writing_mode"],"openai_verified_rewrite"); self.assertEqual([s["source"] for s in result["stories"]],[s["source"] for s in edition["stories"]])
+        payload=json.loads(request.call_args.args[0].data)
+        self.assertIn("no manager may be the primary subject of more than two",payload["input"][0]["content"])
+        supplied=json.loads(payload["input"][1]["content"])["stories"]
+        self.assertTrue(all("primary_owner" in story for story in supplied))
     def test_openai_http_error_is_safe_and_actionable(self):
         edition=self.make(); failures=[]
         body=io.BytesIO(json.dumps({"error":{"type":"rate_limit_error","code":"insufficient_quota","message":"Add credits; sk-secret-must-not-log"}}).encode())
