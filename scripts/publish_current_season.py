@@ -149,6 +149,8 @@ def build_board(
             "week": int(game.get("matchup_period") or game.get("scoring_period") or week),
             "state": state,
             "winner": winner or None,
+            "isPlayoff": bool(game.get("is_playoff", False)),
+            "matchupType": game.get("matchup_type") or "NONE",
             "away": side_from(away.get("team_id"), away.get("score"), roster, away.get("team_name")),
             "home": side_from(home.get("team_id"), home.get("score"), roster, home.get("team_name")),
         })

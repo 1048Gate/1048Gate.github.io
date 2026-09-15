@@ -5,7 +5,12 @@ import json,re,sqlite3,sys
 from pathlib import Path
 
 CURRENT_MEMBERS=['George Travis','Jared Hall','Kyle Fowler','Bryan Hunt','Brian Heino','Vincent Cannarozzi','James Brochu','JD Daley','Thomas Speer','Collin Krum','German Haro','Trevor Hash']
-ALIASES={'german joshua haro':'German Haro','tommy speer':'Thomas Speer'}
+ALIASES={
+    'chardo bryce':'Chardo Bryce',
+    'german joshua haro':'German Haro',
+    'ronnie coiro':'Ronnie Coiro',
+    'tommy speer':'Thomas Speer',
+}
 
 def clean(v): return re.sub(r'\s+',' ',str(v or '')).strip()
 def name_key(v): return clean(v).lower()
@@ -43,7 +48,7 @@ def main():
     for g in games:
         sides.extend([(g[6],g[4],g[5],g[7],g[8],g),(g[9],g[7],g[8],g[4],g[5],g)])
     ranked_high=sorted(sides,key=lambda x:(-x[0],x[5][0],x[5][1],x[1].lower()))
-    ranked_low=sorted(sides,key=lambda x:(x[0],x[5][0],x[5][1],x[1].lower()))
+    ranked_low=sorted((side for side in sides if not side[5][2]),key=lambda x:(x[0],x[5][0],x[5][1],x[1].lower()))
     high=ranked_high[0];low=ranked_low[0];nonties=[g for g in games if g[6]!=g[9]]
     blow=max(nonties,key=lambda g:abs(g[6]-g[9]));close=min(nonties,key=lambda g:abs(g[6]-g[9]));combined=max(games,key=lambda g:g[6]+g[9])
     records={
@@ -53,9 +58,17 @@ def main():
       'closestGame':[round(abs(close[6]-close[9]),2),close[4],close[6],close[7],close[9],close[0],close[1],close[2]],
       'highestCombined':[round(combined[6]+combined[9],2),combined[4],combined[6],combined[7],combined[9],combined[0],combined[1],combined[2]]}
     leaderboard_row=lambda side:[side[0],side[1],side[2],side[3],side[4],side[5][0],side[5][1],side[5][2]]
+    def game_row(game, metric):
+        y,w,po,typ,a,at,sa,b,bt,sb=game
+        if sb>sa: a,at,sa,b,bt,sb=b,bt,sb,a,at,sa
+        return [round(metric,2),a,at,sa,b,bt,sb,y,w,po,typ]
+    competitive=[g for g in nonties if g[3] not in {'LOSERS_CONSOLATION_LADDER','WINNERS_CONSOLATION_LADDER'}]
     archive_leaderboards={
       'highestScores':[leaderboard_row(side) for side in ranked_high[:5]],
       'lowestScores':[leaderboard_row(side) for side in ranked_low[:5]],
+      'biggestBlowouts':[game_row(g,abs(g[6]-g[9])) for g in sorted(competitive,key=lambda g:(-abs(g[6]-g[9]),g[0],g[1]))[:3]],
+      'closestGames':[game_row(g,abs(g[6]-g[9])) for g in sorted(nonties,key=lambda g:(abs(g[6]-g[9]),g[0],g[1]))[:3]],
+      'highestCombinedGames':[game_row(g,g[6]+g[9]) for g in sorted(games,key=lambda g:(-(g[6]+g[9]),g[0],g[1]))[:3]],
     }
     payload={
       'schemaVersion':2,

@@ -91,24 +91,6 @@
     });
   }
 
-  function renderCmsRecords(records){
-    const panel = document.getElementById('history')?.querySelector('[data-history-panel="records"]');
-    if(!panel || !records?.length) return false;
-    const grid = document.createElement('div');
-    grid.className = 'record-grid public-record-grid';
-    grid.dataset.recordBook = 'cms';
-    grid.innerHTML = records.map((record, index) => {
-      const detail = [record.holder || record.detail, record.season_context].filter(Boolean).join(' · ');
-      return `<article class="record-card public-record-card"><div class="record-rank">${String(index + 1).padStart(2, '0')}</div><div class="label">${esc(record.label)}</div><div class="val">${esc(record.value)}</div><div class="sub">${esc(detail)}</div></article>`;
-    }).join('');
-    panel.querySelectorAll('[data-record-grid="placeholder"]').forEach(node => node.remove());
-    panel.querySelectorAll('[data-record-book="cms"]').forEach(node => node.remove());
-    const heading = panel.querySelector('.history-section-head');
-    if(heading) heading.insertAdjacentElement('afterend', grid);
-    else panel.prepend(grid);
-    return true;
-  }
-
   async function loadChampionsFallback(){
     await loadNarratives();
     try{
@@ -197,9 +179,8 @@
       return;
     }
     try{
-      const [{data:champions}, {data:records}, {data:shame}] = await Promise.all([
+      const [{data:champions}, {data:shame}] = await Promise.all([
         supabase.from('league_champions').select('*').order('season_year', {ascending:false}),
-        supabase.from('league_records').select('*').order('sort_order'),
         supabase.from('wall_of_shame').select('*').order('season_year', {ascending:false, nullsFirst:false}).order('created_at', {ascending:false})
       ]);
       await loadNarratives();
@@ -213,7 +194,7 @@
         loadChampionsFallback();
       }
 
-      window.gateCmsRecords = renderCmsRecords(records) ? 'rendered' : 'absent';
+      window.gateCmsRecords = 'absent';
 
       if(shame?.length) renderShame(shame);
       else loadShameFallback();
@@ -230,7 +211,6 @@
   if(supabase){
     supabase.channel('1048-league-content')
       .on('postgres_changes', {event:'*', schema:'public', table:'league_champions'}, loadHistory)
-      .on('postgres_changes', {event:'*', schema:'public', table:'league_records'}, loadHistory)
       .on('postgres_changes', {event:'*', schema:'public', table:'wall_of_shame'}, loadHistory)
       .subscribe();
   }

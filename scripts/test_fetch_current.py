@@ -83,6 +83,22 @@ class CurrentFetchTests(unittest.TestCase):
         self.assertIsNone(result["games"][0]["home"]["score"])
         self.assertIsNone(result["games"][0]["away"]["score"])
 
+    def test_scoreboard_identifies_regular_and_playoff_matchups(self):
+        payload = {
+            "settings": {"scheduleSettings": {"matchupPeriodCount": 14}},
+            "teams": self.payload["teams"],
+            "schedule": [
+                {"id": 16, "matchupPeriodId": 14, "playoffTierType": "NONE", "home": {"teamId": 1}, "away": {"teamId": 2}},
+                {"id": 17, "matchupPeriodId": 15, "playoffTierType": "WINNERS_BRACKET", "home": {"teamId": 1}, "away": {"teamId": 2}},
+            ],
+        }
+        regular = normalize_scoreboard(payload, 2026, 1237285, 14)["games"][0]
+        playoff = normalize_scoreboard(payload, 2026, 1237285, 15)["games"][0]
+        self.assertFalse(regular["is_playoff"])
+        self.assertEqual(regular["matchup_type"], "NONE")
+        self.assertTrue(playoff["is_playoff"])
+        self.assertEqual(playoff["matchup_type"], "WINNERS_BRACKET")
+
 
 if __name__ == "__main__":
     unittest.main()
