@@ -19,7 +19,21 @@ assert.deepEqual(new Set(historical.stories.map(story => story.story_type)), new
   'playoff_picture', 'playoff_elimination', 'record_watch', 'power_rankings',
   'championship_contender', 'rivalry', 'transactions', 'manager_spotlight', 'next_week'
 ]));
-assert.deepEqual(weeklyIndex.editions, [], 'The repository must not publish an incomplete Week 1 edition.');
+assert.ok(Array.isArray(weeklyIndex.editions), 'The weekly newspaper index must contain an editions array.');
+const indexedWeeks = new Set();
+for(const entry of weeklyIndex.editions){
+  const key = `${entry.season}:${entry.week}`;
+  assert.ok(!indexedWeeks.has(key), `The weekly newspaper index contains duplicate ${key} entries.`);
+  indexedWeeks.add(key);
+  assert.equal(entry.source_status, 'verified_final', `Indexed edition ${key} must come from a final board.`);
+  assert.equal(entry.validation_status, 'valid', `Indexed edition ${key} must pass publication validation.`);
+  const edition = readJson(entry.path);
+  assert.equal(edition.season, entry.season, `Indexed edition ${key} has a mismatched season.`);
+  assert.equal(edition.week, entry.week, `Indexed edition ${key} has a mismatched week.`);
+  assert.equal(edition.source_status, 'verified_final', `Edition ${key} must come from a final board.`);
+  assert.equal(edition.validation_status, 'valid', `Edition ${key} must pass publication validation.`);
+  assert.ok(Array.isArray(edition.stories) && edition.stories.length > 0, `Edition ${key} must contain stories.`);
+}
 assert.match(appSource, /if \(name === 'weekly'\) name = 'newspaper'/, '#weekly must resolve to the newspaper view.');
 
 const serializedEditions = JSON.stringify({historical, weeklyIndex});
@@ -82,6 +96,7 @@ const escapeHtml = value => String(value ?? '')
   .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
   .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
 
+const emptyWeeklyIndex = {...weeklyIndex, editions: []};
 const context = {
   window: {
     gateShared: {escapeHtml},
@@ -99,7 +114,7 @@ const context = {
   history: {pushState(){}},
   fetch: async path => ({
     ok: true,
-    async json(){ return structuredClone(path.includes('index.json') ? weeklyIndex : historical); }
+    async json(){ return structuredClone(path.includes('index.json') ? emptyWeeklyIndex : historical); }
   }),
   console: {log: console.log, warn: console.warn, error(){}},
   structuredClone
