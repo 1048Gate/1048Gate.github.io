@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "season": 2026,
   "seasonNumber": 10,
-  "week": 1,
-  "phase": "Week 1",
-  "fetchedAt": "2026-09-15T15:41:03.547563+00:00",
+  "week": 2,
+  "phase": "Week 2",
+  "fetchedAt": "2026-09-15T16:59:15.270402+00:00",
   "source": "ESPN league endpoint",
-  "note": "Week 1 slate from ESPN.",
+  "note": "Week 2 slate from ESPN.",
   "standings": [
     {
       "locker": 12,
@@ -155,123 +155,123 @@
   ],
   "matchups": [
     {
-      "id": 1,
-      "week": 1,
-      "state": "final",
-      "winner": "HOME",
-      "isPlayoff": false,
-      "matchupType": "NONE",
-      "away": {
-        "teamId": 9,
-        "team": "Ja'Marr-a-Lago",
-        "owner": "JD Daley",
-        "score": 147.36
-      },
-      "home": {
-        "teamId": 5,
-        "team": "Howya Been's",
-        "owner": "Bryan Hunt",
-        "score": 158.26
-      }
-    },
-    {
-      "id": 2,
-      "week": 1,
-      "state": "final",
-      "winner": "HOME",
+      "id": 7,
+      "week": 2,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 101.3
+        "score": 0
       },
       "home": {
-        "teamId": 1,
-        "team": "Madison Beer Garden",
-        "owner": "George Travis",
-        "score": 115.96
+        "teamId": 9,
+        "team": "Ja'Marr-a-Lago",
+        "owner": "JD Daley",
+        "score": 0
       }
     },
     {
-      "id": 3,
-      "week": 1,
-      "state": "final",
-      "winner": "AWAY",
+      "id": 8,
+      "week": 2,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
+        "teamId": 5,
+        "team": "Howya Been's",
+        "owner": "Bryan Hunt",
+        "score": 0
+      },
+      "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 192.56
-      },
-      "home": {
-        "teamId": 4,
-        "team": "1912 Titanic Swimteam",
-        "owner": "Kyle Fowler",
-        "score": 90.32
+        "score": 0
       }
     },
     {
-      "id": 4,
-      "week": 1,
-      "state": "final",
-      "winner": "HOME",
+      "id": 9,
+      "week": 2,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
+        "teamId": 1,
+        "team": "Madison Beer Garden",
+        "owner": "George Travis",
+        "score": 0
+      },
+      "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 89.26
-      },
-      "home": {
-        "teamId": 14,
-        "team": "Ice Has Me Running Back",
-        "owner": "German Haro",
-        "score": 104.22
+        "score": 0
       }
     },
     {
-      "id": 5,
-      "week": 1,
-      "state": "final",
-      "winner": "HOME",
+      "id": 10,
+      "week": 2,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
+        "teamId": 4,
+        "team": "1912 Titanic Swimteam",
+        "owner": "Kyle Fowler",
+        "score": 0
+      },
+      "home": {
         "teamId": 3,
         "team": "Darty at 1048",
         "owner": "Jared Hall",
-        "score": 142
-      },
-      "home": {
-        "teamId": 7,
-        "team": "McConkey Tonk Badonkadonk",
-        "owner": "Vincent Cannarozzi",
-        "score": 154.9
+        "score": 0
       }
     },
     {
-      "id": 6,
-      "week": 1,
-      "state": "final",
-      "winner": "HOME",
+      "id": 11,
+      "week": 2,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
+        "teamId": 14,
+        "team": "Ice Has Me Running Back",
+        "owner": "German Haro",
+        "score": 0
+      },
+      "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 78.62
+        "score": 0
+      }
+    },
+    {
+      "id": 12,
+      "week": 2,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
+      "isPlayoff": false,
+      "matchupType": "NONE",
+      "away": {
+        "teamId": 7,
+        "team": "McConkey Tonk Badonkadonk",
+        "owner": "Vincent Cannarozzi",
+        "score": 0
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 139.76
+        "score": 0
       }
     }
   ]
