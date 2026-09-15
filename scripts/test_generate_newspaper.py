@@ -1,5 +1,5 @@
-import io, json, sys, tempfile, unittest
-from contextlib import redirect_stdout
+import io, json, sys, tempfile, unittest, urllib.error
+from contextlib import redirect_stderr, redirect_stdout
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -92,18 +92,37 @@ class NewspaperTests(unittest.TestCase):
         with patch("generate_newspaper.urllib.request.urlopen",side_effect=OSError("down")):self.assertEqual(paper.apply_openai_stories(edition,"key"),edition)
     def test_openai_bad_numbers_rejected(self):
         edition=self.make()
-        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition,True)):self.assertEqual(paper.apply_openai_stories(edition,"key"),edition)
+        failures=[]
+        with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition,True)):self.assertEqual(paper.apply_openai_stories(edition,"key",failures=failures),edition)
+        self.assertEqual(failures[0].stage,"validation"); self.assertIn("story=1",failures[0].detail); self.assertIn("numbers_changed",failures[0].detail)
     def test_openai_valid_keeps_sources(self):
         edition=self.make()
         with patch("generate_newspaper.urllib.request.urlopen",return_value=self.openai_response(edition)):result=paper.apply_openai_stories(edition,"key")
         self.assertEqual(result["writing_mode"],"openai_verified_rewrite"); self.assertEqual([s["source"] for s in result["stories"]],[s["source"] for s in edition["stories"]])
+    def test_openai_http_error_is_safe_and_actionable(self):
+        edition=self.make(); failures=[]
+        body=io.BytesIO(json.dumps({"error":{"type":"rate_limit_error","code":"insufficient_quota","message":"Add credits; sk-secret-must-not-log"}}).encode())
+        error=urllib.error.HTTPError("https://api.openai.com/v1/responses",429,"Too Many Requests",{"x-request-id":"req_test"},body)
+        with patch("generate_newspaper.urllib.request.urlopen",side_effect=error):self.assertEqual(paper.apply_openai_stories(edition,"key",failures=failures),edition)
+        detail=str(failures[0]); self.assertIn("status=429",detail); self.assertIn("insufficient_quota",detail); self.assertIn("req_test",detail); self.assertNotIn("sk-secret",detail)
+    def test_openai_incomplete_response_is_reported(self):
+        edition=self.make(); failures=[]
+        response=MagicMock(); response.__enter__.return_value.read.return_value=json.dumps({"id":"resp_test","status":"incomplete","incomplete_details":{"reason":"max_output_tokens"}}).encode()
+        with patch("generate_newspaper.urllib.request.urlopen",return_value=response):self.assertEqual(paper.apply_openai_stories(edition,"key",failures=failures),edition)
+        self.assertEqual(failures[0].stage,"response"); self.assertIn("max_output_tokens",failures[0].detail)
+    def test_openai_wrong_output_shape_is_reported(self):
+        edition=self.make(); failures=[]
+        payload={"id":"resp_test","status":"completed","output_text":"[]"}
+        response=MagicMock(); response.__enter__.return_value.read.return_value=json.dumps(payload).encode()
+        with patch("generate_newspaper.urllib.request.urlopen",return_value=response):self.assertEqual(paper.apply_openai_stories(edition,"key",failures=failures),edition)
+        self.assertEqual(failures[0].stage,"output_json"); self.assertIn("expected_object",failures[0].detail)
     def test_regenerate_preserves_existing_when_ai_fails(self):
         current=self.root/"current.json"; paper.write_json(current,board())
         editions=self.root/"data/newspaper_editions"; existing=paper.edition_path(2026,1,editions); paper.write_json(existing,self.make()); before=existing.read_bytes()
-        with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions),patch.object(paper,"apply_ai_stories",side_effect=lambda edition,writing:edition):
-            output=io.StringIO()
-            with redirect_stdout(output):code=paper.main(["--season","2026","--week","1","--writing","openai","--regenerate"])
-        self.assertEqual(code,0); self.assertIn("SKIP rewrite_failed",output.getvalue()); self.assertEqual(existing.read_bytes(),before)
+        with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions),patch.object(paper,"apply_ai_stories",side_effect=paper.RewriteFailure("openai","validation","story=1 reason=numbers_changed")):
+            error=io.StringIO()
+            with redirect_stderr(error):code=paper.main(["--season","2026","--week","1","--writing","openai","--regenerate"])
+        self.assertEqual(code,1); self.assertIn("AI_REWRITE_FAILED",error.getvalue()); self.assertIn("numbers_changed",error.getvalue()); self.assertIn("Preserved",error.getvalue()); self.assertEqual(existing.read_bytes(),before)
     def test_duplicate_skips_before_ai_call(self):
         current=self.root/"current.json"; paper.write_json(current,board())
         editions=self.root/"data/newspaper_editions"; existing=paper.edition_path(2026,1,editions); paper.write_json(existing,self.make())
@@ -114,7 +133,7 @@ class NewspaperTests(unittest.TestCase):
     def test_regenerate_replaces_existing_after_verified_rewrite(self):
         current=self.root/"current.json"; paper.write_json(current,board())
         editions=self.root/"data/newspaper_editions"; existing=paper.edition_path(2026,1,editions); paper.write_json(existing,self.make())
-        def rewritten(edition,writing): edition["writing_mode"]="openai_verified_rewrite"; return edition
+        def rewritten(edition,writing,**kwargs): edition["writing_mode"]="openai_verified_rewrite"; return edition
         with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions),patch.object(paper,"apply_ai_stories",side_effect=rewritten):
             output=io.StringIO()
             with redirect_stdout(output):code=paper.main(["--season","2026","--week","1","--writing","openai","--regenerate"])

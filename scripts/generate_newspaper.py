@@ -47,6 +47,19 @@ class GenerationSkip(Exception):
         self.detail = detail or reason
 
 
+class RewriteFailure(Exception):
+    """A safe-to-log explanation of why an AI rewrite was rejected."""
+
+    def __init__(self, provider: str, stage: str, detail: str) -> None:
+        super().__init__(detail)
+        self.provider = provider
+        self.stage = stage
+        self.detail = detail
+
+    def __str__(self) -> str:
+        return f"provider={self.provider} stage={self.stage} {self.detail}"
+
+
 def read_json(path: Path) -> Any:
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
@@ -249,23 +262,81 @@ def _facts(edition: dict[str, Any]) -> list[dict[str, str]]:
 
 
 def _verified_rewrite(edition: dict[str, Any], candidates: Any, writing_mode: str) -> dict[str, Any]:
-    if not isinstance(candidates, list) or len(candidates) != len(edition["stories"]):
-        return edition
+    provider = writing_mode.split("_", 1)[0]
+    if not isinstance(candidates, list):
+        raise RewriteFailure(provider, "validation", "reason=stories_not_array")
+    if len(candidates) != len(edition["stories"]):
+        raise RewriteFailure(
+            provider,
+            "validation",
+            f"reason=story_count expected={len(edition['stories'])} actual={len(candidates)}",
+        )
     result = json.loads(json.dumps(edition))
-    for original, candidate, output in zip(edition["stories"], candidates, result["stories"]):
-        if not isinstance(candidate, dict) or candidate.get("story_type") != original["story_type"]:
-            return edition
+    for index, (original, candidate, output) in enumerate(zip(edition["stories"], candidates, result["stories"]), start=1):
+        story_type = original["story_type"]
+        if not isinstance(candidate, dict):
+            raise RewriteFailure(provider, "validation", f"story={index} story_type={story_type} reason=not_object")
+        if candidate.get("story_type") != story_type:
+            raise RewriteFailure(
+                provider,
+                "validation",
+                f"story={index} story_type={story_type} reason=story_type_changed",
+            )
         title, body = candidate.get("title"), candidate.get("body")
         if not isinstance(title, str) or not title.strip() or not isinstance(body, str) or not body.strip():
-            return edition
-        if sorted(_numbers(title + " " + body)) != sorted(_numbers(original["title"] + " " + original["body"])):
-            return edition
+            raise RewriteFailure(provider, "validation", f"story={index} story_type={story_type} reason=missing_text")
+        expected_numbers = sorted(_numbers(original["title"] + " " + original["body"]))
+        actual_numbers = sorted(_numbers(title + " " + body))
+        if actual_numbers != expected_numbers:
+            raise RewriteFailure(
+                provider,
+                "validation",
+                f"story={index} story_type={story_type} reason=numbers_changed "
+                f"expected={expected_numbers} actual={actual_numbers}",
+            )
         output["title"], output["body"] = title.strip(), body.strip()
     result["writing_mode"] = writing_mode
     return result
 
 
+def _safe_error_text(value: Any, limit: int = 240) -> str:
+    text = re.sub(r"\bsk-[A-Za-z0-9_-]+", "[redacted]", str(value or ""))
+    text = " ".join(text.split())
+    return text[:limit] or "unavailable"
+
+
+def _openai_http_failure(error: urllib.error.HTTPError) -> RewriteFailure:
+    error_type = "unavailable"
+    error_code = "unavailable"
+    message = error.reason or "request rejected"
+    try:
+        payload = json.loads(error.read(8192).decode("utf-8", errors="replace"))
+        details = payload.get("error", {}) if isinstance(payload, dict) else {}
+        if isinstance(details, dict):
+            error_type = details.get("type") or error_type
+            error_code = details.get("code") or error_code
+            message = details.get("message") or message
+    except (OSError, TypeError, ValueError, json.JSONDecodeError):
+        pass
+    request_id = error.headers.get("x-request-id", "unavailable") if error.headers else "unavailable"
+    return RewriteFailure(
+        "openai",
+        "http",
+        f"status={error.code} type={_safe_error_text(error_type)} code={_safe_error_text(error_code)} "
+        f"request_id={_safe_error_text(request_id)} message={_safe_error_text(message)}",
+    )
+
+
 def _openai_text(payload: dict[str, Any]) -> str:
+    if payload.get("status") not in (None, "completed"):
+        details = payload.get("incomplete_details") or payload.get("error") or {}
+        reason = details.get("reason") if isinstance(details, dict) else details
+        raise RewriteFailure(
+            "openai",
+            "response",
+            f"status={_safe_error_text(payload.get('status'))} reason={_safe_error_text(reason)} "
+            f"response_id={_safe_error_text(payload.get('id'))}",
+        )
     direct = payload.get("output_text")
     if isinstance(direct, str) and direct.strip():
         return direct
@@ -275,10 +346,18 @@ def _openai_text(payload: dict[str, Any]) -> str:
         for part in item.get("content", []):
             if isinstance(part, dict) and part.get("type") == "output_text" and isinstance(part.get("text"), str):
                 return part["text"]
-    raise KeyError("OpenAI response did not contain output text.")
+            if isinstance(part, dict) and part.get("type") == "refusal":
+                raise RewriteFailure("openai", "response", "reason=model_refusal")
+    raise RewriteFailure(
+        "openai",
+        "response",
+        f"reason=missing_output_text response_id={_safe_error_text(payload.get('id'))}",
+    )
 
 
-def apply_openai_stories(edition: dict[str, Any], api_key: str | None = None) -> dict[str, Any]:
+def apply_openai_stories(
+    edition: dict[str, Any], api_key: str | None = None, *, failures: list[RewriteFailure] | None = None,
+) -> dict[str, Any]:
     key = api_key or os.getenv("OPENAI_API_KEY")
     if not key:
         return edition
@@ -288,6 +367,8 @@ def apply_openai_stories(edition: dict[str, Any], api_key: str | None = None) ->
         "properties": {
             "stories": {
                 "type": "array",
+                "minItems": len(facts),
+                "maxItems": len(facts),
                 "items": {
                     "type": "object",
                     "properties": {
@@ -306,7 +387,9 @@ def apply_openai_stories(edition: dict[str, Any], api_key: str | None = None) ->
     instructions = (
         "Rewrite these verified fantasy-football newspaper briefs with a lively local sports-column voice. "
         "Keep the same story count, order, and story_type values. Preserve every factual claim, name, and number exactly. "
-        "Make each item cover a distinct angle, vary sentence openings, and avoid repeating a score when it is not needed. "
+        "Within each story, every numeric token must appear exactly as supplied and the same number of times; never spell out, "
+        "remove, add, round, or move a number to another story. If a sentence cannot be improved without changing a number, "
+        "leave that sentence unchanged. Make each item cover a distinct angle and vary sentence openings. "
         "Do not add predictions, quotes, injuries, transactions, or facts that are not supplied."
     )
     request = urllib.request.Request(
@@ -325,14 +408,45 @@ def apply_openai_stories(edition: dict[str, Any], api_key: str | None = None) ->
     )
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
-            payload = json.loads(response.read().decode())
-        rewritten = json.loads(_openai_text(payload))
+            raw_payload = response.read().decode()
+        try:
+            payload = json.loads(raw_payload)
+        except json.JSONDecodeError as error:
+            raise RewriteFailure("openai", "response_json", f"reason=invalid_json line={error.lineno}") from error
+        try:
+            rewritten = json.loads(_openai_text(payload))
+        except json.JSONDecodeError as error:
+            raise RewriteFailure("openai", "output_json", f"reason=invalid_json line={error.lineno}") from error
+        if not isinstance(rewritten, dict):
+            raise RewriteFailure("openai", "output_json", "reason=expected_object")
         return _verified_rewrite(edition, rewritten.get("stories"), "openai_verified_rewrite")
-    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
-        return edition
+    except urllib.error.HTTPError as error:
+        failure = _openai_http_failure(error)
+    except RewriteFailure as error:
+        failure = error
+    except urllib.error.URLError as error:
+        failure = RewriteFailure("openai", "network", f"reason={_safe_error_text(error.reason)}")
+    except (OSError, KeyError, TypeError, ValueError) as error:
+        failure = RewriteFailure("openai", "client", f"reason={_safe_error_text(type(error).__name__)}")
+    if failures is not None:
+        failures.append(failure)
+    return edition
 
 
-def apply_grok_stories(edition: dict[str, Any], api_key: str | None = None) -> dict[str, Any]:
+def _report_rewrite_failures(failures: list[RewriteFailure], *, fatal: bool) -> None:
+    label = "ERROR" if fatal else "WARNING"
+    for failure in failures:
+        print(f"{label} AI_REWRITE {failure}", file=sys.stderr)
+
+
+def _require_failure(writing: str) -> RewriteFailure:
+    providers = "openai,grok" if writing == "auto" else writing
+    return RewriteFailure(providers, "configuration", "reason=no_verified_rewrite")
+
+
+def apply_grok_stories(
+    edition: dict[str, Any], api_key: str | None = None, *, failures: list[RewriteFailure] | None = None,
+) -> dict[str, Any]:
     key = api_key or os.getenv("XAI_API_KEY") or os.getenv("GROK_API_KEY")
     if not key:
         return edition
@@ -344,17 +458,32 @@ def apply_grok_stories(edition: dict[str, Any], api_key: str | None = None) -> d
         content = payload["choices"][0]["message"]["content"]
         rewritten = json.loads(content) if isinstance(content, str) else content
         return _verified_rewrite(edition, rewritten.get("stories"), "grok_verified_rewrite")
-    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
-        return edition
+    except RewriteFailure as error:
+        failure = error
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+        failure = RewriteFailure("grok", "client", f"reason={_safe_error_text(type(error).__name__)}")
+    if failures is not None:
+        failures.append(failure)
+    return edition
 
 
-def apply_ai_stories(edition: dict[str, Any], writing: str = "auto") -> dict[str, Any]:
+def apply_ai_stories(edition: dict[str, Any], writing: str = "auto", *, require_verified: bool = False) -> dict[str, Any]:
+    failures: list[RewriteFailure] = []
     if writing in {"auto", "openai"}:
-        result = apply_openai_stories(edition)
+        result = apply_openai_stories(edition, failures=failures)
         if result.get("writing_mode") == "openai_verified_rewrite" or writing == "openai":
-            return result
+            if result.get("writing_mode") == "openai_verified_rewrite":
+                return result
     if writing in {"auto", "grok"}:
-        return apply_grok_stories(edition)
+        result = apply_grok_stories(edition, failures=failures)
+        if result.get("writing_mode") == "grok_verified_rewrite":
+            return result
+    if writing != "deterministic":
+        if not failures:
+            failures.append(_require_failure(writing))
+        _report_rewrite_failures(failures, fatal=require_verified)
+        if require_verified:
+            raise RewriteFailure("all", "rewrite", "reason=no_verified_rewrite")
     return edition
 
 
@@ -376,13 +505,14 @@ def main(argv: list[str] | None = None) -> int:
             print(f"SKIP {SKIP_DUPLICATE}: {path.relative_to(ROOT)} already contains a valid edition.")
             return 0
         edition = generate_edition(board, args.season, week, allow_incomplete=args.allow_incomplete, root=ROOT)
-        edition = apply_ai_stories(edition, args.writing)
+        edition = apply_ai_stories(
+            edition,
+            args.writing,
+            require_verified=args.regenerate or args.writing in {"openai", "grok"},
+        )
         validate_edition(edition, publish=not args.allow_incomplete)
         if args.allow_incomplete or args.stdout:
             print(json.dumps(edition, indent=2, ensure_ascii=False))
-            return 0
-        if replacing and not str(edition.get("writing_mode", "")).endswith("_verified_rewrite"):
-            print(f"SKIP rewrite_failed: Preserved {path.relative_to(ROOT)} because no verified AI rewrite was produced.")
             return 0
         write_json(path, edition)
         update_index(EDITIONS_ROOT / "index.json", edition, path, root=ROOT)
@@ -392,6 +522,10 @@ def main(argv: list[str] | None = None) -> int:
     except GenerationSkip as skip:
         print(f"SKIP {skip.reason}: {skip.detail}")
         return 0
+    except RewriteFailure as error:
+        preserved = f" Preserved {path.relative_to(ROOT)}." if 'path' in locals() and replacing else ""
+        print(f"ERROR AI_REWRITE_FAILED {error}.{preserved}", file=sys.stderr)
+        return 1
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
