@@ -16,6 +16,7 @@ import re
 import sys
 import urllib.error
 import urllib.request
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -36,6 +37,7 @@ SKIP_INVALID = "invalid_scores"
 SKIP_DUPLICATE = "edition_already_published"
 SKIP_MISSING = "missing_data"
 FINAL_WINNERS = {"HOME", "AWAY", "TIE"}
+MAX_MANAGER_FEATURES = 2
 
 
 class GenerationSkip(Exception):
@@ -134,8 +136,13 @@ def _matchup_facts(matchups: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return facts
 
 
-def _story(kind: str, title: str, body: str, source: dict[str, str]) -> dict[str, Any]:
-    return {"story_type": kind, "title": title, "body": body, "source": source}
+def _story(
+    kind: str, title: str, body: str, source: dict[str, str], *, primary_owner: str | None = None,
+) -> dict[str, Any]:
+    story = {"story_type": kind, "title": title, "body": body, "source": source}
+    if primary_owner:
+        story["primary_owner"] = primary_owner
+    return story
 
 
 def _load_optional(path: Path) -> Any | None:
@@ -163,23 +170,84 @@ def generate_edition(
         f"{fact['away']['owner']} {fact['away_score']:.2f}–{fact['home_score']:.2f} {fact['home']['owner']}"
         for fact in facts
     ]
+    feature_counts: Counter[str] = Counter()
+
+    def feature_story(
+        kind: str, owner: str, title: str, body: str, source: dict[str, str],
+        *, balanced_title: str, balanced_body: str,
+    ) -> dict[str, Any]:
+        if feature_counts[owner] < MAX_MANAGER_FEATURES:
+            feature_counts[owner] += 1
+            return _story(kind, title, body, source, primary_owner=owner)
+        return _story(kind, balanced_title, balanced_body, source)
+
     stories = [
         _story("matchup_recap", f"Week {week}: The league board", "; ".join(recap_lines) + ".", scoreboard_source),
-        _story("biggest_win", f"{biggest['winner']['owner']} delivers the week's biggest win", f"{biggest['winner']['owner']} beat {biggest['loser']['owner']} {biggest['winner_score']:.2f}–{biggest['loser_score']:.2f}, a margin of {biggest['margin']:.2f} points.", scoreboard_source),
-        _story("closest_game", f"{closest['winner']['owner']} survives the closest finish", f"The week's tightest matchup finished {closest['winner_score']:.2f}–{closest['loser_score']:.2f}, with {closest['winner']['owner']} ahead of {closest['loser']['owner']} by {closest['margin']:.2f} points.", scoreboard_source),
-        _story("scoring_leaders", f"{high_team['owner']} sets the Week {week} pace", f"{high_team['owner']} posted the league-high {high_score:.2f}. {low_team['owner']} finished with the week's low score at {low_score:.2f}.", scoreboard_source),
+        feature_story(
+            "biggest_win", biggest["winner"]["owner"],
+            f"{biggest['winner']['owner']} delivers the week's biggest win",
+            f"{biggest['winner']['owner']} beat {biggest['loser']['owner']} {biggest['winner_score']:.2f}–{biggest['loser_score']:.2f}, a margin of {biggest['margin']:.2f} points.",
+            scoreboard_source,
+            balanced_title="The week's widest margin",
+            balanced_body=f"The biggest win finished {biggest['winner_score']:.2f}–{biggest['loser_score']:.2f}, a margin of {biggest['margin']:.2f} points.",
+        ),
+        feature_story(
+            "closest_game", closest["winner"]["owner"],
+            f"{closest['winner']['owner']} survives the closest finish",
+            f"The week's tightest matchup finished {closest['winner_score']:.2f}–{closest['loser_score']:.2f}, with {closest['winner']['owner']} ahead of {closest['loser']['owner']} by {closest['margin']:.2f} points.",
+            scoreboard_source,
+            balanced_title="The week's closest finish",
+            balanced_body=f"The tightest matchup finished {closest['winner_score']:.2f}–{closest['loser_score']:.2f}, a margin of {closest['margin']:.2f} points.",
+        ),
+        feature_story(
+            "scoring_leaders", high_team["owner"],
+            f"{high_team['owner']} sets the Week {week} pace",
+            f"{high_team['owner']} posted the league-high {high_score:.2f}. {low_team['owner']} finished with the week's low score at {low_score:.2f}.",
+            scoreboard_source,
+            balanced_title=f"Week {week}'s scoring range",
+            balanced_body=f"The league-high score was {high_score:.2f}, while the week's low score was {low_score:.2f}.",
+        ),
     ]
 
     standings = sorted(status["standings"], key=lambda row: (-int(row.get("wins", 0)), int(row.get("losses", 0)), -float(row.get("pointsFor", 0))))
     leader = standings[0]
-    stories.append(_story("standings", f"{leader['owner']} leads the verified table", f"After Week {week}, {leader['owner']} is listed first at {leader.get('wins', 0)}-{leader.get('losses', 0)} with {float(leader.get('pointsFor', 0)):.2f} points for.", _source("data/current-season.json", f"season={season};week={week};standings", "Verified standings table")))
+    top_three = ", ".join(row["owner"] for row in standings[:3])
+    stories.append(feature_story(
+        "standings", leader["owner"],
+        f"{leader['owner']} leads the verified table",
+        f"After Week {week}, {leader['owner']} is listed first at {leader.get('wins', 0)}-{leader.get('losses', 0)} with {float(leader.get('pointsFor', 0)):.2f} points for.",
+        _source("data/current-season.json", f"season={season};week={week};standings", "Verified standings table"),
+        balanced_title=f"The Week {week} standings take shape",
+        balanced_body=f"The verified top three after Week {week} are {top_three}.",
+    ))
 
     rankings = _load_optional(root / "data" / "power-rankings.json")
     if rankings and rankings.get("ratings"):
-        preseason = {row.get("name"): row.get("rating") for row in rankings["ratings"]}
-        rating = preseason.get(high_team["owner"])
-        detail = f" Their post-draft rating was {float(rating):.1f}." if isinstance(rating, (int, float)) else ""
-        stories.append(_story("power_rankings", f"The opening board challenges the preseason order", f"Week {week}'s top score belongs to {high_team['owner']} at {high_score:.2f}.{detail}", _source("data/current-season.json + data/power-rankings.json", f"week={week};owner={high_team['owner']}", "Weekly score compared with checked-in post-draft ratings")))
+        rating_rows = {row.get("name"): row for row in rankings["ratings"] if isinstance(row, dict)}
+        power_candidates = []
+        for fact in facts:
+            owner = fact["winner"]["owner"]
+            row = rating_rows.get(owner, {})
+            rating = row.get("preseasonRating", row.get("rating"))
+            if isinstance(rating, (int, float)) and feature_counts[owner] < MAX_MANAGER_FEATURES:
+                power_candidates.append((float(rating), -fact["margin"], owner, fact["winner_score"]))
+        power_source = _source("data/current-season.json + data/power-rankings.json", f"week={week};ratings", "Weekly results compared with checked-in post-draft ratings")
+        if power_candidates:
+            rating, _, owner, winner_score = min(power_candidates)
+            stories.append(feature_story(
+                "power_rankings", owner,
+                f"{owner} applies early pressure to the preseason order",
+                f"{owner} won in Week {week} with {winner_score:.2f} points after entering the season with a {rating:.1f} post-draft rating.",
+                power_source,
+                balanced_title="The opening board challenges the preseason order",
+                balanced_body=f"The verified Week {week} results can now be compared with the checked-in post-draft ratings.",
+            ))
+        else:
+            stories.append(_story(
+                "power_rankings", "The opening board challenges the preseason order",
+                f"The verified Week {week} results can now be compared with the checked-in post-draft ratings.",
+                power_source,
+            ))
 
     records = _load_optional(root / "data" / "matchups.json") or {}
     archive = records.get("records", {})
@@ -217,6 +285,10 @@ def generate_edition(
         "edition_year": season, "week": week, "generated_at": timestamp,
         "source_status": "verified_final" if status["final"] else "incomplete_override",
         "validation_status": "valid" if status["final"] else "preview",
+        "editorial_policy": {
+            "max_primary_features_per_manager": MAX_MANAGER_FEATURES,
+            "matchup_recap_exempt": True,
+        },
         "source_trace": _source("data/current-season.json", f"season={season};week={week}", "Published ESPN board snapshot"),
         "stories": stories,
     }
@@ -230,6 +302,17 @@ def validate_edition(edition: dict[str, Any], *, publish: bool = True) -> None:
     for story in edition["stories"]:
         if not all(isinstance(story.get(key), str) and story[key].strip() for key in ("story_type", "title", "body")) or not story.get("source"):
             raise ValueError("Every story requires a type, title, body, and source trace.")
+    policy = edition.get("editorial_policy", {})
+    feature_limit = policy.get("max_primary_features_per_manager", MAX_MANAGER_FEATURES)
+    if not isinstance(feature_limit, int) or feature_limit < 1:
+        raise ValueError("The manager feature limit must be a positive integer.")
+    primary_counts = Counter(
+        story["primary_owner"] for story in edition["stories"]
+        if story.get("story_type") != "matchup_recap" and story.get("primary_owner")
+    )
+    overused = [owner for owner, count in primary_counts.items() if count > feature_limit]
+    if overused:
+        raise ValueError(f"Manager feature limit exceeded: {', '.join(sorted(overused))}.")
 
 
 def existing_valid_edition(path: Path) -> bool:
@@ -257,8 +340,13 @@ def _numbers(value: str) -> list[str]:
     return re.findall(r"(?<![A-Za-z])\d+(?:\.\d+)?", value)
 
 
-def _facts(edition: dict[str, Any]) -> list[dict[str, str]]:
-    return [{"story_type": story["story_type"], "title": story["title"], "body": story["body"]} for story in edition["stories"]]
+def _facts(edition: dict[str, Any]) -> list[dict[str, Any]]:
+    return [{
+        "story_type": story["story_type"],
+        "title": story["title"],
+        "body": story["body"],
+        "primary_owner": story.get("primary_owner"),
+    } for story in edition["stories"]]
 
 
 def _verified_rewrite(edition: dict[str, Any], candidates: Any, writing_mode: str) -> dict[str, Any]:
@@ -390,6 +478,9 @@ def apply_openai_stories(
         "Within each story, every numeric token must appear exactly as supplied and the same number of times; never spell out, "
         "remove, add, round, or move a number to another story. If a sentence cannot be improved without changing a number, "
         "leave that sentence unchanged. Make each item cover a distinct angle and vary sentence openings. "
+        "Treat primary_owner as locked editorial metadata: no manager may be the primary subject of more than two "
+        "feature stories, and the full matchup_recap is exempt. When primary_owner is null, keep the story league-wide "
+        "instead of turning it into another manager profile. "
         "Do not add predictions, quotes, injuries, transactions, or facts that are not supplied."
     )
     request = urllib.request.Request(
@@ -451,7 +542,7 @@ def apply_grok_stories(
     if not key:
         return edition
     facts = _facts(edition)
-    request = urllib.request.Request(GROK_API_URL, data=json.dumps({"model": GROK_MODEL, "temperature": 0.2, "response_format": {"type": "json_object"}, "messages": [{"role": "system", "content": "Rewrite only for style. Preserve every fact and number. Return JSON with a stories array in the same order."}, {"role": "user", "content": json.dumps({"stories": facts}, ensure_ascii=False)}]}).encode(), headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"}, method="POST")
+    request = urllib.request.Request(GROK_API_URL, data=json.dumps({"model": GROK_MODEL, "temperature": 0.2, "response_format": {"type": "json_object"}, "messages": [{"role": "system", "content": "Rewrite only for style. Preserve every fact and number. Respect the locked primary_owner assignments, keep null-primary stories league-wide, and never make one manager the primary subject of more than two feature stories; matchup_recap is exempt. Return JSON with a stories array in the same order."}, {"role": "user", "content": json.dumps({"stories": facts}, ensure_ascii=False)}]}).encode(), headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"}, method="POST")
     try:
         with urllib.request.urlopen(request, timeout=20) as response:
             payload = json.loads(response.read().decode())
