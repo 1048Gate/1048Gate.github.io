@@ -24,9 +24,10 @@
       const teams = (payload.ratings || []).filter(t => Number.isFinite(Number(t.rating)));
       if(teams.length < 4) throw new Error('Not enough rated teams to project.');
       render(
-        teams.map(t => ({name:String(t.name), rating:Number(t.rating)})),
+        teams.map(t => ({name:String(t.name), rating:Number(t.rating), wins:Number(t.wins)||0, ties:Number(t.ties)||0})),
         Number(payload.generatedForSeason) || '',
-        String(payload.basis || 'career')
+        String(payload.basis || 'career'),
+        Number(payload.currentSeason?.gamesPlayed) || 0
       );
     }catch(error){
       console.warn('Title projection unavailable:', error);
@@ -63,15 +64,16 @@
     return [...rounds, ...rematchRounds.map(index => rounds[index])].flat();
   }
 
-  function simulate(teams){
+  function simulate(teams, gamesPlayed = 0){
     const made = teams.map(() => 0);
     const bye = teams.map(() => 0);
     const title = teams.map(() => 0);
     const n = teams.length;
     const play = (i, j) => Math.random() < pWin(teams[i], teams[j]) ? i : j;
     for(let sim = 0; sim < SIMULATIONS; sim++){
-      const wins = teams.map(() => 0);
-      for(const [home, away] of buildSchedule(n)){
+      const wins = teams.map(team => team.wins + 0.5 * team.ties);
+      const remainingGames = Math.max(0, GAMES_PER_SEASON - gamesPlayed) * n / 2;
+      for(const [home, away] of buildSchedule(n).slice(0, remainingGames)){
         wins[play(home, away)]++;
       }
       const order = teams.map((_, i) => i).sort((a, b) => wins[b] - wins[a] || (Math.random() - 0.5));
@@ -87,21 +89,24 @@
     return {made, bye, title};
   }
 
-  function render(teams, seasonNumber, basis){
-    const {made, bye, title} = simulate(teams);
+  function render(teams, seasonNumber, basis, gamesPlayed){
+    const {made, bye, title} = simulate(teams, gamesPlayed);
     const pct = value => `${Math.round(value * 100)}%`;
     const rows = teams
       .map((t, i) => ({name:t.name, madePct:made[i]/SIMULATIONS, byePct:bye[i]/SIMULATIONS, titlePct:title[i]/SIMULATIONS}))
       .sort((a, b) => b.titlePct - a.titlePct || b.madePct - a.madePct);
     const maxTitle = Math.max(...rows.map(r => r.titlePct)) || 1;
     const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
+    const weekly = basis === 'weekly-results-blend';
     const postDraft = basis === 'post-draft';
-    const kicker = postDraft ? `SZN ${seasonNumber} POST-DRAFT BOARD` : `SZN ${seasonNumber} PRE-DRAFT BOARD`;
-    const sub = postDraft
-      ? `${SIMULATIONS.toLocaleString('en-US')} simulated seasons · 2026 roster ranks blended with career form`
+    const kicker = weekly ? `SZN ${seasonNumber} · THROUGH WEEK ${gamesPlayed}` : postDraft ? `SZN ${seasonNumber} POST-DRAFT BOARD` : `SZN ${seasonNumber} PRE-DRAFT BOARD`;
+    const sub = weekly
+      ? `${SIMULATIONS.toLocaleString('en-US')} simulations · current record, scoring, schedule strength, roster and history`
+      : postDraft ? `${SIMULATIONS.toLocaleString('en-US')} simulated seasons · 2026 roster ranks blended with career form`
       : `${SIMULATIONS.toLocaleString('en-US')} simulated seasons · career power ratings, not 2026 rosters`;
-    const note = postDraft
-      ? `Post-draft projection. These percentages blend ESPN PPR ranks from the Szn 10 draft with career power ratings and a random ${GAMES_PER_SEASON}-game schedule. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.`
+    const note = weekly
+      ? `Updated after completed weeks. Simulations begin with each club's real 2026 record, then project the remaining ${Math.max(0,GAMES_PER_SEASON-gamesPlayed)} regular-season games from the weekly rating blend. Points against is treated as a small schedule-strength adjustment, not fantasy defense. Top six make the bracket; top two get first-round byes.`
+      : postDraft ? `Post-draft projection. These percentages blend ESPN PPR ranks from the Szn 10 draft with career power ratings and a random ${GAMES_PER_SEASON}-game schedule. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.`
       : `Pre-draft projection only. These percentages come from career power ratings and a random ${GAMES_PER_SEASON}-game schedule — not keepers, the 2026 draft, or current rosters. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.`;
     host.innerHTML = `<div class="history-section-head"><div><span>${kicker}</span><h3>Playoff Probability Board</h3></div><small>${sub}</small></div><div class="title-odds-grid">${rows.map(r => `
       <div class="title-odds-card${r.titlePct === maxTitle ? ' is-favorite' : ''}">

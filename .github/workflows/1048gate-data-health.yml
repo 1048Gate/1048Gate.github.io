@@ -109,13 +109,15 @@ jobs:
             echo "Manual incomplete override is enabled for this run only."
           fi
           python3 scripts/generate_newspaper.py "${PAPER_ARGS[@]}"
+      - name: Refresh championship odds from the updated season board
+        run: npm run futures
       - name: Validate site checks still pass
         run: npm run check
       - name: Commit updated board and newspaper when they change
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/current-season.json data/site.json data/newspaper_editions
+          git add data/current-season.json data/site.json data/power-rankings.json data/newspaper_editions
           if git diff --cached --quiet; then
             echo "Current-season board and newspaper unchanged — nothing to commit."
           else
