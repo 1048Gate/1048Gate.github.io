@@ -1,68 +1,162 @@
 {
   "schemaVersion": 1,
   "generatedForSeason": 10,
-  "basis": "post-draft",
-  "currentSeason": null,
+  "basis": "weekly-results-blend",
+  "currentSeason": {
+    "season": 2026,
+    "throughWeek": 1,
+    "gamesPlayed": 1,
+    "weight": 0.146,
+    "factors": {
+      "record": 0.45,
+      "pointsFor": 0.4,
+      "pointsAgainstSchedule": 0.15
+    }
+  },
   "ratings": [
     {
       "name": "Thomas Speer",
-      "rating": 68.2,
-      "preseasonRating": 68.2
-    },
-    {
-      "name": "Brian Heino",
-      "rating": 52.4,
-      "preseasonRating": 52.4
+      "rating": 60.1,
+      "preseasonRating": 68.2,
+      "currentRating": 12.9,
+      "wins": 0,
+      "losses": 1,
+      "ties": 0,
+      "record": "0-1",
+      "pointsForPerGame": 101.3,
+      "pointsAgainstPerGame": 115.96
     },
     {
       "name": "Bryan Hunt",
-      "rating": 50.7,
-      "preseasonRating": 50.7
-    },
-    {
-      "name": "Collin Krum",
-      "rating": 50,
-      "preseasonRating": 50
-    },
-    {
-      "name": "JD Daley",
-      "rating": 45.9,
-      "preseasonRating": 45.9
+      "rating": 55.3,
+      "preseasonRating": 50.7,
+      "currentRating": 82,
+      "wins": 1,
+      "losses": 0,
+      "ties": 0,
+      "record": "1-0",
+      "pointsForPerGame": 158.26,
+      "pointsAgainstPerGame": 147.36
     },
     {
       "name": "James Brochu",
-      "rating": 45.7,
-      "preseasonRating": 45.7
+      "rating": 48.8,
+      "preseasonRating": 45.7,
+      "currentRating": 66.5,
+      "wins": 1,
+      "losses": 0,
+      "ties": 0,
+      "record": "1-0",
+      "pointsForPerGame": 139.76,
+      "pointsAgainstPerGame": 78.62
     },
     {
       "name": "George Travis",
-      "rating": 44.9,
-      "preseasonRating": 44.9
+      "rating": 47.2,
+      "preseasonRating": 44.9,
+      "currentRating": 61.1,
+      "wins": 1,
+      "losses": 0,
+      "ties": 0,
+      "record": "1-0",
+      "pointsForPerGame": 115.96,
+      "pointsAgainstPerGame": 101.3
     },
     {
-      "name": "Jared Hall",
-      "rating": 44.7,
-      "preseasonRating": 44.7
-    },
-    {
-      "name": "Vincent Cannarozzi",
-      "rating": 37.2,
-      "preseasonRating": 37.2
+      "name": "Brian Heino",
+      "rating": 45.9,
+      "preseasonRating": 52.4,
+      "currentRating": 8,
+      "wins": 0,
+      "losses": 1,
+      "ties": 0,
+      "record": "0-1",
+      "pointsForPerGame": 78.62,
+      "pointsAgainstPerGame": 139.76
     },
     {
       "name": "Trevor Hash",
-      "rating": 37.2,
-      "preseasonRating": 37.2
+      "rating": 44.4,
+      "preseasonRating": 37.2,
+      "currentRating": 86.5,
+      "wins": 1,
+      "losses": 0,
+      "ties": 0,
+      "record": "1-0",
+      "pointsForPerGame": 192.56,
+      "pointsAgainstPerGame": 90.32
+    },
+    {
+      "name": "JD Daley",
+      "rating": 44.2,
+      "preseasonRating": 45.9,
+      "currentRating": 34.6,
+      "wins": 0,
+      "losses": 1,
+      "ties": 0,
+      "record": "0-1",
+      "pointsForPerGame": 147.36,
+      "pointsAgainstPerGame": 158.26
+    },
+    {
+      "name": "Collin Krum",
+      "rating": 43.7,
+      "preseasonRating": 50,
+      "currentRating": 7.1,
+      "wins": 0,
+      "losses": 1,
+      "ties": 0,
+      "record": "0-1",
+      "pointsForPerGame": 89.26,
+      "pointsAgainstPerGame": 104.22
+    },
+    {
+      "name": "Vincent Cannarozzi",
+      "rating": 43.4,
+      "preseasonRating": 37.2,
+      "currentRating": 80.1,
+      "wins": 1,
+      "losses": 0,
+      "ties": 0,
+      "record": "1-0",
+      "pointsForPerGame": 154.9,
+      "pointsAgainstPerGame": 142
+    },
+    {
+      "name": "Jared Hall",
+      "rating": 42.9,
+      "preseasonRating": 44.7,
+      "currentRating": 32.3,
+      "wins": 0,
+      "losses": 1,
+      "ties": 0,
+      "record": "0-1",
+      "pointsForPerGame": 142,
+      "pointsAgainstPerGame": 154.9
     },
     {
       "name": "German Haro",
-      "rating": 31.2,
-      "preseasonRating": 31.2
+      "rating": 34.7,
+      "preseasonRating": 31.2,
+      "currentRating": 55.4,
+      "wins": 1,
+      "losses": 0,
+      "ties": 0,
+      "record": "1-0",
+      "pointsForPerGame": 104.22,
+      "pointsAgainstPerGame": 89.26
     },
     {
       "name": "Kyle Fowler",
-      "rating": 27.4,
-      "preseasonRating": 27.4
+      "rating": 26.2,
+      "preseasonRating": 27.4,
+      "currentRating": 19.1,
+      "wins": 0,
+      "losses": 1,
+      "ties": 0,
+      "record": "0-1",
+      "pointsForPerGame": 90.32,
+      "pointsAgainstPerGame": 192.56
     }
   ]
 }

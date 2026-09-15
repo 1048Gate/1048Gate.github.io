@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "league_name": "1048 Gate",
+  "season": 2026,
+  "edition_year": 2026,
+  "week": 1,
+  "generated_at": "2026-09-15T14:25:23.408521Z",
+  "source_status": "verified_final",
+  "validation_status": "valid",
+  "source_trace": {
+    "dataset": "data/current-season.json",
+    "locator": "season=2026;week=1",
+    "description": "Published ESPN board snapshot"
+  },
+  "stories": [
+    {
+      "story_type": "matchup_recap",
+      "title": "Week 1: The league board",
+      "body": "JD Daley 147.36–158.26 Bryan Hunt; Thomas Speer 101.30–115.96 George Travis; Trevor Hash 192.56–90.32 Kyle Fowler; Collin Krum 89.26–104.22 German Haro; Jared Hall 142.00–154.90 Vincent Cannarozzi; Brian Heino 78.62–139.76 James Brochu.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=1;matchups",
+        "description": "Final ESPN matchup board"
+      }
+    },
+    {
+      "story_type": "biggest_win",
+      "title": "Trevor Hash delivers the week's biggest win",
+      "body": "Trevor Hash beat Kyle Fowler 192.56–90.32, a margin of 102.24 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=1;matchups",
+        "description": "Final ESPN matchup board"
+      }
+    },
+    {
+      "story_type": "closest_game",
+      "title": "Bryan Hunt survives the closest finish",
+      "body": "The week's tightest matchup finished 158.26–147.36, with Bryan Hunt ahead of JD Daley by 10.90 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=1;matchups",
+        "description": "Final ESPN matchup board"
+      }
+    },
+    {
+      "story_type": "scoring_leaders",
+      "title": "Trevor Hash sets the Week 1 pace",
+      "body": "Trevor Hash posted the league-high 192.56. Brian Heino finished with the week's low score at 78.62.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=1;matchups",
+        "description": "Final ESPN matchup board"
+      }
+    },
+    {
+      "story_type": "standings",
+      "title": "Trevor Hash leads the verified table",
+      "body": "After Week 1, Trevor Hash is listed first at 1-0 with 192.56 points for.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=1;standings",
+        "description": "Verified standings table"
+      }
+    },
+    {
+      "story_type": "power_rankings",
+      "title": "The opening board challenges the preseason order",
+      "body": "Week 1's top score belongs to Trevor Hash at 192.56. Their post-draft rating was 37.2.",
+      "source": {
+        "dataset": "data/current-season.json + data/power-rankings.json",
+        "locator": "week=1;owner=Trevor Hash",
+        "description": "Weekly score compared with checked-in post-draft ratings"
+      }
+    },
+    {
+      "story_type": "record_watch",
+      "title": "The record book holds",
+      "body": "Week 1's results did not break the checked-in highest-score, blowout, or closest-game marks.",
+      "source": {
+        "dataset": "data/current-season.json + data/matchups.json",
+        "locator": "week=1;records",
+        "description": "Week results compared with archive records"
+      }
+    },
+    {
+      "story_type": "manager_spotlight",
+      "title": "Manager spotlight: Trevor Hash",
+      "body": "Trevor Hash owns Week 1's highest verified score at 192.56 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=1;matchups",
+        "description": "Final ESPN matchup board"
+      }
+    },
+    {
+      "story_type": "rivalry",
+      "title": "Rivalry file: Brian Heino and Bryan Hunt",
+      "body": "The archive lists the all-time series at 4-7-0 from 11 meetings.",
+      "source": {
+        "dataset": "data/matchups.json",
+        "locator": "pair=Brian Heino|Bryan Hunt",
+        "description": "All-time head-to-head archive"
+      }
+    }
+  ]
+}
