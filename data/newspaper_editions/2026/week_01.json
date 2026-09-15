@@ -4,9 +4,13 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 1,
-  "generated_at": "2026-09-15T17:43:59.477070Z",
+  "generated_at": "2026-09-15T20:48:59.456906Z",
   "source_status": "verified_final",
   "validation_status": "valid",
+  "editorial_policy": {
+    "max_primary_features_per_manager": 2,
+    "matchup_recap_exempt": true
+  },
   "source_trace": {
     "dataset": "data/current-season.json",
     "locator": "season=2026;week=1",
@@ -16,7 +20,7 @@
     {
       "story_type": "matchup_recap",
       "title": "Week 1: The league board",
-      "body": "The opening scoreboard delivered a split of drama and domination: JD Daley 147.36–158.26 Bryan Hunt; Thomas Speer 101.30–115.96 George Travis; Trevor Hash 192.56–90.32 Kyle Fowler; Collin Krum 89.26–104.22 German Haro; Jared Hall 142.00–154.90 Vincent Cannarozzi; Brian Heino 78.62–139.76 James Brochu.",
+      "body": "JD Daley 147.36–158.26 Bryan Hunt; Thomas Speer 101.30–115.96 George Travis; Trevor Hash 192.56–90.32 Kyle Fowler; Collin Krum 89.26–104.22 German Haro; Jared Hall 142.00–154.90 Vincent Cannarozzi; Brian Heino 78.62–139.76 James Brochu.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=1;matchups",
@@ -26,37 +30,40 @@
     {
       "story_type": "biggest_win",
       "title": "Trevor Hash delivers the week's biggest win",
-      "body": "Trevor Hash turned in the week's loudest statement, beating Kyle Fowler 192.56–90.32, a margin of 102.24 points.",
+      "body": "Trevor Hash turned in the week’s loudest statement, beating Kyle Fowler 192.56–90.32 by a margin of 102.24 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=1;matchups",
         "description": "Final ESPN matchup board"
-      }
+      },
+      "primary_owner": "Trevor Hash"
     },
     {
       "story_type": "closest_game",
       "title": "Bryan Hunt survives the closest finish",
-      "body": "By the slimmest of margins, Bryan Hunt edged JD Daley as the week's tightest matchup finished 158.26–147.36, with Bryan Hunt ahead of JD Daley by 10.90 points.",
+      "body": "A nail-biter at the top of the board ended 158.26–147.36, with Bryan Hunt edging JD Daley by 10.90 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=1;matchups",
         "description": "Final ESPN matchup board"
-      }
+      },
+      "primary_owner": "Bryan Hunt"
     },
     {
       "story_type": "scoring_leaders",
       "title": "Trevor Hash sets the Week 1 pace",
-      "body": "At the top of the scoring sheet, Trevor Hash posted the league-high 192.56. Brian Heino finished with the week's low score at 78.62.",
+      "body": "Trevor Hash supplied the league-high mark with 192.56. At the other end, Brian Heino finished with the week's low score at 78.62.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=1;matchups",
         "description": "Final ESPN matchup board"
-      }
+      },
+      "primary_owner": "Trevor Hash"
     },
     {
       "story_type": "standings",
-      "title": "Trevor Hash leads the verified table",
-      "body": "The first standings check has Trevor Hash at the summit: After Week 1, Trevor Hash is listed first at 1-0 with 192.56 points for.",
+      "title": "The Week 1 standings take shape",
+      "body": "The verified top three after Week 1 are Trevor Hash, Bryan Hunt, Vincent Cannarozzi, giving the early table a clear shape.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=1;standings",
@@ -65,18 +72,19 @@
     },
     {
       "story_type": "power_rankings",
-      "title": "The opening board challenges the preseason order",
-      "body": "The early scoreboard has a clear headline, even as the preseason order gets a nudge: Week 1's top score belongs to Trevor Hash at 192.56. Their post-draft rating was 44.4.",
+      "title": "German Haro applies early pressure to the preseason order",
+      "body": "German Haro won in Week 1 with 104.22 points, a result that follows an opening position of 31.2 in the post-draft rating.",
       "source": {
         "dataset": "data/current-season.json + data/power-rankings.json",
-        "locator": "week=1;owner=Trevor Hash",
-        "description": "Weekly score compared with checked-in post-draft ratings"
-      }
+        "locator": "week=1;ratings",
+        "description": "Weekly results compared with checked-in post-draft ratings"
+      },
+      "primary_owner": "German Haro"
     },
     {
       "story_type": "record_watch",
       "title": "The record book holds",
-      "body": "No history was rewritten on opening weekend: Week 1's results did not break the checked-in highest-score, blowout, or closest-game marks.",
+      "body": "Week 1 brought plenty of action, but its results did not break the checked-in highest-score, blowout, or closest-game marks.",
       "source": {
         "dataset": "data/current-season.json + data/matchups.json",
         "locator": "week=1;records",
@@ -86,7 +94,7 @@
     {
       "story_type": "rivalry",
       "title": "Rivalry file: Brian Heino and Bryan Hunt",
-      "body": "The long-running matchup remains a familiar archive entry: The archive lists the all-time series at 4-7-0 from 11 meetings.",
+      "body": "The rivalry ledger remains tilted, with the archive listing the all-time series at 4-7-0 from 11 meetings.",
       "source": {
         "dataset": "data/matchups.json",
         "locator": "pair=Brian Heino|Bryan Hunt",
@@ -94,5 +102,11 @@
       }
     }
   ],
-  "writing_mode": "openai_verified_rewrite"
+  "writing_mode": "openai_verified_rewrite",
+  "rewrite_fallbacks": [
+    {
+      "story_type": "matchup_recap",
+      "reason": "numbers_changed"
+    }
+  ]
 }
