@@ -1,3 +1,4 @@
+import copy
 import json
 import sys
 import tempfile
@@ -78,6 +79,25 @@ class PublishCurrentSeasonTests(unittest.TestCase):
         self.assertGreaterEqual(board["standings"][0]["wins"], board["standings"][1]["wins"])
         self.assertGreaterEqual(board["standings"][0]["pointsFor"], board["standings"][1]["pointsFor"])
         self.assertTrue(board["note"].startswith("Week 2"))
+
+    def test_final_espn_status_marks_all_games_final(self):
+        scoreboard = copy.deepcopy(self.scoreboard)
+        for game in scoreboard["games"]:
+            game["winner"] = "UNDECIDED"
+            game["status"] = "STATUS_FINAL"
+
+        roster = {row["teamId"]: row for row in self.roster_seed["standings"]}
+        board = build_board(
+            season=2026,
+            season_number=10,
+            week=2,
+            fetched_at="2026-09-10T00:00:00+00:00",
+            standings_norm=self.standings,
+            scoreboard_norm=scoreboard,
+            roster=roster,
+        )
+
+        self.assertTrue(all(game["state"] == "final" for game in board["matchups"]))
 
 
 if __name__ == "__main__":

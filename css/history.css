@@ -88,3 +88,28 @@ tr.playoff-row td{background:rgba(0,132,135,.06)}
 .archive-season-card small{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-top:3px;color:var(--muted);font-size:9px}
 @media(max-width:980px){.archive-path-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.archive-season-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.archive-season-card:nth-child(n+4){display:none}}
 @media(max-width:620px){.archive-explorer-intro,.archive-overview-head,.archive-timeline-head{align-items:flex-start;flex-direction:column}.archive-intro-note{flex:auto}.archive-overview-panel{padding:16px!important}.archive-path-grid{grid-template-columns:1fr}.archive-path-card{min-height:120px}.archive-season-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.archive-overview-metric{text-align:left}.archive-timeline-head>small{text-align:left}}
+
+/* Verified single-team scoring extremes from the completed matchup archive. */
+.score-leaderboards{margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+.score-leaderboards-title,.score-leaderboard-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.score-leaderboards-title{margin-bottom:14px}
+.score-leaderboards-title span,.score-leaderboard-head span{display:block;font:8px 'Space Mono',monospace;color:var(--amber);letter-spacing:.12em;text-transform:uppercase}
+.score-leaderboards-title h3{font-size:18px;margin-top:4px}
+.score-leaderboards-title small,.score-leaderboard-head small{color:var(--muted);font:9px 'Space Mono',monospace}
+.score-leaderboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.score-leaderboard{overflow:hidden;border:1px solid var(--line);border-radius:12px;background:rgba(7,11,12,.28)}
+.score-leaderboard-head{padding:14px 16px;background:var(--panel2);border-bottom:1px solid var(--line)}
+.score-leaderboard-head h4{font-size:14px;margin-top:3px}
+.score-leaderboard ol{list-style:none;margin:0;padding:0}
+.score-leaderboard li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 15px;border-top:1px solid var(--line)}
+.score-leaderboard li:first-child{border-top:0}
+.score-leaderboard li:nth-child(even){background:rgba(255,255,255,.018)}
+.score-rank{font:18px Anton,sans-serif;color:rgba(185,138,82,.7)}
+.score-performance{min-width:0}
+.score-performance strong,.score-performance>span,.score-performance small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.score-performance strong{font:600 13px Oswald,sans-serif;color:var(--cream);text-transform:uppercase}
+.score-performance>span{margin-top:1px;color:var(--muted);font-size:10px}
+.score-performance small{margin-top:4px;color:var(--muted);font-size:9px}
+.score-leaderboard li>b{font:22px Anton,sans-serif;color:var(--amber)}
+@media(max-width:860px){.score-leaderboard-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.score-leaderboards-title,.score-leaderboard-head{align-items:flex-start;flex-direction:column}.score-leaderboard li{padding:11px 12px}}

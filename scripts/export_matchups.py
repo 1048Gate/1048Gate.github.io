@@ -5,7 +5,7 @@ import json,re,sqlite3,sys
 from pathlib import Path
 
 CURRENT_MEMBERS=['George Travis','Jared Hall','Kyle Fowler','Bryan Hunt','Brian Heino','Vincent Cannarozzi','James Brochu','JD Daley','Thomas Speer','Collin Krum','German Haro','Trevor Hash']
-ALIASES={'german joshua haro':'German Haro'}
+ALIASES={'german joshua haro':'German Haro','tommy speer':'Thomas Speer'}
 
 def clean(v): return re.sub(r'\s+',' ',str(v or '')).strip()
 def name_key(v): return clean(v).lower()
@@ -42,7 +42,9 @@ def main():
     sides=[]
     for g in games:
         sides.extend([(g[6],g[4],g[5],g[7],g[8],g),(g[9],g[7],g[8],g[4],g[5],g)])
-    high=max(sides,key=lambda x:x[0]);low=min(sides,key=lambda x:x[0]);nonties=[g for g in games if g[6]!=g[9]]
+    ranked_high=sorted(sides,key=lambda x:(-x[0],x[5][0],x[5][1],x[1].lower()))
+    ranked_low=sorted(sides,key=lambda x:(x[0],x[5][0],x[5][1],x[1].lower()))
+    high=ranked_high[0];low=ranked_low[0];nonties=[g for g in games if g[6]!=g[9]]
     blow=max(nonties,key=lambda g:abs(g[6]-g[9]));close=min(nonties,key=lambda g:abs(g[6]-g[9]));combined=max(games,key=lambda g:g[6]+g[9])
     records={
       'highestScore':[high[0],high[1],high[2],high[3],high[4],high[5][0],high[5][1],high[5][2]],
@@ -50,7 +52,23 @@ def main():
       'biggestBlowout':[round(abs(blow[6]-blow[9]),2),blow[4],blow[6],blow[7],blow[9],blow[0],blow[1],blow[2]],
       'closestGame':[round(abs(close[6]-close[9]),2),close[4],close[6],close[7],close[9],close[0],close[1],close[2]],
       'highestCombined':[round(combined[6]+combined[9],2),combined[4],combined[6],combined[7],combined[9],combined[0],combined[1],combined[2]]}
-    payload={'schemaVersion':1,'seasonRange':{'from':2017,'to':2025},'gameCount':len(games),'participants':CURRENT_MEMBERS,'records':records,'pairs':pair_rows}
+    leaderboard_row=lambda side:[side[0],side[1],side[2],side[3],side[4],side[5][0],side[5][1],side[5][2]]
+    archive_leaderboards={
+      'highestScores':[leaderboard_row(side) for side in ranked_high[:5]],
+      'lowestScores':[leaderboard_row(side) for side in ranked_low[:5]],
+    }
+    payload={
+      'schemaVersion':2,
+      'seasonRange':{'from':min(g[0] for g in games),'to':max(g[0] for g in games)},
+      'gameCount':len(games),
+      'archiveGameCount':len(games),
+      'participants':CURRENT_MEMBERS,
+      'records':records,
+      'leaderboards':archive_leaderboards,
+      'archiveLeaderboards':archive_leaderboards,
+      'currentSeasonScores':[],
+      'pairs':pair_rows,
+    }
     out=root/'data'/'matchups.json';out.write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
     print(f'Wrote {out}: {len(games)} games, {len(pair_rows)} current-member pairings')
 if __name__=='__main__': main()

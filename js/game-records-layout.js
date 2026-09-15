@@ -10,6 +10,7 @@
   const maxAttempts=40;
   let streakPromise=null;
   let fallbackPromise=null;
+  let matchupsPromise=null;
 
   function cmsBook(){
     return recordPanel.querySelector('[data-record-book="cms"]');
@@ -37,6 +38,39 @@
     });
   }
 
+  function loadMatchups(){
+    matchupsPromise=matchupsPromise||fetch('data/matchups.json',{cache:'no-store'}).then(response=>{
+      if(!response.ok)throw new Error(`matchups.json returned HTTP ${response.status}`);
+      return response.json();
+    }).catch(error=>{
+      console.error('Unable to load matchup records:',error);
+      return null;
+    });
+    return matchupsPromise;
+  }
+
+  function leaderboardList(title,eyebrow,rows){
+    const num=value=>formatNumber(value,1,2);
+    return `<section class="score-leaderboard"><div class="score-leaderboard-head"><div><span>${esc(eyebrow)}</span><h4>${esc(title)}</h4></div><small>Single-team score</small></div><ol>${rows.map((row,index)=>{
+      const playoff=row[7]?' · Playoffs':'';
+      return `<li><span class="score-rank">${String(index+1).padStart(2,'0')}</span><div class="score-performance"><strong>${esc(row[1])}</strong><span>${esc(row[2])}</span><small>vs ${esc(row[3])} · ${esc(row[5])} W${esc(row[6])}${playoff}</small></div><b>${esc(num(row[0]))}</b></li>`;
+    }).join('')}</ol></section>`;
+  }
+
+  function installLeaderboards(data){
+    const boards=data?.leaderboards||{};
+    const highest=Array.isArray(boards.highestScores)?boards.highestScores:[];
+    const lowest=Array.isArray(boards.lowestScores)?boards.lowestScores:[];
+    if(!highest.length||!lowest.length)return;
+    const host=recordPanel.querySelector('.history-content-panel')||recordPanel;
+    if(host.querySelector('[data-score-leaderboards]'))return;
+    const section=document.createElement('section');
+    section.className='score-leaderboards';
+    section.dataset.scoreLeaderboards='';
+    section.innerHTML=`<div class="score-leaderboards-title"><div><span>THE EXTREMES</span><h3>Highest & Lowest Team Scores</h3></div><small>${esc(data.gameCount)} completed games · ${esc(data.seasonRange?.from)}–${esc(data.seasonRange?.to)}</small></div><div class="score-leaderboard-grid">${leaderboardList('Highest Team Scores','TOP FIVE',highest)}${leaderboardList('Lowest Team Scores','BOTTOM FIVE',lowest)}</div>`;
+    host.appendChild(section);
+  }
+
   function buildDerivedGrid(data){
     const records=data.records||{};
     const num=value=>formatNumber(value,1,2);
@@ -57,13 +91,7 @@
   function installFallback(){
     if(recordPanel.querySelector('[data-record-grid="fallback"]'))return;
     removeTransientGrids();
-    fallbackPromise=fallbackPromise||fetch('data/matchups.json',{cache:'no-store'}).then(response=>{
-      if(!response.ok)throw new Error(`matchups.json returned HTTP ${response.status}`);
-      return response.json();
-    }).catch(error=>{
-      console.error('Unable to load matchup records:',error);
-      return null;
-    });
+    fallbackPromise=fallbackPromise||loadMatchups();
     fallbackPromise.then(data=>{
       if(recordPanel.querySelector('[data-record-grid="fallback"]'))return;
       if(!data){
@@ -84,6 +112,7 @@
       if(heading)heading.insertAdjacentElement('afterend',grid);
       else recordPanel.prepend(grid);
       addStreakCard(grid);
+      installLeaderboards(data);
     });
   }
 
@@ -92,6 +121,7 @@
     if(state==='rendered'){
       removeTransientGrids();
       addStreakCard(cmsBook());
+      loadMatchups().then(installLeaderboards);
       return;
     }
     if(state==='absent'){
@@ -112,6 +142,7 @@
     if(!book)return;
     removeTransientGrids();
     addStreakCard(book);
+    loadMatchups().then(installLeaderboards);
   });
   observer.observe(recordPanel,{childList:true,subtree:true});
 })();
