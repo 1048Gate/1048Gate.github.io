@@ -2,54 +2,67 @@
   "schemaVersion": 1,
   "generatedForSeason": 10,
   "basis": "post-draft",
+  "currentSeason": null,
   "ratings": [
     {
       "name": "Thomas Speer",
-      "rating": 68.2
+      "rating": 68.2,
+      "preseasonRating": 68.2
     },
     {
       "name": "Brian Heino",
-      "rating": 52.4
+      "rating": 52.4,
+      "preseasonRating": 52.4
     },
     {
       "name": "Bryan Hunt",
-      "rating": 50.7
+      "rating": 50.7,
+      "preseasonRating": 50.7
     },
     {
       "name": "Collin Krum",
-      "rating": 50
+      "rating": 50,
+      "preseasonRating": 50
     },
     {
       "name": "JD Daley",
-      "rating": 45.9
+      "rating": 45.9,
+      "preseasonRating": 45.9
     },
     {
       "name": "James Brochu",
-      "rating": 45.7
+      "rating": 45.7,
+      "preseasonRating": 45.7
     },
     {
       "name": "George Travis",
-      "rating": 44.9
+      "rating": 44.9,
+      "preseasonRating": 44.9
     },
     {
       "name": "Jared Hall",
-      "rating": 44.7
+      "rating": 44.7,
+      "preseasonRating": 44.7
     },
     {
       "name": "Vincent Cannarozzi",
-      "rating": 37.2
+      "rating": 37.2,
+      "preseasonRating": 37.2
     },
     {
       "name": "Trevor Hash",
-      "rating": 37.2
+      "rating": 37.2,
+      "preseasonRating": 37.2
     },
     {
       "name": "German Haro",
-      "rating": 31.2
+      "rating": 31.2,
+      "preseasonRating": 31.2
     },
     {
       "name": "Kyle Fowler",
-      "rating": 27.4
+      "rating": 27.4,
+      "preseasonRating": 27.4
     }
   ]
 }
