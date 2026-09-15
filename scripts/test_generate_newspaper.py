@@ -104,6 +104,13 @@ class NewspaperTests(unittest.TestCase):
             output=io.StringIO()
             with redirect_stdout(output):code=paper.main(["--season","2026","--week","1","--writing","openai","--regenerate"])
         self.assertEqual(code,0); self.assertIn("SKIP rewrite_failed",output.getvalue()); self.assertEqual(existing.read_bytes(),before)
+    def test_duplicate_skips_before_ai_call(self):
+        current=self.root/"current.json"; paper.write_json(current,board())
+        editions=self.root/"data/newspaper_editions"; existing=paper.edition_path(2026,1,editions); paper.write_json(existing,self.make())
+        with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions),patch.object(paper,"apply_ai_stories") as rewrite:
+            output=io.StringIO()
+            with redirect_stdout(output):code=paper.main(["--season","2026","--week","1","--writing","auto"])
+        self.assertEqual(code,0); self.assertIn("SKIP edition_already_published",output.getvalue()); rewrite.assert_not_called()
     def test_regenerate_replaces_existing_after_verified_rewrite(self):
         current=self.root/"current.json"; paper.write_json(current,board())
         editions=self.root/"data/newspaper_editions"; existing=paper.edition_path(2026,1,editions); paper.write_json(existing,self.make())

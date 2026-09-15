@@ -370,16 +370,16 @@ def main(argv: list[str] | None = None) -> int:
     try:
         board = read_json(CURRENT_PATH)
         week = args.week or int(board.get("week", 0))
+        path = edition_path(args.season, week, EDITIONS_ROOT)
+        replacing = existing_valid_edition(path)
+        if replacing and not args.regenerate and not args.allow_incomplete and not args.stdout:
+            print(f"SKIP {SKIP_DUPLICATE}: {path.relative_to(ROOT)} already contains a valid edition.")
+            return 0
         edition = generate_edition(board, args.season, week, allow_incomplete=args.allow_incomplete, root=ROOT)
         edition = apply_ai_stories(edition, args.writing)
         validate_edition(edition, publish=not args.allow_incomplete)
         if args.allow_incomplete or args.stdout:
             print(json.dumps(edition, indent=2, ensure_ascii=False))
-            return 0
-        path = edition_path(args.season, week, EDITIONS_ROOT)
-        replacing = existing_valid_edition(path)
-        if replacing and not args.regenerate:
-            print(f"SKIP {SKIP_DUPLICATE}: {path.relative_to(ROOT)} already contains a valid edition.")
             return 0
         if replacing and not str(edition.get("writing_mode", "")).endswith("_verified_rewrite"):
             print(f"SKIP rewrite_failed: Preserved {path.relative_to(ROOT)} because no verified AI rewrite was produced.")
