@@ -15,6 +15,7 @@
 // Odds conversion: implied probability p_i ∝ rating^K, K tuned so the
 // favorite lands near 24%, then rendered as American odds rounded to $50.
 import {existsSync, readFileSync, writeFileSync} from 'node:fs';
+import {blendRating, currentSeasonRatings} from './futures-model.mjs';
 
 const root = new URL('..', import.meta.url);
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
@@ -197,13 +198,20 @@ function loadRosterRatings(seasonYear){
 }
 
 const rosterRatings = loadRosterRatings(config.seasonYear);
+const currentPath = new URL('data/current-season.json', root);
+const currentPayload = existsSync(currentPath) ? JSON.parse(readFileSync(currentPath, 'utf8')) : null;
+const currentSeason = Number(currentPayload?.season) === Number(config.seasonYear)
+  ? currentSeasonRatings(currentPayload)
+  : null;
 const ROSTER_WEIGHT = 0.55;
 const ratings = careerRatings.map(m => {
   const rosterRating = rosterRatings?.get(m.name);
-  const rating = rosterRating == null
+  const preseasonRating = rosterRating == null
     ? m.careerRating
     : ((1 - ROSTER_WEIGHT) * m.careerRating) + (ROSTER_WEIGHT * rosterRating);
-  return {...m, rosterRating, rating};
+  const current = currentSeason?.ratings.get(m.name);
+  const rating = blendRating(preseasonRating, current, currentSeason?.weight || 0);
+  return {...m, rosterRating, preseasonRating, current, rating};
 }).sort((a, b) => b.rating - a.rating);
 
 let lo = 1, hi = 14, K = 6;
@@ -225,15 +233,16 @@ const americanOdds = p => {
   return Math.round(Math.min(Math.max(rounded, -400), 2500));
 };
 
-const basis = rosterRatings ? 'post-draft' : 'career';
-console.log(rosterRatings
-  ? 'Rating model — 45% career form / 55% 2026 roster ranks\n'
-  : 'Rating model — last 3 seasons weighted .5/.3/.2\n');
-console.log('Manager               Rating  Career  Roster  Odds');
+const preseasonBasis = rosterRatings ? 'post-draft' : 'career';
+const basis = currentSeason ? 'weekly-results-blend' : preseasonBasis;
+console.log(currentSeason
+  ? `Rating model — ${(100-currentSeason.weight*100).toFixed(1)}% preseason / ${(currentSeason.weight*100).toFixed(1)}% current results through ${currentSeason.games} game(s)\n`
+  : rosterRatings ? 'Rating model — 45% career form / 55% 2026 roster ranks\n' : 'Rating model — last 3 seasons weighted .5/.3/.2\n');
+console.log('Manager               Rating  Base   Current  Odds');
 ratings.forEach((r, i) => {
-  const roster = r.rosterRating == null ? '   —' : r.rosterRating.toFixed(1).padStart(6);
+  const current = r.current == null ? '      —' : r.current.rating.toFixed(1).padStart(7);
   console.log(
-    `${r.name.padEnd(21)} ${r.rating.toFixed(1).padStart(6)}  ${r.careerRating.toFixed(1).padStart(6)}  ${roster}  +${americanOdds(probs[i])}`
+    `${r.name.padEnd(21)} ${r.rating.toFixed(1).padStart(6)}  ${r.preseasonRating.toFixed(1).padStart(5)}  ${current}  +${americanOdds(probs[i])}`
   );
 });
 console.log(`\nExponent K=${K.toFixed(2)} (favorite implied ${(probs[0] * 100).toFixed(1)}%) · basis ${basis}`);
@@ -255,6 +264,26 @@ writeFileSync(new URL('data/power-rankings.json', root), JSON.stringify({
   schemaVersion: 1,
   generatedForSeason: config.seasonNumber,
   basis,
-  ratings: ratings.map(r => ({name: r.name, rating: Math.round(r.rating * 10) / 10}))
+  currentSeason: currentSeason ? {
+    season: config.seasonYear,
+    throughWeek: currentSeason.week,
+    gamesPlayed: currentSeason.games,
+    weight: Math.round(currentSeason.weight * 1000) / 1000,
+    factors: {record: 0.45, pointsFor: 0.40, pointsAgainstSchedule: 0.15}
+  } : null,
+  ratings: ratings.map(r => ({
+    name: r.name,
+    rating: Math.round(r.rating * 10) / 10,
+    preseasonRating: Math.round(r.preseasonRating * 10) / 10,
+    ...(r.current ? {
+      currentRating: Math.round(r.current.rating * 10) / 10,
+      wins: r.current.wins,
+      losses: r.current.losses,
+      ties: r.current.ties,
+      record: `${r.current.wins}-${r.current.losses}${r.current.ties ? `-${r.current.ties}` : ''}`,
+      pointsForPerGame: Math.round(r.current.pfpg * 100) / 100,
+      pointsAgainstPerGame: Math.round(r.current.papg * 100) / 100
+    } : {})
+  }))
 }, null, 2) + '\n');
 console.log(`Wrote ${ratings.length} power ratings to data/power-rankings.json`);
