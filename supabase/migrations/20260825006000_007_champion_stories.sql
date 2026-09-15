@@ -11,11 +11,11 @@ set note = 'The Flash In The Flex beat George Travis to win the 2017 championshi
 where season_year = 2017;
 
 update public.league_champions
-set note = 'Turn Goff the Lights beat George Travis 167.02–126.08 to win the 2018 championship. Kyle Fowler finished the regular season 9–4 with a +125.64 point differential, earning his first 1048 Gate title.'
+set note = 'Turn Goff the Lights beat George Travis 145.64–125.52 to win the 2018 championship. Kyle Fowler finished the regular season 9–4 with a +125.64 point differential, earning his first 1048 Gate title.'
 where season_year = 2018;
 
 update public.league_champions
-set note = 'We''re on to Cleveland beat Trevor Hash 156.84–131.2 to win the 2019 championship. JD Daley finished the regular season 8–5 with a +25.62 point differential, earning his first 1048 Gate title.'
+set note = 'We''re on to Cleveland beat Trevor Hash 136.06–123.1 to win the 2019 championship. JD Daley finished the regular season 8–5 with a +25.62 point differential, earning his first 1048 Gate title.'
 where season_year = 2019;
 
 update public.league_champions

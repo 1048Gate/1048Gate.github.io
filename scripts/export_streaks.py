@@ -10,7 +10,9 @@ from collections import defaultdict
 from pathlib import Path
 
 ALIASES = {
+    'chardo bryce': 'Chardo Bryce',
     'german joshua haro': 'German Haro',
+    'ronnie coiro': 'Ronnie Coiro',
     'tommy speer': 'Thomas Speer',
 }
 
@@ -61,42 +63,37 @@ def main():
         outcomes[(year, home_name)].append((int(row['week']), 'L' if home_score < away_score else 'W' if home_score > away_score else 'T', playoff, clean(row['home_team_name'])))
         outcomes[(year, away_name)].append((int(row['week']), 'L' if away_score < home_score else 'W' if away_score > home_score else 'T', playoff, clean(row['away_team_name'])))
 
-    best = None
-    for (year, manager), rows in outcomes.items():
-        rows = sorted(rows)
-        current = 0
-        start_week = None
-        for week, result, playoff, team_name in rows:
-            if result == 'L':
-                if current == 0:
-                    start_week = week
-                current += 1
-                includes_postseason = any(r[2] for r in rows if start_week <= r[0] <= week)
-                candidate = (current, manager, team_name, year, start_week, week, bool(includes_postseason))
-                if best is None or candidate[0] > best[0]:
-                    best = candidate
-            else:
-                current = 0
-                start_week = None
+    def collect_streaks(result_code, regular_only=False):
+        streaks=[]
+        for (year,manager),source_rows in outcomes.items():
+            rows=sorted(row for row in source_rows if not (regular_only and row[2]))
+            run=[]
+            for row in rows+[(-1,'X',0,'')]:
+                if row[1] == result_code:
+                    run.append(row)
+                elif run:
+                    streaks.append({
+                        'games':len(run),'manager':manager,'team':run[-1][3],
+                        'season':year,'startWeek':run[0][0],'endWeek':run[-1][0],
+                        'includesPostseason':bool(any(item[2] for item in run)),
+                    })
+                    run=[]
+        return sorted(streaks,key=lambda row:(-row['games'],row['season'],row['startWeek'],row['manager'].lower()))
 
-    losses, manager, team, season, start_week, end_week, includes_postseason = best
+    wins=collect_streaks('W')[:3]
+    losses=collect_streaks('L',regular_only=True)[:3]
     payload = {
-        'schemaVersion': 1,
+        'schemaVersion': 2,
         'seasonRange': {'from': 2017, 'to': 2025},
-        'longestLosingStreak': {
-            'losses': losses,
-            'manager': manager,
-            'team': team,
-            'season': season,
-            'startWeek': start_week,
-            'endWeek': end_week,
-            'includesPostseason': includes_postseason,
-        },
+        'longestWinningStreak': {**wins[0], 'wins': wins[0]['games']},
+        'longestLosingStreak': {**losses[0], 'losses': losses[0]['games']},
+        'leaderboards': {'winningStreaks':wins,'losingStreaks':losses},
+        'archiveLeaderboards': {'winningStreaks':wins,'losingStreaks':losses},
     }
 
     out = root / 'data' / 'streaks.json'
     out.write_text(json.dumps(payload, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-    print(f"Wrote {out}: {losses} straight losses — {manager}, {season} Weeks {start_week}-{end_week}")
+    print(f"Wrote {out}: {wins[0]['games']} straight wins; {losses[0]['games']} straight regular-season losses")
 
 
 if __name__ == '__main__':

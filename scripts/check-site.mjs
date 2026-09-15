@@ -255,11 +255,24 @@ if(matchupArchive.schemaVersion < 2 || matchupArchive.archiveGameCount !== 885 |
 if(matchupArchive.leaderboards?.highestScores?.length !== 5 || matchupArchive.leaderboards?.lowestScores?.length !== 5){
   throw new Error('Matchup archive must publish five highest and five lowest team scores.');
 }
+for(const name of ['biggestBlowouts','closestGames','highestCombinedGames']){
+  if(matchupArchive.leaderboards?.[name]?.length !== 3) throw new Error(`${name} must publish a verified top three.`);
+}
 if(matchupArchive.leaderboards.lowestScores.some(row => row[7])){
   throw new Error('Lowest-score leaderboard must exclude postseason games.');
 }
 if(matchupArchive.leaderboards.highestScores[0][0] !== 235.64 || matchupArchive.leaderboards.highestScores[0][1] !== 'Collin Krum'){
   throw new Error('The verified all-time team scoring record must remain Collin Krum at 235.64.');
+}
+const streakArchive = JSON.parse(readFileSync(new URL('data/streaks.json', root), 'utf8'));
+if(streakArchive.schemaVersion !== 2 || streakArchive.leaderboards?.winningStreaks?.length !== 3 || streakArchive.leaderboards?.losingStreaks?.length !== 3){
+  throw new Error('Streak archive must publish top-three winning and regular-season losing streaks.');
+}
+if(streakArchive.leaderboards.losingStreaks.some(row => row.includesPostseason)){
+  throw new Error('Losing-streak leaderboard must exclude postseason games.');
+}
+if(intelligence.games?.lowestScore?.loserScore !== matchupArchive.records.lowestScore[0] || intelligence.games?.championships?.length !== 9){
+  throw new Error('Intelligence Book history must match the matchup and playoff archives.');
 }
 const gameRecordsSource = readFileSync(new URL('js/game-records-layout.js', root), 'utf8');
 if(!scriptAssets.includes('js/game-records-layout.js') || !gameRecordsSource.includes('data-score-leaderboards')){

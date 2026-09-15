@@ -97,6 +97,8 @@ tr.playoff-row td{background:rgba(0,132,135,.06)}
 .score-leaderboards-title h3{font-size:18px;margin-top:4px}
 .score-leaderboards-title small,.score-leaderboard-head small{color:var(--muted);font:9px 'Space Mono',monospace}
 .score-leaderboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.record-groups-title{margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+.record-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .score-leaderboard{overflow:hidden;border:1px solid var(--line);border-radius:12px;background:rgba(7,11,12,.28)}
 .score-leaderboard-head{padding:14px 16px;background:var(--panel2);border-bottom:1px solid var(--line)}
 .score-leaderboard-head h4{font-size:14px;margin-top:3px}
@@ -111,5 +113,5 @@ tr.playoff-row td{background:rgba(0,132,135,.06)}
 .score-performance>span{margin-top:1px;color:var(--muted);font-size:10px}
 .score-performance small{margin-top:4px;color:var(--muted);font-size:9px}
 .score-leaderboard li>b{font:22px Anton,sans-serif;color:var(--amber)}
-@media(max-width:860px){.score-leaderboard-grid{grid-template-columns:1fr}}
+@media(max-width:860px){.score-leaderboard-grid,.record-category-grid{grid-template-columns:1fr}}
 @media(max-width:620px){.score-leaderboards-title,.score-leaderboard-head{align-items:flex-start;flex-direction:column}.score-leaderboard li{padding:11px 12px}}

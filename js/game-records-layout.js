@@ -1,148 +1,25 @@
 (function(){
-  const shell=document.querySelector('#history .history-shell');
-  if(!shell)return;
-
-  const recordPanel=shell.querySelector('[data-history-panel="records"]');
-  if(!recordPanel)return;
-
+  const panel=document.querySelector('#history [data-history-panel="records"]');
+  if(!panel)return;
   const {escapeHtml:esc,formatNumber}=window.gateShared;
-  let attempts=0;
-  const maxAttempts=40;
-  let streakPromise=null;
-  let fallbackPromise=null;
-  let matchupsPromise=null;
+  const num=value=>formatNumber(value,1,2);
+  const load=path=>fetch(path,{cache:'no-store'}).then(response=>{if(!response.ok)throw new Error(`${path} returned HTTP ${response.status}`);return response.json();});
 
-  function cmsBook(){
-    return recordPanel.querySelector('[data-record-book="cms"]');
+  function scoreList(title,eyebrow,scope,rows){
+    return `<section class="score-leaderboard"><div class="score-leaderboard-head"><div><span>${esc(eyebrow)}</span><h4>${esc(title)}</h4></div><small>${esc(scope)}</small></div><ol>${rows.map((row,index)=>{const playoff=row[7]?' · Playoffs':'';return `<li><span class="score-rank">${String(index+1).padStart(2,'0')}</span><div class="score-performance"><strong>${esc(row[1])}</strong><span>${esc(row[2])}</span><small>vs ${esc(row[3])} · ${esc(row[5])} W${esc(row[6])}${playoff}</small></div><b>${esc(num(row[0]))}</b></li>`;}).join('')}</ol></section>`;
   }
-
-  function removeTransientGrids(){
-    recordPanel.querySelectorAll('[data-record-grid="placeholder"],[data-record-grid="fallback"]').forEach(node=>node.remove());
+  function gameList(title,scope,rows,kind){
+    return `<section class="score-leaderboard"><div class="score-leaderboard-head"><div><span>TOP THREE</span><h4>${esc(title)}</h4></div><small>${esc(scope)}</small></div><ol>${rows.map((row,index)=>{const value=kind==='combined'?`${num(row[0])} total`:`${num(row[0])} pts`;const playoff=row[9]?' · Playoffs':'';return `<li><span class="score-rank">${String(index+1).padStart(2,'0')}</span><div class="score-performance"><strong>${esc(row[1])} ${esc(num(row[3]))} – ${esc(row[4])} ${esc(num(row[6]))}</strong><span>${esc(row[2])} vs ${esc(row[5])}</span><small>${esc(row[7])} W${esc(row[8])}${playoff}</small></div><b>${esc(value)}</b></li>`;}).join('')}</ol></section>`;
   }
-
-  function addStreakCard(grid){
-    if(!grid||grid.querySelector('[data-record="longest-losing-streak"]'))return;
-    streakPromise=streakPromise||fetch('data/streaks.json',{cache:'no-store'}).then(response=>{
-      if(!response.ok)throw new Error(`streaks.json returned HTTP ${response.status}`);
-      return response.json();
-    }).catch(error=>{
-      console.error('Unable to load streak record:',error);
-      return null;
-    });
-    streakPromise.then(data=>{
-      if(!data||grid.querySelector('[data-record="longest-losing-streak"]'))return;
-      const streak=data.longestLosingStreak;
-      if(!streak)return;
-      const postseason=streak.includesPostseason?' · Includes postseason':'';
-      grid.insertAdjacentHTML('beforeend',`<article class="matchup-record-card" data-record="longest-losing-streak"><span>Longest Losing Streak</span><strong>${esc(streak.losses)} straight — ${esc(streak.manager)}</strong><small>${esc(streak.team)} · ${esc(streak.season)} W${esc(streak.startWeek)}–W${esc(streak.endWeek)}${esc(postseason)}</small></article>`);
-    });
+  function streakList(title,scope,rows,label){
+    return `<section class="score-leaderboard"><div class="score-leaderboard-head"><div><span>TOP THREE</span><h4>${esc(title)}</h4></div><small>${esc(scope)}</small></div><ol>${rows.map((row,index)=>`<li><span class="score-rank">${String(index+1).padStart(2,'0')}</span><div class="score-performance"><strong>${esc(row.manager)}</strong><span>${esc(row.team)}</span><small>${esc(row.season)} W${esc(row.startWeek)}–W${esc(row.endWeek)}</small></div><b>${esc(row.games)} ${esc(label)}</b></li>`).join('')}</ol></section>`;
   }
-
-  function loadMatchups(){
-    matchupsPromise=matchupsPromise||fetch('data/matchups.json',{cache:'no-store'}).then(response=>{
-      if(!response.ok)throw new Error(`matchups.json returned HTTP ${response.status}`);
-      return response.json();
-    }).catch(error=>{
-      console.error('Unable to load matchup records:',error);
-      return null;
-    });
-    return matchupsPromise;
-  }
-
-  function leaderboardList(title,eyebrow,scope,rows){
-    const num=value=>formatNumber(value,1,2);
-    return `<section class="score-leaderboard"><div class="score-leaderboard-head"><div><span>${esc(eyebrow)}</span><h4>${esc(title)}</h4></div><small>${esc(scope)}</small></div><ol>${rows.map((row,index)=>{
-      const playoff=row[7]?' · Playoffs':'';
-      return `<li><span class="score-rank">${String(index+1).padStart(2,'0')}</span><div class="score-performance"><strong>${esc(row[1])}</strong><span>${esc(row[2])}</span><small>vs ${esc(row[3])} · ${esc(row[5])} W${esc(row[6])}${playoff}</small></div><b>${esc(num(row[0]))}</b></li>`;
-    }).join('')}</ol></section>`;
-  }
-
-  function installLeaderboards(data){
-    const boards=data?.leaderboards||{};
-    const highest=Array.isArray(boards.highestScores)?boards.highestScores:[];
-    const lowest=Array.isArray(boards.lowestScores)?boards.lowestScores:[];
-    if(!highest.length||!lowest.length)return;
-    const host=recordPanel.querySelector('.history-content-panel')||recordPanel;
-    if(host.querySelector('[data-score-leaderboards]'))return;
-    const section=document.createElement('section');
-    section.className='score-leaderboards';
-    section.dataset.scoreLeaderboards='';
-    section.innerHTML=`<div class="score-leaderboards-title"><div><span>THE EXTREMES</span><h3>Highest & Lowest Team Scores</h3></div><small>${esc(data.gameCount)} completed games · ${esc(data.seasonRange?.from)}–${esc(data.seasonRange?.to)}</small></div><div class="score-leaderboard-grid">${leaderboardList('Highest Team Scores','TOP FIVE','Regular season + playoffs',highest)}${leaderboardList('Lowest Team Scores','BOTTOM FIVE','Regular season only',lowest)}</div>`;
+  Promise.all([load('data/matchups.json'),load('data/streaks.json')]).then(([data,streaks])=>{
+    panel.querySelectorAll('[data-record-grid],[data-record-book="cms"],[data-score-leaderboards]').forEach(node=>node.remove());
+    const host=panel.querySelector('.history-content-panel')||panel;
+    const boards=data.leaderboards||{};const streakBoards=streaks.leaderboards||{};
+    const section=document.createElement('section');section.className='score-leaderboards';section.dataset.scoreLeaderboards='';
+    section.innerHTML=`<div class="score-leaderboards-title"><div><span>THE EXTREMES</span><h3>Highest & Lowest Team Scores</h3></div><small>${esc(data.gameCount)} completed games · ${esc(data.seasonRange?.from)}–${esc(data.seasonRange?.to)}</small></div><div class="score-leaderboard-grid">${scoreList('Highest Team Scores','TOP FIVE','Regular season + playoffs',boards.highestScores||[])}${scoreList('Lowest Team Scores','BOTTOM FIVE','Regular season only',boards.lowestScores||[])}</div><div class="score-leaderboards-title record-groups-title"><div><span>LEAGUE RECORDS</span><h3>Top Performances & Streaks</h3></div><small>Calculated from the verified game archive</small></div><div class="record-category-grid">${gameList('Biggest Blowouts','Regular season + title bracket',boards.biggestBlowouts||[],'margin')}${gameList('Closest Games','All completed games',boards.closestGames||[],'margin')}${gameList('Highest Combined Scores','All completed games',boards.highestCombinedGames||[],'combined')}${streakList('Winning Streaks','All official games',streakBoards.winningStreaks||[],'wins')}${streakList('Losing Streaks','Regular season only',streakBoards.losingStreaks||[],'losses')}</div>`;
     host.appendChild(section);
-  }
-
-  function buildDerivedGrid(data){
-    const records=data.records||{};
-    const num=value=>formatNumber(value,1,2);
-    const cards=[
-      ['Highest Score',records.highestScore, r=>`${num(r[0])} — ${r[1]}`,r=>`${r[2]} vs ${r[3]} · ${r[5]} W${r[6]}`],
-      ['Lowest Score',records.lowestScore,r=>`${num(r[0])} — ${r[1]}`,r=>`${r[2]} vs ${r[3]} · ${r[5]} W${r[6]}${r[7]?' · Playoffs':''}`],
-      ['Biggest Blowout',records.biggestBlowout,r=>`${num(r[0])} pts`,r=>`${r[1]} ${num(r[2])} – ${r[3]} ${num(r[4])} · ${r[5]} W${r[6]}`],
-      ['Closest Game',records.closestGame,r=>`${num(r[0])} pts`,r=>`${r[1]} ${num(r[2])} – ${r[3]} ${num(r[4])} · ${r[5]} W${r[6]}`],
-      ['Highest Combined',records.highestCombined,r=>`${num(r[0])} pts`,r=>`${r[1]} ${num(r[2])} + ${r[3]} ${num(r[4])} · ${r[5]} W${r[6]}`]
-    ];
-    const grid=document.createElement('div');
-    grid.className='matchup-record-grid';
-    grid.dataset.recordGrid='fallback';
-    grid.innerHTML=cards.map(([label,r,value,sub])=>r?`<article class="matchup-record-card"><span>${label}</span><strong>${esc(value(r))}</strong><small>${esc(sub(r))}</small></article>`:'').join('');
-    return grid;
-  }
-
-  function installFallback(){
-    if(recordPanel.querySelector('[data-record-grid="fallback"]'))return;
-    removeTransientGrids();
-    fallbackPromise=fallbackPromise||loadMatchups();
-    fallbackPromise.then(data=>{
-      if(recordPanel.querySelector('[data-record-grid="fallback"]'))return;
-      if(!data){
-        if(!recordPanel.querySelector('[data-record-grid="placeholder"]')){
-          const placeholder=document.createElement('div');
-          placeholder.className='record-grid';
-          placeholder.dataset.recordGrid='placeholder';
-          placeholder.innerHTML='<div class="history-loading">Record book could not be loaded.</div>';
-          const heading=recordPanel.querySelector('.history-section-head');
-          if(heading)heading.insertAdjacentElement('afterend',placeholder);
-          else recordPanel.prepend(placeholder);
-        }
-        return;
-      }
-      const grid=buildDerivedGrid(data);
-      if(!grid.innerHTML.trim())return;
-      const heading=recordPanel.querySelector('.history-section-head');
-      if(heading)heading.insertAdjacentElement('afterend',grid);
-      else recordPanel.prepend(grid);
-      addStreakCard(grid);
-      installLeaderboards(data);
-    });
-  }
-
-  function settle(){
-    const state=window.gateCmsRecords;
-    if(state==='rendered'){
-      removeTransientGrids();
-      addStreakCard(cmsBook());
-      loadMatchups().then(installLeaderboards);
-      return;
-    }
-    if(state==='absent'){
-      installFallback();
-      return;
-    }
-    if(++attempts<maxAttempts){
-      setTimeout(settle,100);
-      return;
-    }
-    installFallback();
-  }
-
-  settle();
-
-  const observer=new MutationObserver(()=>{
-    const book=cmsBook();
-    if(!book)return;
-    removeTransientGrids();
-    addStreakCard(book);
-    loadMatchups().then(installLeaderboards);
-  });
-  observer.observe(recordPanel,{childList:true,subtree:true});
+  }).catch(error=>{console.error('Unable to load record book:',error);const placeholder=panel.querySelector('[data-record-grid="placeholder"]');if(placeholder)placeholder.innerHTML='<div class="history-loading">Record book could not be loaded.</div>';});
 })();

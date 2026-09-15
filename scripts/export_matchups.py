@@ -58,9 +58,17 @@ def main():
       'closestGame':[round(abs(close[6]-close[9]),2),close[4],close[6],close[7],close[9],close[0],close[1],close[2]],
       'highestCombined':[round(combined[6]+combined[9],2),combined[4],combined[6],combined[7],combined[9],combined[0],combined[1],combined[2]]}
     leaderboard_row=lambda side:[side[0],side[1],side[2],side[3],side[4],side[5][0],side[5][1],side[5][2]]
+    def game_row(game, metric):
+        y,w,po,typ,a,at,sa,b,bt,sb=game
+        if sb>sa: a,at,sa,b,bt,sb=b,bt,sb,a,at,sa
+        return [round(metric,2),a,at,sa,b,bt,sb,y,w,po,typ]
+    competitive=[g for g in nonties if g[3] not in {'LOSERS_CONSOLATION_LADDER','WINNERS_CONSOLATION_LADDER'}]
     archive_leaderboards={
       'highestScores':[leaderboard_row(side) for side in ranked_high[:5]],
       'lowestScores':[leaderboard_row(side) for side in ranked_low[:5]],
+      'biggestBlowouts':[game_row(g,abs(g[6]-g[9])) for g in sorted(competitive,key=lambda g:(-abs(g[6]-g[9]),g[0],g[1]))[:3]],
+      'closestGames':[game_row(g,abs(g[6]-g[9])) for g in sorted(nonties,key=lambda g:(abs(g[6]-g[9]),g[0],g[1]))[:3]],
+      'highestCombinedGames':[game_row(g,g[6]+g[9]) for g in sorted(games,key=lambda g:(-(g[6]+g[9]),g[0],g[1]))[:3]],
     }
     payload={
       'schemaVersion':2,
