@@ -4,9 +4,9 @@
   "seasonNumber": 10,
   "week": 2,
   "phase": "Week 2",
-  "fetchedAt": "2026-09-18T00:17:53.114182+00:00",
+  "fetchedAt": "2026-09-18T05:08:51.537076+00:00",
   "source": "ESPN league endpoint",
-  "note": "Week 2 slate from ESPN.",
+  "note": "Week 2 in progress. Live scoring from ESPN.",
   "standings": [
     {
       "locker": 12,
@@ -157,7 +157,7 @@
     {
       "id": 7,
       "week": 2,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -165,19 +165,19 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 0
+        "score": 35.2
       },
       "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 0
+        "score": 53.82
       }
     },
     {
       "id": 8,
       "week": 2,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -185,19 +185,19 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 0
+        "score": 22.5
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 0
+        "score": 23.3
       }
     },
     {
       "id": 9,
       "week": 2,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -211,13 +211,13 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 0
+        "score": 2.8
       }
     },
     {
       "id": 10,
       "week": 2,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -225,7 +225,7 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 0
+        "score": 17.2
       },
       "home": {
         "teamId": 3,
@@ -237,7 +237,7 @@
     {
       "id": 11,
       "week": 2,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -245,7 +245,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 0
+        "score": 20.9
       },
       "home": {
         "teamId": 6,
@@ -257,7 +257,7 @@
     {
       "id": 12,
       "week": 2,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -265,7 +265,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 0
+        "score": -0.1
       },
       "home": {
         "teamId": 8,
