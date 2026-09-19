@@ -7,7 +7,14 @@
   const body = document.getElementById("intelBody");
   const meta = document.getElementById("intelMeta");
   const nav = document.getElementById("intelNav");
+  const status = root.querySelector('[data-intel-status]');
   if (!body || !nav) return;
+
+  function setStatus(state, text) {
+    if (!status) return;
+    status.className = `section-status-bar ${state || ''}`;
+    status.textContent = text;
+  }
 
   const SLICE_ORDER = ["wire", "rivalries", "book", "draft", "trades", "power"];
   let intel = null;
@@ -340,6 +347,7 @@
   });
 
   async function load() {
+    setStatus('is-loading', 'Loading · Connecting to the league archive…');
     body.innerHTML = '<div class="panel"><div class="history-loading">Computing the book…</div></div>';
     try {
       const response = await fetch("data/intelligence.json", {cache: "no-store"});
@@ -352,11 +360,14 @@
         meta.textContent = `${intel.generatedFor.gameCount} games · ${intel.generatedFor.draftPicks} draft picks · ${intel.generatedFor.tradeCount} executed trades · ${intel.generatedFor.seasonRange.from}–${intel.generatedFor.seasonRange.to}`;
       }
       render();
+      setStatus('is-live', 'Live · Computed book connected');
     } catch (error) {
       console.error("Unable to load league intelligence:", error);
-      body.innerHTML = '<div class="panel"><div class="history-loading">League intelligence could not be loaded.</div></div>';
+      setStatus('is-error', 'Unavailable · Book could not connect');
+      body.innerHTML = `<div class="panel history-state history-state-error"><strong>League intelligence could not load.</strong><span>${escapeHtml(error.message || 'Check your connection, then try again.')}</span><button type="button" class="btn btn-primary" data-intel-retry>Retry</button></div>`;
     }
   }
+  body.addEventListener('click', event => { if (event.target.closest('[data-intel-retry]')) load(); });
 
   document.addEventListener("gate:viewchange", (event) => {
     if (event.detail?.name === "intel" && !intel) load();

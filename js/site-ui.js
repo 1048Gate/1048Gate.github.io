@@ -42,15 +42,20 @@
     document.dispatchEvent(new CustomEvent('gate:site-ready', {detail:config}));
   }catch(error){
     console.warn('Unable to load site season settings; keeping the HTML fallback labels.', error);
+    document.querySelector('[data-futures-status]')?.replaceChildren(document.createTextNode('Unavailable · Try refreshing'));
+    const futures=document.querySelector('[data-futures]');
+    if(futures) futures.innerHTML='<div class="futures-empty state-error"><strong>Championship odds could not load.</strong><span>Check your connection, then refresh the page.</span></div>';
   }
 })();
 
 function renderFutures(config){
   const target = document.querySelector('[data-futures]');
   if(!target) return;
+  const status=document.querySelector('[data-futures-status]');
   const futures = Array.isArray(config.futures) ? config.futures : [];
   if(!futures.length){
-    target.innerHTML = '<div class="futures-empty">Odds will be posted before the season starts.</div>';
+    target.innerHTML = '<div class="futures-empty"><strong>No odds posted yet.</strong><span>Championship lines will appear when the board is ready.</span></div>';
+    if(status) status.textContent='Available after draft board';
     return;
   }
   const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
@@ -64,6 +69,7 @@ function renderFutures(config){
         <p>${escapeHtml(entry.case || '')}</p>
       </div>
     </div>`).join('');
+  if(status) status.textContent=`Live · ${futures.length} clubs priced`;
   document.getElementById('futuresExpand')?.remove();
   if(futures.length <= preview) return;
   const button = document.createElement('button');

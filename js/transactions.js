@@ -38,9 +38,16 @@
   function setSync(state, text){
     const sync = document.getElementById('transactionSync');
     if(!sync) return;
-    sync.classList.remove('is-live','is-error');
+    sync.classList.remove('is-live','is-error','is-loading');
     if(state) sync.classList.add(state);
     sync.innerHTML = `<span></span>${esc(text)}`;
+  }
+
+  function setFeedState(title, detail, action = ''){
+    const feed = document.getElementById('transactionFeed');
+    if(!feed) return;
+    feed.innerHTML = `<div class="panel transaction-empty transaction-state"><strong>${esc(title)}</strong><span>${esc(detail)}</span>${action ? `<button class="btn btn-primary" id="transactionRetry" type="button">${esc(action)}</button>` : ''}</div>`;
+    document.getElementById('transactionRetry')?.addEventListener('click', () => loadArchive({refreshSummary:true}), {once:true});
   }
 
   function rpcArgs(category = activeCategory, requestedPage = page, requestedPageSize = PAGE_SIZE){
@@ -173,7 +180,8 @@
     if(loading) return;
     loading = true;
     setControlsDisabled(true);
-    setSync(null, loaded ? 'Updating archive…' : 'Loading archive…');
+    setSync('is-loading', loaded ? 'Updating archive…' : 'Loading archive…');
+    if(!loaded) setFeedState('Loading transaction archive…', 'Connecting to the league database.');
     try{
       supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
       if(!supabase) throw new Error('The league database connection is unavailable.');
@@ -188,12 +196,11 @@
       currentArchive = await fetchArchive();
       loaded = true;
       render();
-      setSync('is-live', 'Archive loaded');
+      setSync('is-live', `Live · Updated ${new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit'})}`);
     }catch(error){
       console.error('Unable to load transaction archive:', error);
       setSync('is-error', 'Sync unavailable');
-      document.getElementById('transactionFeed').innerHTML = `<div class="panel transaction-empty transaction-error"><strong>Transaction history could not load.</strong><span>${esc(error.message || 'Please try again shortly.')}</span><button class="btn btn-primary" id="transactionRetry" type="button">Retry</button></div>`;
-      document.getElementById('transactionRetry')?.addEventListener('click', () => loadArchive({refreshSummary:true}), {once:true});
+      setFeedState('Transaction history is unavailable.', error.message || 'Check your connection, then try again.', 'Retry');
     }finally{
       loading = false;
       setControlsDisabled(false);

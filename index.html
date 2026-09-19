@@ -108,8 +108,8 @@
         <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
         <p>Week 2 is live. Six games are scoring. Championship odds are posted.</p>
         <div class="hero-buttons">
-          <button class="btn btn-primary" data-scroll-to="weekBoard">This Week</button>
-          <button class="btn btn-ghost" data-scroll-to="championshipOdds">Championship Odds</button>
+          <button class="btn btn-primary" data-scroll-to="weekBoard">See This Week</button>
+          <button class="btn btn-ghost" data-scroll-to="championshipOdds">See Championship Odds</button>
         </div>
       </div>
       <aside class="hero-season-card" aria-label="Current league campaign">
@@ -140,6 +140,8 @@
       </nav>
     </section>
 
+    <section class="home-band home-band-now" aria-labelledby="homeNowTitle">
+      <header class="home-band-head"><div><span>Right now</span><h2 id="homeNowTitle">Now</h2></div><small>Live league state</small></header>
     <section class="home-pulse" aria-label="Szn 10 status">
       <div><span>Phase</span><strong data-site-phase>Week 2</strong></div>
       <div><span>This week</span><strong>6 games</strong></div>
@@ -254,9 +256,12 @@
         </div>
       </div>
     </section>
+    </section>
 
+    <section class="home-band home-band-story" aria-labelledby="homeStoryTitle">
+      <header class="home-band-head"><div><span>The league story</span><h2 id="homeStoryTitle">Story</h2></div><small>Odds, office, and context</small></header>
     <section class="home-section futures-section" id="championshipOdds" aria-label="Championship futures odds">
-      <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small>Post-draft board</small></header>
+      <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small data-futures-status>Post-draft board · Loading</small></header>
       <div class="futures-grid" data-futures aria-live="polite">
         <div class="futures-empty">Setting the lines…</div>
       </div>
@@ -287,11 +292,21 @@
       </aside>
     </div>
 
+    </section>
+    <section class="home-band home-band-archive" aria-labelledby="homeArchiveTitle">
+      <header class="home-band-head"><div><span>Since 2017</span><h2 id="homeArchiveTitle">Archive</h2></div><small>Records and league memory</small></header>
+
     <section class="home-section banner-wall-section" aria-label="Championship banners">
-      <header class="home-section-head"><div><span>Ring count since 2017</span><h2>Championship Banners</h2></div><small>One banner per title</small></header>
+      <header class="home-section-head"><div><span>Ring count since 2017</span><h2>Championship Banners</h2></div><small data-banner-status>One banner per title · Loading</small></header>
       <div class="banner-wall" data-banner-wall aria-live="polite">
         <div class="banner-wall-empty">Raising the banners…</div>
       </div>
+    </section>
+    <div class="home-archive-links" aria-label="Explore the archive">
+      <button type="button" class="btn btn-ghost" data-view-link="history">Explore History</button>
+      <button type="button" class="btn btn-ghost" data-view-link="transactions">Search the Wire</button>
+      <button type="button" class="btn btn-ghost" data-view-link="league">Meet the Managers</button>
+    </div>
     </section>
 
   </section>
@@ -538,7 +553,7 @@
     </section>
   </section>
   <section class="view" id="history">
-    <div class="section-title"><h2>League History</h2></div>
+    <div class="section-title"><h2>League History</h2><span class="section-status" data-history-status role="status" aria-live="polite">Archive not loaded</span></div>
     <div class="panel" style="margin-bottom:16px;">
       <h3 style="font-size:14px; color:var(--muted); letter-spacing:0.06em; margin-bottom:18px;">Champions Timeline</h3>
       <div class="trophy-room" data-trophy-room><div class="history-loading">Loading trophy room…</div></div>
@@ -559,6 +574,7 @@
       <button type="button" data-intel-slice="trades" role="tab" aria-selected="false">Trades</button>
       <button type="button" data-intel-slice="power" role="tab" aria-selected="false">Power</button>
     </nav>
+    <div class="section-status-bar" data-intel-status role="status" aria-live="polite">Not loaded · Open a Book section to connect the archive.</div>
     <div id="intelBody" aria-live="polite"><div class="panel"><div class="history-loading">Open Intel to load the computed book.</div></div></div>
   </section>
 

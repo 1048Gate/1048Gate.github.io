@@ -4,6 +4,9 @@
   history.dataset.historyLayout='ready';
   const title=history.querySelector('.section-title'),timeline=history.querySelector('.timeline'),recordGrid=history.querySelector('.record-grid'),shame=history.querySelector('.shame');
   if(!timeline||!recordGrid||!shame)return;
+  const statusNode=history.querySelector('[data-history-status]');
+  const setStatus=(state,text)=>{if(!statusNode)return;statusNode.className=`section-status ${state||''}`;statusNode.textContent=text};
+  const errorPanel=(title,error,retry)=>`<div class="panel history-state history-state-error"><strong>${title}</strong><span>${String(error?.message||'Check your connection, then try again.')}</span><button type="button" class="btn btn-primary" data-history-retry="${retry}">Retry</button></div>`;
   const championsPanel=timeline.closest('.panel')||timeline.parentElement,recordsPanel=recordGrid.closest('.panel')||recordGrid.parentElement,shamePanel=shame.closest('.panel')||shame.parentElement;
   const shell=document.createElement('div');shell.className='history-shell';shell.innerHTML=`<div class="history-intro archive-explorer-intro"><div><span class="history-eyebrow">1048 ARCHIVES</span><h3>Choose your way into the league story.</h3><p>Start with a season, a rivalry, a title run, or the league wire. The detailed tables are still here—now they are one deliberate step away instead of the first thing you have to decode.</p></div><div class="archive-intro-note"><span>START HERE</span><strong>One question at a time.</strong><small>Follow a season · compare managers · revisit milestones</small></div></div><div class="history-subnav" role="tablist" aria-label="League history sections"><button class="active" type="button" data-history-tab="overview" role="tab" aria-selected="true">Overview</button><button type="button" data-history-tab="seasons" role="tab" aria-selected="false">Season Vault</button><button type="button" data-history-tab="champions" role="tab" aria-selected="false">Champions</button><button type="button" data-history-tab="matchups" role="tab" aria-selected="false">Rivalries</button><button type="button" data-history-tab="records" role="tab" aria-selected="false">Record Book</button><button type="button" data-history-tab="shame" role="tab" aria-selected="false">Hall of Shame</button><button type="button" data-history-tab="playoffs" role="tab" aria-selected="false">Playoffs</button></div><div class="history-tab-panels"><section class="history-tab-panel active" data-history-panel="overview"></section><section class="history-tab-panel" data-history-panel="seasons"></section><section class="history-tab-panel" data-history-panel="champions"></section><section class="history-tab-panel" data-history-panel="matchups"></section><section class="history-tab-panel" data-history-panel="records"></section><section class="history-tab-panel" data-history-panel="shame"></section><section class="history-tab-panel" data-history-panel="playoffs"></section></div>`;
   if(title)title.insertAdjacentElement('afterend',shell);else history.prepend(shell);
@@ -36,6 +39,13 @@
     if(btn) activate(btn.dataset.historyTab);
   });
 
+  shell.addEventListener('click', event => {
+    const retry=event.target.closest('[data-history-retry]');
+    if(!retry)return;
+    const loaders={overview:loadArchiveOverview,seasons:loadSeasonArchive,matchups:loadMatchups,trophy:loadTrophyRoom};
+    loaders[retry.dataset.historyRetry]?.();
+  });
+
   window.gateHistory={show:activate};
   document.addEventListener('gate:viewchange', event=>{
     const detail=event.detail||{};
@@ -49,6 +59,7 @@
   const clean=value=>String(value??'').trim().replace(/\s+/g,' ');
   const recordText=a=>a&&a[2]?`${a[0]}-${a[1]}-${a[2]}`:a?`${a[0]}-${a[1]}`:'—';
   async function loadArchiveOverview(){
+    setStatus('is-loading','Loading archive map…');
     overviewHost.innerHTML='<div class="panel history-content-panel archive-overview-panel"><div class="history-loading">Building the archive map…</div></div>';
     try{
       const response=await fetch('data/seasons.json',{cache:'no-store'});
@@ -68,7 +79,7 @@
         const viewButton=event.target.closest('[data-archive-view]');
         if(viewButton){if(window.switchView)window.switchView(viewButton.dataset.archiveView);else document.querySelector(`[data-view="${viewButton.dataset.archiveView}"]`)?.click();}
       });
-    }catch(error){console.error('Unable to build archive overview:',error);overviewHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Archive overview could not be loaded.</div></div>'}
+    }catch(error){console.error('Unable to build archive overview:',error);setStatus('is-error','Archive map unavailable');overviewHost.innerHTML=errorPanel('Archive overview could not load.',error,'overview')}
   }
 
   function applyRundownStory(block,note){
@@ -86,6 +97,7 @@
     });
   }
   async function loadSeasonArchive(){
+    setStatus('is-loading','Loading season archive…');
     seasonHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Loading season archive…</div></div>';
     try{
       const [seasonRes,playoffRes]=await Promise.all([fetch('data/seasons.json',{cache:'no-store'}),fetch('data/playoffs.json',{cache:'no-store'})]);
@@ -159,9 +171,10 @@
       }
       nav.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>renderSeason(btn.dataset.seasonYear)));
       renderSeason(seasonsList[0][0]);
-    }catch(error){console.error('Unable to load season archive:',error);seasonHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Season archive could not be loaded.</div></div>'}
+    }catch(error){console.error('Unable to load season archive:',error);setStatus('is-error','Season archive unavailable');seasonHost.innerHTML=errorPanel('Season archive could not load.',error,'seasons')}
   }
   async function loadMatchups(){
+    setStatus('is-loading','Loading matchup archive…');
     matchupHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Loading matchup archive…</div></div>';
     try{
       const response=await fetch('data/matchups.json',{cache:'no-store'});if(!response.ok)throw new Error(`matchups.json returned HTTP ${response.status}`);const data=await response.json();const people=data.participants||[],pairs=data.pairs||[];
@@ -198,7 +211,7 @@
       const a=matchupHost.querySelector('#h2hA'),b=matchupHost.querySelector('#h2hB'),result=matchupHost.querySelector('#h2hResult');
       function render(){if(a.value===b.value){result.innerHTML='<div class="h2h-empty">Pick two different managers.</div>';return}const pair=pairs.find(p=>(p[0]===a.value&&p[1]===b.value)||(p[0]===b.value&&p[1]===a.value));if(!pair){result.innerHTML='<div class="h2h-empty">These managers never played each other in the archive.</div>';return}const same=pair[0]===a.value,all=pair[2],reg=pair[3],po=pair[4],aw=same?all[0]:all[1],bw=same?all[1]:all[0],ap=same?all[3]:all[4],bp=same?all[4]:all[3],ar=same?[reg[0],reg[1],reg[2]]:[reg[1],reg[0],reg[2]],br=[ar[1],ar[0],ar[2]],apo=same?[po[0],po[1],po[2]]:[po[1],po[0],po[2]],bpo=[apo[1],apo[0],apo[2]];result.innerHTML=`<div class="h2h-score"><div><span>${esc(a.value)}</span><strong>${aw}</strong><small>${num(ap)} pts scored</small></div><div class="h2h-middle"><span>ALL-TIME</span><b>${recordText([aw,bw,all[2]])}</b><small>${aw+bw+all[2]} meetings</small></div><div><span>${esc(b.value)}</span><strong>${bw}</strong><small>${num(bp)} pts scored</small></div></div><div class="h2h-splits"><div><span>Regular Season</span><strong>${recordText(ar)}</strong><small>${esc(a.value)}</small><strong>${recordText(br)}</strong><small>${esc(b.value)}</small></div><div><span>Playoffs</span><strong>${recordText(apo)}</strong><small>${esc(a.value)}</small><strong>${recordText(bpo)}</strong><small>${esc(b.value)}</small></div></div>`}
       a.addEventListener('change',render);b.addEventListener('change',render);render();
-    }catch(error){console.error('Unable to load matchup archive:',error);matchupHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Matchup archive could not be loaded.</div></div>'}
+    }catch(error){console.error('Unable to load matchup archive:',error);setStatus('is-error','Matchup archive unavailable');matchupHost.innerHTML=errorPanel('Matchup archive could not load.',error,'matchups')}
   }
   function trophyStats(seasons,playoffs,currentMembers){
     const champs=seasons.map(([year,,owner,team,standings])=>{
@@ -280,6 +293,7 @@
   async function loadTrophyRoom(){
     const trophy=history.querySelector('[data-trophy-room]');
     if(!trophy)return;
+    setStatus('is-loading','Loading championship archive…');
     try{
       const [seasonRes,playoffRes,membersRes]=await Promise.all([
         fetch('data/seasons.json',{cache:'no-store'}),
@@ -295,11 +309,13 @@
       trophy.innerHTML=`<div class="trophy-room-head"><span>TROPHY ROOM</span><small>Championship stats · ${Math.min(...years)}–${Math.max(...years)}</small></div><div class="trophy-grid">${trophyStats(seasons,playoffs,memberNames).map(card=>`<div class="trophy-card"><span>${esc(card.label)}</span><strong>${esc(card.value)}</strong><small>${esc(card.detail)}</small></div>`).join('')}</div>`;
     }catch(error){
       console.error('Unable to load trophy room:',error);
-      trophy.innerHTML='<div class="history-loading">Trophy room could not be loaded.</div>';
+      setStatus('is-error','Championship archive unavailable');
+      trophy.innerHTML=errorPanel('Trophy room could not load.',error,'trophy');
     }
   }
 
-  loadArchiveOverview();loadSeasonArchive();loadMatchups();loadTrophyRoom();
+  setStatus('is-loading','Loading league archive…');
+  Promise.all([loadArchiveOverview(),loadSeasonArchive(),loadMatchups(),loadTrophyRoom()]).then(()=>{if(!statusNode?.classList.contains('is-error'))setStatus('is-live','Live · Archive connected')}).catch(()=>{});
   let shameAttempts=0;
   function placeShameTimeline(){
     const shameTimeline=document.getElementById('shameTimeline');

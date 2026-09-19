@@ -127,6 +127,20 @@ if(!html.includes('class="orientation-panel"') || !html.includes('What is 1048 G
 if(!html.includes('Wire — transactions and trades') || !html.includes('Book — league analytics') || !html.includes('Office — rules, polls, and news')){
   throw new Error('Branded navigation labels must include plain-language descriptions.');
 }
+if(!html.includes('data-history-status') || !html.includes('data-intel-status') || !html.includes('data-futures-status') || !html.includes('data-banner-status')){
+  throw new Error('Public data sections must expose explicit connection status hooks.');
+}
+if(!html.includes('class="home-band home-band-now"') || !html.includes('id="homeNowTitle"') || !html.includes('class="home-band home-band-story"') || !html.includes('class="home-band home-band-archive"')){
+  throw new Error('Homepage must preserve the Now, Story, and Archive hierarchy.');
+}
+if(!html.includes('See This Week') || !html.includes('Explore History') || !html.includes('Search the Wire')){
+  throw new Error('Homepage hierarchy needs direct current-week and archive actions.');
+}
+const stateScripts = ['js/transactions.js','js/site-ui.js','js/history-layout.js','js/intelligence.js','js/banner-wall.js','js/title-odds.js'];
+for(const asset of stateScripts){
+  const source = readFileSync(new URL(asset, root), 'utf8');
+  if(!source.includes('Retry') && !source.includes('data-') && !source.includes('Unavailable')) throw new Error(`${asset} is missing explicit failure-state handling.`);
+}
 if(html.includes('class="quick-card"') || html.includes('home-directory-title') || html.includes('class="corkboard commissioner-board"')){
   throw new Error('Home directory cards must stay off the landing page.');
 }

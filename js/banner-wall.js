@@ -4,8 +4,11 @@
   if(!host) return;
 
   const {escapeHtml:esc} = window.gateShared;
+  const status=document.querySelector('[data-banner-status]');
+  const setStatus=(state,text)=>{if(!status)return;status.className=`section-status ${state||''}`;status.textContent=text};
 
   async function load(){
+    setStatus('is-loading','Loading championship archive…');
     try{
       const response = await fetch('data/seasons.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`seasons.json returned HTTP ${response.status}`);
@@ -43,11 +46,15 @@
         });
         host.insertAdjacentElement('afterend', button);
       }
+      setStatus('is-live',`Live · ${banners.length} banners`);
     }catch(error){
       console.error('Unable to load banner wall:', error);
-      host.innerHTML = '<div class="banner-wall-empty">Banners could not be loaded.</div>';
+      setStatus('is-error','Unavailable · Championship archive failed');
+      host.innerHTML = `<div class="banner-wall-empty state-error"><strong>Banners could not load.</strong><span>${esc(error.message || 'Check your connection, then try again.')}</span><button type="button" class="btn btn-primary" data-banner-retry>Retry</button></div>`;
     }
   }
+
+  host.addEventListener('click', event => { if(event.target.closest('[data-banner-retry]')) load(); });
 
   load();
 })();

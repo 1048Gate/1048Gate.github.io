@@ -17,6 +17,8 @@
   toolbar.insertAdjacentElement('afterend', host);
 
   async function load(){
+    host.classList.remove('hidden');
+    host.innerHTML = '<div class="history-loading">Loading playoff probability board…</div>';
     try{
       const response = await fetch('data/power-rankings.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`power-rankings.json returned HTTP ${response.status}`);
@@ -31,9 +33,11 @@
       );
     }catch(error){
       console.warn('Title projection unavailable:', error);
-      host.classList.add('hidden');
+      host.innerHTML = `<div class="history-state history-state-error"><strong>Playoff probability board could not load.</strong><span>${window.gateShared?.escapeHtml(error.message || 'Check your connection, then try again.')}</span><button type="button" class="btn btn-primary" data-title-odds-retry>Retry</button></div>`;
     }
   }
+
+  host.addEventListener('click', event => { if(event.target.closest('[data-title-odds-retry]')) load(); });
 
   function pWin(a, b){
     return 1 / (1 + Math.pow(10, -(a.rating - b.rating) / RATING_SCALE));
