@@ -158,7 +158,8 @@ def _build_editorial(
     leader: dict[str, Any], high_team: dict[str, Any], high_score: float, low_team: dict[str, Any], low_score: float,
     record_body: str, root: Path,
 ) -> dict[str, Any]:
-    closest = min(facts, key=lambda item: item["margin"])
+    comparison_facts = facts if status["final"] else ([item for item in facts if item["combined"] > 0] or facts)
+    closest = min(comparison_facts, key=lambda item: item["margin"])
     pressure = next((row for row in standings if int(row.get("losses", 0)) > 0), standings[-1])
     matchup = closest
     final = status["final"]
@@ -257,9 +258,10 @@ def generate_edition(
     status = inspect_week(board, season, week)
     live = not status["final"]
     facts = _matchup_facts(status["matchups"])
-    biggest = max(facts, key=lambda item: item["margin"])
-    closest = min(facts, key=lambda item: item["margin"])
-    all_sides = [(fact[key], fact[f"{key}_score"]) for fact in facts for key in ("away", "home")]
+    comparison_facts = facts if status["final"] else ([fact for fact in facts if fact["combined"] > 0] or facts)
+    biggest = max(comparison_facts, key=lambda item: item["margin"])
+    closest = min(comparison_facts, key=lambda item: item["margin"])
+    all_sides = [(fact[key], fact[f"{key}_score"]) for fact in comparison_facts for key in ("away", "home")]
     high_team, high_score = max(all_sides, key=lambda pair: pair[1])
     low_team, low_score = min(all_sides, key=lambda pair: pair[1])
     scoreboard_source = _source(
