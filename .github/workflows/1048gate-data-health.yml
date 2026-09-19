@@ -3,7 +3,7 @@ name: Data health and current-season fetch
 on:
   schedule:
     # Daily morning catch-up (~4:15 AM ET). Newspaper generation runs after
-    # the board publish and only writes a recap when the week is final.
+    # the board publish, refreshes a verified live issue, and finalizes it when the slate ends.
     - cron: '15 8 * * *'
     # Every 30 minutes Thursday–Monday so Week slates update during the NFL window.
     - cron: '7,37 * * * 0,1,4,5,6'
@@ -33,7 +33,7 @@ on:
         required: false
         default: ''
       newspaper_allow_incomplete:
-        description: Testing only — generate a preview if the week is not final
+        description: Testing only — print an unpublished preview instead of updating the live issue
         required: false
         type: boolean
         default: false
@@ -76,9 +76,9 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
-      - name: Test ESPN normalizers and publisher
+      - name: Test ESPN normalizers, publisher, and newspaper lifecycle
         run: |
-          python3 -m unittest scripts/test_fetch_current.py scripts/test_publish_current_season.py scripts/test_update_matchup_leaderboards.py
+          python3 -m unittest scripts/test_fetch_current.py scripts/test_publish_current_season.py scripts/test_update_matchup_leaderboards.py scripts/test_generate_newspaper.py
       - name: Publish standings and scoreboard into data/current-season.json
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
