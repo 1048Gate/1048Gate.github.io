@@ -97,7 +97,8 @@ class NewspaperTests(unittest.TestCase):
         stories=[{"story_type":s["story_type"],"title":s["title"],"body":s["body"]} for s in edition["stories"]]
         if mutate: stories[0]["body"] += " 999.00"
         if add_week: stories[1]["title"] = "Week 1: " + stories[1]["title"]
-        text=json.dumps({"stories":stories})
+        editorial={key: edition[key] for key in ("status","headline","standfirst","lead","matchup","tableNotes","pressure","surprise","recordWatch","archiveComparison","editorial_note") if key in edition}
+        text=json.dumps({"stories":stories,"editorial":editorial})
         payload={"output":[{"type":"message","content":[{"type":"output_text","text":text}]}]}
         response=MagicMock(); response.__enter__.return_value.read.return_value=json.dumps(payload).encode(); return response
     def test_grok_down_fallback(self):

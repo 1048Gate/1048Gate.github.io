@@ -152,6 +152,62 @@ def _load_optional(path: Path) -> Any | None:
         return None
 
 
+def _build_editorial(
+    *, season: int, week: int, status: dict[str, Any], facts: list[dict[str, Any]], standings: list[dict[str, Any]],
+    leader: dict[str, Any], high_team: dict[str, Any], high_score: float, low_team: dict[str, Any], low_score: float,
+    record_body: str, root: Path,
+) -> dict[str, Any]:
+    closest = min(facts, key=lambda item: item["margin"])
+    pressure = next((row for row in standings if int(row.get("losses", 0)) > 0), standings[-1])
+    matchup = closest
+    source = lambda dataset, locator, description: _source(dataset, locator, description)
+    return {
+        "status": "final" if status["final"] else "preview",
+        "headline": f"The Week {week} table has a shape, but not a verdict",
+        "standfirst": f"{leader['owner']} leads the verified table after Week {week}, while {pressure['owner']} is already looking for a response.",
+        "lead": {
+            "title": f"The Week {week} table has a shape, but not a verdict",
+            "body": f"{leader['owner']} owns the early headline at {int(leader.get('wins', 0))}-{int(leader.get('losses', 0))} with {float(leader.get('pointsFor', 0)):.2f} points for. {high_team['owner']} supplied the league-high score at {high_score:.2f}, while {low_team['owner']} finished at {low_score:.2f}. The season is still a collection of signals, not a sentence, but the first separation is visible.",
+            "sourceIds": ["current-season", "power-rankings"],
+        },
+        "matchup": {
+            "awayTeam": matchup["away"]["team"], "awayOwner": matchup["away"]["owner"], "awayScore": matchup["away_score"],
+            "homeTeam": matchup["home"]["team"], "homeOwner": matchup["home"]["owner"], "homeScore": matchup["home_score"],
+            "whyItMatters": f"The closest game on the board finished with a {matchup['margin']:.2f}-point margin, making it the cleanest competitive story of Week {week}.",
+            "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
+            "edge": f"Verified result: {matchup['winner']['owner']} by {matchup['margin']:.2f} points.",
+            "sourceIds": ["current-season"],
+        },
+        "tableNotes": [
+            {"rank": index, "team": row["team"], "owner": row["owner"], "record": f"{int(row.get('wins', 0))}-{int(row.get('losses', 0))}", "pointsFor": f"{float(row.get('pointsFor', 0)):.2f}", "tag": "Highest scoring" if index == 1 else "Early signal"}
+            for index, row in enumerate(standings[:3], start=1)
+        ],
+        "pressure": {
+            "team": pressure["team"], "owner": pressure["owner"], "record": f"{int(pressure.get('wins', 0))}-{int(pressure.get('losses', 0))}",
+            "title": f"Under pressure: {pressure['owner']}",
+            "body": f"{pressure['owner']} is {int(pressure.get('wins', 0))}-{int(pressure.get('losses', 0))} after Week {week}. That is an early-season pressure point, not a verdict; the next result determines whether the opening becomes a story.",
+            "sourceIds": ["current-season", "seasons"],
+        },
+        "surprise": {
+            "title": "Biggest surprise: the scoring range is already loud",
+            "body": f"The gap between {high_team['owner']}'s {high_score:.2f} and {low_team['owner']}'s {low_score:.2f} is {high_score - low_score:.2f} points. It is a real Week {week} signal, but too early to call a season trend.",
+            "sourceIds": ["current-season"],
+        },
+        "recordWatch": {
+            "title": "Record to watch: the first benchmark is on the board",
+            "body": record_body,
+            "sourceIds": ["current-season", "matchups"],
+        },
+        "archiveComparison": {
+            "title": "From the archive: early leaders need patience",
+            "body": f"Week {week} is now part of the verified Szn {season - 2016} record, but the archive does not turn an opening table into a final ranking. Keep the benchmark; wait for the pattern.",
+            "linkLabel": "Open the newspaper archive",
+            "sourceIds": ["seasons", "newspaper"],
+        },
+        "editorial_note": f"Week {week} edition generated from the verified board. Interpretive language is intentionally restrained until the slate is final.",
+    }
+
+
 def generate_edition(
     board: dict[str, Any], season: int, week: int, *, allow_incomplete: bool = False,
     root: Path = ROOT, now: datetime | None = None,
@@ -280,6 +336,11 @@ def generate_edition(
         stories.append(_story("playoff_picture", "The playoff picture comes into focus", f"With Week {week} complete, the verified standings now provide the current six-team playoff order.", _source("data/current-season.json", f"season={season};week={week};standings", "Verified standings table")))
 
     timestamp = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+    editorial = _build_editorial(
+        season=season, week=week, status=status, facts=facts, standings=standings,
+        leader=leader, high_team=high_team, high_score=high_score, low_team=low_team,
+        low_score=low_score, record_body=record_body, root=root,
+    )
     return {
         "schema_version": 1, "league_name": "1048 Gate", "season": season,
         "edition_year": season, "week": week, "generated_at": timestamp,
@@ -290,6 +351,7 @@ def generate_edition(
             "matchup_recap_exempt": True,
         },
         "source_trace": _source("data/current-season.json", f"season={season};week={week}", "Published ESPN board snapshot"),
+        **editorial,
         "stories": stories,
     }
 
@@ -386,6 +448,37 @@ def _verified_rewrite(edition: dict[str, Any], candidates: Any, writing_mode: st
     return result
 
 
+def _verified_editorial(edition: dict[str, Any], candidate: Any, provider: str) -> dict[str, Any]:
+    editorial_keys = ("status", "headline", "standfirst", "lead", "matchup", "tableNotes", "pressure", "surprise", "recordWatch", "archiveComparison", "editorial_note")
+    original = {key: edition[key] for key in editorial_keys if key in edition}
+    if not isinstance(candidate, dict) or not isinstance(original, dict):
+        raise RewriteFailure(provider, "validation", "reason=editorial_not_object")
+
+    def merge(source: Any, value: Any, path: str) -> Any:
+        if isinstance(source, dict):
+            if not isinstance(value, dict) or set(source) != set(value):
+                raise RewriteFailure(provider, "validation", f"field={path} reason=editorial_shape_changed")
+            return {key: merge(source[key], value[key], f"{path}.{key}") for key in source}
+        if isinstance(source, list):
+            if not isinstance(value, list) or len(source) != len(value):
+                raise RewriteFailure(provider, "validation", f"field={path} reason=editorial_array_changed")
+            return [merge(left, right, f"{path}[{index}]") for index, (left, right) in enumerate(zip(source, value))]
+        if isinstance(source, str):
+            if not isinstance(value, str) or not value.strip():
+                raise RewriteFailure(provider, "validation", f"field={path} reason=editorial_text_missing")
+            if sorted(_numbers(source)) != sorted(_numbers(value)):
+                raise RewriteFailure(provider, "validation", f"field={path} reason=editorial_numbers_changed")
+            return value.strip()
+        if value != source:
+            raise RewriteFailure(provider, "validation", f"field={path} reason=editorial_locked_value_changed")
+        return source
+
+    result = json.loads(json.dumps(edition))
+    result.update(merge(original, candidate, "editorial"))
+    result["writing_mode"] = f"{provider}_verified_rewrite"
+    return result
+
+
 def _safe_error_text(value: Any, limit: int = 240) -> str:
     text = re.sub(r"\bsk-[A-Za-z0-9_-]+", "[redacted]", str(value or ""))
     text = " ".join(text.split())
@@ -442,6 +535,18 @@ def _openai_text(payload: dict[str, Any]) -> str:
     )
 
 
+def _strict_schema(value: Any) -> dict[str, Any]:
+    if isinstance(value, dict):
+        return {"type": "object", "properties": {key: _strict_schema(item) for key, item in value.items()}, "required": list(value), "additionalProperties": False}
+    if isinstance(value, list):
+        item = _strict_schema(value[0]) if value else {"type": "string"}
+        return {"type": "array", "items": item, "minItems": len(value), "maxItems": len(value)}
+    if isinstance(value, bool): return {"type": "boolean"}
+    if isinstance(value, int): return {"type": "integer"}
+    if isinstance(value, float): return {"type": "number"}
+    return {"type": "string"}
+
+
 def apply_openai_stories(
     edition: dict[str, Any], api_key: str | None = None, *, failures: list[RewriteFailure] | None = None,
 ) -> dict[str, Any]:
@@ -449,6 +554,8 @@ def apply_openai_stories(
     if not key:
         return edition
     facts = _facts(edition)
+    editorial_keys = ("status", "headline", "standfirst", "lead", "matchup", "tableNotes", "pressure", "surprise", "recordWatch", "archiveComparison", "editorial_note")
+    editorial = {key: edition[key] for key in editorial_keys if key in edition}
     story_schema = {
         "type": "object",
         "properties": {
@@ -466,13 +573,14 @@ def apply_openai_stories(
                     "required": ["story_type", "title", "body"],
                     "additionalProperties": False,
                 },
-            }
+            },
+            "editorial": _strict_schema(editorial),
         },
-        "required": ["stories"],
+        "required": ["stories", "editorial"],
         "additionalProperties": False,
     }
     instructions = (
-        "Rewrite these verified fantasy-football newspaper briefs with a lively local sports-column voice. "
+        "Rewrite these verified fantasy-football newspaper briefs and structured editorial fields with a lively local sports-column voice. "
         "Keep the same story count, order, and story_type values. Preserve every factual claim, name, and number exactly. "
         "Within each story, every numeric token must appear exactly as supplied and the same number of times; never spell out, "
         "remove, add, round, or move a number to another story. If a sentence cannot be improved without changing a number, "
@@ -481,7 +589,7 @@ def apply_openai_stories(
         "Treat primary_owner as locked editorial metadata: no manager may be the primary subject of more than two "
         "feature stories, and the full matchup_recap is exempt. When primary_owner is null, keep the story league-wide "
         "instead of turning it into another manager profile. "
-        "Do not add predictions, quotes, injuries, transactions, or facts that are not supplied."
+        "Do not add predictions, quotes, injuries, transactions, or facts that are not supplied. Return the editorial object with exactly the same keys, arrays, names, sourceIds, and numeric values; only improve string wording while preserving every numeric token."
     )
     request = urllib.request.Request(
         OPENAI_API_URL,
@@ -489,7 +597,7 @@ def apply_openai_stories(
             "model": os.getenv("OPENAI_MODEL", OPENAI_MODEL),
             "input": [
                 {"role": "system", "content": instructions},
-                {"role": "user", "content": json.dumps({"stories": facts}, ensure_ascii=False)},
+                {"role": "user", "content": json.dumps({"stories": facts, "editorial": editorial}, ensure_ascii=False)},
             ],
             "text": {"format": {"type": "json_schema", "name": "newspaper_rewrite", "strict": True, "schema": story_schema}},
             "max_output_tokens": 4000,
@@ -510,7 +618,8 @@ def apply_openai_stories(
             raise RewriteFailure("openai", "output_json", f"reason=invalid_json line={error.lineno}") from error
         if not isinstance(rewritten, dict):
             raise RewriteFailure("openai", "output_json", "reason=expected_object")
-        return _verified_rewrite(edition, rewritten.get("stories"), "openai_verified_rewrite")
+        rewritten_edition = _verified_rewrite(edition, rewritten.get("stories"), "openai_verified_rewrite")
+        return _verified_editorial(rewritten_edition, rewritten.get("editorial"), "openai")
     except urllib.error.HTTPError as error:
         failure = _openai_http_failure(error)
     except RewriteFailure as error:
