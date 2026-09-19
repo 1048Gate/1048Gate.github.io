@@ -1,0 +1,94 @@
+{
+  "schema_version": 2,
+  "league_name": "1048 Gate",
+  "season": 2026,
+  "edition_year": 2026,
+  "week": 2,
+  "generated_at": "2026-09-19T14:45:27.952515Z",
+  "published_at": "2026-09-19T15:00:00Z",
+  "updated_at": "2026-09-19T14:45:27.952515Z",
+  "source_status": "verified_live",
+  "validation_status": "valid",
+  "status": "live",
+  "headline": "The early table has a shape, but not a verdict",
+  "standfirst": "Trevor Hash brings the league's highest score into Week 2, while the reigning champion is already chasing a response against JD Daley.",
+  "source_trace": {
+    "dataset": "data/current-season.json",
+    "locator": "season=2026;week=2",
+    "description": "Live ESPN board snapshot; Week 2 remains in progress"
+  },
+  "lead": {
+    "title": "The early table has a shape, but not a verdict",
+    "body": "Trevor Hash owns the early headline after a 192.56-point Week 1 and a 1–0 start. Bryan Hunt and Vincent Cannarozzi are also above 150 points, giving the first table a clear front edge. The complication is timing: Week 2 is still live, and early-season standings are signals rather than sentences. The most interesting pressure point is at the other end of the board, where reigning champion Thomas Speer is 0–1 and currently trailing JD Daley in the week's live matchup. One result will not rewrite the title race, but it can change the conversation.",
+    "sourceIds": ["current-season", "power-rankings"]
+  },
+  "matchup": {
+    "awayTeam": "Your Reigning Champ",
+    "awayOwner": "Thomas Speer",
+    "awayScore": 35.2,
+    "homeTeam": "Ja'Marr-a-Lago",
+    "homeOwner": "JD Daley",
+    "homeScore": 53.82,
+    "whyItMatters": "The reigning champion is trying to avoid an 0–2 opening while Daley is looking to turn a narrow Week 1 loss into an immediate response.",
+    "history": "This is an early-season pressure game, not a declared rivalry. The result matters because both managers began the season with a loss.",
+    "edge": "Live edge: Ja'Marr-a-Lago, 53.82–35.20",
+    "sourceIds": ["current-season"]
+  },
+  "tableNotes": [
+    {"rank": 1, "team": "Team Hash", "owner": "Trevor Hash", "record": "1–0", "pointsFor": "192.56", "tag": "Highest scoring"},
+    {"rank": 2, "team": "Howya Been's", "owner": "Bryan Hunt", "record": "1–0", "pointsFor": "158.26", "tag": "Efficient start"},
+    {"rank": 3, "team": "McConkey Tonk Badonkadonk", "owner": "Vincent Cannarozzi", "record": "1–0", "pointsFor": "154.90", "tag": "Quietly climbing"}
+  ],
+  "pressure": {
+    "team": "Your Reigning Champ",
+    "owner": "Thomas Speer",
+    "record": "0–1",
+    "title": "Under pressure: the reigning champion",
+    "body": "The early pressure is about the scoreboard, not the résumé. Speer's title defense began with a loss, and the live Week 2 matchup is another test. A comeback would turn the opening stumble into background noise; another loss would make the defense of the crown a real weekly storyline.",
+    "sourceIds": ["current-season", "seasons"]
+  },
+  "surprise": {
+    "title": "Biggest surprise: the scoring gap is already loud",
+    "body": "Team Hash's 192.56 points in Week 1 are 90.32 points higher than Kyle Fowler's total. That is an early scoring signal, not a season forecast, but it explains why Hash currently leads both the table and the conversation.",
+    "sourceIds": ["current-season"]
+  },
+  "recordWatch": {
+    "title": "Record to watch: Hash has the first benchmark",
+    "body": "Trevor Hash's 192.56 points are the first major scoring benchmark of Szn 10. Week 2's live board will show whether the early leader can add another statement before the archive starts to separate contenders from noise.",
+    "sourceIds": ["current-season", "matchups"]
+  },
+  "archiveComparison": {
+    "title": "From the archive: early leaders need patience",
+    "body": "The 2026 archive already has a Week 1 edition, but no two-week verdict. The useful comparison for now is structural: a 1–0 record and a high points-for total create an advantage, not a conclusion.",
+    "linkLabel": "Open the newspaper archive",
+    "sourceIds": ["data/newspaper_editions/2026/week_01.json", "seasons"]
+  },
+  "stories": [
+    {
+      "story_type": "lead",
+      "title": "The early table has a shape, but not a verdict",
+      "body": "Trevor Hash owns the early headline after a 192.56-point Week 1 and a 1–0 start. Bryan Hunt and Vincent Cannarozzi are also above 150 points, giving the first table a clear front edge. Week 2 is still live, so the standings are signals rather than sentences.",
+      "source": {"dataset": "data/current-season.json", "locator": "season=2026;week=2;standings", "description": "Live standings and Week 1 scoring totals"}
+    },
+    {
+      "story_type": "matchup_of_the_week",
+      "title": "Matchup of the week: the champion needs a response",
+      "body": "Your Reigning Champ and Ja'Marr-a-Lago are both trying to move past 0–1 starts. Daley currently leads Speer 53.82–35.20 on the live board.",
+      "source": {"dataset": "data/current-season.json", "locator": "season=2026;week=2;matchup=7", "description": "Live ESPN matchup board"}
+    },
+    {
+      "story_type": "record_watch",
+      "title": "Record watch: Hash sets the first scoring benchmark",
+      "body": "Trevor Hash's 192.56 points are the first major scoring mark of Szn 10. It is a benchmark to watch, not a record claim.",
+      "source": {"dataset": "data/current-season.json", "locator": "season=2026;week=1;standings", "description": "Verified Week 1 scoring total"}
+    },
+    {
+      "story_type": "archive_comparison",
+      "title": "From the archive: early leaders need patience",
+      "body": "The Week 1 edition is preserved, but the season is too young for a verdict. The archive's job this week is context: one strong opening can start a story without finishing it.",
+      "source": {"dataset": "data/newspaper_editions/2026/week_01.json", "locator": "edition=2026-week-01", "description": "Verified prior weekly edition"}
+    }
+  ],
+  "writing_mode": "manual_verified_editorial",
+  "editorial_note": "Week 2 is live. Interpretive language is intentionally restrained until the slate is final."
+}

@@ -33,12 +33,13 @@ for(const entry of weeklyIndex.editions){
   const key = `${entry.season}:${entry.week}`;
   assert.ok(!indexedWeeks.has(key), `The weekly newspaper index contains duplicate ${key} entries.`);
   indexedWeeks.add(key);
-  assert.equal(entry.source_status, 'verified_final', `Indexed edition ${key} must come from a final board.`);
+  assert.ok(['verified_live','verified_final'].includes(entry.source_status), `Indexed edition ${key} must come from a verified live or final board.`);
   assert.equal(entry.validation_status, 'valid', `Indexed edition ${key} must pass publication validation.`);
   const edition = readJson(entry.path);
   assert.equal(edition.season, entry.season, `Indexed edition ${key} has a mismatched season.`);
   assert.equal(edition.week, entry.week, `Indexed edition ${key} has a mismatched week.`);
-  assert.equal(edition.source_status, 'verified_final', `Edition ${key} must come from a final board.`);
+  assert.equal(edition.source_status, entry.source_status, `Edition ${key} must match the indexed source status.`);
+  assert.ok(['verified_live','verified_final'].includes(edition.source_status), `Edition ${key} must come from a verified live or final board.`);
   assert.equal(edition.validation_status, 'valid', `Edition ${key} must pass publication validation.`);
   assert.ok(Array.isArray(edition.stories) && edition.stories.length > 0, `Edition ${key} must contain stories.`);
 }
@@ -161,7 +162,8 @@ assert.match(hostileMarkup, /&lt;img src=x/);
 assert.deepEqual(context.window.gateNewspaper.weeklyEntries({editions:[
   {season:2026,week:1,path:'week-1.json',validation_status:'valid',source_status:'verified_final'},
   {season:2026,week:2,path:'preview.json',validation_status:'preview',source_status:'incomplete_override'},
-  {season:2025,week:14,path:'week-14.json',validation_status:'valid',source_status:'verified_final'}
-]}).map(entry => entry.path), ['week-1.json','week-14.json']);
+  {season:2025,week:14,path:'week-14.json',validation_status:'valid',source_status:'verified_final'},
+  {season:2024,week:8,path:'live.json',validation_status:'valid',source_status:'verified_live'}
+]}).map(entry => entry.path), ['week-1.json','week-14.json','live.json']);
 
 console.log('Newspaper checks passed: historical archive, verified weekly index, empty state, picker, sources, and HTML escaping.');

@@ -130,6 +130,18 @@ if(!html.includes('Wire â€” transactions and trades') || !html.includes('Book â€
 if(!html.includes('data-history-status') || !html.includes('data-intel-status') || !html.includes('data-futures-status') || !html.includes('data-banner-status')){
   throw new Error('Public data sections must expose explicit connection status hooks.');
 }
+if(!html.includes('data-weekly-feature') || !html.includes('data-weekly-feature-status')){
+  throw new Error('Homepage must expose a weekly edition feature target and status.');
+}
+const weeklyIndex = JSON.parse(readFileSync(new URL('data/newspaper_editions/index.json', root), 'utf8'));
+const liveWeekly = weeklyIndex.editions.find(entry => entry.week === currentSeason.week && entry.source_status === 'verified_live');
+if(!liveWeekly || !existsSync(new URL(liveWeekly.path, root))){
+  throw new Error('Current live week must have a published verified weekly edition.');
+}
+const liveEdition = JSON.parse(readFileSync(new URL(liveWeekly.path, root), 'utf8'));
+if(liveEdition.source_status !== 'verified_live' || !liveEdition.headline || !liveEdition.lead?.body || !liveEdition.matchup || !Array.isArray(liveEdition.tableNotes)){
+  throw new Error('Live weekly edition is missing the structured editorial fields.');
+}
 if(!html.includes('class="home-band home-band-now"') || !html.includes('id="homeNowTitle"') || !html.includes('class="home-band home-band-story"') || !html.includes('class="home-band home-band-archive"')){
   throw new Error('Homepage must preserve the Now, Story, and Archive hierarchy.');
 }

@@ -44,7 +44,7 @@
     const editions = Array.isArray(index?.editions) ? index.editions : [];
     return editions
       .filter(entry => entry && entry.mode !== 'historical' && Number.isInteger(entry.season) && Number.isInteger(entry.week))
-      .filter(entry => entry.validation_status === 'valid' && entry.source_status === 'verified_final')
+      .filter(entry => entry.validation_status === 'valid' && ['verified_live','verified_final'].includes(entry.source_status))
       .slice()
       .sort((left, right) => (right.season - left.season) || (right.week - left.week));
   }
@@ -87,8 +87,8 @@
       if(data.validation_status && data.validation_status !== 'valid'){
         throw new Error('Weekly edition is not marked valid.');
       }
-      if(data.source_status && data.source_status !== 'verified_final'){
-        throw new Error('Weekly edition is not a verified final recap.');
+      if(data.source_status && !['verified_live','verified_final'].includes(data.source_status)){
+        throw new Error('Weekly edition is not a verified live or final recap.');
       }
     }
     return data;
@@ -103,6 +103,26 @@
       </div>`;
   }
 
+  function renderWeeklyEditorial(data){
+    if(!data.headline && !data.lead && !data.matchup) return '';
+    const lead=data.lead||{};
+    const matchup=data.matchup||{};
+    const pressure=data.pressure||{};
+    const surprise=data.surprise||{};
+    const record=data.recordWatch||{};
+    const archive=data.archiveComparison||{};
+    const notes=Array.isArray(data.tableNotes)?data.tableNotes:[];
+    const table=notes.map(note=>`<li><b>${esc(String(note.rank).padStart(2,'0'))}</b><span><strong>${esc(note.team)}</strong><small>${esc(note.owner)} · ${esc(note.record)} · ${esc(note.pointsFor)} PF</small></span><em>${esc(note.tag)}</em></li>`).join('');
+    return `<section class="weekly-editorial">
+      <header class="weekly-editorial-header"><span class="edition-kicker">THE WEEKLY EDITION · ${esc(data.status==='live'?'LIVE':'FINAL')}</span><h3>${esc(data.headline||'The weekly edition')}</h3><p>${esc(data.standfirst||'')}</p><div class="weekly-editorial-meta"><span>Szn ${esc(data.season - 2016)} · Week ${esc(data.week)}</span><span>Updated ${esc(data.updated_at||data.generated_at||'')}</span></div></header>
+      ${lead.body?`<article class="weekly-lead"><span class="weekly-kicker">LEAD STORY</span><h4>${esc(lead.title||'The week in view')}</h4><p>${esc(lead.body)}</p></article>`:''}
+      ${matchup.awayTeam?`<article class="weekly-matchup"><div class="weekly-kicker">MATCHUP OF THE WEEK</div><div class="weekly-matchup-score"><div><strong>${esc(matchup.awayTeam)}</strong><small>${esc(matchup.awayOwner||'')}</small><b>${esc(matchup.awayScore??'—')}</b></div><span>vs</span><div><strong>${esc(matchup.homeTeam)}</strong><small>${esc(matchup.homeOwner||'')}</small><b>${esc(matchup.homeScore??'—')}</b></div></div><p><strong>Why it matters:</strong> ${esc(matchup.whyItMatters||'')}</p><p><strong>Edge:</strong> ${esc(matchup.edge||'')}</p></article>`:''}
+      ${table?`<section class="weekly-table"><div class="weekly-kicker">THE FIVE-MINUTE TABLE</div><ol>${table}</ol></section>`:''}
+      <div class="weekly-editorial-grid">${pressure.body?`<article><span class="weekly-kicker">UNDER PRESSURE</span><h4>${esc(pressure.title||pressure.team||'Under pressure')}</h4><p>${esc(pressure.body)}</p></article>`:''}${surprise.body?`<article><span class="weekly-kicker">BIGGEST SURPRISE</span><h4>${esc(surprise.title||'A surprise from the board')}</h4><p>${esc(surprise.body)}</p></article>`:''}${record.body?`<article><span class="weekly-kicker">RECORD TO WATCH</span><h4>${esc(record.title||'Record watch')}</h4><p>${esc(record.body)}</p></article>`:''}${archive.body?`<article><span class="weekly-kicker">FROM THE ARCHIVE</span><h4>${esc(archive.title||'Archive comparison')}</h4><p>${esc(archive.body)}</p></article>`:''}</div>
+      <footer class="weekly-editorial-source"><span>DATA STATUS · ${esc(data.source_status==='verified_live'?'Live board':'Final board')}</span><small>${esc(data.editorial_note||'Claims limited to checked-in sources.')}</small></footer>
+    </section>`;
+  }
+
   function renderEditionMarkup(data, editionKey){
     const historical = editionKey === 'historical';
     const title = historical
@@ -110,10 +130,10 @@
       : `${data.league_name || '1048 Gate'} \u2014 ${data.season} Week ${data.week} Edition`;
     const notice = historical
       ? 'One verified championship recap from every completed league season.'
-      : 'Verified weekly recap built from the finalized 2026 league board.';
+      : (data.source_status === 'verified_live' ? 'Live weekly edition built from the current 2026 league board.' : 'Verified weekly recap built from the finalized 2026 league board.');
     const status = historical
       ? editionConfig.historical.status
-      : (data.source_status === 'verified_final' ? 'verified 2026 weekly edition' : editionConfig.weekly.status);
+      : (data.source_status === 'verified_live' ? 'live 2026 weekly edition' : data.source_status === 'verified_final' ? 'verified 2026 weekly edition' : editionConfig.weekly.status);
 
     const stories = data.stories.map((story, index) => `
       <article class="story-item${index === 0 ? ' story-lead' : ''}">
@@ -141,6 +161,7 @@
         </div>
       </header>
       <div class="edition-status" aria-label="Source status: ${esc(status)}"><span class="status-dot"></span>${esc(status)}</div>
+      ${historical?'':renderWeeklyEditorial(data)}
       <div class="edition-stories">${stories}</div>
       <footer class="edition-footer"><small>${historical ? 'Verified league archive' : 'Deterministic edition'} \u00b7 claims limited to checked-in sources</small></footer>`;
   }
@@ -260,6 +281,37 @@
       showEditionError(config, error);
     }
   }
+
+  async function loadHomepageFeature(){
+    if(typeof document?.querySelector !== 'function')return;
+    const target=document.querySelector('[data-weekly-feature]');
+    const status=document.querySelector('[data-weekly-feature-status]');
+    if(!target)return;
+    try{
+      const index=await loadWeeklyIndex();
+      const selected=latestWeeklyEntry(index);
+      if(!selected){
+        target.innerHTML='<div class="weekly-feature-empty"><strong>No edition published yet.</strong><span>The first issue will appear after the opening slate is ready.</span></div>';
+        if(status)status.textContent='No issue published';
+        return;
+      }
+      const data=validateEdition(await fetchJson(selected.path),'weekly');
+      target.innerHTML=`<div class="weekly-feature-card"><div class="weekly-feature-copy"><span class="weekly-kicker">SZN ${esc(data.season-2016)} · WEEK ${esc(data.week)} · ${esc(data.status==='live'?'LIVE':'FINAL')}</span><h3>${esc(data.headline||'The Weekly Edition')}</h3><p>${esc(data.standfirst||'')}</p><button type="button" class="btn btn-primary" data-weekly-open>Read the edition</button></div><div class="weekly-feature-facts"><div><span>TABLE LEADER</span><strong>${esc(data.tableNotes?.[0]?.team||'—')}</strong><small>${esc(data.tableNotes?.[0]?.record||'')} · ${esc(data.tableNotes?.[0]?.pointsFor||'')} PF</small></div><div><span>UNDER PRESSURE</span><strong>${esc(data.pressure?.owner||'—')}</strong><small>${esc(data.pressure?.record||'')} · ${esc(data.pressure?.team||'')}</small></div><div><span>RECORD WATCH</span><strong>${esc(data.recordWatch?.title||'Archive benchmark')}</strong><small>Source-backed editorial note</small></div></div></div>`;
+      if(status)status.textContent=`${data.status==='live'?'Live':'Final'} · Updated ${String(data.updated_at||data.generated_at||'').replace('T',' ').replace('Z',' UTC')}`;
+      target.querySelector('[data-weekly-open]')?.addEventListener('click',()=>{
+        window.switchView?.('office');
+        document.querySelector('[data-office-tab="newspaper"]')?.click();
+        window.gateNewspaper?.selectEdition('weekly',{path:selected.path});
+      });
+    }catch(error){
+      console.error('Unable to load homepage weekly edition:',error);
+      target.innerHTML=`<div class="weekly-feature-empty state-error"><strong>Weekly edition unavailable.</strong><span>${esc(error.message||'Check your connection, then try again.')}</span><button type="button" class="btn btn-primary" data-weekly-retry>Retry</button></div>`;
+      if(status)status.textContent='Unavailable · Retry';
+      target.querySelector('[data-weekly-retry]')?.addEventListener('click',loadHomepageFeature,{once:true});
+    }
+  }
+
+  loadHomepageFeature();
 
   function openSources(){
     const drawer = document.getElementById('editionSourcesDrawer');
