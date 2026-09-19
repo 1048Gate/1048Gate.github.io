@@ -121,6 +121,12 @@ if(!html.includes('data-site-phase') || !html.includes('data-site-season') || !s
 if(!html.includes('class="hero-season-card"') || !html.includes('data-site-year') || !html.includes('data-site-season-label') || !html.includes('class="home-dashboard"')){
   throw new Error('The professional home dashboard and data-driven season card are missing.');
 }
+if(!html.includes('class="orientation-panel"') || !html.includes('What is 1048 Gate?') || !html.includes('data-view-link="league"') || !html.includes('data-view-link="rules"')){
+  throw new Error('The first-time orientation panel and its exploration links are missing.');
+}
+if(!html.includes('Wire — transactions and trades') || !html.includes('Book — league analytics') || !html.includes('Office — rules, polls, and news')){
+  throw new Error('Branded navigation labels must include plain-language descriptions.');
+}
 if(html.includes('class="quick-card"') || html.includes('home-directory-title') || html.includes('class="corkboard commissioner-board"')){
   throw new Error('Home directory cards must stay off the landing page.');
 }

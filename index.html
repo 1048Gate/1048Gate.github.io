@@ -92,10 +92,10 @@
   <nav class="tabs" id="tabs" aria-label="Primary league navigation">
     <button data-view="home" class="active" aria-current="page">Home</button>
     <button data-view="league">League</button>
-    <button data-view="wire">Wire</button>
+    <button data-view="wire" aria-label="Wire — transactions and trades" title="Transactions and trades">Wire · Transactions</button>
     <button data-view="history">History</button>
-    <button data-view="intel">Book</button>
-    <button data-view="office">Office</button>
+    <button data-view="intel" aria-label="Book — league analytics" title="League analytics">Book · Analytics</button>
+    <button data-view="office" aria-label="Office — rules, polls, and news" title="Rules, polls, and news">Office · Rules</button>
   </nav>
 </div>
 
@@ -125,6 +125,20 @@
         </div>
       </aside>
     </div>
+
+    <section class="orientation-panel" aria-labelledby="orientationTitle">
+      <div class="orientation-copy">
+        <span class="eyebrow">Start here</span>
+        <h2 id="orientationTitle">What is 1048 Gate?</h2>
+        <p>The official home of a 12-team keeper league established in 2017. Check this week’s games, meet the managers, or explore the records and rules that make the league ours.</p>
+      </div>
+      <nav class="orientation-links" aria-label="Explore 1048 Gate">
+        <button type="button" class="orientation-link" data-scroll-to="weekBoard">This week <span aria-hidden="true">→</span></button>
+        <button type="button" class="orientation-link" data-view-link="league">Managers <span aria-hidden="true">→</span></button>
+        <button type="button" class="orientation-link" data-view-link="history">History <span aria-hidden="true">→</span></button>
+        <button type="button" class="orientation-link" data-view-link="rules">Rules <span aria-hidden="true">→</span></button>
+      </nav>
+    </section>
 
     <section class="home-pulse" aria-label="Szn 10 status">
       <div><span>Phase</span><strong data-site-phase>Week 2</strong></div>
@@ -667,7 +681,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8 0a2.6 2.6 0 1 0 0-5.2A2.6 2.6 0 0 0 16 11zM4.5 19.5V17c0-1.8 2-3.2 5.5-3.2S15.5 15.2 15.5 17v2.5zm11.2 0V17c0-.7-.2-1.3-.6-1.9 2 .3 3.4 1.3 3.4 2.5v2z"/></svg>
     <span>League</span>
   </button>
-  <button type="button" data-view="wire">
+  <button type="button" data-view="wire" aria-label="Wire — transactions and trades">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v2H4zm0 5h11v2H4zm0 5h16v2H4z"/></svg>
     <span>Wire</span>
   </button>
@@ -686,8 +700,8 @@
   <div class="phone-more-sheet" role="dialog" aria-label="More league sections">
     <div class="phone-more-handle" aria-hidden="true"></div>
     <strong>More</strong>
-    <button type="button" data-view="intel">Book</button>
-    <button type="button" data-view="office">Office</button>
+  <button type="button" data-view="intel" aria-label="Book — league analytics">Book</button>
+  <button type="button" data-view="office" aria-label="Office — rules, polls, and news">Office</button>
     <button type="button" data-view="staff" class="staff-nav">Staff</button>
   </div>
 </div>
