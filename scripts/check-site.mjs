@@ -134,13 +134,21 @@ if(!html.includes('data-weekly-feature') || !html.includes('data-weekly-feature-
   throw new Error('Homepage must expose a weekly edition feature target and status.');
 }
 const weeklyIndex = JSON.parse(readFileSync(new URL('data/newspaper_editions/index.json', root), 'utf8'));
-const liveWeekly = weeklyIndex.editions.find(entry => entry.week === currentSeason.week && entry.source_status === 'verified_live');
-if(!liveWeekly || !existsSync(new URL(liveWeekly.path, root))){
-  throw new Error('Current live week must have a published verified weekly edition.');
+const finalWinners = new Set(['HOME','AWAY','TIE']);
+const currentWeekFinal = currentSeason.matchups.every(game => String(game.state || '').toLowerCase() === 'final' && finalWinners.has(String(game.winner || '').toUpperCase()));
+const expectedWeeklyStatus = currentWeekFinal ? 'verified_final' : 'verified_live';
+const currentWeekly = weeklyIndex.editions.find(entry =>
+  entry.season === currentSeason.season &&
+  entry.week === currentSeason.week &&
+  entry.source_status === expectedWeeklyStatus &&
+  entry.validation_status === 'valid'
+);
+if(!currentWeekly || !existsSync(new URL(currentWeekly.path, root))){
+  throw new Error(`Current Week ${currentSeason.week} must have a published ${expectedWeeklyStatus} weekly edition.`);
 }
-const liveEdition = JSON.parse(readFileSync(new URL(liveWeekly.path, root), 'utf8'));
-if(liveEdition.source_status !== 'verified_live' || !liveEdition.headline || !liveEdition.lead?.body || !liveEdition.matchup || !Array.isArray(liveEdition.tableNotes)){
-  throw new Error('Live weekly edition is missing the structured editorial fields.');
+const currentEdition = JSON.parse(readFileSync(new URL(currentWeekly.path, root), 'utf8'));
+if(currentEdition.source_status !== expectedWeeklyStatus || currentEdition.validation_status !== 'valid' || !currentEdition.headline || !currentEdition.lead?.body || !currentEdition.matchup || !Array.isArray(currentEdition.tableNotes)){
+  throw new Error('Current weekly edition is missing its expected status or structured editorial fields.');
 }
 if(!html.includes('class="home-band home-band-now"') || !html.includes('id="homeNowTitle"') || !html.includes('class="home-band home-band-story"') || !html.includes('class="home-band home-band-archive"')){
   throw new Error('Homepage must preserve the Now, Story, and Archive hierarchy.');

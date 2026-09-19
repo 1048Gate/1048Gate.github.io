@@ -141,7 +141,7 @@ assert.match(elements.editionSourcesList.innerHTML, /data\/seasons\.json \+ data
 
 await context.window.gateNewspaper.loadEdition('weekly');
 assert.match(elements.editionContent.innerHTML, /No weekly edition has been published yet/);
-assert.match(elements.editionContent.innerHTML, /Live or incomplete slates are not printed/i);
+assert.match(elements.editionContent.innerHTML, /verified live issue while games are underway/i);
 assert.equal(elements.weeklyEditionSelect.disabled, true);
 
 context.fetch = async () => ({ok:false, status:404});
