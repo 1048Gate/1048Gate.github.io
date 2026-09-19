@@ -99,7 +99,7 @@
       <div class="edition-empty" role="status">
         <span class="edition-kicker">1048 Gate Weekly Press</span>
         <h2>No weekly edition has been published yet</h2>
-        <p>The 2026 newspaper publishes after a fantasy week is final. Live or incomplete slates are not printed as recaps. The league-history archive is separate from current coverage.</p>
+        <p>The 2026 newspaper can publish a verified live issue while games are underway, then locks that same week as a final recap after the slate ends. The league-history archive is separate from current coverage.</p>
       </div>`;
   }
 
