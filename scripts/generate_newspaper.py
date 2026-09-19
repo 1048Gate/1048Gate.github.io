@@ -3,9 +3,10 @@
 
 Builds a weekly edition only from checked-in league files. It does not invent
 scores, records, standings, transactions, or next-week slates. Every published
-claim carries a source trace. Normal publishing requires a finalized week.
-Credentials are read only from the environment and are never written into
-edition files or logs.
+claim carries a source trace. Normal publishing refreshes a verified live issue
+while games are underway, then replaces it with a verified final edition after
+the week completes. Credentials are read only from the environment and are never
+written into edition files or logs.
 """
 from __future__ import annotations
 
@@ -160,37 +161,75 @@ def _build_editorial(
     closest = min(facts, key=lambda item: item["margin"])
     pressure = next((row for row in standings if int(row.get("losses", 0)) > 0), standings[-1])
     matchup = closest
-    source = lambda dataset, locator, description: _source(dataset, locator, description)
+    final = status["final"]
+    status_label = "final" if final else "live"
+    standfirst = (
+        f"{leader['owner']} leads the verified table after Week {week}, while {pressure['owner']} is already looking for a response."
+        if final else
+        f"Week {week} is live; {leader['owner']} leads the completed-results table while the current matchup board continues to move."
+    )
+    lead_body = (
+        f"{leader['owner']} owns the Week {week} headline at {int(leader.get('wins', 0))}-{int(leader.get('losses', 0))} with {float(leader.get('pointsFor', 0)):.2f} points for. {high_team['owner']} supplied the league-high score at {high_score:.2f}, while {low_team['owner']} finished at {low_score:.2f}. The completed slate is now part of the season record."
+        if final else
+        f"{leader['owner']} is first in the completed-results table at {int(leader.get('wins', 0))}-{int(leader.get('losses', 0))} with {float(leader.get('pointsFor', 0)):.2f} points for. On the live Week {week} board, {high_team['owner']} currently has the high score at {high_score:.2f}, while {low_team['owner']} is at {low_score:.2f}. Those live scores can still change."
+    )
+    matchup_why = (
+        f"The closest game on the final board finished with a {matchup['margin']:.2f}-point margin, making it the tightest result of Week {week}."
+        if final else
+        f"The closest live game currently has a {matchup['margin']:.2f}-point margin, making it the tightest matchup on the Week {week} board right now."
+    )
+    matchup_edge = (
+        f"Verified result: {matchup['winner']['owner']} by {matchup['margin']:.2f} points."
+        if final else
+        f"Live edge: {matchup['winner']['owner']} by {matchup['margin']:.2f} points."
+    )
+    pressure_body = (
+        f"{pressure['owner']} is {int(pressure.get('wins', 0))}-{int(pressure.get('losses', 0))} after Week {week}. That is an early-season pressure point, not a verdict; the next result determines whether the opening becomes a story."
+        if final else
+        f"{pressure['owner']} enters the live Week {week} board at {int(pressure.get('wins', 0))}-{int(pressure.get('losses', 0))}. The current matchup can change the direction of that early-season story."
+    )
+    archive_body = (
+        f"Week {week} is now part of the verified Szn {season - 2016} record, but the archive does not turn an opening table into a final ranking. Keep the benchmark; wait for the pattern."
+        if final else
+        f"Week {week} is still underway in Szn {season - 2016}. The archive keeps completed results separate from the live board, so no unfinished score is treated as a final historical result."
+    )
     return {
-        "status": "final" if status["final"] else "preview",
+        "status": status_label,
         "headline": f"The Week {week} table has a shape, but not a verdict",
-        "standfirst": f"{leader['owner']} leads the verified table after Week {week}, while {pressure['owner']} is already looking for a response.",
+        "standfirst": standfirst,
         "lead": {
             "title": f"The Week {week} table has a shape, but not a verdict",
-            "body": f"{leader['owner']} owns the early headline at {int(leader.get('wins', 0))}-{int(leader.get('losses', 0))} with {float(leader.get('pointsFor', 0)):.2f} points for. {high_team['owner']} supplied the league-high score at {high_score:.2f}, while {low_team['owner']} finished at {low_score:.2f}. The season is still a collection of signals, not a sentence, but the first separation is visible.",
+            "body": lead_body,
             "sourceIds": ["current-season", "power-rankings"],
         },
         "matchup": {
             "awayTeam": matchup["away"]["team"], "awayOwner": matchup["away"]["owner"], "awayScore": matchup["away_score"],
             "homeTeam": matchup["home"]["team"], "homeOwner": matchup["home"]["owner"], "homeScore": matchup["home_score"],
-            "whyItMatters": f"The closest game on the board finished with a {matchup['margin']:.2f}-point margin, making it the cleanest competitive story of Week {week}.",
+            "whyItMatters": matchup_why,
             "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
-            "edge": f"Verified result: {matchup['winner']['owner']} by {matchup['margin']:.2f} points.",
+            "edge": matchup_edge,
             "sourceIds": ["current-season"],
         },
         "tableNotes": [
-            {"rank": index, "team": row["team"], "owner": row["owner"], "record": f"{int(row.get('wins', 0))}-{int(row.get('losses', 0))}", "pointsFor": f"{float(row.get('pointsFor', 0)):.2f}", "tag": "Highest scoring" if index == 1 else "Early signal"}
+            {
+                "rank": index,
+                "team": row["team"],
+                "owner": row["owner"],
+                "record": f"{int(row.get('wins', 0))}-{int(row.get('losses', 0))}",
+                "pointsFor": f"{float(row.get('pointsFor', 0)):.2f}",
+                "tag": ("Table leader" if not final else "Highest scoring") if index == 1 else ("Current table" if not final else "Early signal"),
+            }
             for index, row in enumerate(standings[:3], start=1)
         ],
         "pressure": {
             "team": pressure["team"], "owner": pressure["owner"], "record": f"{int(pressure.get('wins', 0))}-{int(pressure.get('losses', 0))}",
             "title": f"Under pressure: {pressure['owner']}",
-            "body": f"{pressure['owner']} is {int(pressure.get('wins', 0))}-{int(pressure.get('losses', 0))} after Week {week}. That is an early-season pressure point, not a verdict; the next result determines whether the opening becomes a story.",
+            "body": pressure_body,
             "sourceIds": ["current-season", "seasons"],
         },
         "surprise": {
             "title": "Biggest surprise: the scoring range is already loud",
-            "body": f"The gap between {high_team['owner']}'s {high_score:.2f} and {low_team['owner']}'s {low_score:.2f} is {high_score - low_score:.2f} points. It is a real Week {week} signal, but too early to call a season trend.",
+            "body": f"The gap between {high_team['owner']}'s {high_score:.2f} and {low_team['owner']}'s {low_score:.2f} is {high_score - low_score:.2f} points. " + ("It is a completed Week %d signal, but too early to call a season trend." % week if final else "That is the current live spread, not a final Week %d result." % week),
             "sourceIds": ["current-season"],
         },
         "recordWatch": {
@@ -200,28 +239,34 @@ def _build_editorial(
         },
         "archiveComparison": {
             "title": "From the archive: early leaders need patience",
-            "body": f"Week {week} is now part of the verified Szn {season - 2016} record, but the archive does not turn an opening table into a final ranking. Keep the benchmark; wait for the pattern.",
+            "body": archive_body,
             "linkLabel": "Open the newspaper archive",
             "sourceIds": ["seasons", "newspaper"],
         },
-        "editorial_note": f"Week {week} edition generated from the verified board. Interpretive language is intentionally restrained until the slate is final.",
+        "editorial_note": (
+            f"Week {week} edition generated from the verified final board."
+            if final else
+            f"Week {week} live edition generated from the verified board. Scores and live edges may change until the slate is final."
+        ),
     }
-
 
 def generate_edition(
     board: dict[str, Any], season: int, week: int, *, allow_incomplete: bool = False,
     root: Path = ROOT, now: datetime | None = None,
 ) -> dict[str, Any]:
     status = inspect_week(board, season, week)
-    if status["live"] and not allow_incomplete:
-        raise GenerationSkip(SKIP_LIVE, f"Week {week} has {status['live']} matchup(s) still underway.")
+    live = not status["final"]
     facts = _matchup_facts(status["matchups"])
     biggest = max(facts, key=lambda item: item["margin"])
     closest = min(facts, key=lambda item: item["margin"])
     all_sides = [(fact[key], fact[f"{key}_score"]) for fact in facts for key in ("away", "home")]
     high_team, high_score = max(all_sides, key=lambda pair: pair[1])
     low_team, low_score = min(all_sides, key=lambda pair: pair[1])
-    scoreboard_source = _source("data/current-season.json", f"season={season};week={week};matchups", "Final ESPN matchup board")
+    scoreboard_source = _source(
+        "data/current-season.json",
+        f"season={season};week={week};matchups",
+        "Live ESPN matchup board" if live else "Final ESPN matchup board",
+    )
     recap_lines = [
         f"{fact['away']['owner']} {fact['away_score']:.2f}–{fact['home_score']:.2f} {fact['home']['owner']}"
         for fact in facts
@@ -238,30 +283,59 @@ def generate_edition(
         return _story(kind, balanced_title, balanced_body, source)
 
     stories = [
-        _story("matchup_recap", f"Week {week}: The league board", "; ".join(recap_lines) + ".", scoreboard_source),
+        _story(
+            "matchup_recap",
+            f"Week {week}: " + ("Live league board" if live else "The league board"),
+            "; ".join(recap_lines) + ".",
+            scoreboard_source,
+        ),
         feature_story(
             "biggest_win", biggest["winner"]["owner"],
-            f"{biggest['winner']['owner']} delivers the week's biggest win",
-            f"{biggest['winner']['owner']} beat {biggest['loser']['owner']} {biggest['winner_score']:.2f}–{biggest['loser_score']:.2f}, a margin of {biggest['margin']:.2f} points.",
+            (
+                f"{biggest['winner']['owner']} holds the widest live edge"
+                if live else f"{biggest['winner']['owner']} delivers the week's biggest win"
+            ),
+            (
+                f"{biggest['winner']['owner']} currently leads {biggest['loser']['owner']} {biggest['winner_score']:.2f}–{biggest['loser_score']:.2f}, a live margin of {biggest['margin']:.2f} points."
+                if live else f"{biggest['winner']['owner']} beat {biggest['loser']['owner']} {biggest['winner_score']:.2f}–{biggest['loser_score']:.2f}, a margin of {biggest['margin']:.2f} points."
+            ),
             scoreboard_source,
-            balanced_title="The week's widest margin",
-            balanced_body=f"The biggest win finished {biggest['winner_score']:.2f}–{biggest['loser_score']:.2f}, a margin of {biggest['margin']:.2f} points.",
+            balanced_title="The widest live margin" if live else "The week's widest margin",
+            balanced_body=(
+                f"The widest live margin currently stands at {biggest['winner_score']:.2f}–{biggest['loser_score']:.2f}, a gap of {biggest['margin']:.2f} points."
+                if live else f"The biggest win finished {biggest['winner_score']:.2f}–{biggest['loser_score']:.2f}, a margin of {biggest['margin']:.2f} points."
+            ),
         ),
         feature_story(
             "closest_game", closest["winner"]["owner"],
-            f"{closest['winner']['owner']} survives the closest finish",
-            f"The week's tightest matchup finished {closest['winner_score']:.2f}–{closest['loser_score']:.2f}, with {closest['winner']['owner']} ahead of {closest['loser']['owner']} by {closest['margin']:.2f} points.",
+            (
+                f"{closest['winner']['owner']} has the narrowest live edge"
+                if live else f"{closest['winner']['owner']} survives the closest finish"
+            ),
+            (
+                f"The tightest live matchup stands {closest['winner_score']:.2f}–{closest['loser_score']:.2f}, with {closest['winner']['owner']} ahead of {closest['loser']['owner']} by {closest['margin']:.2f} points."
+                if live else f"The week's tightest matchup finished {closest['winner_score']:.2f}–{closest['loser_score']:.2f}, with {closest['winner']['owner']} ahead of {closest['loser']['owner']} by {closest['margin']:.2f} points."
+            ),
             scoreboard_source,
-            balanced_title="The week's closest finish",
-            balanced_body=f"The tightest matchup finished {closest['winner_score']:.2f}–{closest['loser_score']:.2f}, a margin of {closest['margin']:.2f} points.",
+            balanced_title="The closest live margin" if live else "The week's closest finish",
+            balanced_body=(
+                f"The tightest live matchup stands {closest['winner_score']:.2f}–{closest['loser_score']:.2f}, a margin of {closest['margin']:.2f} points."
+                if live else f"The tightest matchup finished {closest['winner_score']:.2f}–{closest['loser_score']:.2f}, a margin of {closest['margin']:.2f} points."
+            ),
         ),
         feature_story(
             "scoring_leaders", high_team["owner"],
-            f"{high_team['owner']} sets the Week {week} pace",
-            f"{high_team['owner']} posted the league-high {high_score:.2f}. {low_team['owner']} finished with the week's low score at {low_score:.2f}.",
+            f"{high_team['owner']} sets the " + ("current " if live else "") + f"Week {week} pace",
+            (
+                f"{high_team['owner']} currently has the league-high {high_score:.2f}. {low_team['owner']} is at the current board-low {low_score:.2f}; both scores can still move."
+                if live else f"{high_team['owner']} posted the league-high {high_score:.2f}. {low_team['owner']} finished with the week's low score at {low_score:.2f}."
+            ),
             scoreboard_source,
-            balanced_title=f"Week {week}'s scoring range",
-            balanced_body=f"The league-high score was {high_score:.2f}, while the week's low score was {low_score:.2f}.",
+            balanced_title=f"Week {week}'s " + ("live scoring range" if live else "scoring range"),
+            balanced_body=(
+                f"The current league-high score is {high_score:.2f}, while the current board-low is {low_score:.2f}."
+                if live else f"The league-high score was {high_score:.2f}, while the week's low score was {low_score:.2f}."
+            ),
         ),
     ]
 
@@ -270,15 +344,24 @@ def generate_edition(
     top_three = ", ".join(row["owner"] for row in standings[:3])
     stories.append(feature_story(
         "standings", leader["owner"],
-        f"{leader['owner']} leads the verified table",
-        f"After Week {week}, {leader['owner']} is listed first at {leader.get('wins', 0)}-{leader.get('losses', 0)} with {float(leader.get('pointsFor', 0)):.2f} points for.",
+        (
+            f"{leader['owner']} leads the completed-results table"
+            if live else f"{leader['owner']} leads the verified table"
+        ),
+        (
+            f"During live Week {week}, {leader['owner']} is listed first at {leader.get('wins', 0)}-{leader.get('losses', 0)} with {float(leader.get('pointsFor', 0)):.2f} points for from completed results."
+            if live else f"After Week {week}, {leader['owner']} is listed first at {leader.get('wins', 0)}-{leader.get('losses', 0)} with {float(leader.get('pointsFor', 0)):.2f} points for."
+        ),
         _source("data/current-season.json", f"season={season};week={week};standings", "Verified standings table"),
         balanced_title=f"The Week {week} standings take shape",
-        balanced_body=f"The verified top three after Week {week} are {top_three}.",
+        balanced_body=(
+            f"The current completed-results top three during Week {week} are {top_three}."
+            if live else f"The verified top three after Week {week} are {top_three}."
+        ),
     ))
 
     rankings = _load_optional(root / "data" / "power-rankings.json")
-    if rankings and rankings.get("ratings"):
+    if status["final"] and rankings and rankings.get("ratings"):
         rating_rows = {row.get("name"): row for row in rankings["ratings"] if isinstance(row, dict)}
         power_candidates = []
         for fact in facts:
@@ -311,8 +394,17 @@ def generate_edition(
     if archive.get("highestScore") and high_score > float(archive["highestScore"][0]): broken.append("highest single-team score")
     if archive.get("biggestBlowout") and biggest["margin"] > float(archive["biggestBlowout"][0]): broken.append("biggest blowout")
     if archive.get("closestGame") and closest["margin"] < float(archive["closestGame"][0]): broken.append("closest game")
-    record_body = f"Week {week} broke the archive mark for {', '.join(broken)}." if broken else f"Week {week}'s results did not break the checked-in highest-score, blowout, or closest-game marks."
-    stories.append(_story("record_watch", "The record book holds" if not broken else "The record book needs an update", record_body, _source("data/current-season.json + data/matchups.json", f"week={week};records", "Week results compared with archive records")))
+    if live:
+        record_body = (
+            f"The live Week {week} board currently exceeds the checked-in archive mark for {', '.join(broken)}, but no record is declared until the matchup is final."
+            if broken else
+            f"The live Week {week} board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway."
+        )
+        record_title = "Live record watch"
+    else:
+        record_body = f"Week {week} broke the archive mark for {', '.join(broken)}." if broken else f"Week {week}'s results did not break the checked-in highest-score, blowout, or closest-game marks."
+        record_title = "The record book holds" if not broken else "The record book needs an update"
+    stories.append(_story("record_watch", record_title, record_body, _source("data/current-season.json + data/matchups.json", f"week={week};records", "Week board compared with archive records")))
 
     pairs = records.get("pairs", [])
     current_owners = {fact[key]["owner"] for fact in facts for key in ("away", "home")}
@@ -332,7 +424,7 @@ def generate_edition(
     next_board = _load_optional(root / "data" / "current-season-weeks" / f"week_{week + 1:02d}.json")
     if next_board and len(next_board.get("matchups", [])) == EXPECTED_MATCHUPS:
         stories.append(_story("next_week", f"Next: Week {week + 1}", f"The verified Week {week + 1} board contains all {EXPECTED_MATCHUPS} scheduled matchups.", _source(f"data/current-season-weeks/week_{week + 1:02d}.json", f"week={week + 1}", "Checked-in next-week slate")))
-    if week >= PLAYOFF_PICTURE_WEEK:
+    if status["final"] and week >= PLAYOFF_PICTURE_WEEK:
         stories.append(_story("playoff_picture", "The playoff picture comes into focus", f"With Week {week} complete, the verified standings now provide the current six-team playoff order.", _source("data/current-season.json", f"season={season};week={week};standings", "Verified standings table")))
 
     timestamp = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -342,10 +434,10 @@ def generate_edition(
         low_score=low_score, record_body=record_body, root=root,
     )
     return {
-        "schema_version": 1, "league_name": "1048 Gate", "season": season,
+        "schema_version": 2, "league_name": "1048 Gate", "season": season,
         "edition_year": season, "week": week, "generated_at": timestamp,
-        "source_status": "verified_final" if status["final"] else "incomplete_override",
-        "validation_status": "valid" if status["final"] else "preview",
+        "source_status": "verified_final" if status["final"] else ("incomplete_override" if allow_incomplete else "verified_live"),
+        "validation_status": "valid" if status["final"] or not allow_incomplete else "preview",
         "editorial_policy": {
             "max_primary_features_per_manager": MAX_MANAGER_FEATURES,
             "matchup_recap_exempt": True,
@@ -359,8 +451,11 @@ def generate_edition(
 def validate_edition(edition: dict[str, Any], *, publish: bool = True) -> None:
     if not isinstance(edition, dict) or not isinstance(edition.get("stories"), list) or not edition["stories"]:
         raise ValueError("Edition contains no stories.")
-    if publish and (edition.get("source_status") != "verified_final" or edition.get("validation_status") != "valid"):
-        raise ValueError("Only verified final editions may be published.")
+    if publish and (
+        edition.get("source_status") not in {"verified_live", "verified_final"}
+        or edition.get("validation_status") != "valid"
+    ):
+        raise ValueError("Only verified live or final editions may be published.")
     for story in edition["stories"]:
         if not all(isinstance(story.get(key), str) and story[key].strip() for key in ("story_type", "title", "body")) or not story.get("source"):
             raise ValueError("Every story requires a type, title, body, and source trace.")
@@ -701,14 +796,19 @@ def main(argv: list[str] | None = None) -> int:
         week = args.week or int(board.get("week", 0))
         path = edition_path(args.season, week, EDITIONS_ROOT)
         replacing = existing_valid_edition(path)
-        if replacing and not args.regenerate and not args.allow_incomplete and not args.stdout:
-            print(f"SKIP {SKIP_DUPLICATE}: {path.relative_to(ROOT)} already contains a valid edition.")
+        existing = _load_optional(path) if replacing else None
+        previous_status = existing.get("source_status") if isinstance(existing, dict) else None
+        if replacing and previous_status == "verified_final" and not args.regenerate and not args.allow_incomplete and not args.stdout:
+            print(f"SKIP {SKIP_DUPLICATE}: {path.relative_to(ROOT)} already contains a verified final edition.")
             return 0
         edition = generate_edition(board, args.season, week, allow_incomplete=args.allow_incomplete, root=ROOT)
+        writing = args.writing
+        if edition.get("source_status") == "verified_live" and writing == "auto" and not args.regenerate:
+            writing = "deterministic"
         edition = apply_ai_stories(
             edition,
-            args.writing,
-            require_verified=args.regenerate or args.writing in {"openai", "grok"},
+            writing,
+            require_verified=args.regenerate or writing in {"openai", "grok"},
         )
         validate_edition(edition, publish=not args.allow_incomplete)
         if args.allow_incomplete or args.stdout:
@@ -716,7 +816,14 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         write_json(path, edition)
         update_index(EDITIONS_ROOT / "index.json", edition, path, root=ROOT)
-        action = "Replaced" if replacing else "Published"
+        if not replacing:
+            action = "Published"
+        elif previous_status == "verified_live" and edition.get("source_status") == "verified_final":
+            action = "Finalized"
+        elif edition.get("source_status") == "verified_live":
+            action = "Refreshed"
+        else:
+            action = "Replaced"
         print(f"{action} {path.relative_to(ROOT)} with {len(edition['stories'])} sourced stories ({edition.get('writing_mode', 'deterministic')}).")
         return 0
     except GenerationSkip as skip:
