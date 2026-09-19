@@ -62,6 +62,12 @@ class NewspaperTests(unittest.TestCase):
         widest=next(s for s in result["stories"] if s["story_type"]=="biggest_win")
         self.assertIn("live", widest["title"].lower())
         self.assertNotIn(" beat ", widest["body"].lower())
+    def test_live_editorial_ignores_untouched_zero_zero_game(self):
+        value=board(); value["matchups"][0].update(state="live",winner="UNDECIDED")
+        value["matchups"][0]["away"]["score"]=0; value["matchups"][0]["home"]["score"]=0
+        result=self.make(value)
+        self.assertGreater(float(result["matchup"]["awayScore"])+float(result["matchup"]["homeScore"]),0)
+
     def test_incomplete_skip(self):
         value=board(); value["matchups"].pop()
         with self.assertRaises(paper.GenerationSkip) as error:self.make(value)
