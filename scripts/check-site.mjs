@@ -90,6 +90,10 @@ if(!siteConfig.draftNight?.startsAt || !Number.isInteger(siteConfig.draftNight.c
   throw new Error('data/site.json must define draftNight.startsAt and currentPick.');
 }
 validateSeasonState(siteConfig, currentSeason);
+const staticWeekBoardPhase = html.match(/<section class="home-section week-board"[^>]*aria-label="([^"]+) matchups and standings"/)?.[1];
+if(staticWeekBoardPhase !== currentSeason.phase || staticWeekBoardPhase !== siteConfig.phase){
+  throw new Error(`Static homepage week board is stale: expected ${currentSeason.phase}, found ${staticWeekBoardPhase || 'missing'}.`);
+}
 if(!siteConfig.draftOrder?.[0]?.player || siteConfig.draftOrder[0].player !== 'Jahmyr Gibbs'){
   throw new Error('First-round recap must include the 1.01 player from the Szn 10 draft.');
 }
