@@ -4,7 +4,7 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 2,
-  "generated_at": "2026-09-20T20:45:01.494919Z",
+  "generated_at": "2026-09-20T23:12:15.638705Z",
   "source_status": "verified_live",
   "validation_status": "valid",
   "editorial_policy": {
@@ -21,22 +21,22 @@
   "standfirst": "Week 2 is live; Trevor Hash leads the completed-results table while the current matchup board continues to move.",
   "lead": {
     "title": "The Week 2 table has a shape, but not a verdict",
-    "body": "Trevor Hash is first in the completed-results table at 1-0 with 192.56 points for. On the live Week 2 board, JD Daley currently has the high score at 109.02, while Collin Krum is at 37.42. Those live scores can still change.",
+    "body": "Trevor Hash is first in the completed-results table at 1-0 with 192.56 points for. On the live Week 2 board, Thomas Speer currently has the high score at 148.82, while Jared Hall is at 50.20. Those live scores can still change.",
     "sourceIds": [
       "current-season",
       "power-rankings"
     ]
   },
   "matchup": {
-    "awayTeam": "Madison Beer Garden",
-    "awayOwner": "George Travis",
-    "awayScore": 38.16,
-    "homeTeam": "Breezin’ with Bijan",
-    "homeOwner": "Collin Krum",
-    "homeScore": 37.42,
-    "whyItMatters": "The closest live game currently has a 0.74-point margin, making it the tightest matchup on the Week 2 board right now.",
+    "awayTeam": "McConkey Tonk Badonkadonk",
+    "awayOwner": "Vincent Cannarozzi",
+    "awayScore": 90.46,
+    "homeTeam": "Jigalos Jims",
+    "homeOwner": "James Brochu",
+    "homeScore": 85.08,
+    "whyItMatters": "The closest live game currently has a 5.38-point margin, making it the tightest matchup on the Week 2 board right now.",
     "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
-    "edge": "Live edge: George Travis by 0.74 points.",
+    "edge": "Live edge: Vincent Cannarozzi by 5.38 points.",
     "sourceIds": [
       "current-season"
     ]
@@ -80,7 +80,7 @@
   },
   "surprise": {
     "title": "Biggest surprise: the scoring range is already loud",
-    "body": "The gap between JD Daley's 109.02 and Collin Krum's 37.42 is 71.60 points. That is the current live spread, not a final Week 2 result.",
+    "body": "The gap between Thomas Speer's 148.82 and Jared Hall's 50.20 is 98.62 points. That is the current live spread, not a final Week 2 result.",
     "sourceIds": [
       "current-season"
     ]
@@ -107,7 +107,7 @@
     {
       "story_type": "matchup_recap",
       "title": "Week 2: Live league board",
-      "body": "Thomas Speer 66.44–109.02 JD Daley; Bryan Hunt 100.62–106.20 Trevor Hash; George Travis 38.16–37.42 Collin Krum; Kyle Fowler 83.40–43.50 Jared Hall; German Haro 82.42–48.86 Brian Heino; Vincent Cannarozzi 40.20–79.58 James Brochu.",
+      "body": "Thomas Speer 148.82–109.02 JD Daley; Bryan Hunt 98.62–106.20 Trevor Hash; George Travis 77.78–61.94 Collin Krum; Kyle Fowler 84.30–50.20 Jared Hall; German Haro 100.02–78.96 Brian Heino; Vincent Cannarozzi 90.46–85.08 James Brochu.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
@@ -116,36 +116,36 @@
     },
     {
       "story_type": "biggest_win",
-      "title": "JD Daley holds the widest live edge",
-      "body": "JD Daley currently leads Thomas Speer 109.02–66.44, a live margin of 42.58 points.",
+      "title": "Thomas Speer holds the widest live edge",
+      "body": "Thomas Speer currently leads JD Daley 148.82–109.02, a live margin of 39.80 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
         "description": "Live ESPN matchup board"
       },
-      "primary_owner": "JD Daley"
+      "primary_owner": "Thomas Speer"
     },
     {
       "story_type": "closest_game",
-      "title": "George Travis has the narrowest live edge",
-      "body": "The tightest live matchup stands 38.16–37.42, with George Travis ahead of Collin Krum by 0.74 points.",
+      "title": "Vincent Cannarozzi has the narrowest live edge",
+      "body": "The tightest live matchup stands 90.46–85.08, with Vincent Cannarozzi ahead of James Brochu by 5.38 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
         "description": "Live ESPN matchup board"
       },
-      "primary_owner": "George Travis"
+      "primary_owner": "Vincent Cannarozzi"
     },
     {
       "story_type": "scoring_leaders",
-      "title": "JD Daley sets the current Week 2 pace",
-      "body": "JD Daley currently has the league-high 109.02. Collin Krum is at the current board-low 37.42; both scores can still move.",
+      "title": "Thomas Speer sets the current Week 2 pace",
+      "body": "Thomas Speer currently has the league-high 148.82. Jared Hall is at the current board-low 50.20; both scores can still move.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
         "description": "Live ESPN matchup board"
       },
-      "primary_owner": "JD Daley"
+      "primary_owner": "Thomas Speer"
     },
     {
       "story_type": "standings",
