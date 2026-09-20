@@ -4,91 +4,179 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 2,
-  "generated_at": "2026-09-19T14:45:27.952515Z",
-  "published_at": "2026-09-19T15:00:00Z",
-  "updated_at": "2026-09-19T14:45:27.952515Z",
+  "generated_at": "2026-09-20T17:39:18.227468Z",
   "source_status": "verified_live",
   "validation_status": "valid",
-  "status": "live",
-  "headline": "The early table has a shape, but not a verdict",
-  "standfirst": "Trevor Hash brings the league's highest score into Week 2, while the reigning champion is already chasing a response against JD Daley.",
+  "editorial_policy": {
+    "max_primary_features_per_manager": 2,
+    "matchup_recap_exempt": true
+  },
   "source_trace": {
     "dataset": "data/current-season.json",
     "locator": "season=2026;week=2",
-    "description": "Live ESPN board snapshot; Week 2 remains in progress"
+    "description": "Published ESPN board snapshot"
   },
+  "status": "live",
+  "headline": "The Week 2 table has a shape, but not a verdict",
+  "standfirst": "Week 2 is live; Trevor Hash leads the completed-results table while the current matchup board continues to move.",
   "lead": {
-    "title": "The early table has a shape, but not a verdict",
-    "body": "Trevor Hash owns the early headline after a 192.56-point Week 1 and a 1–0 start. Bryan Hunt and Vincent Cannarozzi are also above 150 points, giving the first table a clear front edge. The complication is timing: Week 2 is still live, and early-season standings are signals rather than sentences. The most interesting pressure point is at the other end of the board, where reigning champion Thomas Speer is 0–1 and currently trailing JD Daley in the week's live matchup. One result will not rewrite the title race, but it can change the conversation.",
-    "sourceIds": ["current-season", "power-rankings"]
+    "title": "The Week 2 table has a shape, but not a verdict",
+    "body": "Trevor Hash is first in the completed-results table at 1-0 with 192.56 points for. On the live Week 2 board, JD Daley currently has the high score at 86.82, while George Travis is at 0.00. Those live scores can still change.",
+    "sourceIds": [
+      "current-season",
+      "power-rankings"
+    ]
   },
   "matchup": {
-    "awayTeam": "Your Reigning Champ",
-    "awayOwner": "Thomas Speer",
-    "awayScore": 35.2,
-    "homeTeam": "Ja'Marr-a-Lago",
-    "homeOwner": "JD Daley",
-    "homeScore": 53.82,
-    "whyItMatters": "The reigning champion is trying to avoid an 0–2 opening while Daley is looking to turn a narrow Week 1 loss into an immediate response.",
-    "history": "This is an early-season pressure game, not a declared rivalry. The result matters because both managers began the season with a loss.",
-    "edge": "Live edge: Ja'Marr-a-Lago, 53.82–35.20",
-    "sourceIds": ["current-season"]
+    "awayTeam": "McConkey Tonk Badonkadonk",
+    "awayOwner": "Vincent Cannarozzi",
+    "awayScore": 11.9,
+    "homeTeam": "Jigalos Jims",
+    "homeOwner": "James Brochu",
+    "homeScore": 15.96,
+    "whyItMatters": "The closest live game currently has a 4.06-point margin, making it the tightest matchup on the Week 2 board right now.",
+    "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
+    "edge": "Live edge: James Brochu by 4.06 points.",
+    "sourceIds": [
+      "current-season"
+    ]
   },
   "tableNotes": [
-    {"rank": 1, "team": "Team Hash", "owner": "Trevor Hash", "record": "1–0", "pointsFor": "192.56", "tag": "Highest scoring"},
-    {"rank": 2, "team": "Howya Been's", "owner": "Bryan Hunt", "record": "1–0", "pointsFor": "158.26", "tag": "Efficient start"},
-    {"rank": 3, "team": "McConkey Tonk Badonkadonk", "owner": "Vincent Cannarozzi", "record": "1–0", "pointsFor": "154.90", "tag": "Quietly climbing"}
+    {
+      "rank": 1,
+      "team": "Team Hash",
+      "owner": "Trevor Hash",
+      "record": "1-0",
+      "pointsFor": "192.56",
+      "tag": "Table leader"
+    },
+    {
+      "rank": 2,
+      "team": "Howya Been's",
+      "owner": "Bryan Hunt",
+      "record": "1-0",
+      "pointsFor": "158.26",
+      "tag": "Current table"
+    },
+    {
+      "rank": 3,
+      "team": "McConkey Tonk Badonkadonk",
+      "owner": "Vincent Cannarozzi",
+      "record": "1-0",
+      "pointsFor": "154.90",
+      "tag": "Current table"
+    }
   ],
   "pressure": {
-    "team": "Your Reigning Champ",
-    "owner": "Thomas Speer",
-    "record": "0–1",
-    "title": "Under pressure: the reigning champion",
-    "body": "The early pressure is about the scoreboard, not the résumé. Speer's title defense began with a loss, and the live Week 2 matchup is another test. A comeback would turn the opening stumble into background noise; another loss would make the defense of the crown a real weekly storyline.",
-    "sourceIds": ["current-season", "seasons"]
+    "team": "Ja'Marr-a-Lago",
+    "owner": "JD Daley",
+    "record": "0-1",
+    "title": "Under pressure: JD Daley",
+    "body": "JD Daley enters the live Week 2 board at 0-1. The current matchup can change the direction of that early-season story.",
+    "sourceIds": [
+      "current-season",
+      "seasons"
+    ]
   },
   "surprise": {
-    "title": "Biggest surprise: the scoring gap is already loud",
-    "body": "Team Hash's 192.56 points in Week 1 are 90.32 points higher than Kyle Fowler's total. That is an early scoring signal, not a season forecast, but it explains why Hash currently leads both the table and the conversation.",
-    "sourceIds": ["current-season"]
+    "title": "Biggest surprise: the scoring range is already loud",
+    "body": "The gap between JD Daley's 86.82 and George Travis's 0.00 is 86.82 points. That is the current live spread, not a final Week 2 result.",
+    "sourceIds": [
+      "current-season"
+    ]
   },
   "recordWatch": {
-    "title": "Record to watch: Hash has the first benchmark",
-    "body": "Trevor Hash's 192.56 points are the first major scoring benchmark of Szn 10. Week 2's live board will show whether the early leader can add another statement before the archive starts to separate contenders from noise.",
-    "sourceIds": ["current-season", "matchups"]
+    "title": "Record to watch: the first benchmark is on the board",
+    "body": "The live Week 2 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+    "sourceIds": [
+      "current-season",
+      "matchups"
+    ]
   },
   "archiveComparison": {
     "title": "From the archive: early leaders need patience",
-    "body": "The 2026 archive already has a Week 1 edition, but no two-week verdict. The useful comparison for now is structural: a 1–0 record and a high points-for total create an advantage, not a conclusion.",
+    "body": "Week 2 is still underway in Szn 10. The archive keeps completed results separate from the live board, so no unfinished score is treated as a final historical result.",
     "linkLabel": "Open the newspaper archive",
-    "sourceIds": ["data/newspaper_editions/2026/week_01.json", "seasons"]
+    "sourceIds": [
+      "seasons",
+      "newspaper"
+    ]
   },
+  "editorial_note": "Week 2 live edition generated from the verified board. Scores and live edges may change until the slate is final.",
   "stories": [
     {
-      "story_type": "lead",
-      "title": "The early table has a shape, but not a verdict",
-      "body": "Trevor Hash owns the early headline after a 192.56-point Week 1 and a 1–0 start. Bryan Hunt and Vincent Cannarozzi are also above 150 points, giving the first table a clear front edge. Week 2 is still live, so the standings are signals rather than sentences.",
-      "source": {"dataset": "data/current-season.json", "locator": "season=2026;week=2;standings", "description": "Live standings and Week 1 scoring totals"}
+      "story_type": "matchup_recap",
+      "title": "Week 2: Live league board",
+      "body": "Thomas Speer 35.20–86.82 JD Daley; Bryan Hunt 30.36–44.18 Trevor Hash; George Travis 0.00–9.80 Collin Krum; Kyle Fowler 46.70–12.40 Jared Hall; German Haro 41.74–11.22 Brian Heino; Vincent Cannarozzi 11.90–15.96 James Brochu.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=2;matchups",
+        "description": "Live ESPN matchup board"
+      }
     },
     {
-      "story_type": "matchup_of_the_week",
-      "title": "Matchup of the week: the champion needs a response",
-      "body": "Your Reigning Champ and Ja'Marr-a-Lago are both trying to move past 0–1 starts. Daley currently leads Speer 53.82–35.20 on the live board.",
-      "source": {"dataset": "data/current-season.json", "locator": "season=2026;week=2;matchup=7", "description": "Live ESPN matchup board"}
+      "story_type": "biggest_win",
+      "title": "JD Daley holds the widest live edge",
+      "body": "JD Daley currently leads Thomas Speer 86.82–35.20, a live margin of 51.62 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=2;matchups",
+        "description": "Live ESPN matchup board"
+      },
+      "primary_owner": "JD Daley"
+    },
+    {
+      "story_type": "closest_game",
+      "title": "James Brochu has the narrowest live edge",
+      "body": "The tightest live matchup stands 15.96–11.90, with James Brochu ahead of Vincent Cannarozzi by 4.06 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=2;matchups",
+        "description": "Live ESPN matchup board"
+      },
+      "primary_owner": "James Brochu"
+    },
+    {
+      "story_type": "scoring_leaders",
+      "title": "JD Daley sets the current Week 2 pace",
+      "body": "JD Daley currently has the league-high 86.82. George Travis is at the current board-low 0.00; both scores can still move.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=2;matchups",
+        "description": "Live ESPN matchup board"
+      },
+      "primary_owner": "JD Daley"
+    },
+    {
+      "story_type": "standings",
+      "title": "Trevor Hash leads the completed-results table",
+      "body": "During live Week 2, Trevor Hash is listed first at 1-0 with 192.56 points for from completed results.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=2;standings",
+        "description": "Verified standings table"
+      },
+      "primary_owner": "Trevor Hash"
     },
     {
       "story_type": "record_watch",
-      "title": "Record watch: Hash sets the first scoring benchmark",
-      "body": "Trevor Hash's 192.56 points are the first major scoring mark of Szn 10. It is a benchmark to watch, not a record claim.",
-      "source": {"dataset": "data/current-season.json", "locator": "season=2026;week=1;standings", "description": "Verified Week 1 scoring total"}
+      "title": "Live record watch",
+      "body": "The live Week 2 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+      "source": {
+        "dataset": "data/current-season.json + data/matchups.json",
+        "locator": "week=2;records",
+        "description": "Week board compared with archive records"
+      }
     },
     {
-      "story_type": "archive_comparison",
-      "title": "From the archive: early leaders need patience",
-      "body": "The Week 1 edition is preserved, but the season is too young for a verdict. The archive's job this week is context: one strong opening can start a story without finishing it.",
-      "source": {"dataset": "data/newspaper_editions/2026/week_01.json", "locator": "edition=2026-week-01", "description": "Verified prior weekly edition"}
+      "story_type": "rivalry",
+      "title": "Rivalry file: Brian Heino and Bryan Hunt",
+      "body": "The archive lists the all-time series at 4-7-0 from 11 meetings.",
+      "source": {
+        "dataset": "data/matchups.json",
+        "locator": "pair=Brian Heino|Bryan Hunt",
+        "description": "All-time head-to-head archive"
+      }
     }
-  ],
-  "writing_mode": "manual_verified_editorial",
-  "editorial_note": "Week 2 is live. Interpretive language is intentionally restrained until the slate is final."
+  ]
 }

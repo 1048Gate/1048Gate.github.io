@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 2,
   "phase": "Week 2",
-  "fetchedAt": "2026-09-20T14:12:38.521215+00:00",
+  "fetchedAt": "2026-09-20T17:39:18.155257+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 2 in progress. Live scoring from ESPN.",
   "standings": [
@@ -171,7 +171,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 53.82
+        "score": 86.82
       }
     },
     {
@@ -185,13 +185,13 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 22.5
+        "score": 30.36
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 23.3
+        "score": 44.18
       }
     },
     {
@@ -211,7 +211,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 2.8
+        "score": 9.8
       }
     },
     {
@@ -225,13 +225,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 17.2
+        "score": 46.7
       },
       "home": {
         "teamId": 3,
         "team": "Darty at 1048",
         "owner": "Jared Hall",
-        "score": 0
+        "score": 12.4
       }
     },
     {
@@ -245,13 +245,13 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 20.9
+        "score": 41.74
       },
       "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 0
+        "score": 11.22
       }
     },
     {
@@ -265,13 +265,13 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": -0.1
+        "score": 11.9
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 0
+        "score": 15.96
       }
     }
   ]
