@@ -108,3 +108,6 @@ main{max-width:var(--gate-content-width)}
 
 /* Keep the masthead words separated when its line break collapses. */
 #home .hero h1 span{display:inline-block;margin-inline-start:.25em}
+
+/* The newspaper keeps its intentional paper/ink palette in both themes. */
+.edition-content[data-panel="editorial"]{background:#f3ead9;color:#171819}
