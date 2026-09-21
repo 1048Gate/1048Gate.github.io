@@ -72,6 +72,54 @@ const server=http.createServer((req,res)=>{
   }
   await page.addScriptTag({path:path.join(process.env.QA_NODE_MODULES,'axe-core/axe.min.js')});
   const a11y=await page.evaluate(async()=>{const r=await axe.run('#home',{runOnly:{type:'rule',values:['color-contrast']}});return {violations:r.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),incomplete:r.incomplete.map(v=>({id:v.id,count:v.nodes.length}))};});
+  let navigation=null;
+  if(state==='live'&&theme==='light'){
+    if(width===1440){
+      await page.locator('#tabs [data-view="newspaper"]').click();
+      await page.waitForFunction(()=>document.getElementById('office')?.classList.contains('active')&&!document.querySelector('[data-office-panel="newspaper"]')?.hidden);
+      const newspaper=await page.evaluate(()=>({
+        hash:location.hash,
+        primaryActive:document.querySelector('#tabs [data-view="newspaper"]')?.classList.contains('active')||false,
+        moreActive:document.querySelector('#tabs [data-more-toggle]')?.classList.contains('active')||false
+      }));
+      await page.locator('#tabs [data-more-toggle]').click();
+      await page.waitForFunction(()=>document.getElementById('phoneMore')?.hidden===false);
+      const moreOpen=await page.evaluate(()=>({
+        expanded:document.querySelector('#tabs [data-more-toggle]')?.getAttribute('aria-expanded'),
+        visible:document.getElementById('phoneMore')?.hidden===false
+      }));
+      await page.locator('#phoneMore [data-view="intel"]').click();
+      await page.waitForFunction(()=>document.getElementById('intel')?.classList.contains('active'));
+      const book=await page.evaluate(()=>({
+        hash:location.hash,
+        moreActive:document.querySelector('#tabs [data-more-toggle]')?.classList.contains('active')||false,
+        sheetClosed:document.getElementById('phoneMore')?.hidden===true
+      }));
+      navigation={mode:'desktop',newspaper,moreOpen,book,
+        ok:newspaper.hash==='#newspaper'&&newspaper.primaryActive&&!newspaper.moreActive&&moreOpen.expanded==='true'&&moreOpen.visible&&book.hash==='#intel'&&book.moreActive&&book.sheetClosed};
+    }else{
+      await page.locator('#phoneDock [data-more-toggle]').click();
+      await page.waitForFunction(()=>document.getElementById('phoneMore')?.hidden===false);
+      const menu=await page.evaluate(()=>({
+        expanded:document.querySelector('#phoneDock [data-more-toggle]')?.getAttribute('aria-expanded'),
+        newspaperVisible:!!document.querySelector('#phoneMore .nav-more-phone-only[data-view="newspaper"]')?.getClientRects().length
+      }));
+      await page.locator('#phoneMore .nav-more-phone-only[data-view="newspaper"]').click();
+      await page.waitForFunction(()=>document.getElementById('office')?.classList.contains('active')&&!document.querySelector('[data-office-panel="newspaper"]')?.hidden);
+      const newspaper=await page.evaluate(()=>({
+        hash:location.hash,
+        moreActive:document.querySelector('#phoneDock [data-more-toggle]')?.classList.contains('active')||false,
+        sheetClosed:document.getElementById('phoneMore')?.hidden===true
+      }));
+      navigation={mode:'mobile',menu,newspaper,
+        ok:menu.expanded==='true'&&menu.newspaperVisible&&newspaper.hash==='#newspaper'&&newspaper.moreActive&&newspaper.sheetClosed};
+    }
+    await page.evaluate(()=>{
+      window.switchView('home',{updateHash:false,scroll:false});
+      history.replaceState({view:'home'},'', '#home');
+    });
+    await page.waitForFunction(()=>document.getElementById('home')?.classList.contains('active'));
+  }
   let draftArchive=null;
   if(state==='offseason'&&width===1440&&theme==='light'){
     await page.locator('[data-home-draft]').click();
@@ -83,7 +131,7 @@ const server=http.createServer((req,res)=>{
       draftPanelActive:document.querySelector('[data-history-panel="drafts"]')?.classList.contains('active')||false
     }));
   }
-  report.cases.push({name,metrics,anchors,a11y,draftArchive,errors:[...errors]});
+  report.cases.push({name,metrics,anchors,a11y,navigation,draftArchive,errors:[...errors]});
   writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
   if(state==='live'){
@@ -111,6 +159,7 @@ const server=http.createServer((req,res)=>{
    if(item.errors.length)failures.push(`${item.name}: page errors: ${item.errors.join(' | ')}`);
    if(item.metrics.pageOverflow)failures.push(`${item.name}: page-level horizontal overflow (${item.metrics.scrollWidth}px > ${item.metrics.viewport}px)`);
    if(item.a11y.violations.length)failures.push(`${item.name}: accessibility violations: ${item.a11y.violations.map(v=>v.id).join(', ')}`);
+   if(item.navigation&&!item.navigation.ok)failures.push(`${item.name}: Phase 4 navigation interaction failed`);
    if(item.draftArchive&&(!item.draftArchive.historyActive||item.draftArchive.historyTab!=='drafts'||!item.draftArchive.draftTabActive||!item.draftArchive.draftPanelActive)){
      failures.push(`${item.name}: Draft archive did not open the Drafts history panel`);
    }
