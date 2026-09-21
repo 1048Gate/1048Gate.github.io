@@ -5,7 +5,7 @@
   "week": 2,
   "phase": "Week 2",
   "status": "live",
-  "last_updated": "2026-09-21T19:58:07.816843+00:00",
+  "last_updated": "2026-09-21T23:14:14.144688+00:00",
   "note": "Week 2 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -284,7 +284,7 @@
     "source_status": "verified_live",
     "validation_status": "valid",
     "status": "live",
-    "generated_at": "2026-09-21T19:58:07.942338Z",
+    "generated_at": "2026-09-21T23:14:14.248729Z",
     "table_leader": {
       "rank": 1,
       "team": "Team Hash",
@@ -419,9 +419,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-21T19:58:07.816843+00:00",
-    "edition_published_at": "2026-09-21T19:58:07.942338Z",
-    "payload_built_at": "2026-09-21T22:40:39.015Z",
+    "week_fetched_at": "2026-09-21T23:14:14.144688+00:00",
+    "edition_published_at": "2026-09-21T23:14:14.248729Z",
+    "payload_built_at": "2026-09-21T23:14:14.517Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
