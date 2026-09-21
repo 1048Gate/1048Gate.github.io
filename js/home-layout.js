@@ -20,7 +20,8 @@
     const home = document.getElementById('home');
     const now = home?.querySelector('.home-band-now');
     const story = home?.querySelector('.home-band-story');
-    if(!now || !story) return;
+    const archive = home?.querySelector('.home-band-archive');
+    if(!now || !story || !archive) return;
     const config = window.gateSiteConfig;
     const board = window.gateHomeBoard;
     const state = stateFor(config, board, window.gateHomeEdition);
@@ -29,6 +30,8 @@
     const scoreboard = document.getElementById('weekBoard');
     const pulse = home.querySelector('.league-pulse');
     const odds = document.getElementById('championshipOdds');
+    const dashboard = home.querySelector('.home-dashboard');
+    const orientation = archive.querySelector('.orientation-panel');
     const heading = now.querySelector('.home-band-head');
     function place(nodes, anchor){
       let previous = anchor;
@@ -39,7 +42,9 @@
     }
     const lead = state === 'recap' ? feature : state === 'offseason' ? prep : null;
     place([lead, state !== 'offseason' ? scoreboard : null], heading);
-    place([state !== 'recap' ? feature : null, odds, pulse, state !== 'offseason' ? prep : null], story.querySelector('.home-band-head'));
+    if(prep) prep.hidden=state!=='offseason';
+    place([state !== 'recap' ? feature : null, pulse, odds], story.querySelector('.home-band-head'));
+    place([orientation,dashboard],archive.querySelector('.home-band-head'));
     if(state === 'offseason' && scoreboard && story.lastElementChild !== scoreboard) story.append(scoreboard);
     home.dataset.homeState = state;
     const title = document.getElementById('homeNowTitle');

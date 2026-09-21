@@ -43,6 +43,17 @@
     return `${clock} ET`;
   }
 
+  function dateTimeLabel(iso){
+    if(!iso) return '';
+    const date = new Date(iso);
+    if(Number.isNaN(date.getTime())) return '';
+    const label=date.toLocaleString('en-US',{
+      timeZone:LEAGUE_TZ,
+      month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'
+    });
+    return `${label.replace(/, (?=\d{1,2}:\d{2})/,' at ')} ET`;
+  }
+
   function formatted(iso){
     const rel = relativeFrom(iso);
     const clock = clockLabel(iso);
@@ -50,20 +61,21 @@
     return rel || clock;
   }
 
-  function setTimestamp(target, {iso, saved = false, source = 'ESPN snapshot', live = false, degraded = false} = {}){
+  function setTimestamp(target, {iso, saved = false, source = 'ESPN', status = '', live = false, degraded = false} = {}){
     if(!target) return;
     const rel = relativeFrom(iso);
     const clock = clockLabel(iso);
-    let prefix;
-    if(degraded) prefix = 'Scores last updated';
-    else if(saved) prefix = 'Saved snapshot';
-    else if(live) prefix = 'Live';
-    else prefix = source;
-    let text;
-    if(degraded) text = rel ? `${prefix} ${rel} — ESPN feed reconnecting` : 'ESPN feed reconnecting';
-    else text = rel ? `${prefix} · Updated ${rel}` : prefix;
-    target.replaceChildren(document.createTextNode(clock ? `${text} ` : text));
-    if(iso && clock){
+    const absolute=dateTimeLabel(iso);
+    const state=saved?'snapshot':status||(live?'live':'snapshot');
+    let text='';
+    if(degraded) text=rel?`ESPN scores last updated ${rel} · Feed reconnecting`:'ESPN feed reconnecting';
+    else if(state==='live') text=rel?`${source} live · Updated ${rel}`:`${source} live`;
+    else if(state==='final') text=absolute?`Final · ${source} verified · ${absolute}`:`Final · ${source} verified`;
+    else if(state==='upcoming') text=absolute?`Upcoming · ${source} schedule · ${absolute}`:`Upcoming · ${source} schedule`;
+    else text=absolute?`${source} snapshot · ${absolute}`:`${source} snapshot`;
+    const appendClock=state==='live'&&clock&&!degraded;
+    target.replaceChildren(document.createTextNode(appendClock ? `${text} · ` : text));
+    if(iso && appendClock){
       const time = document.createElement('time');
       time.dateTime = iso;
       time.textContent = clock;
@@ -71,7 +83,9 @@
       target.append(time);
     }
     target.classList.toggle('is-saved', saved);
-    target.classList.toggle('is-live', !!(live && !saved && !degraded));
+    target.classList.toggle('is-live', !!(state==='live' && !saved && !degraded));
+    target.classList.toggle('is-final', !!(state==='final' && !degraded));
+    target.classList.toggle('is-upcoming', !!(state==='upcoming' && !degraded));
     target.classList.toggle('is-degraded', !!degraded);
   }
 
@@ -100,6 +114,7 @@
     validWeek,
     relativeFrom,
     clockLabel,
+    dateTimeLabel,
     formatted,
     setTimestamp,
     saveWeek,
