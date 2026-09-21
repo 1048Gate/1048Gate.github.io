@@ -5,8 +5,9 @@ Authority: `docs/visual-redesign-brief.md`, Phase 2 only. Based on merged Phase 
 ## Implementation
 
 - New `css/visual-system.css`, loaded after existing theme CSS, owns the reusable presentation layer. It uses existing light/dark colors; light remains the default.
+- Masthead subtitle has explicit word spacing when the existing line break collapses.
 - Four type roles: display (28–36px), section (24–30px), module (20px), and utility (12px). Shared public page headings and homepage metadata use these roles. Editorial body copy is 16px; odds summaries and snapshot labels are 14px.
-- Editorial panels: amber leading rule, headline hierarchy, readable copy width, quieter backgrounds. Applied to weekly feature, commissioner content, newspaper container, and existing historical-story adapter.
+- Editorial panels: amber leading rule, headline hierarchy, readable copy width, quieter backgrounds. Applied to weekly feature, commissioner content, newspaper container, and existing historical-story adapter. The newspaper retains its existing paper/ink palette in both themes to preserve contrast.
 - Data panels: neutral borders, quieter surfaces, tabular numerals, consistent header treatment. Applied to scoreboard outer panel, odds, snapshot, banners, transaction workbench, and existing history/record adapters. Matchup-card internals and standings columns are unchanged.
 - Navigation panels: transparent backgrounds, light borders and no shadow; applied to keeper/draft shortcuts, introduction, and existing archive-card adapters.
 - Spacing scale: 8/16/24/32/48px. Homepage section gaps, headers, editorial copy, snapshot, and archive links use the scale.
