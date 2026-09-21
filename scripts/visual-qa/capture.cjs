@@ -83,11 +83,12 @@ const server=http.createServer((req,res)=>{
       draftPanelActive:document.querySelector('[data-history-panel="drafts"]')?.classList.contains('active')||false
     }));
   }
-  report.cases.push({name,metrics,anchors,a11y,draftArchive,errors});
+  report.cases.push({name,metrics,anchors,a11y,draftArchive,errors:[...errors]});
   writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
   if(state==='live'){
     for(const view of ['league','history','newspaper','transactions','rules']){
+      const errorStart=errors.length;
       await page.evaluate(v=>window.switchView(v,{scroll:false}),view);
       await page.waitForLoadState('networkidle');
       // Finish navigation's smooth header scroll, then capture the top of the view.
@@ -96,7 +97,10 @@ const server=http.createServer((req,res)=>{
       await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
       await page.screenshot({path:path.join(output,`${name}-${view}.png`)});
       const layout=await page.evaluate(()=>({pageOverflow:document.documentElement.scrollWidth>innerWidth+1,heading:[...document.querySelectorAll('.view.active .section-title h2')].filter(n=>n.getBoundingClientRect().height).map(n=>({text:n.textContent,size:getComputedStyle(n).fontSize}))}));
-      (report.secondaryViews ||= []).push({name,view,...layout});
+      const a11y=await page.evaluate(async()=>{const r=await axe.run('.view.active',{runOnly:{type:'rule',values:['color-contrast']}});return {violations:r.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),incomplete:r.incomplete.map(v=>({id:v.id,count:v.nodes.length}))};});
+      const viewErrors=errors.slice(errorStart);
+      (report.secondaryViews ||= []).push({name,view,...layout,a11y,errors:viewErrors});
+      console.log(`${name}-${view}`,JSON.stringify({pageOverflow:layout.pageOverflow,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),errors:viewErrors}));
     }
     writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
   }
@@ -110,6 +114,12 @@ const server=http.createServer((req,res)=>{
    if(item.draftArchive&&(!item.draftArchive.historyActive||item.draftArchive.historyTab!=='drafts'||!item.draftArchive.draftTabActive||!item.draftArchive.draftPanelActive)){
      failures.push(`${item.name}: Draft archive did not open the Drafts history panel`);
    }
+ }
+ for(const item of report.secondaryViews || []){
+   const name=`${item.name}-${item.view}`;
+   if(item.errors.length)failures.push(`${name}: page errors: ${item.errors.join(' | ')}`);
+   if(item.pageOverflow)failures.push(`${name}: page-level horizontal overflow`);
+   if(item.a11y.violations.length)failures.push(`${name}: accessibility violations: ${item.a11y.violations.map(v=>v.id).join(', ')}`);
  }
  report.failures=failures;
  writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
