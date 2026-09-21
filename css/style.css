@@ -473,3 +473,30 @@ body.edition-sources-open{overflow:hidden}
 .weekly-editorial-source{display:flex;justify-content:space-between;gap:12px;padding:12px 2px;color:var(--muted);font:9px 'Space Mono',monospace;text-transform:uppercase}.weekly-editorial-source small{max-width:60%;text-align:right;text-transform:none;font:10px Inter,sans-serif;line-height:1.4}
 @media(max-width:760px){.weekly-feature-card{grid-template-columns:1fr}.weekly-feature-copy{border-right:0;border-bottom:1px solid var(--line)}.weekly-editorial-header h3{font-size:28px}.weekly-editorial-grid{grid-template-columns:1fr}.weekly-editorial-source{align-items:flex-start;flex-direction:column}.weekly-editorial-source small{max-width:none;text-align:left}}
 @media(max-width:520px){.weekly-matchup-score{grid-template-columns:1fr}.weekly-matchup-score>span{padding:2px 0}.weekly-table li{grid-template-columns:28px 1fr}.weekly-table li em{grid-column:2}.weekly-editorial-meta{align-items:flex-start;flex-direction:column;gap:5px}}
+
+/* Step 1: a compact league masthead gives the current week the lead. */
+#home .hero{grid-template-columns:minmax(0,1fr) auto;gap:20px;padding:22px 26px;margin-bottom:22px}
+#home .hero h1{font-size:32px;margin:6px 0 8px;line-height:1.1}
+#home .hero h1 br{display:none}
+#home .hero h1 span{font-size:.65em}
+#home .hero-tagline{margin-bottom:8px}
+#home .hero-buttons{margin-top:14px}
+#home .hero-season-card{padding-left:24px;min-width:140px}
+#home .hero-season-year{font-size:36px}
+#home .hero-meta-grid{display:none}
+#home .home-band-now > .weekly-feature-section,
+#home .home-band-now > .home-keepers-link{margin-bottom:16px}
+#home .home-band-story > .weekly-feature-section{margin-bottom:16px}
+#home .home-band-archive .orientation-panel{margin:0 0 22px}
+#home .home-pulse[hidden]{display:none}
+#homeSeasonPrep,#homeWeeklyFeature{scroll-margin-top:var(--sticky-offset)}
+@media(max-width:760px){
+  #home .hero{grid-template-columns:1fr;padding:18px;gap:12px}
+  #home .hero h1{font-size:28px}
+  #home .hero-season-card{flex-direction:row;justify-content:flex-start;align-items:baseline;flex-wrap:wrap;gap:8px;padding:10px 0 0;border-left:0;border-top:1px solid var(--line)}
+  #home .hero-season-kicker{display:none}
+  #home .hero-season-year{font-size:20px;margin:0}
+  #home .hero-season-edition,#home .hero-season-phase{margin:0}
+  #home .hero-buttons{gap:8px}
+  #home .hero-buttons .btn{width:auto;flex:1;padding:10px}
+}

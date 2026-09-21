@@ -48,6 +48,7 @@
 <script defer src="js/auth.js"></script>
 <script defer src="js/app.js"></script>
 <script defer src="js/staff-loader.js"></script>
+<script defer src="js/home-layout.js"></script>
 <script defer src="js/newspaper.js"></script>
 
 <script defer src="js/transactions.js"></script>
@@ -108,7 +109,7 @@
         <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
         <p>Week 2 is live. Six games are scoring. Championship odds are posted.</p>
         <div class="hero-buttons">
-          <button class="btn btn-primary" data-scroll-to="weekBoard">See This Week</button>
+          <button class="btn btn-primary" data-home-primary data-scroll-to="weekBoard">See This Week</button>
           <button class="btn btn-ghost" data-scroll-to="championshipOdds">See Championship Odds</button>
         </div>
       </div>
@@ -126,22 +127,8 @@
       </aside>
     </div>
 
-    <section class="orientation-panel" aria-labelledby="orientationTitle">
-      <div class="orientation-copy">
-        <span class="eyebrow">Start here</span>
-        <h2 id="orientationTitle">What is 1048 Gate?</h2>
-        <p>The official home of a 12-team keeper league established in 2017. Check this week’s games, meet the managers, or explore the records and rules that make the league ours.</p>
-      </div>
-      <nav class="orientation-links" aria-label="Explore 1048 Gate">
-        <button type="button" class="orientation-link" data-scroll-to="weekBoard">This week <span aria-hidden="true">→</span></button>
-        <button type="button" class="orientation-link" data-view-link="league">Managers <span aria-hidden="true">→</span></button>
-        <button type="button" class="orientation-link" data-view-link="history">History <span aria-hidden="true">→</span></button>
-        <button type="button" class="orientation-link" data-view-link="rules">Rules <span aria-hidden="true">→</span></button>
-      </nav>
-    </section>
-
     <section class="home-band home-band-now" aria-labelledby="homeNowTitle">
-      <header class="home-band-head"><div><span>Right now</span><h2 id="homeNowTitle">Now</h2></div><small>Live league state</small></header>
+      <header class="home-band-head"><div><span>Right now</span><h2 id="homeNowTitle">This Week</h2></div><small data-home-context>Scores and standings</small></header>
     <section class="home-pulse" aria-label="Szn 10 status">
       <div><span>Phase</span><strong data-site-phase>Week 2</strong></div>
       <div><span>This week</span><strong>6 games</strong></div>
@@ -259,22 +246,23 @@
     </section>
 
     <section class="home-band home-band-story" aria-labelledby="homeStoryTitle">
-      <header class="home-band-head"><div><span>The league story</span><h2 id="homeStoryTitle">Story</h2></div><small>Odds, office, and context</small></header>
+      <header class="home-band-head"><div><span>The league story</span><h2 id="homeStoryTitle">Around the League</h2></div><small>Odds, office, and context</small></header>
     <section class="home-section futures-section" id="championshipOdds" aria-label="Championship futures odds">
       <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small data-futures-status>Post-draft board · Loading</small></header>
       <div class="futures-grid" data-futures aria-live="polite">
         <div class="futures-empty">Setting the lines…</div>
       </div>
     </section>
-    <section class="home-section weekly-feature-section" aria-label="Weekly edition">
+    <section class="home-section weekly-feature-section" id="homeWeeklyFeature" aria-label="Weekly edition">
       <header class="home-section-head"><div><span>The weekly edition</span><h2>League Wire</h2></div><small data-weekly-feature-status>Loading current issue</small></header>
       <div data-weekly-feature aria-live="polite"><div class="history-loading">Loading the current edition…</div></div>
     </section>
 
-    <section class="home-section home-keepers-link" aria-label="Szn 10 keepers">
+    <section class="home-section home-keepers-link" id="homeSeasonPrep" aria-label="Szn 10 keepers">
       <header class="home-section-head">
-        <div><span>House rule</span><h2>Keepers</h2></div>
-        <button type="button" class="btn btn-ghost" data-view-link="members" data-scroll-to="membersKeepers">Szn 10 keepers</button>
+        <div><span>Next up</span><h2>Draft &amp; Keepers</h2></div>
+        <button type="button" class="btn btn-ghost" data-view-link="members" data-scroll-to="membersKeepers">View keepers</button>
+        <button type="button" class="btn btn-ghost" data-home-draft>Draft archive</button>
       </header>
     </section>
 
@@ -299,6 +287,20 @@
     </section>
     <section class="home-band home-band-archive" aria-labelledby="homeArchiveTitle">
       <header class="home-band-head"><div><span>Since 2017</span><h2 id="homeArchiveTitle">Archive</h2></div><small>Records and league memory</small></header>
+
+    <section class="orientation-panel" aria-labelledby="orientationTitle">
+      <div class="orientation-copy">
+        <span class="eyebrow">Start here</span>
+        <h2 id="orientationTitle">What is 1048 Gate?</h2>
+        <p>The official home of a 12-team keeper league established in 2017. Check this week’s games, meet the managers, or explore the records and rules that make the league ours.</p>
+      </div>
+      <nav class="orientation-links" aria-label="Explore 1048 Gate">
+        <button type="button" class="orientation-link" data-scroll-to="weekBoard">This week <span aria-hidden="true">→</span></button>
+        <button type="button" class="orientation-link" data-view-link="league">Managers <span aria-hidden="true">→</span></button>
+        <button type="button" class="orientation-link" data-view-link="history">History <span aria-hidden="true">→</span></button>
+        <button type="button" class="orientation-link" data-view-link="rules">Rules <span aria-hidden="true">→</span></button>
+      </nav>
+    </section>
 
     <section class="home-section banner-wall-section" aria-label="Championship banners">
       <header class="home-section-head"><div><span>Ring count since 2017</span><h2>Championship Banners</h2></div><small data-banner-status>One banner per title · Loading</small></header>

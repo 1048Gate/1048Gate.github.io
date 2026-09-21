@@ -230,6 +230,8 @@ function renderWeekBoardFrom(payload){
     }</tbody></table></div><p class="week-standings-note">${escapeHtml(payload.note || formatFetchedAt(payload.fetchedAt) || '')}</p>`;
   }
   renderPulse(window.gateSiteConfig || {}, {...payload, standings});
+  window.gateHomeBoard = payload;
+  document.dispatchEvent(new CustomEvent('gate:home-board-ready', {detail:payload}));
 }
 
 async function renderWeekBoard(){
