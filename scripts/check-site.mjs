@@ -263,8 +263,14 @@ if(html.includes('data-countdown-seconds') || html.includes('draft-countdown') |
 if(html.includes('data-draft-order') || html.includes('id="draftBoard"') || html.includes('data-draft-night')){
   throw new Error('Home must not show the draft-order board after Szn 10.');
 }
-if(!html.includes('id="championshipOdds"') || !html.includes('data-scroll-to="championshipOdds"') || !html.includes('class="home-pulse"')){
-  throw new Error('Home must keep the championship odds and season pulse.');
+if(!html.includes('id="championshipOdds"') || !html.includes('data-scroll-to="championshipOdds"') || !html.includes('id="leaguePulse"') || !html.includes('data-league-pulse')){
+  throw new Error('Home must keep the championship odds and League Pulse.');
+}
+if(!scriptAssets.includes('js/league-pulse.js') || html.includes('class="home-pulse"')){
+  throw new Error('Phase 6 must use the data-backed League Pulse instead of the old season-status strip.');
+}
+for(const item of ['odds','playoff','matchup','record','streak','transactions']){
+  if(!html.includes(`data-pulse-card="${item}"`)) throw new Error(`League Pulse fallback is missing ${item}.`);
 }
 if(!html.includes('id="weekBoard"') || !html.includes('data-week-matchups') || !html.includes('data-week-standings') || !html.includes('data-scroll-to="weekBoard"')){
   throw new Error('Home must show the Week 1 matchups and standings board.');

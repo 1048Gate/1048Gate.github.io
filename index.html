@@ -52,6 +52,7 @@
 <script defer src="js/week-board.js"></script>
 <script defer src="js/staff-loader.js"></script>
 <script defer src="js/home-layout.js"></script>
+<script defer src="js/league-pulse.js"></script>
 <script defer src="js/newspaper.js"></script>
 
 <script defer src="js/transactions.js"></script>
@@ -225,11 +226,19 @@
         <div class="gate-skeleton" role="status" aria-label="Loading championship odds"><span></span><span></span><span></span></div>
       </div>
     </section>
-    <section class="home-pulse" aria-label="Szn 10 status">
-      <div><span>Phase</span><strong data-site-phase>Week 2</strong></div>
-      <div><span>This week</span><strong>6 games</strong></div>
-      <div><span>Favorite</span><strong data-home-favorite>Thomas Speer +300</strong></div>
-      <div><span>Table</span><strong>Trevor Hash 1-0</strong></div>
+    <section class="home-section league-pulse" data-panel="data" id="leaguePulse" data-pulse-source="saved" aria-label="League Pulse">
+      <header class="home-section-head league-pulse-head">
+        <div><span>Across 1048 Gate</span><h2>League Pulse</h2></div>
+        <div class="league-pulse-tools"><small data-pulse-status>Saved league read</small><button type="button" data-pulse-prev aria-label="Previous League Pulse item">←</button><button type="button" data-pulse-next aria-label="Next League Pulse item">→</button></div>
+      </header>
+      <div class="league-pulse-rail" data-league-pulse role="list" aria-live="polite">
+        <article class="league-pulse-card" data-pulse-card="odds" role="listitem"><span>Odds board</span><strong>Thomas Speer +300</strong><p>The current championship favorite. Open the full board for every club.</p><button type="button" data-scroll-to="championshipOdds">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="playoff" role="listitem"><span>Playoff line</span><strong>German Haro holds No. 6</strong><p>1-0 at the cut · JD Daley is next</p><button type="button" data-scroll-to="weekBoard">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="matchup" role="listitem"><span>Game watch</span><strong>McConkey Tonk / Jigalos Jims</strong><p>0.1 points apart · Live</p><button type="button" data-scroll-to="weekBoard">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="record" role="listitem"><span>Record watch</span><strong>Thomas Speer · 158.4</strong><p>77.3 shy of the 235.6 all-time mark</p><button type="button" data-view-link="intel">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="streak" role="listitem"><span>Form guide</span><strong>6 teams opened 1–0</strong><p>The first separation in the table is points for.</p><button type="button" data-scroll-to="weekBoard">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="transactions" role="listitem"><span>Latest moves</span><strong>Transaction Wire</strong><p>Completed adds, waivers, and accepted trades live in the verified archive.</p><button type="button" data-view-link="transactions">Open <span aria-hidden="true">→</span></button></article>
+      </div>
     </section>
 
     <section class="home-section home-keepers-link" data-panel="navigation" id="homeSeasonPrep" aria-label="Szn 10 keepers">

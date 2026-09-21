@@ -58,8 +58,8 @@ main > .view:not(#staff) .section-title{gap:var(--gate-space-2);flex-wrap:wrap;m
 #home .snapshot-list > div{gap:var(--gate-space-2);border-color:var(--line)}
 #home .snapshot-list span{font-size:.875rem;line-height:1.5}
 #home .snapshot-list strong{font-size:1rem;line-height:1.4}
-#home .home-pulse span{font-size:var(--gate-utility);line-height:1.5;letter-spacing:.025em}
-#home .home-pulse strong{font-size:1rem;line-height:1.4;white-space:normal;overflow-wrap:anywhere}
+#home .league-pulse-card>span{font-size:var(--gate-utility);line-height:1.5;letter-spacing:.025em}
+#home .league-pulse-card>strong{font-size:1rem;line-height:1.4;white-space:normal;overflow-wrap:anywhere}
 
 /* Navigation: lighter framing so destinations do not compete with scores. */
 :is(.gate-panel--navigation,[data-panel="navigation"]),
@@ -80,7 +80,7 @@ main{max-width:var(--gate-content-width)}
 #home .home-band{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gate-space-3);margin:0 0 var(--gate-space-5)}
 #home .home-band > *{min-width:0;grid-column:1 / -1;margin:0}
 #home .home-band > .home-band-head{padding:0 0 var(--gate-space-2);gap:var(--gate-space-2);align-items:baseline}
-#home .home-band > :is(.home-section,.orientation-panel,.home-pulse,.home-dashboard){margin:0}
+#home .home-band > :is(.home-section,.orientation-panel,.league-pulse,.home-dashboard){margin:0}
 #home .home-section-head{padding:var(--gate-space-2) var(--gate-space-3);gap:var(--gate-space-2);flex-wrap:wrap}
 #home .home-section-head > div{min-width:0}
 #home .home-section-head > small{max-width:100%;overflow-wrap:anywhere;color:var(--muted);text-transform:none}

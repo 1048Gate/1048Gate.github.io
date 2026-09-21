@@ -27,7 +27,7 @@
     const feature = document.getElementById('homeWeeklyFeature');
     const prep = document.getElementById('homeSeasonPrep');
     const scoreboard = document.getElementById('weekBoard');
-    const pulse = home.querySelector('.home-pulse');
+    const pulse = home.querySelector('.league-pulse');
     const odds = document.getElementById('championshipOdds');
     const heading = now.querySelector('.home-band-head');
     function place(nodes, anchor){
@@ -41,7 +41,6 @@
     place([lead, state !== 'offseason' ? scoreboard : null], heading);
     place([state !== 'recap' ? feature : null, odds, pulse, state !== 'offseason' ? prep : null], story.querySelector('.home-band-head'));
     if(state === 'offseason' && scoreboard && story.lastElementChild !== scoreboard) story.append(scoreboard);
-    if(pulse) pulse.hidden = state === 'offseason';
     home.dataset.homeState = state;
     const title = document.getElementById('homeNowTitle');
     if(title) title.textContent = state === 'offseason' ? 'Draft & Keepers' : state === 'recap' ? 'The Week in Review' : 'This Week';

@@ -73,11 +73,13 @@ const server=http.createServer((req,res)=>{
       clientWidth:n.clientWidth,scrollWidth:n.scrollWidth,scrollable:n.scrollWidth>n.clientWidth+1,
       overflowX:getComputedStyle(n).overflowX
     }));
+    const pulse=document.getElementById('leaguePulse');
     return {theme:document.documentElement.dataset.theme,state:document.querySelector('#home').dataset.homeState,viewport:innerWidth,scrollWidth:document.documentElement.scrollWidth,
       pageOverflow:document.documentElement.scrollWidth>innerWidth+1,
+      leaguePulse:{present:!!pulse,source:pulse?.dataset.pulseSource||'',cards:pulse?.querySelectorAll('[data-pulse-card]').length||0},
       standingsScroll:standings,
-      sections:Object.fromEntries(['.hero','#weekBoard','#homeWeeklyFeature','#homeSeasonPrep','#championshipOdds','.home-band-now','.home-band-story','.home-band-archive','.orientation-panel'].map(s=>[s,rect(s)])),
-      unexpectedOverflow:[...document.querySelectorAll('#home *')].filter(n=>{const r=n.getBoundingClientRect();return r.width&&r.right>innerWidth+1&&!n.closest('.week-standings-wrap')}).map(n=>({tag:n.tagName,class:n.className,text:n.textContent.slice(0,90)})),
+      sections:Object.fromEntries(['.hero','#weekBoard','#homeWeeklyFeature','#homeSeasonPrep','#championshipOdds','#leaguePulse','.home-band-now','.home-band-story','.home-band-archive','.orientation-panel'].map(s=>[s,rect(s)])),
+      unexpectedOverflow:[...document.querySelectorAll('#home *')].filter(n=>{const r=n.getBoundingClientRect();return r.width&&r.right>innerWidth+1&&!n.closest('.week-standings-wrap,.league-pulse-rail')}).map(n=>({tag:n.tagName,class:n.className,text:n.textContent.slice(0,90)})),
       teamNames:[...document.querySelectorAll('.week-game-side strong')].map(n=>({text:n.textContent,width:n.clientWidth,scrollWidth:n.scrollWidth,height:n.clientHeight}))};
   });
   const anchors=[];
@@ -192,6 +194,10 @@ const server=http.createServer((req,res)=>{
    if(item.errors.length)failures.push(`${item.name}: page errors: ${item.errors.join(' | ')}`);
    if(item.metrics.pageOverflow)failures.push(`${item.name}: page-level horizontal overflow (${item.metrics.scrollWidth}px > ${item.metrics.viewport}px)`);
    if(item.a11y.violations.length)failures.push(`${item.name}: accessibility violations: ${item.a11y.violations.map(v=>v.id).join(', ')}`);
+   const expectedPulseCards=item.name.startsWith('offseason-')?5:6;
+   if(!item.metrics.leaguePulse.present||item.metrics.leaguePulse.source!=='current'||item.metrics.leaguePulse.cards!==expectedPulseCards){
+     failures.push(`${item.name}: League Pulse did not render ${expectedPulseCards} current cards`);
+   }
    if(item.navigation&&!item.navigation.ok)failures.push(`${item.name}: Phase 4 navigation interaction failed`);
    if(item.noCacheFallback&&!item.noCacheFallback.ok)failures.push(`${item.name}: Phase 5 checked-in fallback failed`);
    if(item.cachedFallback&&!item.cachedFallback.ok)failures.push(`${item.name}: Phase 5 cached fallback failed`);

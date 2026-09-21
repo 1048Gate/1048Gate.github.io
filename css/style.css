@@ -75,10 +75,20 @@ main{min-height:70vh;padding:36px 28px 80px}
 /* Home dashboard */
 .home-dashboard{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:22px;margin-bottom:26px}.home-section{overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:var(--shadow-sm)}.home-section-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:17px 20px;border-bottom:1px solid var(--line)}.home-section-head span{display:block;color:var(--amber);font:700 7px 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase}.home-section-head h2{margin-top:3px;font-size:15px;letter-spacing:.015em}.home-section-head small{color:var(--muted);font:8px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase}.home-office .commissioner-board{border:0;border-radius:0;background:transparent;box-shadow:none}.snapshot-list{padding:7px 18px 10px}.snapshot-list>div{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 2px;border-bottom:1px solid #172829}.snapshot-list>div:last-child{border-bottom:0}.snapshot-list span{color:var(--muted);font-size:10px}.snapshot-list strong{color:var(--cream);font:600 12px Oswald,sans-serif;text-align:right;text-transform:uppercase}.home-directory-title{margin-top:0}
 
-.home-pulse{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-bottom:22px;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--line);box-shadow:var(--shadow-sm)}
-.home-pulse>div{padding:16px 18px;background:var(--panel)}
-.home-pulse span{display:block;color:var(--amber);font:700 7px 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase}
-.home-pulse strong{display:block;margin-top:6px;overflow:hidden;color:var(--cream);font:600 14px Oswald,sans-serif;letter-spacing:.02em;text-transform:uppercase;text-overflow:ellipsis;white-space:nowrap}
+.league-pulse{margin-bottom:22px}
+.league-pulse-head{align-items:center}
+.league-pulse-tools{display:flex;align-items:center;gap:7px}
+.league-pulse-tools small{margin-right:3px}
+.league-pulse-tools button{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--cream);font:700 14px 'Space Mono',monospace}
+.league-pulse-tools button:hover{border-color:var(--amber);background:rgba(185,138,82,.08)}
+.league-pulse-rail{display:flex;gap:16px;overflow-x:auto;padding:16px;scroll-behavior:smooth;scroll-snap-type:x mandatory;scrollbar-width:none}
+.league-pulse-rail::-webkit-scrollbar{display:none}
+.league-pulse-card{display:flex;flex:0 0 calc((100% - 32px)/3);min-width:0;min-height:168px;flex-direction:column;align-items:flex-start;padding:17px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);scroll-snap-align:start}
+.league-pulse-card>span{display:block;color:var(--amber);font:700 8px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+.league-pulse-card>strong{display:block;margin-top:8px;color:var(--cream);font:600 17px/1.25 Oswald,sans-serif;letter-spacing:.01em;text-transform:uppercase;overflow-wrap:anywhere}
+.league-pulse-card>p{margin:7px 0 14px;color:var(--muted);font-size:11px;line-height:1.5}
+.league-pulse-card>button{display:flex;align-items:center;gap:8px;margin-top:auto;padding:0;border:0;background:none;color:var(--cream);font:600 10px 'Space Mono',monospace;letter-spacing:.04em;text-transform:uppercase}
+.league-pulse-card>button span{color:var(--amber)}
 .futures-section{margin-bottom:22px;scroll-margin-top:var(--sticky-offset)}
 .week-board{margin-bottom:22px;scroll-margin-top:var(--sticky-offset)}
 .week-board-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr)}
@@ -101,8 +111,8 @@ main{min-height:70vh;padding:36px 28px 80px}
 .week-standings-table tbody tr:last-child td{border-bottom:0}
 .week-standings-table tbody tr:hover{background:rgba(245,235,217,.025)}
 .week-standings-note{margin:0;padding:10px 16px 14px;border-top:1px solid var(--line);color:var(--muted);font:8px 'Space Mono',monospace;letter-spacing:.04em;text-transform:uppercase}
-@media(max-width:900px){.home-pulse{grid-template-columns:repeat(2,minmax(0,1fr))}.keepers-home-body .keeper-list{grid-template-columns:repeat(2,minmax(0,1fr))}.week-board-grid{grid-template-columns:1fr}.week-standings{border-left:0;border-top:1px solid var(--line)}}
-@media(max-width:520px){.home-pulse{grid-template-columns:1fr 1fr}.home-pulse strong{font-size:13px}.week-game{padding:11px 12px}.week-game-side strong{font-size:12px}}
+@media(max-width:900px){.league-pulse-card{flex-basis:calc((100% - 16px)/2)}.keepers-home-body .keeper-list{grid-template-columns:repeat(2,minmax(0,1fr))}.week-board-grid{grid-template-columns:1fr}.week-standings{border-left:0;border-top:1px solid var(--line)}}
+@media(max-width:520px){.league-pulse-head{align-items:flex-start}.league-pulse-tools{width:100%;justify-content:flex-end}.league-pulse-tools small{margin-right:auto}.league-pulse-rail{padding:12px}.league-pulse-card{flex-basis:88%;min-height:158px}.week-game{padding:11px 12px}.week-game-side strong{font-size:12px}}
 
 /* Shared content hierarchy */
 .section-title{scroll-margin-top:var(--sticky-offset);margin:8px 0 18px;padding-bottom:10px;border-bottom:1px solid var(--line)}.section-title h2{font-size:24px;letter-spacing:.01em}.section-kicker{color:var(--amber);font-weight:700}.section-title .see-all{font-size:8px;opacity:1}
@@ -430,7 +440,7 @@ body.edition-sources-open{overflow:hidden}
 .home-band-head span{display:block;color:var(--amber);font:700 8px 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase}
 .home-band-head h2{margin-top:4px;color:var(--cream);font-size:26px;letter-spacing:.02em}
 .home-band-head small{color:var(--muted);font:9px 'Space Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
-.home-band-now .home-pulse{margin-bottom:14px}
+.home-band-now .league-pulse{margin-bottom:14px}
 .home-band-now .week-board{margin-bottom:0}
 .home-band-story .futures-section{margin-bottom:14px}
 .home-band-story .home-keepers-link{margin-bottom:14px}
@@ -490,7 +500,6 @@ body.edition-sources-open{overflow:hidden}
 #home .home-band-now > .home-keepers-link{margin-bottom:16px}
 #home .home-band-story > .weekly-feature-section{margin-bottom:16px}
 #home .home-band-archive .orientation-panel{margin:0 0 22px}
-#home .home-pulse[hidden]{display:none}
 #homeSeasonPrep,#homeWeeklyFeature{scroll-margin-top:var(--sticky-offset)}
 @media(max-width:760px){
   #home .hero{grid-template-columns:1fr;padding:18px;gap:12px}
