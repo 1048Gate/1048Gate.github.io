@@ -44,6 +44,7 @@
 <link rel="stylesheet" href="css/visual-system.css">
 
 <script defer src="js/shared.js"></script>
+<script defer src="js/freshness.js"></script>
 <script defer src="js/site-ui.js"></script>
 <script defer src="js/supabase-config.js"></script>
 <script defer src="js/auth.js"></script>
@@ -131,8 +132,8 @@
 
     <section class="home-band home-band-now" aria-labelledby="homeNowTitle">
       <header class="home-band-head"><div><span>Right now</span><h2 id="homeNowTitle">This Week</h2></div><small data-home-context>Scores and standings</small></header>
-    <section class="home-section week-board" data-panel="data" id="weekBoard" aria-label="Week 2 matchups and standings">
-      <header class="home-section-head"><div><span>Regular season</span><h2>Week 2</h2></div><small>Week 2 in progress. Live scoring from ESPN.</small></header>
+    <section class="home-section week-board" data-panel="data" id="weekBoard" data-week-source="saved" data-week-season="2026" data-week="2" data-week-fetched-at="2026-09-21T15:06:30.129199+00:00" aria-label="Week 2 matchups and standings">
+      <header class="home-section-head"><div><span>Regular season</span><h2>Week 2</h2></div><small data-week-stamp role="status">Saved snapshot · Updated Sep 21, 3:06 PM</small></header>
       <div class="week-board-grid">
         <div class="week-matchups" data-week-matchups>
           <article class="week-game week-card is-live" data-state="live">
@@ -205,7 +206,7 @@
               </tbody>
             </table>
           </div>
-          <p class="week-standings-note">Week 2 in progress. Live scoring from ESPN. · Top 6 in the playoff picture</p>
+          <p class="week-standings-note">Top 6 in the playoff picture</p>
         </div>        </div>
       </div>
     </section>
@@ -214,14 +215,14 @@
     <section class="home-band home-band-story" aria-labelledby="homeStoryTitle">
       <header class="home-band-head"><div><span>The league story</span><h2 id="homeStoryTitle">Around the League</h2></div><small>Odds, office, and context</small></header>
     <section class="home-section weekly-feature-section" data-panel="editorial" id="homeWeeklyFeature" aria-label="Weekly edition">
-      <header class="home-section-head"><div><span>The weekly edition</span><h2>League Wire</h2></div><small data-weekly-feature-status>Loading current issue</small></header>
-      <div data-weekly-feature aria-live="polite"><div class="history-loading">Loading the current edition…</div></div>
+      <header class="home-section-head"><div><span>The weekly edition</span><h2>League Wire</h2></div><small data-weekly-feature-status>Weekly edition</small></header>
+      <div data-weekly-feature aria-live="polite"><div class="gate-skeleton" role="status" aria-label="Loading weekly edition"><span></span><span></span><span></span></div></div>
     </section>
 
     <section class="home-section futures-section" data-panel="data" id="championshipOdds" aria-label="Championship futures odds">
-      <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small data-futures-status>Post-draft board · Loading</small></header>
+      <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small data-futures-status>Post-draft board</small></header>
       <div class="futures-grid" data-futures aria-live="polite">
-        <div class="futures-empty">Setting the lines…</div>
+        <div class="gate-skeleton" role="status" aria-label="Loading championship odds"><span></span><span></span><span></span></div>
       </div>
     </section>
     <section class="home-pulse" aria-label="Szn 10 status">
@@ -276,9 +277,9 @@
     </section>
 
     <section class="home-section banner-wall-section" data-panel="data" aria-label="Championship banners">
-      <header class="home-section-head"><div><span>Ring count since 2017</span><h2>Championship Banners</h2></div><small data-banner-status>One banner per title · Loading</small></header>
+      <header class="home-section-head"><div><span>Ring count since 2017</span><h2>Championship Banners</h2></div><small data-banner-status>Championship archive</small></header>
       <div class="banner-wall" data-banner-wall aria-live="polite">
-        <div class="banner-wall-empty">Raising the banners…</div>
+        <div class="gate-skeleton" role="status" aria-label="Loading championship banners"><span></span><span></span><span></span></div>
       </div>
     </section>
     <div class="home-archive-links" aria-label="Explore the archive">

@@ -20,7 +20,7 @@ const server=http.createServer((req,res)=>{
  for(const state of ['live','recap','offseason'])for(const width of [1440,390])for(const theme of ['light','dark']){
   const name=`${state}-${width===1440?'desktop':'mobile'}-${theme}`;
   const context=await browser.newContext({viewport:{width,height:width===1440?1000:844},deviceScaleFactor:1,reducedMotion:'reduce'});
-  await context.addInitScript(t=>localStorage.setItem('1048-gate-theme',t),theme);
+  await context.addInitScript(t=>{localStorage.setItem('1048-gate-theme',t);localStorage.removeItem('1048-gate-current-week-v1')},theme);
   const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const board=json('data/current-season.json'),config=json('data/site.json'),index=json('data/newspaper_editions/index.json');
   const entry=index.editions.find(e=>e.season===board.season&&e.week===board.week);
@@ -33,9 +33,12 @@ const server=http.createServer((req,res)=>{
   }
   if(state==='offseason')config.phase='Offseason';
   const fixtures={'/data/site.json':config,'/data/current-season.json':board,'/data/newspaper_editions/index.json':index,['/'+entry.path]:edition};
+  const exerciseFallbacks=state==='live'&&width===1440&&theme==='light';
+  let forceWeekFailure=exerciseFallbacks;
   await page.route('**/*',async route=>{
     const u=new URL(route.request().url());
     if(u.hostname==='127.0.0.1'){
+      if(u.pathname==='/data/current-season.json'&&forceWeekFailure)return route.fulfill({status:503,body:'unavailable'});
       if(fixtures[u.pathname])return route.fulfill({json:fixtures[u.pathname]});
       return route.continue();
     }
@@ -44,6 +47,22 @@ const server=http.createServer((req,res)=>{
     return route.abort();
   });
   await page.goto('http://127.0.0.1:8080',{waitUntil:'networkidle'});
+  let noCacheFallback=null;
+  if(exerciseFallbacks){
+    await page.waitForFunction(()=>document.getElementById('weekBoard')?.dataset.weekSource==='saved');
+    noCacheFallback=await page.evaluate(()=>({
+      source:document.getElementById('weekBoard')?.dataset.weekSource,
+      cards:document.querySelectorAll('#weekBoard .week-card').length,
+      standings:document.querySelectorAll('#weekBoard .week-standings-table tbody tr').length,
+      status:document.querySelector('[data-week-stamp]')?.textContent||'',
+      ok:document.getElementById('weekBoard')?.dataset.weekSource==='saved'
+        && document.querySelectorAll('#weekBoard .week-card').length===6
+        && document.querySelectorAll('#weekBoard .week-standings-table tbody tr').length===12
+        && document.querySelector('[data-week-stamp]')?.textContent.includes('Saved snapshot')
+    }));
+    forceWeekFailure=false;
+    await page.evaluate(()=>renderWeekBoard());
+  }
   await page.waitForFunction(s=>document.querySelector('#home')?.dataset.homeState===s,state);
   await page.evaluate(()=>document.fonts.ready);
   await page.screenshot({path:path.join(output,name+'-viewport.png')});
@@ -120,6 +139,20 @@ const server=http.createServer((req,res)=>{
     });
     await page.waitForFunction(()=>document.getElementById('home')?.classList.contains('active'));
   }
+  let cachedFallback=null;
+  if(exerciseFallbacks){
+    forceWeekFailure=true;
+    await page.evaluate(()=>renderWeekBoard());
+    await page.waitForFunction(()=>document.getElementById('weekBoard')?.dataset.weekSource==='saved');
+    cachedFallback=await page.evaluate(()=>({
+      source:document.getElementById('weekBoard')?.dataset.weekSource,
+      cards:document.querySelectorAll('#weekBoard .week-card').length,
+      status:document.querySelector('[data-week-stamp]')?.textContent||'',
+      ok:document.getElementById('weekBoard')?.dataset.weekSource==='saved'
+        && document.querySelectorAll('#weekBoard .week-card').length===6
+        && document.querySelector('[data-week-stamp]')?.textContent.includes('Saved snapshot')
+    }));
+  }
   let draftArchive=null;
   if(state==='offseason'&&width===1440&&theme==='light'){
     await page.locator('[data-home-draft]').click();
@@ -131,7 +164,7 @@ const server=http.createServer((req,res)=>{
       draftPanelActive:document.querySelector('[data-history-panel="drafts"]')?.classList.contains('active')||false
     }));
   }
-  report.cases.push({name,metrics,anchors,a11y,navigation,draftArchive,errors:[...errors]});
+  report.cases.push({name,metrics,anchors,a11y,navigation,noCacheFallback,cachedFallback,draftArchive,errors:[...errors]});
   writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
   if(state==='live'){
@@ -160,6 +193,8 @@ const server=http.createServer((req,res)=>{
    if(item.metrics.pageOverflow)failures.push(`${item.name}: page-level horizontal overflow (${item.metrics.scrollWidth}px > ${item.metrics.viewport}px)`);
    if(item.a11y.violations.length)failures.push(`${item.name}: accessibility violations: ${item.a11y.violations.map(v=>v.id).join(', ')}`);
    if(item.navigation&&!item.navigation.ok)failures.push(`${item.name}: Phase 4 navigation interaction failed`);
+   if(item.noCacheFallback&&!item.noCacheFallback.ok)failures.push(`${item.name}: Phase 5 checked-in fallback failed`);
+   if(item.cachedFallback&&!item.cachedFallback.ok)failures.push(`${item.name}: Phase 5 cached fallback failed`);
    if(item.draftArchive&&(!item.draftArchive.historyActive||item.draftArchive.historyTab!=='drafts'||!item.draftArchive.draftTabActive||!item.draftArchive.draftPanelActive)){
      failures.push(`${item.name}: Draft archive did not open the Drafts history panel`);
    }

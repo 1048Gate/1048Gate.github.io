@@ -112,6 +112,16 @@ main{max-width:var(--gate-content-width)}
 /* The newspaper keeps its intentional paper/ink palette in both themes. */
 .edition-content[data-panel="editorial"]{background:#f3ead9;color:#171819}
 
+/* Phase 5 — one quiet loading surface per module and visible data freshness. */
+.gate-skeleton{display:grid;gap:var(--gate-space-2);width:100%;padding:var(--gate-space-3)}
+.gate-skeleton span{display:block;height:.75rem;border-radius:999px;background:linear-gradient(90deg,var(--panel2),rgba(185,138,82,.14),var(--panel2));background-size:220% 100%;animation:gateSkeleton 1.4s ease-in-out infinite}
+.gate-skeleton span:nth-child(2){width:82%}.gate-skeleton span:nth-child(3){width:58%}
+@keyframes gateSkeleton{to{background-position:-220% 0}}
+#home [data-week-stamp] time,#home [data-weekly-feature-status] time{font:inherit;color:inherit}
+#home [data-week-stamp].is-saved{color:var(--amber)}
+@media(prefers-reduced-motion:reduce){.gate-skeleton span{animation:none}}
+@media(max-width:620px){#home .home-section-head [data-week-stamp]{display:block;width:100%;margin-top:-.25rem}}
+
 /* Phase 3 — This Week matchup cards and compact standings snapshot. */
 #home .week-board-grid{
   gap:var(--gate-space-3);
