@@ -14,6 +14,10 @@ The goal is to make it feel intentionally edited, easier to scan, and more obvio
   
   
   
+**Existing Theme Baseline — Phase 1 Constraint**
+
+The current 1048 Gate site supports **light and dark themes, with light as the default**. Preserve both themes and the existing theme toggle. There is currently no system-theme option. Do not add system-theme support as part of Phase 1 or PR #52. Verify homepage layout and readability in both supported themes before merge.
+
 **Core Product Direction**  
   
 1048 Gate should be treated as:  

@@ -31,3 +31,19 @@ No changes to data files, Supabase schema or policies, authentication, ESPN inge
 The current repository's theme implementation supports light/dark, with light as default. It has no system-theme option to preserve; Phase 1 leaves the theme implementation unchanged rather than adding an unrequested theme feature.
 
 Stop after Phase 1. Phases 2–8 have not been implemented.
+
+## Pre-merge visual QA follow-up
+
+Browser access was retried after the Phase 1 review. The cloud browser is connected, but the local preview returned `ERR_BLOCKED_BY_CLIENT`. The documented shared-file preview path was also rejected because browser policy permits only HTTP/HTTPS. No workaround was attempted after that explicit rejection. Automated/DOM results above remain valid; they are not visual approval.
+
+All of the following remain **visually unverified**, at desktop and mobile widths in light and dark:
+
+- Masthead proportions and wrapping; above-the-fold hierarchy.
+- Live/current-week, finalized-week/verified-recap, and offseason ordering.
+- Long fantasy team names.
+- Spacing between This Week, Around the League, and Archive.
+- Championship Odds prominence and the relocated introductory panel.
+- Horizontal overflow and contrast/readability.
+- Sticky header offsets and anchor jumps.
+
+No visual defects can be ruled out from this blocked attempt. No product code changed in this follow-up. The authoritative repository brief now explicitly records light/dark support, light as default, and no system-theme work in Phase 1. PR #52 remains unmerged; Phase 2 has not started.
