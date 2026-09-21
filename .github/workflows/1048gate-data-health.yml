@@ -124,13 +124,15 @@ jobs:
         run: npm run futures
       - name: Refresh all-time score leaderboards from final results
         run: python3 scripts/update_matchup_leaderboards.py
+      - name: Rebuild the homepage week payload
+        run: node scripts/build-homepage-week.mjs
       - name: Validate site checks still pass
         run: npm run check
       - name: Commit updated board and newspaper when they change
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/streaks.json data/newspaper_editions
+          git add data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/streaks.json data/newspaper_editions data/homepage-week.json
           if git diff --cached --quiet; then
             echo "Current-season board and newspaper unchanged — nothing to commit."
           else
