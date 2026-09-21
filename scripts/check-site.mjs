@@ -124,8 +124,10 @@ if(!html.includes('class="hero-season-card"') || !html.includes('data-site-year'
 if(!html.includes('class="orientation-panel"') || !html.includes('What is 1048 Gate?') || !html.includes('data-view-link="league"') || !html.includes('data-view-link="rules"')){
   throw new Error('The first-time orientation panel and its exploration links are missing.');
 }
-if(!html.includes('Wire — transactions and trades') || !html.includes('Book — league analytics') || !html.includes('Office — rules, polls, and news')){
-  throw new Error('Branded navigation labels must include plain-language descriptions.');
+if(!html.includes('aria-label="Transactions and trades"') ||
+   !html.includes('The Book — league analytics') ||
+   !html.includes('League Office — rules and polls')){
+  throw new Error('Navigation destinations must keep clear plain-language descriptions, including branded items under More.');
 }
 if(!html.includes('data-history-status') || !html.includes('data-intel-status') || !html.includes('data-futures-status') || !html.includes('data-banner-status')){
   throw new Error('Public data sections must expose explicit connection status hooks.');
