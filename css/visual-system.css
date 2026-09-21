@@ -1,1 +1,156 @@
-/* see branch file; append refresh control */
+/* Phase 2: reusable visual roles. Existing theme tokens own all colors. */
+:root{
+  --gate-space-1: .5rem;
+  --gate-space-2: 1rem;
+  --gate-space-3: 1.5rem;
+  --gate-space-4: 2rem;
+  --gate-space-5: 3rem;
+  --gate-display: clamp(1.75rem, 2.4vw, 2.25rem);
+  --gate-section: clamp(1.5rem, 2vw, 1.875rem);
+  --gate-module: 1.25rem;
+  --gate-utility: .75rem;
+  --gate-radius: .75rem;
+  --gate-content-width: 1180px;
+}
+.gate-display{font:700 var(--gate-display)/1.15 Oswald,sans-serif;letter-spacing:-.01em}
+.gate-section-title,
+main > .view:not(#staff) .section-title h2,
+#home .home-band-head h2{font:700 var(--gate-section)/1.2 Oswald,sans-serif;letter-spacing:.01em}
+.gate-module-title,
+#home .home-section-head h2,
+#home .orientation-copy h2{font:600 var(--gate-module)/1.25 Oswald,sans-serif;letter-spacing:.015em}
+.gate-utility,
+#home .home-section-head > small,
+#home .home-section-head > div > span,
+#home .home-band-head small,
+#home .home-band-head > div > span,
+main > .view:not(#staff) .section-title > :is(.see-all,.section-kicker){
+  font:500 var(--gate-utility)/1.5 'Space Mono',monospace;letter-spacing:.025em;
+}
+#home .home-section-head > div > span [data-site-season-number]{display:inline;font:inherit;color:inherit;letter-spacing:inherit}
+main > .view:not(#staff) .section-title{gap:var(--gate-space-2);flex-wrap:wrap;margin-bottom:var(--gate-space-3);padding-bottom:var(--gate-space-2)}
+:is(.gate-panel--editorial,[data-panel="editorial"]),
+:is(.weekly-feature-section,.home-office,.edition-content,.rundown-story){
+  border:1px solid var(--line);border-top:3px solid var(--amber);
+  border-radius:var(--gate-radius);background:var(--panel);box-shadow:none;
+}
+#home :is(.gate-panel--editorial,[data-panel="editorial"]) > .home-section-head{background:transparent}
+#home .weekly-feature-card{background:var(--panel)}
+#home .weekly-feature-copy{padding:var(--gate-space-3)}
+#home .weekly-feature-copy h3{font:700 var(--gate-display)/1.16 Oswald,sans-serif;letter-spacing:-.01em;margin:var(--gate-space-2) 0}
+#home .weekly-feature-copy p{font-size:1rem;line-height:1.65;max-width:65ch}
+#home .weekly-feature-facts{background:var(--panel2);padding:var(--gate-space-1) var(--gate-space-3)}
+#home .weekly-feature-facts :is(span,small),#home .weekly-kicker{font-size:var(--gate-utility);line-height:1.5;letter-spacing:.025em}
+#home .weekly-feature-facts strong{font-size:1rem;line-height:1.4}
+:is(.gate-panel--data,[data-panel="data"]),
+:is(.history-content-panel,.transaction-workbench,.transaction-ledger,.public-record-card,.player-record-grid article){
+  border:1px solid var(--line);border-radius:var(--gate-radius);
+  background:var(--panel);box-shadow:none;font-variant-numeric:tabular-nums;
+}
+#home :is(.gate-panel--data,[data-panel="data"]) > .home-section-head{background:var(--panel2)}
+#home .snapshot-list{padding:var(--gate-space-1) var(--gate-space-3)}
+#home .snapshot-list > div{gap:var(--gate-space-2);border-color:var(--line)}
+#home .snapshot-list span{font-size:.875rem;line-height:1.5}
+#home .snapshot-list strong{font-size:1rem;line-height:1.4}
+#home .league-pulse-card>span{font-size:var(--gate-utility);line-height:1.5;letter-spacing:.025em}
+#home .league-pulse-card>strong{font-size:1rem;line-height:1.4;white-space:normal;overflow-wrap:anywhere}
+:is(.gate-panel--navigation,[data-panel="navigation"]),
+:is(.archive-path-card,.archive-season-card,.quick-card){
+  border:1px solid var(--line);border-radius:var(--gate-radius);
+  background:transparent;box-shadow:none;
+}
+#home :is(.gate-panel--navigation,[data-panel="navigation"]){background:transparent;box-shadow:none}
+#home :is(.gate-panel--navigation,[data-panel="navigation"]) > .home-section-head{border-bottom:0}
+#home .orientation-copy p{font-size:1rem;line-height:1.65;max-width:65ch}
+#home .orientation-copy > .eyebrow{font-size:var(--gate-utility);line-height:1.5}
+#home .orientation-link{min-height:44px;font-size:.875rem}
+main{max-width:var(--gate-content-width)}
+.gate-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gate-space-3)}
+.gate-grid > *{min-width:0;grid-column:1 / -1}
+#home .home-band{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gate-space-3);margin:0 0 var(--gate-space-5)}
+#home .home-band > *{min-width:0;grid-column:1 / -1;margin:0}
+#home .home-band > .home-band-head{padding:0 0 var(--gate-space-2);gap:var(--gate-space-2);align-items:baseline}
+#home .home-band > :is(.home-section,.orientation-panel,.league-pulse,.home-dashboard){margin:0}
+#home .home-section-head{padding:var(--gate-space-2) var(--gate-space-3);gap:var(--gate-space-2);flex-wrap:wrap}
+#home .home-section-head > div{min-width:0}
+#home .home-section-head > small{max-width:100%;overflow-wrap:anywhere;color:var(--muted);text-transform:none}
+#home .home-dashboard{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gate-space-3)}
+#home .home-office{grid-column:span 8;min-width:0}
+#home .home-snapshot{grid-column:span 4;min-width:0}
+#home .home-office[hidden] + .home-snapshot{grid-column:1 / -1}
+#home .home-office[hidden] + .home-snapshot .snapshot-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--gate-space-3)}
+#home .home-archive-links{gap:var(--gate-space-2)}
+@media(max-width:900px){
+  #home .home-office,#home .home-snapshot{grid-column:1 / -1}
+  #home .home-office[hidden] + .home-snapshot .snapshot-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  #home .home-band{gap:var(--gate-space-2);margin-bottom:var(--gate-space-4)}
+  #home .home-band > .home-band-head{gap:var(--gate-space-1)}
+  #home .home-section-head{padding:var(--gate-space-2)}
+  #home .weekly-feature-copy{padding:var(--gate-space-2)}
+  #home .weekly-feature-facts{padding-inline:var(--gate-space-2)}
+  #home .home-office[hidden] + .home-snapshot .snapshot-list{grid-template-columns:1fr}
+}
+#home .futures-body strong{font-size:1rem;line-height:1.4}
+#home .futures-body p{font-size:.875rem;line-height:1.6}
+#home .hero h1 span{display:inline-block;margin-inline-start:.25em}
+.edition-content[data-panel="editorial"]{background:#f3ead9;color:#171819}
+.gate-skeleton{display:grid;gap:var(--gate-space-2);width:100%;padding:var(--gate-space-3)}
+.gate-skeleton span{display:block;height:.75rem;border-radius:999px;background:linear-gradient(90deg,var(--panel2),rgba(185,138,82,.14),var(--panel2));background-size:220% 100%;animation:gateSkeleton 1.4s ease-in-out infinite}
+.gate-skeleton span:nth-child(2){width:82%}.gate-skeleton span:nth-child(3){width:58%}
+@keyframes gateSkeleton{to{background-position:-220% 0}}
+#home [data-week-stamp] time,#home [data-weekly-feature-status] time{font:inherit;color:inherit}
+#home [data-week-stamp].is-saved{color:var(--amber)}
+@media(prefers-reduced-motion:reduce){.gate-skeleton span{animation:none}}
+@media(max-width:620px){#home .home-section-head [data-week-stamp]{display:block;width:100%;margin-top:-.25rem}}
+#home .week-board-grid{gap:var(--gate-space-3);align-items:start}
+#home .week-matchups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gate-space-2);background:transparent}
+#home .week-game.week-card{position:relative;display:flex;flex-direction:column;gap:var(--gate-space-1);min-width:0;padding:var(--gate-space-2);border:1px solid var(--line);border-radius:var(--gate-radius);background:var(--panel)}
+#home .week-card-status{display:flex;justify-content:space-between;align-items:baseline;gap:var(--gate-space-1)}
+#home .week-card-badge,#home .week-card-margin,#home .week-card-owner{font:700 var(--gate-utility)/1.4 'Space Mono',monospace;letter-spacing:.04em;color:var(--muted)}
+#home .week-card-badge{text-transform:uppercase;letter-spacing:.08em}
+#home .week-game.is-live .week-card-badge{color:#8cc8a5}
+html[data-theme="light"] #home .week-game.is-live .week-card-badge{color:#416a52}
+#home .week-game.is-final .week-card-badge{color:var(--cream)}
+html[data-theme="light"] #home .week-game.is-final .week-card-badge{color:#1f2a2b}
+#home .week-card-sides{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--gate-space-2);align-items:end}
+#home .week-card .week-game-vs{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+#home .week-card .week-game-side{min-width:0}
+#home .week-card .week-game-side strong{display:block;margin-top:2px;color:var(--cream);font:700 .95rem/1.25 Oswald,sans-serif;letter-spacing:.01em;text-transform:none;white-space:normal;overflow:visible;overflow-wrap:anywhere;text-overflow:unset}
+#home .week-card .week-game-side b{display:block;margin-top:var(--gate-space-1);color:var(--cream);font:700 clamp(1.75rem, 2.6vw, 2.25rem)/1 Anton,sans-serif;font-variant-numeric:tabular-nums}
+#home .week-card .week-game-side.is-trailing :is(strong,b){opacity:.68}
+#home .week-card .week-game-side.is-home{text-align:right}
+#home .week-standings{border-left:1px solid var(--line)}
+#home .week-standings-table th,#home .week-standings-table td{font-variant-numeric:tabular-nums}
+#home .week-standings-rank{color:var(--muted);width:1.75rem}
+#home .week-standings-table tr.is-playoff-line td{border-bottom:2px solid var(--amber)}
+#home .week-standings-table td:nth-child(2),#home .week-standings-table th:nth-child(2){white-space:normal;overflow-wrap:anywhere}
+@media(max-width:900px){
+  #home .week-matchups{grid-template-columns:1fr}
+  #home .week-standings{border-left:0;border-top:1px solid var(--line)}
+}
+@media(max-width:760px){
+  #home .week-card .week-game-side b{font-size:2rem}
+  #home .week-card .week-game-side strong{font-size:1rem}
+}
+@media (min-width: 761px){
+  .phone-more{display:block;position:fixed;inset:0;z-index:90}
+  .phone-more[hidden]{display:none!important}
+  .phone-more-backdrop{position:absolute;inset:0;border:0;background:rgba(0,0,0,.38)}
+  .phone-more-sheet{position:absolute;top:calc(var(--sticky-offset) + 8px);right:max(16px, calc((100vw - 1220px) / 2 + 16px));left:auto;width:min(320px, calc(100vw - 32px));display:flex;flex-direction:column;gap:4px;padding:14px 16px 16px;border-radius:var(--gate-radius);background:var(--panel);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+  .phone-more-handle{display:none}
+  .phone-more-sheet>strong{display:block;margin:0 0 8px;font:700 var(--gate-utility)/1.4 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .phone-more-sheet button[data-view]{display:flex;align-items:center;min-height:44px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:var(--cream);font:600 14px Oswald,sans-serif;text-transform:uppercase;letter-spacing:.04em;text-align:left;cursor:pointer}
+  .phone-more-sheet button[data-view].active{color:var(--amber);background:rgba(185,138,82,.12)}
+  .phone-more-sheet button.staff-nav{display:none}
+  .phone-more-sheet button.staff-nav.visible{display:flex}
+  .phone-more-sheet .nav-more-phone-only{display:none!important}
+  #tabs [data-more-toggle].active,#tabs [data-more-toggle][aria-expanded="true"]{color:var(--amber)}
+  body.phone-more-open{overflow:hidden}
+}
+#home .home-section-head:has([data-week-stamp]){display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#home [data-week-stamp].is-live{color:var(--ink, #1b1b18)}
+#home [data-week-stamp].is-degraded{color:var(--muted)}
+#home .week-refresh,.week-refresh{appearance:none;border:1px solid var(--line, #d7d0c4);background:var(--panel, #fffaf1);color:inherit;font:inherit;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;min-height:44px;min-width:44px;cursor:pointer}
+#home .week-refresh:disabled{opacity:.6;cursor:wait}
