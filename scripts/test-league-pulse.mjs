@@ -2,9 +2,27 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {runInNewContext} from 'node:vm';
 
+const dom={
+  host:{innerHTML:''},
+  section:{dataset:{}},
+  status:{textContent:''},
+  weekBoard:{dataset:{weekSource:'saved'}}
+};
 const context={
   window:{gateShared:{escapeHtml:value=>String(value??'')},addEventListener(){}},
-  document:{addEventListener(){},querySelector(){return null},querySelectorAll(){return []},getElementById(){return null}},
+  document:{
+    addEventListener(){},querySelectorAll(){return []},
+    querySelector(selector){
+      if(selector==='[data-league-pulse]') return dom.host;
+      if(selector==='[data-pulse-status]') return dom.status;
+      return null;
+    },
+    getElementById(id){
+      if(id==='leaguePulse') return dom.section;
+      if(id==='weekBoard') return dom.weekBoard;
+      return null;
+    }
+  },
   fetch:async()=>({ok:false}),
   console
 };
@@ -36,9 +54,25 @@ assert.deepEqual(Array.from(offseason,card=>card.id),['draft','odds','record','s
 assert.equal(offseason.find(card=>card.id==='record').title,'Record Holder · 235.6');
 assert.ok(!offseason.some(card=>['playoff','matchup'].includes(card.id)));
 
+const archiveFailure=pulse.buildCards({config,board:{week:2,standings,matchups},archive:{}});
+assert.deepEqual(Array.from(archiveFailure,card=>card.id),['odds','playoff','matchup','record','streak','transactions']);
+assert.deepEqual(Array.from(archiveFailure.filter(card=>['record','streak'].includes(card.id)),card=>[card.label,card.view]),[
+  ['Record book','intel'],
+  ['Streak history','intel']
+]);
+const offseasonArchiveFailure=pulse.buildCards({config:{...config,phase:'Offseason'},board:{week:2,standings,matchups},archive:{}});
+assert.deepEqual(Array.from(offseasonArchiveFailure,card=>card.id),['draft','odds','record','streak','transactions']);
+
+context.window.gateSiteConfig=config;
+context.window.gateHomeBoard={week:2,standings,matchups};
+await pulse.refresh();
+assert.equal(dom.section.dataset.pulseSource,'saved');
+assert.equal(dom.status.textContent,'Saved league read');
+assert.equal((dom.host.innerHTML.match(/data-pulse-card=/g)||[]).length,6);
+
 const transaction=pulse.transactionCard({transaction_type:'WAIVER',team_name:'Team Hash',items:[{item_type:'ADD',player_name:'Example Player',to_team_name:'Team Hash'}]});
 assert.equal(transaction.title,'Team Hash · Waiver claim');
 assert.equal(transaction.detail,'Example Player · added to Team Hash');
 assert.equal(transaction.view,'transactions');
 
-console.log('League Pulse checks passed: odds, cutoff/movement, live game, record watch, streaks, offseason, and transaction enrichment.');
+console.log('League Pulse checks passed: core cards, saved-board provenance, archive-failure fallbacks, offseason, and transaction enrichment.');

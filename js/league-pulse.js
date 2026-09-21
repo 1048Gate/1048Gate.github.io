@@ -59,7 +59,9 @@
     const leader=sides(board).sort((a,b)=>Number(b.score||0)-Number(a.score||0))[0];
     const recordRow=archive?.records?.highestScore;
     const allTime=Number(Array.isArray(recordRow)?recordRow[0]:recordRow?.score);
-    if(!Number.isFinite(allTime)) return null;
+    if(!Number.isFinite(allTime)){
+      return {id:'record',label:'Record book',title:'League Record Book',detail:'Explore the highest scores and defining performances in league history.',view:'intel'};
+    }
     if(!leader){
       const holder=clean(Array.isArray(recordRow)?recordRow[1]:recordRow?.owner);
       const season=Array.isArray(recordRow)?recordRow[5]:recordRow?.season;
@@ -106,7 +108,9 @@
       return {id:'streak',label:'Form guide',title:`${best.owner} · ${best.count} straight`,detail:`Active ${word} streak for ${clean(best.team||'the current team')}.`,scrollTo:'weekBoard'};
     }
     const historic=archive?.leaderboards?.winningStreaks?.[0];
-    if(!historic) return null;
+    if(!historic){
+      return {id:'streak',label:'Streak history',title:'Winning & losing runs',detail:'Explore the league’s longest streaks and historic runs in The Book.',view:'intel'};
+    }
     return {id:'streak',label:'Streak book',title:`${clean(historic.manager)} · ${historic.games} straight`,detail:`League record set in ${historic.season}.`,view:'intel'};
   }
 
@@ -138,7 +142,7 @@
     return {id:'transactions',label:'Latest move',title:`${clean(row.team_name||'League activity')} · ${type}`,detail:player?`${player}${route?` · ${route}`:''}`:'Open the verified transaction for full details.',view:'transactions'};
   }
 
-  const api=Object.freeze({buildCards,transactionCard,isOffseason});
+  const api=Object.freeze({buildCards,transactionCard,isOffseason,refresh});
   window.gateLeaguePulse=api;
   if(typeof document === 'undefined') return;
 
@@ -179,16 +183,17 @@
   }
 
   async function refresh(){
+    const saved=document.getElementById('weekBoard')?.dataset.weekSource==='saved';
     const prebuilt=cardsFromPayload();
     if(prebuilt){
-      render(prebuilt);
+      render(prebuilt,{saved});
       return;
     }
     const config=window.gateSiteConfig;
     const board=window.gateHomeBoard;
     if(!config||!board) return;
     await loadArchive();
-    render(buildCards({config,board,archive:archive||{}}));
+    render(buildCards({config,board,archive:archive||{}}),{saved});
   }
 
   async function refreshTransaction(){

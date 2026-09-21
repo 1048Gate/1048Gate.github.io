@@ -40,13 +40,16 @@ const server=http.createServer((req,res)=>{
     homepage.status='offseason';
     homepage.league_pulse=[];
   }
-  const fixtures={'/data/site.json':config,'/data/current-season.json':board,'/data/homepage-week.json':homepage,'/data/newspaper_editions/index.json':index,['/'+entry.path]:edition};
   const exerciseFallbacks=state==='live'&&width===1440&&theme==='light';
+  const exerciseArchiveFailure=width===1440&&theme==='dark';
+  if(exerciseArchiveFailure) homepage.league_pulse=[];
+  const fixtures={'/data/site.json':config,'/data/current-season.json':board,'/data/homepage-week.json':homepage,'/data/newspaper_editions/index.json':index,['/'+entry.path]:edition};
   let forceWeekFailure=exerciseFallbacks;
   await page.route('**/*',async route=>{
     const u=new URL(route.request().url());
     if(u.hostname==='127.0.0.1'){
       if((u.pathname==='/data/current-season.json'||u.pathname==='/data/homepage-week.json')&&forceWeekFailure)return route.fulfill({status:503,body:'unavailable'});
+      if(u.pathname==='/data/matchups.json'&&exerciseArchiveFailure)return route.fulfill({status:503,body:'unavailable'});
       if(fixtures[u.pathname])return route.fulfill({json:fixtures[u.pathname]});
       return route.continue();
     }
@@ -63,15 +66,34 @@ const server=http.createServer((req,res)=>{
       cards:document.querySelectorAll('#weekBoard .week-card').length,
       standings:document.querySelectorAll('#weekBoard .week-standings-table tbody tr').length,
       status:document.querySelector('[data-week-stamp]')?.textContent||'',
+      pulseSource:document.getElementById('leaguePulse')?.dataset.pulseSource,
+      pulseStatus:document.querySelector('[data-pulse-status]')?.textContent||'',
+      pulseCards:document.querySelectorAll('#leaguePulse [data-pulse-card]').length,
       ok:document.getElementById('weekBoard')?.dataset.weekSource==='saved'
         && document.querySelectorAll('#weekBoard .week-card').length===6
         && document.querySelectorAll('#weekBoard .week-standings-table tbody tr').length===12
         && document.querySelector('[data-week-stamp]')?.textContent.includes('Saved snapshot')
+        && document.getElementById('leaguePulse')?.dataset.pulseSource==='saved'
+        && document.querySelector('[data-pulse-status]')?.textContent.includes('Saved league read')
+        && document.querySelectorAll('#leaguePulse [data-pulse-card]').length===6
     }));
     forceWeekFailure=false;
     await page.evaluate(()=>renderWeekBoard());
   }
   await page.waitForFunction(s=>document.querySelector('#home')?.dataset.homeState===s,state);
+  let archiveFallback=null;
+  if(exerciseArchiveFailure){
+    const expected=state==='offseason'?5:6;
+    await page.waitForFunction(count=>document.querySelectorAll('#leaguePulse [data-pulse-card]').length===count,expected);
+    archiveFallback=await page.evaluate(expected=>{
+      const record=document.querySelector('[data-pulse-card="record"]');
+      const streak=document.querySelector('[data-pulse-card="streak"]');
+      const labels=[record?.querySelector('span')?.textContent,streak?.querySelector('span')?.textContent];
+      const links=[record?.querySelector('[data-view-link="intel"]'),streak?.querySelector('[data-view-link="intel"]')];
+      const cards=document.querySelectorAll('#leaguePulse [data-pulse-card]').length;
+      return {cards,labels,bookLinks:links.filter(Boolean).length,ok:cards===expected&&labels[0]==='Record book'&&labels[1]==='Streak history'&&links.every(Boolean)};
+    },expected);
+  }
   await page.evaluate(()=>document.fonts.ready);
   await page.screenshot({path:path.join(output,name+'-viewport.png')});
   await page.locator('#home').screenshot({path:path.join(output,name+'-homepage.png')});
@@ -154,13 +176,20 @@ const server=http.createServer((req,res)=>{
     forceWeekFailure=true;
     await page.evaluate(()=>renderWeekBoard());
     await page.waitForFunction(()=>document.getElementById('weekBoard')?.dataset.weekSource==='saved');
+    await page.waitForFunction(()=>document.getElementById('leaguePulse')?.dataset.pulseSource==='saved');
     cachedFallback=await page.evaluate(()=>({
       source:document.getElementById('weekBoard')?.dataset.weekSource,
       cards:document.querySelectorAll('#weekBoard .week-card').length,
       status:document.querySelector('[data-week-stamp]')?.textContent||'',
+      pulseSource:document.getElementById('leaguePulse')?.dataset.pulseSource,
+      pulseStatus:document.querySelector('[data-pulse-status]')?.textContent||'',
+      pulseCards:document.querySelectorAll('#leaguePulse [data-pulse-card]').length,
       ok:document.getElementById('weekBoard')?.dataset.weekSource==='saved'
         && document.querySelectorAll('#weekBoard .week-card').length===6
         && document.querySelector('[data-week-stamp]')?.textContent.includes('Saved snapshot')
+        && document.getElementById('leaguePulse')?.dataset.pulseSource==='saved'
+        && document.querySelector('[data-pulse-status]')?.textContent.includes('Saved league read')
+        && document.querySelectorAll('#leaguePulse [data-pulse-card]').length===6
     }));
   }
   let draftArchive=null;
@@ -174,7 +203,7 @@ const server=http.createServer((req,res)=>{
       draftPanelActive:document.querySelector('[data-history-panel="drafts"]')?.classList.contains('active')||false
     }));
   }
-  report.cases.push({name,metrics,anchors,a11y,navigation,noCacheFallback,cachedFallback,draftArchive,errors:[...errors]});
+  report.cases.push({name,metrics,anchors,a11y,navigation,noCacheFallback,cachedFallback,archiveFallback,draftArchive,errors:[...errors]});
   writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
   if(state==='live'){
@@ -209,6 +238,7 @@ const server=http.createServer((req,res)=>{
    if(item.navigation&&!item.navigation.ok)failures.push(`${item.name}: Phase 4 navigation interaction failed`);
    if(item.noCacheFallback&&!item.noCacheFallback.ok)failures.push(`${item.name}: Phase 5 checked-in fallback failed`);
    if(item.cachedFallback&&!item.cachedFallback.ok)failures.push(`${item.name}: Phase 5 cached fallback failed`);
+   if(item.archiveFallback&&!item.archiveFallback.ok)failures.push(`${item.name}: Phase 6 archive fallback failed`);
    if(item.draftArchive&&(!item.draftArchive.historyActive||item.draftArchive.historyTab!=='drafts'||!item.draftArchive.draftTabActive||!item.draftArchive.draftPanelActive)){
      failures.push(`${item.name}: Draft archive did not open the Drafts history panel`);
    }
