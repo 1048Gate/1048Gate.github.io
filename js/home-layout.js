@@ -60,11 +60,23 @@
     if(lede && state === 'offseason') lede.textContent = 'Prepare for the next season: keepers, the draft board, and the league story.';
     if(lede && ['recap','final'].includes(state)) lede.textContent = `${board.phase || `Week ${board.week}`} is final. ${state === 'recap' ? 'Catch up on the weekly edition, then see the results and standings.' : 'See the results and standings while the weekly recap is prepared.'}`;
   }
-  window.gateHomeLayout = Object.freeze({stateFor, render});
+  function openDraftArchive(){
+    window.switchView?.('history', {scroll:false});
+    const draftTab = document.querySelector('[data-history-tab="drafts"]');
+    if(draftTab){
+      window.gateHistory?.show?.('drafts');
+      draftTab.focus?.({preventScroll:true});
+      draftTab.scrollIntoView?.({block:'nearest', inline:'nearest'});
+      return 'drafts';
+    }
+    // The Season Vault contains a draft recap for every archived season, so it is
+    // a safe fallback if the richer Drafts module did not initialize.
+    window.gateHistory?.show?.('seasons');
+    document.querySelector('[data-history-tab="seasons"]')?.focus?.({preventScroll:true});
+    return 'seasons';
+  }
+  window.gateHomeLayout = Object.freeze({stateFor, render, openDraftArchive});
   ['gate:site-ready', 'gate:home-board-ready', 'gate:home-edition-ready'].forEach(name => document.addEventListener(name, render));
-  document.querySelector('[data-home-draft]')?.addEventListener('click', () => {
-    window.switchView?.('history');
-    document.querySelector('[data-history-tab="drafts"]')?.click();
-  });
+  document.querySelector('[data-home-draft]')?.addEventListener('click', openDraftArchive);
   render();
 })();
