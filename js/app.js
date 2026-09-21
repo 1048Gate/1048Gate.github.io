@@ -18,21 +18,19 @@ const {
 
 function closePhoneMore() {
   const sheet = document.getElementById('phoneMore');
-  const toggle = document.querySelector('[data-more-toggle]');
   if (!sheet) return;
   sheet.hidden = true;
   sheet.classList.remove('open');
-  toggle?.setAttribute('aria-expanded', 'false');
+  document.querySelectorAll('[data-more-toggle]').forEach(toggle => toggle.setAttribute('aria-expanded', 'false'));
   document.body.classList.remove('phone-more-open');
 }
 
 function openPhoneMore() {
   const sheet = document.getElementById('phoneMore');
-  const toggle = document.querySelector('[data-more-toggle]');
   if (!sheet) return;
   sheet.hidden = false;
   sheet.classList.add('open');
-  toggle?.setAttribute('aria-expanded', 'true');
+  document.querySelectorAll('[data-more-toggle]').forEach(toggle => toggle.setAttribute('aria-expanded', 'true'));
   document.body.classList.add('phone-more-open');
 }
 
@@ -52,11 +50,25 @@ const gateRoutes = {
   office: {view: 'office', nav: 'office', tab: 'rules', event: 'office'},
   rules: {view: 'office', nav: 'office', tab: 'rules', event: 'office'},
   votes: {view: 'office', nav: 'office', tab: 'votes', event: 'votes'},
-  newspaper: {view: 'office', nav: 'office', tab: 'newspaper', event: 'newspaper'},
-  weekly: {view: 'office', nav: 'office', tab: 'newspaper', event: 'newspaper'},
+  newspaper: {view: 'office', nav: 'newspaper', tab: 'newspaper', event: 'newspaper'},
+  weekly: {view: 'office', nav: 'newspaper', tab: 'newspaper', event: 'newspaper'},
+  thisweek: {view: 'home', nav: 'home', event: 'home'},
   staff: {view: 'staff', nav: 'staff', event: 'staff'}
 };
 const dockViews = new Set(['home', 'league', 'wire', 'history']);
+const primaryTabViews = new Set(['home', 'league', 'wire', 'history', 'newspaper']);
+
+function moreMenuOwns(route, key){
+  const phone = window.matchMedia('(max-width: 760px)').matches;
+  if(phone) return !dockViews.has(route.view);
+  return !primaryTabViews.has(key) && !primaryTabViews.has(route.nav);
+}
+
+function toggleMoreMenu(){
+  const sheet = document.getElementById('phoneMore');
+  if(sheet?.hidden) openPhoneMore();
+  else closePhoneMore();
+}
 
 function activateSubnav(rootSelector, tabAttr, panelAttr, tab){
   const root = document.querySelector(rootSelector);
@@ -93,16 +105,18 @@ function switchView(name, {updateHash = true, scroll = true, scrollTarget = null
 
   const navName = route.nav;
   document.querySelectorAll('#tabs button[data-view]').forEach(button => {
-    const active = button.dataset.view === navName;
+    const active = button.dataset.view === navName || button.dataset.view === key;
     button.classList.toggle('active', active);
     button.setAttribute('aria-current', active ? 'page' : 'false');
   });
   document.querySelectorAll('.phone-dock [data-view]').forEach(button => {
-    button.classList.toggle('active', button.dataset.view === navName);
+    button.classList.toggle('active', button.dataset.view === navName || button.dataset.view === key);
   });
-  document.querySelector('[data-more-toggle]')?.classList.toggle('active', !dockViews.has(route.view));
+  document.querySelectorAll('[data-more-toggle]').forEach(button => {
+    button.classList.toggle('active', moreMenuOwns(route, key));
+  });
   document.querySelectorAll('.phone-more [data-view]').forEach(button => {
-    button.classList.toggle('active', button.dataset.view === navName);
+    button.classList.toggle('active', button.dataset.view === navName || button.dataset.view === key);
   });
   closePhoneMore();
   const activeButton = [...document.querySelectorAll('#tabs button[data-view]')]
@@ -117,6 +131,10 @@ function switchView(name, {updateHash = true, scroll = true, scrollTarget = null
 
 window.switchView = switchView;
 document.getElementById('tabs')?.addEventListener('click', event => {
+  if (event.target.closest('[data-more-toggle]')) {
+    toggleMoreMenu();
+    return;
+  }
   const button = event.target.closest('button[data-view]');
   if (button) switchView(button.dataset.view);
 });
@@ -124,9 +142,7 @@ document.getElementById('tabs')?.addEventListener('click', event => {
 document.getElementById('phoneDock')?.addEventListener('click', event => {
   const more = event.target.closest('[data-more-toggle]');
   if (more) {
-    const sheet = document.getElementById('phoneMore');
-    if (sheet?.hidden) openPhoneMore();
-    else closePhoneMore();
+    toggleMoreMenu();
     return;
   }
   const button = event.target.closest('button[data-view]');

@@ -124,8 +124,10 @@ if(!html.includes('class="hero-season-card"') || !html.includes('data-site-year'
 if(!html.includes('class="orientation-panel"') || !html.includes('What is 1048 Gate?') || !html.includes('data-view-link="league"') || !html.includes('data-view-link="rules"')){
   throw new Error('The first-time orientation panel and its exploration links are missing.');
 }
-if(!html.includes('Wire — transactions and trades') || !html.includes('Book — league analytics') || !html.includes('Office — rules, polls, and news')){
-  throw new Error('Branded navigation labels must include plain-language descriptions.');
+if(!html.includes('aria-label="Transactions and trades"') ||
+   !html.includes('The Book — league analytics') ||
+   !html.includes('League Office — rules and polls')){
+  throw new Error('Navigation destinations must keep clear plain-language descriptions, including branded items under More.');
 }
 if(!html.includes('data-history-status') || !html.includes('data-intel-status') || !html.includes('data-futures-status') || !html.includes('data-banner-status')){
   throw new Error('Public data sections must expose explicit connection status hooks.');
@@ -286,8 +288,36 @@ if(!Array.isArray(intelligence.powerRankings) || intelligence.powerRankings[0]?.
 if(!html.includes('id="intel"') || !html.includes('data-view="intel"') || !scriptAssets.includes('js/intelligence.js') || !localAssets.includes('css/intelligence.css')){
   throw new Error('Intel view, stylesheet, navigation, or script is missing.');
 }
-if(!html.includes('>Book</button>') || !html.includes('data-view="office"') || !html.includes('id="wire"') || !html.includes('id="league"')){
-  throw new Error('Desktop navigation must be Home, League, Wire, History, Book, and Office.');
+const primaryNavStart = html.indexOf('<nav class="tabs" id="tabs"');
+const primaryNavEnd = primaryNavStart >= 0 ? html.indexOf('</nav>', primaryNavStart) : -1;
+const primaryNav = primaryNavStart >= 0 && primaryNavEnd >= 0 ? html.slice(primaryNavStart, primaryNavEnd + 6) : '';
+for(const [view, label] of [['home','This Week'],['league','League'],['wire','Transactions'],['history','History'],['newspaper','Newspaper']]){
+  if(!primaryNav.includes(`data-view="${view}"`) || !primaryNav.includes(`>${label}</button>`)){
+    throw new Error(`Desktop primary navigation is missing ${label}.`);
+  }
+}
+if(!primaryNav.includes('data-more-toggle') || !primaryNav.includes('>More</button>')){
+  throw new Error('Desktop primary navigation must end with More.');
+}
+if(primaryNav.includes('data-view="intel"') || primaryNav.includes('data-view="office"') || primaryNav.includes('data-view="staff"')){
+  throw new Error('The Book, League Office, and Staff must live under More instead of the desktop primary navigation.');
+}
+if(!html.includes('class="nav-more-phone-only" data-view="newspaper">Newspaper</button>') ||
+   !html.includes('data-view="intel" aria-label="The Book — league analytics">The Book</button>') ||
+   !html.includes('data-view="office" aria-label="League Office — rules and polls">League Office</button>') ||
+   !html.includes('data-view="staff" class="staff-nav">Staff</button>')){
+  throw new Error('More must contain Newspaper (phone only), The Book, League Office, and Staff.');
+}
+const phoneDockStart = html.indexOf('<nav class="phone-dock" id="phoneDock"');
+const phoneDockEnd = phoneDockStart >= 0 ? html.indexOf('</nav>', phoneDockStart) : -1;
+const phoneDockMarkup = phoneDockStart >= 0 && phoneDockEnd >= 0 ? html.slice(phoneDockStart, phoneDockEnd + 6) : '';
+if(!phoneDockMarkup.includes('<span>This Week</span>') ||
+   !phoneDockMarkup.includes('<span>League</span>') ||
+   !phoneDockMarkup.includes('<span>Transactions</span>') ||
+   !phoneDockMarkup.includes('<span>History</span>') ||
+   !phoneDockMarkup.includes('<span>More</span>') ||
+   phoneDockMarkup.includes('data-view="newspaper"')){
+  throw new Error('Phone dock must stay five items: This Week, League, Transactions, History, More; Newspaper belongs in More.');
 }
 
 const matchupArchive = JSON.parse(readFileSync(new URL('data/matchups.json', root), 'utf8'));
@@ -415,6 +445,12 @@ if(!appSource.includes("from('league_members')") || !appSource.includes("fetch('
 }
 if(!appSource.includes('closePhoneMore') || !appSource.includes('phoneDock') || !appSource.includes('data-more-toggle')){
   throw new Error('Phone dock navigation handlers are missing from app.js.');
+}
+if(!appSource.includes("newspaper: {view: 'office', nav: 'newspaper'") ||
+   !appSource.includes("const primaryTabViews = new Set(['home', 'league', 'wire', 'history', 'newspaper'])") ||
+   !appSource.includes('function moreMenuOwns(route, key)') ||
+   !appSource.includes('function toggleMoreMenu()')){
+  throw new Error('Phase 4 navigation routing or More ownership logic is missing from app.js.');
 }
 if(!appSource.includes('trapFocus(event') || !appSource.includes('memberReturnFocus')){
   throw new Error('The member modal must trap focus and restore it when closed.');
