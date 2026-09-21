@@ -145,6 +145,48 @@ def record_text(wins: int, losses: int, ties: int) -> str:
     return f"{wins}-{losses}-{ties}" if ties else f"{wins}-{losses}"
 
 
+SCHEMA_VERSION = 2
+
+
+def manager_id(number: str | int) -> str:
+    return f"mgr-{str(number).zfill(2)}"
+
+
+def named_season(
+    *,
+    number: str | int,
+    year: int,
+    finish: int | None,
+    team: str,
+    record: str,
+    points_for: float | None,
+    points_against: float | None,
+) -> dict:
+    return {
+        "id": f"{manager_id(number)}-{year}",
+        "year": year,
+        "finish": finish,
+        "team": team,
+        "record": record,
+        "pointsFor": points_for,
+        "pointsAgainst": points_against,
+    }
+
+
+def members_payload(members: list[dict]) -> dict:
+    return {
+        "schemaVersion": SCHEMA_VERSION,
+        "seasonRange": {"from": START_YEAR, "to": END_YEAR},
+        "provenance": {
+            "kind": "canonical",
+            "dataset": "member-seasons",
+            "path": "data/members.json",
+            "derivedFrom": ["1048_gate.db members", "1048_gate.db teams"],
+        },
+        "members": members,
+    }
+
+
 def load_members(conn: sqlite3.Connection) -> list[dict]:
     """Read the canonical roster from migrated tables, or fall back."""
 
@@ -215,24 +257,24 @@ def export_member(conn: sqlite3.Connection, member: dict) -> dict:
         losses = int(row["losses"] or 0)
         ties = int(row["ties"] or 0)
 
-        # This array shape intentionally mirrors the site's current app.js:
-        # [year, finish, team name, record, points for, points against]
         seasons.append(
-            [
-                year,
-                finish,
-                clean_team_name(row["team_name"]),
-                record_text(wins, losses, ties),
-                round(float(row["points_for"]), 2)
+            named_season(
+                number=member["number"],
+                year=year,
+                finish=finish,
+                team=clean_team_name(row["team_name"]),
+                record=record_text(wins, losses, ties),
+                points_for=round(float(row["points_for"]), 2)
                 if row["points_for"] is not None
                 else None,
-                round(float(row["points_against"]), 2)
+                points_against=round(float(row["points_against"]), 2)
                 if row["points_against"] is not None
                 else None,
-            ]
+            )
         )
 
     return {
+        "id": manager_id(member["number"]),
         "number": member["number"],
         "name": member["name"],
         "role": member["role"],
@@ -251,15 +293,28 @@ def validate(members: list[dict]) -> None:
             raise RuntimeError(f"Duplicate member number: {number}")
         seen_numbers.add(number)
 
-        years = [season[0] for season in member["seasons"]]
-        if len(years) != len(set(years)):
-            raise RuntimeError(f"Duplicate season detected for {member['name']}")
+        if member.get("id") != manager_id(number):
+            raise RuntimeError(f"Missing or incorrect manager id for {member['name']}")
 
-        if years != sorted(years):
-            raise RuntimeError(f"Seasons are not sorted for {member['name']}")
-
+        years = []
         for season in member["seasons"]:
-            year, finish = season[0], season[1]
+            if not isinstance(season, dict):
+                raise RuntimeError(
+                    f"Season rows must be named objects for {member['name']}"
+                )
+            year = season["year"]
+            finish = season["finish"]
+            expected_id = f"{manager_id(number)}-{year}"
+            if season.get("id") != expected_id:
+                raise RuntimeError(
+                    f"Missing or incorrect season id for {member['name']} in {year}"
+                )
+            for field in ("team", "record", "pointsFor", "pointsAgainst"):
+                if field not in season:
+                    raise RuntimeError(
+                        f"Season {year} for {member['name']} is missing {field}"
+                    )
+            years.append(year)
             if not START_YEAR <= year <= END_YEAR:
                 raise RuntimeError(
                     f"Unexpected season {year} for {member['name']}"
@@ -268,6 +323,12 @@ def validate(members: list[dict]) -> None:
                 raise RuntimeError(
                     f"Missing final finish for {member['name']} in {year}"
                 )
+
+        if len(years) != len(set(years)):
+            raise RuntimeError(f"Duplicate season detected for {member['name']}")
+
+        if years != sorted(years):
+            raise RuntimeError(f"Seasons are not sorted for {member['name']}")
 
 
 def main() -> None:
@@ -297,11 +358,7 @@ def main() -> None:
 
     validate(members)
 
-    payload = {
-        "schemaVersion": 1,
-        "seasonRange": {"from": START_YEAR, "to": END_YEAR},
-        "members": members,
-    }
+    payload = members_payload(members)
 
     output_dir = repo_root / "data"
     output_dir.mkdir(parents=True, exist_ok=True)

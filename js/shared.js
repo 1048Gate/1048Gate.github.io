@@ -121,16 +121,39 @@
     };
   }
 
+  function normalizeDraftSeason(season){
+    if(Array.isArray(season)){
+      return {
+        id: `draft-${Number(season[0])}`,
+        year: Number(season[0]),
+        name: String(season[1] ?? ''),
+        keepers: nullableNumber(season[2]),
+        picks: nullableNumber(season[3])
+      };
+    }
+    return {
+      id: season?.id || (Number.isFinite(Number(season?.year)) ? `draft-${Number(season.year)}` : undefined),
+      year: Number(season?.year),
+      name: String(season?.name ?? ''),
+      keepers: nullableNumber(season?.keepers),
+      picks: nullableNumber(season?.picks)
+    };
+  }
+
   function normalizeMember(member){
     const rawSeasons = member?.seasons ?? member?.member_seasons ?? [];
     const number = normalizeMemberNumber(member?.number ?? member?.member_number);
+    const id = member?.id || (number ? `mgr-${number}` : undefined);
     return {
-      id: member?.id,
+      id,
       number,
       name: String(member?.name ?? ''),
       role: memberRole({...member, number}),
       sortOrder: nullableNumber(member?.sortOrder ?? member?.sort_order),
-      seasons: rawSeasons.map(normalizeSeason).filter(season => Number.isFinite(season.year)).sort((a, b) => a.year - b.year)
+      seasons: rawSeasons.map(season => {
+        const named = normalizeSeason(season);
+        return {...named, id: named.id || (id && Number.isFinite(named.year) ? `${id}-${named.year}` : named.id)};
+      }).filter(season => Number.isFinite(season.year)).sort((a, b) => a.year - b.year)
     };
   }
 
@@ -293,6 +316,7 @@
     relativeTime,
     trapFocus,
     normalizeSeason,
+    normalizeDraftSeason,
     normalizeMember,
     memberTotals,
     latestSeason,
