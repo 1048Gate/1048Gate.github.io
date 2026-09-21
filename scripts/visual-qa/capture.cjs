@@ -72,7 +72,7 @@ const server=http.createServer((req,res)=>{
       ok:document.getElementById('weekBoard')?.dataset.weekSource==='saved'
         && document.querySelectorAll('#weekBoard .week-card').length===6
         && document.querySelectorAll('#weekBoard .week-standings-table tbody tr').length===12
-        && document.querySelector('[data-week-stamp]')?.textContent.includes('Saved snapshot')
+        && document.querySelector('[data-week-stamp]')?.textContent.includes('ESPN snapshot')
         && document.getElementById('leaguePulse')?.dataset.pulseSource==='saved'
         && document.querySelector('[data-pulse-status]')?.textContent.includes('Saved league read')
         && document.querySelectorAll('#leaguePulse [data-pulse-card]').length===6
@@ -186,7 +186,7 @@ const server=http.createServer((req,res)=>{
       pulseCards:document.querySelectorAll('#leaguePulse [data-pulse-card]').length,
       ok:document.getElementById('weekBoard')?.dataset.weekSource==='saved'
         && document.querySelectorAll('#weekBoard .week-card').length===6
-        && document.querySelector('[data-week-stamp]')?.textContent.includes('Saved snapshot')
+        && document.querySelector('[data-week-stamp]')?.textContent.includes('ESPN snapshot')
         && document.getElementById('leaguePulse')?.dataset.pulseSource==='saved'
         && document.querySelector('[data-pulse-status]')?.textContent.includes('Saved league read')
         && document.querySelectorAll('#leaguePulse [data-pulse-card]').length===6
