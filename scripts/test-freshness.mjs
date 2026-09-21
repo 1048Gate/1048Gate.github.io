@@ -10,9 +10,12 @@ const context={window:{localStorage:storage},document:{
 }};
 runInNewContext(readFileSync(new URL('../js/freshness.js',import.meta.url),'utf8'),context);
 const freshness=context.window.gateFreshness;
-const board={season:2026,week:2,fetchedAt:'2026-09-21T15:06:30Z',matchups:[{}],standings:[{}]};
+const board={season:2026,week:2,fetchedAt:'2026-09-21T15:06:30Z',matchups:Array.from({length:6},()=>({})),standings:Array.from({length:12},()=>({}))};
 assert.equal(freshness.validWeek(board),true);
-assert.equal(freshness.validWeek({...board,matchups:[]}),false);
+assert.equal(freshness.validWeek({...board,matchups:board.matchups.slice(0,5)}),false);
+assert.equal(freshness.validWeek({...board,standings:board.standings.slice(0,11)}),false);
+for(const season of [undefined,0,-1,1.5,'2026','invalid']) assert.equal(freshness.validWeek({...board,season}),false);
+for(const week of [undefined,0,-1,1.5,'2','invalid']) assert.equal(freshness.validWeek({...board,week}),false);
 assert.equal(freshness.saveWeek(board,storage),true);
 assert.deepEqual(JSON.parse(JSON.stringify(freshness.readWeek({season:2026,week:2},storage))),board);
 assert.equal(freshness.readWeek({season:2025,week:2},storage),null);

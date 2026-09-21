@@ -3,13 +3,17 @@
   const WEEK_CACHE_KEY = '1048-gate-current-week-v1';
 
   function validWeek(payload){
+    const season=payload?.season;
+    const week=payload?.week;
     return !!payload
-      && Number.isInteger(Number(payload.season))
-      && Number.isInteger(Number(payload.week))
+      && Number.isInteger(season)
+      && season > 0
+      && Number.isInteger(week)
+      && week > 0
       && Array.isArray(payload.matchups)
-      && payload.matchups.length > 0
+      && payload.matchups.length === 6
       && Array.isArray(payload.standings)
-      && payload.standings.length > 0;
+      && payload.standings.length === 12;
   }
 
   function formatted(iso){
