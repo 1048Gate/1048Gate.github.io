@@ -86,6 +86,16 @@ const server=http.createServer((req,res)=>{
   report.cases.push({name,metrics,anchors,a11y,draftArchive,errors});
   writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
+  if(state==='live'){
+    for(const view of ['league','history','newspaper','transactions','rules']){
+      await page.evaluate(v=>window.switchView(v),view);
+      await page.waitForLoadState('networkidle');
+      await page.screenshot({path:path.join(output,`${name}-${view}.png`)});
+      const layout=await page.evaluate(()=>({pageOverflow:document.documentElement.scrollWidth>innerWidth+1,heading:[...document.querySelectorAll('.view.active .section-title h2')].filter(n=>n.getBoundingClientRect().height).map(n=>({text:n.textContent,size:getComputedStyle(n).fontSize}))}));
+      (report.secondaryViews ||= []).push({name,view,...layout});
+    }
+    writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
+  }
   await context.close();
  }
  const failures=[];
