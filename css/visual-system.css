@@ -105,3 +105,6 @@ main{max-width:var(--gate-content-width)}
 
 #home .futures-body strong{font-size:1rem;line-height:1.4}
 #home .futures-body p{font-size:.875rem;line-height:1.6}
+
+/* Keep the masthead words separated when its line break collapses. */
+#home .hero h1 span{display:inline-block;margin-inline-start:.25em}

@@ -88,8 +88,12 @@ const server=http.createServer((req,res)=>{
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
   if(state==='live'){
     for(const view of ['league','history','newspaper','transactions','rules']){
-      await page.evaluate(v=>window.switchView(v),view);
+      await page.evaluate(v=>window.switchView(v,{scroll:false}),view);
       await page.waitForLoadState('networkidle');
+      // Finish navigation's smooth header scroll, then capture the top of the view.
+      await page.waitForTimeout(600);
+      await page.evaluate(()=>window.scrollTo({top:0,left:0,behavior:'instant'}));
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
       await page.screenshot({path:path.join(output,`${name}-${view}.png`)});
       const layout=await page.evaluate(()=>({pageOverflow:document.documentElement.scrollWidth>innerWidth+1,heading:[...document.querySelectorAll('.view.active .section-title h2')].filter(n=>n.getBoundingClientRect().height).map(n=>({text:n.textContent,size:getComputedStyle(n).fontSize}))}));
       (report.secondaryViews ||= []).push({name,view,...layout});
