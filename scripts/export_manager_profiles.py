@@ -9,6 +9,10 @@ ALIASES={'german joshua haro':'German Haro','tommy speer':'Thomas Speer','thomas
 def clean(v): return re.sub(r'\s+',' ',str(v or '')).strip()
 def canon(v):
     n=clean(v); return ALIASES.get(n.lower(),n)
+def season_fields(s):
+    if isinstance(s, dict):
+        return int(s['year']), int(s['finish']), s.get('team',''), s.get('record',''), float(s.get('pointsFor') or 0)
+    return int(s[0]), int(s[1]), s[2], s[3], float(s[4] or 0)
 
 def main():
     root=Path(__file__).resolve().parents[1]
@@ -56,17 +60,19 @@ def main():
     profiles=[]
     for name in CURRENT:
         seasons=members[name]['seasons']
-        playoff_years=[int(s[0]) for s in seasons if int(s[1])<=6]
-        finals=[int(s[0]) for s in seasons if int(s[1])<=2]
-        titles=[int(s[0]) for s in seasons if int(s[1])==1]
-        best=min(seasons,key=lambda s:(int(s[1]),-float(s[4] or 0))) if seasons else None
-        high=max(seasons,key=lambda s:float(s[4] or 0)) if seasons else None
+        playoff_years=[season_fields(s)[0] for s in seasons if season_fields(s)[1]<=6]
+        finals=[season_fields(s)[0] for s in seasons if season_fields(s)[1]<=2]
+        titles=[season_fields(s)[0] for s in seasons if season_fields(s)[1]==1]
+        best=min(seasons,key=lambda s:(season_fields(s)[1],-season_fields(s)[4])) if seasons else None
+        high=max(seasons,key=lambda s:season_fields(s)[4]) if seasons else None
         rival_rows=sorted(((sum(row[:3]),op,row) for op,row in h2h[name].items()),key=lambda x:(-x[0],x[1]))
         rival=None
         if rival_rows:
             meetings,op,row=rival_rows[0]; rival=[op,row[0],row[1],row[2],round(row[3],2),round(row[4],2),meetings]
         top=sorted(([round(row[0],2),pname,pos,row[1],row[2],row[3]] for (_,pname,pos),row in weapons[name].items()),key=lambda x:(-x[0],x[1]))[:5]
-        profiles.append({'name':name,'resume':{'playoffAppearances':len(playoff_years),'playoffYears':playoff_years,'finals':len(finals),'finalYears':finals,'titles':len(titles),'titleYears':titles,'bestSeason':[int(best[0]),int(best[1]),clean(best[2]),clean(best[3]),round(float(best[4]),2)] if best else None,'highestPF':[int(high[0]),round(float(high[4]),2),clean(high[2])] if high else None},'rivalry':rival,'signature':{'biggestWin':biggest_win[name],'worstLoss':worst_loss[name]},'draft':{'totalPicks':total_picks[name],'keepers':keeper_counts[name],'firstRound':drafts[name][:6]},'weapons':top})
+        by,bf,bt,br,bpf=season_fields(best) if best else (None,None,None,None,None)
+        hy,hf,ht,hr,hpf=season_fields(high) if high else (None,None,None,None,None)
+        profiles.append({'name':name,'resume':{'playoffAppearances':len(playoff_years),'playoffYears':playoff_years,'finals':len(finals),'finalYears':finals,'titles':len(titles),'titleYears':titles,'bestSeason':[int(by),int(bf),clean(bt),clean(br),round(float(bpf),2)] if best else None,'highestPF':[int(hy),round(float(hpf),2),clean(ht)] if high else None},'rivalry':rival,'signature':{'biggestWin':biggest_win[name],'worstLoss':worst_loss[name]},'draft':{'totalPicks':total_picks[name],'keepers':keeper_counts[name],'firstRound':drafts[name][:6]},'weapons':top})
 
     payload={'schemaVersion':1,'seasonRange':[2017,2025],'playerRange':[2019,2025],'profiles':profiles}
     out=root/'data'/'manager-profiles.json'; out.write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
