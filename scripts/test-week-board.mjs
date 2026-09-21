@@ -17,8 +17,31 @@ assert.equal(board.leaderSide(live), 'home');
 assert.equal(board.marginCopy(live), 'Ahead by 7.5');
 assert.equal(board.marginCopy({state:'final', away:{score:192.56}, home:{score:158.3}}), 'Won by 34.3');
 assert.equal(board.statusLabel('live'), 'Live');
-assert.match(board.matchupCardHtml(live, esc), /week-card is-live/);
-assert.match(board.matchupCardHtml(live, esc), /Ahead by 7.5/);
+assert.equal(board.statusLabel('scheduled'), 'Upcoming');
+assert.equal(board.marginCopy({state:'scheduled', away:{score:0}, home:{score:0}}), '');
+assert.equal(board.marginCopy({state:'live', away:{score:10}, home:{score:10}}), 'Tied');
+
+const liveHtml = board.matchupCardHtml(live, esc);
+assert.match(liveHtml, /week-card is-live/);
+assert.match(liveHtml, /Ahead by 7.5/);
+
+const finalHtml = board.matchupCardHtml({
+  state:'final',
+  away:{team:'A', owner:'A', score:192.56},
+  home:{team:'B', owner:'B', score:158.3}
+}, esc);
+assert.match(finalHtml, /week-card is-final/);
+assert.match(finalHtml, />Final</);
+assert.match(finalHtml, /Won by 34.3/);
+
+const upcomingHtml = board.matchupCardHtml({
+  state:'scheduled',
+  away:{team:'A', owner:'A', score:0},
+  home:{team:'B', owner:'B', score:0}
+}, esc);
+assert.match(upcomingHtml, /week-card is-scheduled/);
+assert.match(upcomingHtml, />Upcoming</);
+assert.doesNotMatch(upcomingHtml, /Ahead by|Won by|Tied/);
 assert.match(board.standingsSnapshotHtml([
   {team:'A', owner:'A', wins:1, losses:0, pointsFor:10},
   {team:'B', owner:'B', wins:1, losses:0, pointsFor:9},
@@ -29,6 +52,11 @@ assert.match(board.standingsSnapshotHtml([
   {team:'G', owner:'G', wins:0, losses:1, pointsFor:4}
 ], 'Live scoring from ESPN.', esc), /is-playoff-line/);
 assert.match(readFileSync(new URL('../js/site-ui.js', import.meta.url), 'utf8'), /gateWeekBoard/);
-assert.match(readFileSync(new URL('../index.html', import.meta.url), 'utf8'), /js\/week-board\.js/);
+const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+assert.match(indexHtml, /js\/week-board\.js/);
+assert.equal((indexHtml.match(/class="week-game week-card is-live"/g) || []).length, 6, 'static fallback must include six Phase 3 matchup cards');
+assert.match(indexHtml, /week-standings-rank/);
+assert.match(indexHtml, /class="is-playoff-line"/);
+assert.match(indexHtml, /Swipe standings/);
 assert.doesNotMatch(readFileSync(new URL('../js/home-layout.js', import.meta.url), 'utf8'), /createElement\('script'\)/);
 console.log('This Week board: six cards, live/final/upcoming states, margins, and standings snapshot checks passed.');
