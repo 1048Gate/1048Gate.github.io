@@ -88,7 +88,6 @@ const server=http.createServer((req,res)=>{
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
   await context.close();
  }
- }
  const failures=[];
  for(const item of report.cases){
    if(item.errors.length)failures.push(`${item.name}: page errors: ${item.errors.join(' | ')}`);
