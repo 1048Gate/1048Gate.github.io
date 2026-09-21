@@ -5,11 +5,19 @@ on:
     paths:
       - '.github/workflows/phase1-visual-qa.yml'
       - 'scripts/visual-qa/**'
+      - 'index.html'
+      - 'css/**'
+      - 'js/**'
+      - 'data/**'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
       - '.github/workflows/phase1-visual-qa.yml'
       - 'scripts/visual-qa/**'
+      - 'index.html'
+      - 'css/**'
+      - 'js/**'
+      - 'data/**'
 permissions:
   contents: read
 jobs:
