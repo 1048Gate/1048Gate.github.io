@@ -117,8 +117,8 @@ html[data-theme="light"] #home .week-game.is-final .week-card-badge{color:#1f2a2
 #home .week-card-sides{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--gate-space-2);align-items:end}
 #home .week-card .week-game-vs{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 #home .week-card .week-game-side{min-width:0}
-#home .week-card .week-game-side strong{display:block;margin-top:2px;color:var(--cream);font:700 .95rem/1.25 Oswald,sans-serif;letter-spacing:.01em;text-transform:none;white-space:normal;overflow:visible;overflow-wrap:anywhere;text-overflow:unset}
-#home .week-card .week-game-side b{display:block;margin-top:var(--gate-space-1);color:var(--cream);font:700 clamp(1.75rem, 2.6vw, 2.25rem)/1 Anton,sans-serif;font-variant-numeric:tabular-nums}
+#home .week-card .week-game-side strong{display:block;margin-top:1px;color:var(--cream);font:600 .8rem/1.2 Oswald,sans-serif;letter-spacing:.01em;text-transform:none;white-space:normal;overflow:visible;overflow-wrap:anywhere;text-overflow:unset}
+#home .week-card .week-game-side b{display:block;margin-top:4px;color:var(--cream);font:700 clamp(1.2rem, 1.5vw, 1.45rem)/1 Anton,sans-serif;font-variant-numeric:tabular-nums}
 #home .week-card .week-game-side.is-trailing :is(strong,b){opacity:.68}
 #home .week-card .week-game-side.is-home{text-align:right}
 #home .week-standings{border-left:1px solid var(--line)}
@@ -131,8 +131,8 @@ html[data-theme="light"] #home .week-game.is-final .week-card-badge{color:#1f2a2
   #home .week-standings{border-left:0;border-top:1px solid var(--line)}
 }
 @media(max-width:760px){
-  #home .week-card .week-game-side b{font-size:2rem}
-  #home .week-card .week-game-side strong{font-size:1rem}
+  #home .week-card .week-game-side b{font-size:1.35rem}
+  #home .week-card .week-game-side strong{font-size:.8rem}
 }
 @media (min-width: 761px){
   .phone-more{display:block;position:fixed;inset:0;z-index:90}
