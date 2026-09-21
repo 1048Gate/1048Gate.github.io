@@ -111,3 +111,94 @@ main{max-width:var(--gate-content-width)}
 
 /* The newspaper keeps its intentional paper/ink palette in both themes. */
 .edition-content[data-panel="editorial"]{background:#f3ead9;color:#171819}
+
+/* Phase 3 — This Week matchup cards and compact standings snapshot. */
+#home .week-board-grid{
+  gap:var(--gate-space-3);
+  align-items:start;
+}
+#home .week-matchups{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--gate-space-2);
+  background:transparent;
+}
+#home .week-game.week-card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:var(--gate-space-1);
+  min-width:0;
+  padding:var(--gate-space-2);
+  border:1px solid var(--line);
+  border-radius:var(--gate-radius);
+  background:var(--panel);
+}
+#home .week-card-status{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:var(--gate-space-1);
+}
+#home .week-card-badge,
+#home .week-card-margin,
+#home .week-card-owner{
+  font:700 var(--gate-utility)/1.4 'Space Mono',monospace;
+  letter-spacing:.04em;
+  color:var(--muted);
+}
+#home .week-card-badge{text-transform:uppercase;letter-spacing:.08em}
+#home .week-game.is-live .week-card-badge{color:#8cc8a5}
+html[data-theme="light"] #home .week-game.is-live .week-card-badge{color:#416a52}
+#home .week-game.is-final .week-card-badge{color:var(--cream)}
+html[data-theme="light"] #home .week-game.is-final .week-card-badge{color:#1f2a2b}
+#home .week-card-sides{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:var(--gate-space-2);
+  align-items:end;
+}
+#home .week-card .week-game-vs{
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+}
+#home .week-card .week-game-side{min-width:0}
+#home .week-card .week-game-side strong{
+  display:block;
+  margin-top:2px;
+  color:var(--cream);
+  font:700 .95rem/1.25 Oswald,sans-serif;
+  letter-spacing:.01em;
+  text-transform:none;
+  white-space:normal;
+  overflow:visible;
+  overflow-wrap:anywhere;
+  text-overflow:unset;
+}
+#home .week-card .week-game-side b{
+  display:block;
+  margin-top:var(--gate-space-1);
+  color:var(--cream);
+  font:700 clamp(1.75rem, 2.6vw, 2.25rem)/1 Anton,sans-serif;
+  font-variant-numeric:tabular-nums;
+}
+#home .week-card .week-game-side.is-trailing :is(strong,b){opacity:.68}
+#home .week-card .week-game-side.is-home{text-align:right}
+#home .week-standings{border-left:1px solid var(--line)}
+#home .week-standings-table th,
+#home .week-standings-table td{font-variant-numeric:tabular-nums}
+#home .week-standings-rank{color:var(--muted);width:1.75rem}
+#home .week-standings-table tr.is-playoff-line td{border-bottom:2px solid var(--amber)}
+#home .week-standings-table td:nth-child(2),
+#home .week-standings-table th:nth-child(2){white-space:normal;overflow-wrap:anywhere}
+@media(max-width:900px){
+  #home .week-matchups{grid-template-columns:1fr}
+  #home .week-standings{border-left:0;border-top:1px solid var(--line)}
+}
+@media(max-width:760px){
+  #home .week-card .week-game-side b{font-size:2rem}
+  #home .week-card .week-game-side strong{font-size:1rem}
+}
