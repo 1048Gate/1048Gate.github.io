@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 2,
   "phase": "Week 2",
-  "fetchedAt": "2026-09-21T01:37:42.734777+00:00",
+  "fetchedAt": "2026-09-21T07:55:01.330591+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 2 in progress. Live scoring from ESPN.",
   "standings": [
@@ -171,7 +171,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 115.62
+        "score": 121.32
       }
     },
     {
@@ -185,7 +185,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 106.22
+        "score": 122.42
       },
       "home": {
         "teamId": 15,
@@ -205,7 +205,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 100.38
+        "score": 106.58
       },
       "home": {
         "teamId": 13,
@@ -225,13 +225,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 101.5
+        "score": 119.28
       },
       "home": {
         "teamId": 3,
         "team": "Darty at 1048",
         "owner": "Jared Hall",
-        "score": 56.2
+        "score": 79.4
       }
     },
     {
@@ -251,7 +251,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 94.46
+        "score": 109.36
       }
     },
     {

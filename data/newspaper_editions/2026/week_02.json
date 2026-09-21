@@ -4,7 +4,7 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 2,
-  "generated_at": "2026-09-21T01:37:42.833047Z",
+  "generated_at": "2026-09-21T07:55:01.431534Z",
   "source_status": "verified_live",
   "validation_status": "valid",
   "editorial_policy": {
@@ -21,22 +21,22 @@
   "standfirst": "Week 2 is live; Trevor Hash leads the completed-results table while the current matchup board continues to move.",
   "lead": {
     "title": "The Week 2 table has a shape, but not a verdict",
-    "body": "Trevor Hash is first in the completed-results table at 1-0 with 192.56 points for. On the live Week 2 board, Thomas Speer currently has the high score at 158.36, while Jared Hall is at 56.20. Those live scores can still change.",
+    "body": "Trevor Hash is first in the completed-results table at 1-0 with 192.56 points for. On the live Week 2 board, Thomas Speer currently has the high score at 158.36, while Collin Krum is at 61.94. Those live scores can still change.",
     "sourceIds": [
       "current-season",
       "power-rankings"
     ]
   },
   "matchup": {
-    "awayTeam": "Howya Been's",
-    "awayOwner": "Bryan Hunt",
-    "awayScore": 106.22,
-    "homeTeam": "Team Hash",
-    "homeOwner": "Trevor Hash",
-    "homeScore": 106.2,
-    "whyItMatters": "The closest live game currently has a 0.02-point margin, making it the tightest matchup on the Week 2 board right now.",
+    "awayTeam": "McConkey Tonk Badonkadonk",
+    "awayOwner": "Vincent Cannarozzi",
+    "awayScore": 91.46,
+    "homeTeam": "Jigalos Jims",
+    "homeOwner": "James Brochu",
+    "homeScore": 98.98,
+    "whyItMatters": "The closest live game currently has a 7.52-point margin, making it the tightest matchup on the Week 2 board right now.",
     "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
-    "edge": "Live edge: Bryan Hunt by 0.02 points.",
+    "edge": "Live edge: James Brochu by 7.52 points.",
     "sourceIds": [
       "current-season"
     ]
@@ -80,14 +80,14 @@
   },
   "surprise": {
     "title": "Biggest surprise: the scoring range is already loud",
-    "body": "The gap between Thomas Speer's 158.36 and Jared Hall's 56.20 is 102.16 points. That is the current live spread, not a final Week 2 result.",
+    "body": "The gap between Thomas Speer's 158.36 and Collin Krum's 61.94 is 96.42 points. That is the current live spread, not a final Week 2 result.",
     "sourceIds": [
       "current-season"
     ]
   },
   "recordWatch": {
     "title": "Record to watch: the first benchmark is on the board",
-    "body": "The live Week 2 board currently exceeds the checked-in archive mark for closest game, but no record is declared until the matchup is final.",
+    "body": "The live Week 2 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
     "sourceIds": [
       "current-season",
       "matchups"
@@ -107,7 +107,7 @@
     {
       "story_type": "matchup_recap",
       "title": "Week 2: Live league board",
-      "body": "Thomas Speer 158.36–115.62 JD Daley; Bryan Hunt 106.22–106.20 Trevor Hash; George Travis 100.38–61.94 Collin Krum; Kyle Fowler 101.50–56.20 Jared Hall; German Haro 101.72–94.46 Brian Heino; Vincent Cannarozzi 91.46–98.98 James Brochu.",
+      "body": "Thomas Speer 158.36–121.32 JD Daley; Bryan Hunt 122.42–106.20 Trevor Hash; George Travis 106.58–61.94 Collin Krum; Kyle Fowler 119.28–79.40 Jared Hall; German Haro 101.72–109.36 Brian Heino; Vincent Cannarozzi 91.46–98.98 James Brochu.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
@@ -116,30 +116,30 @@
     },
     {
       "story_type": "biggest_win",
-      "title": "Kyle Fowler holds the widest live edge",
-      "body": "Kyle Fowler currently leads Jared Hall 101.50–56.20, a live margin of 45.30 points.",
+      "title": "George Travis holds the widest live edge",
+      "body": "George Travis currently leads Collin Krum 106.58–61.94, a live margin of 44.64 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
         "description": "Live ESPN matchup board"
       },
-      "primary_owner": "Kyle Fowler"
+      "primary_owner": "George Travis"
     },
     {
       "story_type": "closest_game",
-      "title": "Bryan Hunt has the narrowest live edge",
-      "body": "The tightest live matchup stands 106.22–106.20, with Bryan Hunt ahead of Trevor Hash by 0.02 points.",
+      "title": "James Brochu has the narrowest live edge",
+      "body": "The tightest live matchup stands 98.98–91.46, with James Brochu ahead of Vincent Cannarozzi by 7.52 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
         "description": "Live ESPN matchup board"
       },
-      "primary_owner": "Bryan Hunt"
+      "primary_owner": "James Brochu"
     },
     {
       "story_type": "scoring_leaders",
       "title": "Thomas Speer sets the current Week 2 pace",
-      "body": "Thomas Speer currently has the league-high 158.36. Jared Hall is at the current board-low 56.20; both scores can still move.",
+      "body": "Thomas Speer currently has the league-high 158.36. Collin Krum is at the current board-low 61.94; both scores can still move.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
@@ -161,7 +161,7 @@
     {
       "story_type": "record_watch",
       "title": "Live record watch",
-      "body": "The live Week 2 board currently exceeds the checked-in archive mark for closest game, but no record is declared until the matchup is final.",
+      "body": "The live Week 2 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
       "source": {
         "dataset": "data/current-season.json + data/matchups.json",
         "locator": "week=2;records",

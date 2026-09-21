@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "league_name": "1048 Gate",
-  "updated_at": "2026-09-21T01:37:42.833047Z",
+  "updated_at": "2026-09-21T07:55:01.431534Z",
   "historical": {
     "path": "data/newspaper_editions/historical_archive.json",
     "season_start": 2017,
@@ -14,7 +14,7 @@
       "season": 2026,
       "week": 2,
       "mode": "weekly",
-      "published_at": "2026-09-21T01:37:42.833047Z",
+      "published_at": "2026-09-21T07:55:01.431534Z",
       "source_status": "verified_live",
       "validation_status": "valid"
     },
