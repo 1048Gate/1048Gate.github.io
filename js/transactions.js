@@ -4,6 +4,49 @@
 
   const {escapeHtml:esc} = window.gateShared;
   const PAGE_SIZE = 35;
+  const CATEGORY_FROM_SLUG = Object.freeze({
+    all:'all',
+    adds:'FREEAGENT',
+    freeagent:'FREEAGENT',
+    waivers:'WAIVER',
+    waiver:'WAIVER',
+    trades:'TRADE_ACCEPT',
+    trade:'TRADE_ACCEPT',
+    trade_accept:'TRADE_ACCEPT'
+  });
+  const CATEGORY_TO_SLUG = Object.freeze({
+    all:'all',
+    FREEAGENT:'adds',
+    WAIVER:'waivers',
+    TRADE_ACCEPT:'trades'
+  });
+  const CATEGORY_LABEL = Object.freeze({
+    all:'All activity',
+    FREEAGENT:'Adds & drops',
+    WAIVER:'Successful waivers',
+    TRADE_ACCEPT:'Accepted trades'
+  });
+
+  function readCategoryFromHash(){
+    const raw = String(window.location.hash || '').replace(/^#/, '');
+    const query = raw.includes('?') ? raw.slice(raw.indexOf('?') + 1) : '';
+    const type = new URLSearchParams(query).get('type');
+    return CATEGORY_FROM_SLUG[String(type || '').toLowerCase()] || 'all';
+  }
+
+  function writeCategoryToHash(){
+    const slug = CATEGORY_TO_SLUG[activeCategory] || 'all';
+    const next = slug === 'all' ? '#transactions' : `#transactions?type=${slug}`;
+    if(window.location.hash !== next) history.replaceState({view:'transactions'}, '', next);
+  }
+
+  function renderHeading(){
+    const heading = document.querySelector('#transactions h2');
+    if(!heading) return;
+    const label = CATEGORY_LABEL[activeCategory] || 'All activity';
+    heading.textContent = activeCategory === 'all' ? 'Transaction Archive' : `Transaction Archive \u00b7 ${label}`;
+  }
+
   const TYPE_LABELS = Object.freeze({
     FREEAGENT:'Add / drop',
     WAIVER:'Successful waiver',
@@ -14,7 +57,7 @@
   let loaded = false;
   let loading = false;
   let page = 1;
-  let activeCategory = 'TRADE_ACCEPT';
+  let activeCategory = readCategoryFromHash();
   let searchTimer = null;
   let summaryCounts = null;
   let currentArchive = null;
@@ -93,7 +136,8 @@
       ['WAIVER','Successful waivers',totals.WAIVER,'Completed claims only'],
       ['TRADE_ACCEPT','Accepted trades',totals.TRADE_ACCEPT,'Canonicalized deal archive']
     ];
-    document.getElementById('transactionSummary').innerHTML = entries.map(([key,label,value,note]) => `<button class="transaction-summary-card ${activeCategory === key ? 'active' : ''}" type="button" data-transaction-category="${key}" aria-pressed="${activeCategory === key}"><span>${label}</span><strong>${value === undefined ? '—' : number(value)}</strong><small>${note}</small></button>`).join('');
+    document.getElementById('transactionSummary').innerHTML = entries.map(([key,label,value,note]) => `<button class="transaction-summary-card ${activeCategory === key ? 'active' : ''}" type="button" data-transaction-category="${key}" aria-pressed="${activeCategory === key}"><span>${label}</span><strong>${value === undefined ? '\u2014' : number(value)}</strong><small>${note}</small></button>`).join('');
+    renderHeading();
   }
 
   function renderItem(item){
@@ -102,7 +146,7 @@
     const from = item.from_team_name;
     const to = item.to_team_name;
     let verb = 'Moved';
-    let movement = `${from || 'Previous team'} → ${to || 'New team'}`;
+    let movement = `${from || 'Previous team'} \u2192 ${to || 'New team'}`;
     if(type === 'ADD'){
       verb = 'Added';
       movement = `to ${to || 'the roster'}`;
@@ -144,7 +188,7 @@
     const related = Array.isArray(row.items) ? row.items : [];
     const bid = Number(row.bid_amount || 0);
     const typeLabel = labelType(row.transaction_type);
-    return `<article class="transaction-ledger-row" data-type="${slug(row.transaction_type)}"><span class="transaction-ledger-marker" aria-hidden="true"></span><div class="transaction-ledger-main"><div class="transaction-ledger-heading"><strong>${esc(row.team_name || 'League transaction')}</strong><span class="transaction-type transaction-type-${slug(row.transaction_type)}">${esc(typeLabel)}</span></div>${related.length ? `<ul class="transaction-items">${related.map(renderItem).join('')}</ul>` : ''}${detailNote(row)}</div><div class="transaction-ledger-meta"><time datetime="${esc(row.transaction_date || '')}">${esc(formatTime(row))}</time><span>${esc(row.season_year)}${row.scoring_period ? ` · Week ${esc(row.scoring_period)}` : ''}</span>${bid > 0 ? `<strong>$${number(bid)} FAAB</strong>` : ''}</div></article>`;
+    return `<article class="transaction-ledger-row" data-type="${slug(row.transaction_type)}"><span class="transaction-ledger-marker" aria-hidden="true"></span><div class="transaction-ledger-main"><div class="transaction-ledger-heading"><strong>${esc(row.team_name || 'League transaction')}</strong><span class="transaction-type transaction-type-${slug(row.transaction_type)}">${esc(typeLabel)}</span></div>${related.length ? `<ul class="transaction-items">${related.map(renderItem).join('')}</ul>` : ''}${detailNote(row)}</div><div class="transaction-ledger-meta"><time datetime="${esc(row.transaction_date || '')}">${esc(formatTime(row))}</time><span>${esc(row.season_year)}${row.scoring_period ? ` \u00b7 Week ${esc(row.scoring_period)}` : ''}</span>${bid > 0 ? `<strong>$${number(bid)} FAAB</strong>` : ''}</div></article>`;
   }
 
   function renderDayGroup(rows){
@@ -156,13 +200,15 @@
     const host = document.getElementById('transactionPagination');
     const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
     if(totalPages <= 1){host.innerHTML=''; return;}
-    host.innerHTML = `<button type="button" data-page="${page-1}" ${page === 1 ? 'disabled' : ''}>← Previous</button><span>Page <strong>${page}</strong> of ${totalPages}</span><button type="button" data-page="${page+1}" ${page === totalPages ? 'disabled' : ''}>Next →</button>`;
+    host.innerHTML = `<button type="button" data-page="${page-1}" ${page === 1 ? 'disabled' : ''}>← Previous</button><span>Page <strong>${page}</strong> of ${totalPages}</span><button type="button" data-page="${page+1}" ${page === totalPages ? 'disabled' : ''}>→ Next</button>`;
   }
 
   function render(){
     const payload = currentArchive || {total_count:0, items:[]};
     const rows = Array.isArray(payload.items) ? payload.items : [];
-    document.getElementById('transactionResultCount').textContent = `${number(payload.total_count)} matching activit${Number(payload.total_count) === 1 ? 'y' : 'ies'}`;
+    renderHeading();
+    const label = CATEGORY_LABEL[activeCategory] || 'All activity';
+    document.getElementById('transactionResultCount').textContent = `${number(payload.total_count)} ${label.toLowerCase()} \u00b7 matching activit${Number(payload.total_count) === 1 ? 'y' : 'ies'}`;
     const start = rows.length ? (page - 1) * PAGE_SIZE + 1 : 0;
     document.getElementById('transactionResultRange').textContent = rows.length ? `Showing ${number(start)}–${number(start + rows.length - 1)}` : 'Adjust the filters to widen your search.';
     const groups = [];
@@ -196,7 +242,10 @@
       currentArchive = await fetchArchive();
       loaded = true;
       render();
-      setSync('is-live', `Live · Updated ${new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit'})}`);
+      const now = new Date().toISOString();
+      const rel = window.gateFreshness?.relativeFrom(now) || 'just now';
+      const clock = window.gateFreshness?.clockLabel(now) || '';
+      setSync('is-live', clock ? `Updated ${rel} \u00b7 ${clock}` : `Updated ${rel}`);
     }catch(error){
       console.error('Unable to load transaction archive:', error);
       setSync('is-error', 'Sync unavailable');
@@ -218,14 +267,17 @@
     controls.search.value = '';
     controls.season.value = 'all';
     controls.sort.value = 'newest';
-    activeCategory = 'TRADE_ACCEPT';
+    activeCategory = 'all';
     page = 1;
+    writeCategoryToHash();
     loadArchive({refreshSummary:true});
     controls.search.focus();
   });
   document.getElementById('transactionJumpTrades')?.addEventListener('click', () => {
     activeCategory = 'TRADE_ACCEPT';
     page = 1;
+    writeCategoryToHash();
+    renderHeading();
     renderSummary();
     loadArchive();
     document.querySelector('.transaction-results-head')?.scrollIntoView({behavior:'smooth', block:'start'});
@@ -242,12 +294,19 @@
     if(!button) return;
     activeCategory = button.dataset.transactionCategory;
     page = 1;
+    writeCategoryToHash();
+    renderHeading();
     renderSummary();
     loadArchive();
   });
 
   document.addEventListener('gate:viewchange', event => {
-    if(event.detail?.name === 'transactions') loadArchive();
+    if(event.detail?.name === 'transactions'){
+      activeCategory = readCategoryFromHash();
+      page = 1;
+      renderHeading();
+      loadArchive();
+    }
   });
   if(section.classList.contains('active')) loadArchive();
   else setControlsDisabled(true);
