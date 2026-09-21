@@ -22,14 +22,38 @@ assert.equal(freshness.readWeek({season:2025,week:2},storage),null);
 assert.equal(freshness.readWeek({season:2026,week:3},storage),null);
 values.set(freshness.WEEK_CACHE_KEY,'broken');
 assert.equal(freshness.readWeek({},storage),null);
+
+assert.equal(freshness.clockLabel(board.fetchedAt).endsWith(' ET'), true);
+assert.match(freshness.relativeFrom(board.fetchedAt, Date.parse('2026-09-21T15:35:00Z')), /min ago/);
+assert.equal(freshness.relativeFrom(board.fetchedAt, Date.parse('2026-09-21T15:06:35Z')), 'just now');
+
 const target={children:[],classList:{toggle(){}},replaceChildren(...children){this.children=children},append(child){this.children.push(child)}};
 freshness.setTimestamp(target,{iso:board.fetchedAt,saved:true});
 assert.match(target.children[0].textContent,/Saved snapshot · Updated/);
 assert.equal(target.children[1].tagName,'TIME');
 assert.equal(target.children[1].dateTime,board.fetchedAt);
+assert.match(target.children[1].textContent,/ET/);
+
+const liveTarget={children:[],classList:{toggle(){}},replaceChildren(...children){this.children=children},append(child){this.children.push(child)}};
+freshness.setTimestamp(liveTarget,{iso:board.fetchedAt,live:true});
+assert.match(liveTarget.children[0].textContent,/^Live · Updated/);
+
+const degraded={children:[],classList:{toggle(){}},replaceChildren(...children){this.children=children},append(child){this.children.push(child)}};
+freshness.setTimestamp(degraded,{iso:board.fetchedAt,saved:true,degraded:true});
+assert.match(degraded.children[0].textContent,/ESPN feed reconnecting/);
 
 const siteUi=readFileSync(new URL('../js/site-ui.js',import.meta.url),'utf8');
 assert.match(siteUi,/showing the last saved snapshot/);
 assert.match(siteUi,/gateFreshness\?\.readWeek/);
 assert.match(siteUi,/gateFreshness\.saveWeek/);
-console.log('Freshness checks: validation, last-known-good cache, and ESPN fallback paths passed.');
+assert.match(siteUi,/data-week-refresh/);
+assert.match(siteUi,/degraded:true/);
+
+const transactions=readFileSync(new URL('../js/transactions.js',import.meta.url),'utf8');
+assert.match(transactions,/readCategoryFromHash/);
+assert.match(transactions,/let activeCategory = readCategoryFromHash/);
+assert.match(transactions,/writeCategoryToHash/);
+assert.doesNotMatch(transactions,/let activeCategory = 'TRADE_ACCEPT'/);
+assert.match(transactions,/activeCategory = 'all'/);
+
+console.log('Freshness checks: relative ET stamps, live/degraded labels, refresh control, and archive default passed.');
