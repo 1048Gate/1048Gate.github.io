@@ -193,11 +193,11 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
   const weekLabel = payload.phase || (payload.week ? `Week ${payload.week}` : 'This week');
   document.querySelectorAll('[data-week-heading], #weekBoard h2').forEach(el => {el.textContent = weekLabel});
   const stamp = firstMatch(['[data-week-stamp]', '#weekBoard .home-section-head small']);
-  window.gateFreshness?.setTimestamp(stamp, {iso:payload.fetchedAt, saved});
+  window.gateFreshness?.setTimestamp(stamp, {iso:payload.fetchedAt || payload.last_updated, saved});
   const boardNode=document.getElementById('weekBoard');
   if(boardNode){
     boardNode.dataset.weekSource=saved?'saved':'fresh';
-    if(payload.fetchedAt) boardNode.dataset.weekFetchedAt=payload.fetchedAt;
+    if(payload.fetchedAt || payload.last_updated) boardNode.dataset.weekFetchedAt=payload.fetchedAt || payload.last_updated;
   }
   const weekBoard = window.gateWeekBoard;
   if(matchupsHost && matchups.length){
@@ -226,13 +226,31 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
   document.dispatchEvent(new CustomEvent('gate:home-board-ready', {detail:payload}));
 }
 
+async function loadHomepageWeek(){
+  try{
+    const home = await fetch('data/homepage-week.json', {cache:'no-store'});
+    if(!home.ok) return null;
+    const payload = await home.json();
+    if(!window.gateFreshness?.validWeek(payload) || !Array.isArray(payload.league_pulse)) return null;
+    window.gateHomepageWeek = payload;
+    document.dispatchEvent(new CustomEvent('gate:homepage-week-ready', {detail:payload}));
+    return payload;
+  }catch(error){
+    console.warn('Homepage week payload unavailable; using current-season.json.', error);
+    return null;
+  }
+}
+
 async function renderWeekBoard(){
   if(!document.querySelector('[data-week-matchups]') && !document.querySelector('[data-week-standings]')) return;
   try{
-    const response = await fetch('data/current-season.json', {cache:'no-store'});
-    if(!response.ok) throw new Error(`current-season.json returned HTTP ${response.status}`);
-    const payload=await response.json();
-    if(!window.gateFreshness?.validWeek(payload)) throw new Error('current-season.json is incomplete');
+    let payload = await loadHomepageWeek();
+    if(!payload){
+      const response = await fetch('data/current-season.json', {cache:'no-store'});
+      if(!response.ok) throw new Error(`current-season.json returned HTTP ${response.status}`);
+      payload=await response.json();
+      if(!window.gateFreshness?.validWeek(payload)) throw new Error('current-season.json is incomplete');
+    }
     renderWeekBoardFrom(payload);
     window.gateFreshness.saveWeek(payload);
   }catch(error){
