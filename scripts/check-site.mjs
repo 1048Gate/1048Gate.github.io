@@ -19,7 +19,7 @@ if(/[?&]v=20\d{6}/.test(html)) throw new Error('A manual date-based cache-bustin
 if(html.includes('member-logo-patch')) throw new Error('The retired member logo patch is still referenced.');
 
 const scriptAssets = [...html.matchAll(/<script defer src="((?:js)\/[^"?]+\.js)(?:\?[^"#]*)?"/g)].map(match => match[1]);
-const requiredScriptOrder = ['js/shared.js', 'js/site-ui.js', 'js/supabase-config.js', 'js/auth.js', 'js/app.js'];
+const requiredScriptOrder = ['js/shared.js', 'js/freshness.js', 'js/site-ui.js', 'js/supabase-config.js', 'js/auth.js', 'js/app.js'];
 for(let index = 0; index < requiredScriptOrder.length; index++){
   if(scriptAssets[index] !== requiredScriptOrder[index]){
     throw new Error(`Core script order must begin: ${requiredScriptOrder.join(', ')}`);

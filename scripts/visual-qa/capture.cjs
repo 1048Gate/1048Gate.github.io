@@ -120,6 +120,20 @@ const server=http.createServer((req,res)=>{
     });
     await page.waitForFunction(()=>document.getElementById('home')?.classList.contains('active'));
   }
+  let freshnessRecovery=null;
+  if(state==='live'&&width===1440&&theme==='light'){
+    await page.route('**/data/current-season.json',route=>route.fulfill({status:503,body:'unavailable'}));
+    await page.evaluate(()=>renderWeekBoard());
+    await page.waitForFunction(()=>document.getElementById('weekBoard')?.dataset.weekSource==='saved');
+    freshnessRecovery=await page.evaluate(()=>({
+      source:document.getElementById('weekBoard')?.dataset.weekSource,
+      cards:document.querySelectorAll('#weekBoard .week-card').length,
+      status:document.querySelector('[data-week-stamp]')?.textContent||'',
+      ok:document.getElementById('weekBoard')?.dataset.weekSource==='saved'
+        && document.querySelectorAll('#weekBoard .week-card').length===6
+        && document.querySelector('[data-week-stamp]')?.textContent.includes('Saved snapshot')
+    }));
+  }
   let draftArchive=null;
   if(state==='offseason'&&width===1440&&theme==='light'){
     await page.locator('[data-home-draft]').click();
@@ -131,7 +145,7 @@ const server=http.createServer((req,res)=>{
       draftPanelActive:document.querySelector('[data-history-panel="drafts"]')?.classList.contains('active')||false
     }));
   }
-  report.cases.push({name,metrics,anchors,a11y,navigation,draftArchive,errors:[...errors]});
+  report.cases.push({name,metrics,anchors,a11y,navigation,freshnessRecovery,draftArchive,errors:[...errors]});
   writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
   if(state==='live'){
@@ -160,6 +174,7 @@ const server=http.createServer((req,res)=>{
    if(item.metrics.pageOverflow)failures.push(`${item.name}: page-level horizontal overflow (${item.metrics.scrollWidth}px > ${item.metrics.viewport}px)`);
    if(item.a11y.violations.length)failures.push(`${item.name}: accessibility violations: ${item.a11y.violations.map(v=>v.id).join(', ')}`);
    if(item.navigation&&!item.navigation.ok)failures.push(`${item.name}: Phase 4 navigation interaction failed`);
+   if(item.freshnessRecovery&&!item.freshnessRecovery.ok)failures.push(`${item.name}: Phase 5 saved-snapshot recovery failed`);
    if(item.draftArchive&&(!item.draftArchive.historyActive||item.draftArchive.historyTab!=='drafts'||!item.draftArchive.draftTabActive||!item.draftArchive.draftPanelActive)){
      failures.push(`${item.name}: Draft archive did not open the Drafts history panel`);
    }

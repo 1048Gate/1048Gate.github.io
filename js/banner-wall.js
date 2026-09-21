@@ -8,7 +8,7 @@
   const setStatus=(state,text)=>{if(!status)return;status.className=`section-status ${state||''}`;status.textContent=text};
 
   async function load(){
-    setStatus('is-loading','Loading championship archive…');
+    setStatus('','Championship archive');
     try{
       const response = await fetch('data/seasons.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`seasons.json returned HTTP ${response.status}`);

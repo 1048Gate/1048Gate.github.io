@@ -193,14 +193,7 @@ function sortedStandings(standings){
   });
 }
 
-function formatFetchedAt(iso){
-  if(!iso) return '';
-  const date = new Date(iso);
-  if(Number.isNaN(date.getTime())) return '';
-  return date.toLocaleString(undefined, {weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit'});
-}
-
-function renderWeekBoardFrom(payload){
+function renderWeekBoardFrom(payload, {saved = false} = {}){
   const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
   const matchupsHost = document.querySelector('[data-week-matchups]');
   const standingsHost = document.querySelector('[data-week-standings]');
@@ -209,8 +202,11 @@ function renderWeekBoardFrom(payload){
   const weekLabel = payload.phase || (payload.week ? `Week ${payload.week}` : 'This week');
   document.querySelectorAll('[data-week-heading], #weekBoard h2').forEach(el => {el.textContent = weekLabel});
   const stamp = firstMatch(['[data-week-stamp]', '#weekBoard .home-section-head small']);
-  if(stamp){
-    stamp.textContent = payload.note || formatFetchedAt(payload.fetchedAt) || '';
+  window.gateFreshness?.setTimestamp(stamp, {iso:payload.fetchedAt, saved});
+  const boardNode=document.getElementById('weekBoard');
+  if(boardNode){
+    boardNode.dataset.weekSource=saved?'saved':'fresh';
+    if(payload.fetchedAt) boardNode.dataset.weekFetchedAt=payload.fetchedAt;
   }
   const weekBoard = window.gateWeekBoard;
   if(matchupsHost && matchups.length){
@@ -223,9 +219,8 @@ function renderWeekBoardFrom(payload){
     </article>`).join('');
   }
   if(standingsHost && standings.length){
-    const note = payload.note || formatFetchedAt(payload.fetchedAt) || '';
     standingsHost.innerHTML = weekBoard
-      ? weekBoard.standingsSnapshotHtml(standings, note, escapeHtml)
+      ? weekBoard.standingsSnapshotHtml(standings, '', escapeHtml)
       : `<div class="week-standings-scroll-hint" aria-hidden="true">Swipe standings →</div><div class="week-standings-wrap"><table class="week-standings-table"><thead><tr><th>Team</th><th>Mgr</th><th>Rec</th><th>PF</th></tr></thead><tbody>${
       standings.map(team => `<tr>
         <td>${escapeHtml(team.team || 'Team')}</td>
@@ -233,7 +228,7 @@ function renderWeekBoardFrom(payload){
         <td>${escapeHtml(recordLine(team))}</td>
         <td>${escapeHtml(pointsLine(team.pointsFor))}</td>
       </tr>`).join('')
-    }</tbody></table></div><p class="week-standings-note">${escapeHtml(note)}</p>`;
+    }</tbody></table></div><p class="week-standings-note">Top 6 in the playoff picture</p>`;
   }
   renderPulse(window.gateSiteConfig || {}, {...payload, standings});
   window.gateHomeBoard = payload;
@@ -245,9 +240,20 @@ async function renderWeekBoard(){
   try{
     const response = await fetch('data/current-season.json', {cache:'no-store'});
     if(!response.ok) throw new Error(`current-season.json returned HTTP ${response.status}`);
-    renderWeekBoardFrom(await response.json());
+    const payload=await response.json();
+    if(!window.gateFreshness?.validWeek(payload)) throw new Error('current-season.json is incomplete');
+    renderWeekBoardFrom(payload);
+    window.gateFreshness.saveWeek(payload);
   }catch(error){
-    console.warn('Unable to refresh the week board; keeping the HTML fallback.', error);
+    const board=document.getElementById('weekBoard');
+    const cached=window.gateFreshness?.readWeek({season:board?.dataset.weekSeason,week:board?.dataset.week});
+    if(cached) renderWeekBoardFrom(cached,{saved:true});
+    else{
+      const stamp=board?.querySelector('[data-week-stamp]');
+      window.gateFreshness?.setTimestamp(stamp,{iso:board?.dataset.weekFetchedAt,saved:true});
+      if(board) board.dataset.weekSource='saved';
+    }
+    console.warn('Unable to refresh the ESPN week board; showing the last saved snapshot.', error);
   }
 }
 
