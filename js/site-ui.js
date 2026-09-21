@@ -193,7 +193,8 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
   const weekLabel = payload.phase || (payload.week ? `Week ${payload.week}` : 'This week');
   document.querySelectorAll('[data-week-heading], #weekBoard h2').forEach(el => {el.textContent = weekLabel});
   const stamp = firstMatch(['[data-week-stamp]', '#weekBoard .home-section-head small']);
-  window.gateFreshness?.setTimestamp(stamp, {iso:payload.fetchedAt || payload.last_updated, saved});
+  const boardStatus=saved?'snapshot':matchups.length&&matchups.every(game=>game.state==='final')?'final':matchups.some(game=>game.state==='live')?'live':'upcoming';
+  window.gateFreshness?.setTimestamp(stamp, {iso:payload.fetchedAt || payload.last_updated, saved, status:boardStatus});
   const boardNode=document.getElementById('weekBoard');
   if(boardNode){
     boardNode.dataset.weekSource=saved?'saved':'fresh';

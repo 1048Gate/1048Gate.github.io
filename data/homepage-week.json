@@ -376,11 +376,11 @@
   },
   "league_pulse": [
     {
-      "id": "odds",
-      "label": "Odds board",
-      "title": "Thomas Speer +300",
-      "detail": "The current championship favorite. Open the full board for every club.",
-      "scrollTo": "championshipOdds"
+      "id": "matchup",
+      "label": "Game watch",
+      "title": "McConkey Tonk Badonkadonk / Jigalos Jims",
+      "detail": "7.5 points apart · Live",
+      "scrollTo": "weekBoard"
     },
     {
       "id": "playoff",
@@ -390,11 +390,18 @@
       "scrollTo": "weekBoard"
     },
     {
-      "id": "matchup",
-      "label": "Game watch",
-      "title": "McConkey Tonk Badonkadonk / Jigalos Jims",
-      "detail": "7.5 points apart · Live",
-      "scrollTo": "weekBoard"
+      "id": "transactions",
+      "label": "Latest moves",
+      "title": "Transaction Wire",
+      "detail": "Completed adds, waivers, and accepted trades live in the verified archive.",
+      "view": "transactions"
+    },
+    {
+      "id": "odds",
+      "label": "Odds board",
+      "title": "Thomas Speer +300",
+      "detail": "The current championship favorite. Open the full board for every club.",
+      "scrollTo": "championshipOdds"
     },
     {
       "id": "record",
@@ -409,19 +416,12 @@
       "title": "Brian Heino · 1 straight",
       "detail": "Active loss streak for The Buwhops.",
       "scrollTo": "weekBoard"
-    },
-    {
-      "id": "transactions",
-      "label": "Latest moves",
-      "title": "Transaction Wire",
-      "detail": "Completed adds, waivers, and accepted trades live in the verified archive.",
-      "view": "transactions"
     }
   ],
   "freshness": {
     "week_fetched_at": "2026-09-21T19:58:07.816843+00:00",
     "edition_published_at": "2026-09-21T19:58:07.942338Z",
-    "payload_built_at": "2026-09-21T19:58:08.323Z",
+    "payload_built_at": "2026-09-21T22:40:39.015Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

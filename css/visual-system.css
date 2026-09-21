@@ -80,9 +80,14 @@ main{max-width:var(--gate-content-width)}
 #home .home-office[hidden] + .home-snapshot{grid-column:1 / -1}
 #home .home-office[hidden] + .home-snapshot .snapshot-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--gate-space-3)}
 #home .home-archive-links{gap:var(--gate-space-2)}
+#home .home-band-archive>.orientation-panel{grid-column:span 7}
+#home .home-band-archive>.home-dashboard{grid-column:span 5;align-self:stretch}
+#home .home-band-archive>.home-dashboard .home-snapshot{height:100%}
+#home .home-band-archive .snapshot-list{display:grid;grid-template-columns:1fr!important}
 @media(max-width:900px){
   #home .home-office,#home .home-snapshot{grid-column:1 / -1}
   #home .home-office[hidden] + .home-snapshot .snapshot-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #home .home-band-archive>.orientation-panel,#home .home-band-archive>.home-dashboard{grid-column:1 / -1}
 }
 @media(max-width:760px){
   #home .home-band{gap:var(--gate-space-2);margin-bottom:var(--gate-space-4)}
@@ -150,7 +155,11 @@ html[data-theme="light"] #home .week-game.is-final .week-card-badge{color:#1f2a2
   body.phone-more-open{overflow:hidden}
 }
 #home .home-section-head:has([data-week-stamp]){display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-#home [data-week-stamp].is-live{color:var(--ink, #1b1b18)}
+#home [data-week-stamp].is-live{color:#8cc8a5}
+#home [data-week-stamp].is-final{color:var(--cream)}
+#home [data-week-stamp].is-upcoming{color:var(--muted)}
+html[data-theme="light"] #home [data-week-stamp].is-final{color:#1f2a2b}
+html[data-theme="light"] #home [data-week-stamp].is-live{color:#416a52}
 #home [data-week-stamp].is-degraded{color:var(--muted)}
 #home .week-refresh,.week-refresh{appearance:none;border:1px solid var(--line, #d7d0c4);background:var(--panel, #fffaf1);color:inherit;font:inherit;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;min-height:44px;min-width:44px;cursor:pointer}
 #home .week-refresh:disabled{opacity:.6;cursor:wait}

@@ -36,7 +36,7 @@ const currentSeasonScores=standings.map((team,index)=>({owner:team.owner,team:te
 const archive={records:{highestScore:[235.64,'Record Holder','Record Team','Opponent','Opponent Team',2022,8,0]},currentSeasonScores,leaderboards:{winningStreaks:[{manager:'Historic Manager',games:8,season:2021}]}};
 
 const cards=pulse.buildCards({config,board:{week:2,standings,matchups},archive});
-assert.deepEqual(Array.from(cards,card=>card.id),['odds','playoff','matchup','record','streak','transactions']);
+assert.deepEqual(Array.from(cards,card=>card.id),['matchup','playoff','transactions','odds','record','streak']);
 assert.equal(cards.find(card=>card.id==='odds').title,'Favorite Manager +300');
 assert.match(cards.find(card=>card.id==='playoff').title,/Manager 6 holds No\. 6/);
 assert.match(cards.find(card=>card.id==='matchup').detail,/0\.5 points apart · Live/);
@@ -50,18 +50,18 @@ assert.equal(movement.label,'Playoff movement');
 assert.match(movement.title,/↑3 to No\. 1/);
 
 const offseason=pulse.buildCards({config:{...config,phase:'Offseason'},board:{week:2,standings,matchups},archive});
-assert.deepEqual(Array.from(offseason,card=>card.id),['draft','odds','record','streak','transactions']);
+assert.deepEqual(Array.from(offseason,card=>card.id),['draft','transactions','odds','record','streak']);
 assert.equal(offseason.find(card=>card.id==='record').title,'Record Holder · 235.6');
 assert.ok(!offseason.some(card=>['playoff','matchup'].includes(card.id)));
 
 const archiveFailure=pulse.buildCards({config,board:{week:2,standings,matchups},archive:{}});
-assert.deepEqual(Array.from(archiveFailure,card=>card.id),['odds','playoff','matchup','record','streak','transactions']);
+assert.deepEqual(Array.from(archiveFailure,card=>card.id),['matchup','playoff','transactions','odds','record','streak']);
 assert.deepEqual(Array.from(archiveFailure.filter(card=>['record','streak'].includes(card.id)),card=>[card.label,card.view]),[
   ['Record book','intel'],
   ['Streak history','intel']
 ]);
 const offseasonArchiveFailure=pulse.buildCards({config:{...config,phase:'Offseason'},board:{week:2,standings,matchups},archive:{}});
-assert.deepEqual(Array.from(offseasonArchiveFailure,card=>card.id),['draft','odds','record','streak','transactions']);
+assert.deepEqual(Array.from(offseasonArchiveFailure,card=>card.id),['draft','transactions','odds','record','streak']);
 
 context.window.gateSiteConfig=config;
 context.window.gateHomeBoard={week:2,standings,matchups};

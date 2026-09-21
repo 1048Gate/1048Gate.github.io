@@ -124,7 +124,7 @@ if(!html.includes('class="hero-season-card"') || !html.includes('data-site-year'
 if(!html.includes('class="orientation-panel"') || !html.includes('What is 1048 Gate?') || !html.includes('data-view-link="league"') || !html.includes('data-view-link="rules"')){
   throw new Error('The first-time orientation panel and its exploration links are missing.');
 }
-if(!html.includes('aria-label="Transactions and trades"') ||
+if(!html.includes('aria-label="League Wire and transaction archive"') ||
    !html.includes('The Book — league analytics') ||
    !html.includes('League Office — rules and polls')){
   throw new Error('Navigation destinations must keep clear plain-language descriptions, including branded items under More.');
@@ -155,7 +155,7 @@ if(currentEdition.source_status !== expectedWeeklyStatus || currentEdition.valid
 if(!html.includes('class="home-band home-band-now"') || !html.includes('id="homeNowTitle"') || !html.includes('class="home-band home-band-story"') || !html.includes('class="home-band home-band-archive"')){
   throw new Error('Homepage must preserve the Now, Story, and Archive hierarchy.');
 }
-if(!html.includes('See This Week') || !html.includes('Explore History') || !html.includes('Search the Wire')){
+if(!html.includes('See This Week') || !html.includes('Explore History') || !html.includes('Search Transaction Archive')){
   throw new Error('Homepage hierarchy needs direct current-week and archive actions.');
 }
 const stateScripts = ['js/transactions.js','js/site-ui.js','js/history-layout.js','js/intelligence.js','js/banner-wall.js','js/title-odds.js'];
@@ -297,7 +297,7 @@ if(!html.includes('id="intel"') || !html.includes('data-view="intel"') || !scrip
 const primaryNavStart = html.indexOf('<nav class="tabs" id="tabs"');
 const primaryNavEnd = primaryNavStart >= 0 ? html.indexOf('</nav>', primaryNavStart) : -1;
 const primaryNav = primaryNavStart >= 0 && primaryNavEnd >= 0 ? html.slice(primaryNavStart, primaryNavEnd + 6) : '';
-for(const [view, label] of [['home','This Week'],['league','League'],['wire','Transactions'],['history','History'],['newspaper','Newspaper']]){
+for(const [view, label] of [['home','This Week'],['league','League'],['wire','Wire'],['history','History'],['newspaper','Newspaper']]){
   if(!primaryNav.includes(`data-view="${view}"`) || !primaryNav.includes(`>${label}</button>`)){
     throw new Error(`Desktop primary navigation is missing ${label}.`);
   }
@@ -319,11 +319,11 @@ const phoneDockEnd = phoneDockStart >= 0 ? html.indexOf('</nav>', phoneDockStart
 const phoneDockMarkup = phoneDockStart >= 0 && phoneDockEnd >= 0 ? html.slice(phoneDockStart, phoneDockEnd + 6) : '';
 if(!phoneDockMarkup.includes('<span>This Week</span>') ||
    !phoneDockMarkup.includes('<span>League</span>') ||
-   !phoneDockMarkup.includes('<span>Transactions</span>') ||
+   !phoneDockMarkup.includes('<span>Wire</span>') ||
    !phoneDockMarkup.includes('<span>History</span>') ||
    !phoneDockMarkup.includes('<span>More</span>') ||
    phoneDockMarkup.includes('data-view="newspaper"')){
-  throw new Error('Phone dock must stay five items: This Week, League, Transactions, History, More; Newspaper belongs in More.');
+  throw new Error('Phone dock must stay five items: This Week, League, Wire, History, More; Newspaper belongs in More.');
 }
 
 const matchupArchive = JSON.parse(readFileSync(new URL('data/matchups.json', root), 'utf8'));

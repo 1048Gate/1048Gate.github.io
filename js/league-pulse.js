@@ -125,8 +125,8 @@
 
   function buildCards({config={},board={},archive={}}={}){
     const cards=isOffseason(config)
-      ? [draftCard(config),oddsCard(config),recordCard(null,archive),streakCard(archive),transactionFallback()]
-      : [oddsCard(config),playoffCard(board),matchupCard(board),recordCard(board,archive),streakCard(archive),transactionFallback()];
+      ? [draftCard(config),transactionFallback(),oddsCard(config),recordCard(null,archive),streakCard(archive)]
+      : [matchupCard(board),playoffCard(board),transactionFallback(),oddsCard(config),recordCard(board,archive),streakCard(archive)];
     return cards.filter(Boolean);
   }
 
