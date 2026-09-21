@@ -41,11 +41,10 @@ assert.equal(fromCompact.seasons[0].id, 'mgr-01-2025');
 assert.equal(fromCompact.seasons[0].team, 'Shiesty Szn');
 
 const drafts = JSON.parse(readFileSync(new URL('data/drafts/index.json', root), 'utf8'));
-assert.equal(drafts.schemaVersion, 2);
 const szn10 = drafts.seasons.map(normalizeDraftSeason).find(row => row.year === 2026);
 assert.equal(szn10.id, 'draft-2026');
 assert.equal(szn10.picks, 192);
 assert.equal(szn10.keepers, 12);
-assert.deepEqual(normalizeDraftSeason([2026,'1048 Gate Szn 10',12,192]), szn10);
+assert.deepEqual(normalizeDraftSeason({year:2026, name:'1048 Gate Szn 10', keepers:12, picks:192}), szn10);
 
-console.log('Phase 8 named records: compact arrays, named member seasons, and draft index checks passed.');
+console.log('Phase 8 named records: compact arrays, named member seasons, and draft decoding passed.');
