@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "test": "npm run check && npm run test:python && npm run build",
-    "check": "node scripts/check-site.mjs && node scripts/test-home-layout.mjs && npm run test:data-validation && npm run test:playoffs && npm run test:newspaper && npm run test:futures",
+    "check": "node scripts/check-site.mjs && node scripts/test-home-layout.mjs && node scripts/test-week-board.mjs && npm run test:data-validation && npm run test:playoffs && npm run test:newspaper && npm run test:futures",
     "test:data-validation": "node scripts/test-data-validation.mjs",
     "test:playoffs": "node scripts/test-playoff-export.mjs",
     "test:newspaper": "node scripts/test-newspaper.mjs",

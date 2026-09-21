@@ -212,22 +212,28 @@ function renderWeekBoardFrom(payload){
   if(stamp){
     stamp.textContent = payload.note || formatFetchedAt(payload.fetchedAt) || '';
   }
+  const weekBoard = window.gateWeekBoard;
   if(matchupsHost && matchups.length){
-    matchupsHost.innerHTML = matchups.map(game => `<article class="week-game${game.state ? ` is-${escapeHtml(game.state)}` : ''}">
+    matchupsHost.innerHTML = weekBoard
+      ? matchups.map(game => weekBoard.matchupCardHtml(game, escapeHtml)).join('')
+      : matchups.map(game => `<article class="week-game${game.state ? ` is-${escapeHtml(game.state)}` : ''}">
       ${gameSide(game.away, 'is-away', escapeHtml)}
       <div class="week-game-vs">${game.state === 'live' ? 'live' : game.state === 'final' ? 'final' : 'at'}</div>
       ${gameSide(game.home, 'is-home', escapeHtml)}
     </article>`).join('');
   }
   if(standingsHost && standings.length){
-    standingsHost.innerHTML = `<div class="week-standings-scroll-hint" aria-hidden="true">Swipe standings →</div><div class="week-standings-wrap"><table class="week-standings-table"><thead><tr><th>Team</th><th>Mgr</th><th>Rec</th><th>PF</th></tr></thead><tbody>${
+    const note = payload.note || formatFetchedAt(payload.fetchedAt) || '';
+    standingsHost.innerHTML = weekBoard
+      ? weekBoard.standingsSnapshotHtml(standings, note, escapeHtml)
+      : `<div class="week-standings-scroll-hint" aria-hidden="true">Swipe standings →</div><div class="week-standings-wrap"><table class="week-standings-table"><thead><tr><th>Team</th><th>Mgr</th><th>Rec</th><th>PF</th></tr></thead><tbody>${
       standings.map(team => `<tr>
         <td>${escapeHtml(team.team || 'Team')}</td>
         <td>${escapeHtml(team.owner || '')}</td>
         <td>${escapeHtml(recordLine(team))}</td>
         <td>${escapeHtml(pointsLine(team.pointsFor))}</td>
       </tr>`).join('')
-    }</tbody></table></div><p class="week-standings-note">${escapeHtml(payload.note || formatFetchedAt(payload.fetchedAt) || '')}</p>`;
+    }</tbody></table></div><p class="week-standings-note">${escapeHtml(note)}</p>`;
   }
   renderPulse(window.gateSiteConfig || {}, {...payload, standings});
   window.gateHomeBoard = payload;
