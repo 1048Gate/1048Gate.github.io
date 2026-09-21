@@ -5,6 +5,7 @@ Authority: `docs/visual-redesign-brief.md`, Phase 3 only. Based on merged Phase 
 ## Implementation
 
 - Added `js/week-board.js` to build six matchup cards and a compact standings snapshot from the existing `current-season.json` payload.
+- `index.html` loads that helper after the core script prefix so check-site does not see a runtime inject.
 - `js/site-ui.js` still fetches and publishes the board; it now renders through the card helpers when they are present.
 - Cards emphasize manager identity, team name (no forced uppercase truncation), score, live/final/upcoming status, and score margin. Projected remaining NFL games are not in the current payload, so they are omitted rather than invented.
 - Standings snapshot adds rank and a playoff-line marker after sixth place. Record and points-for remain; historical extras stay out.

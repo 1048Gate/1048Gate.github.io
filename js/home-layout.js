@@ -1,10 +1,5 @@
 /* Homepage hierarchy only: reuse the existing board, edition, and season data. */
 (function(){
-  if(!window.gateWeekBoard && !document.querySelector('script[src="js/week-board.js"]')){
-    const script = document.createElement('script');
-    script.src = 'js/week-board.js';
-    document.head.appendChild(script);
-  }
   function stateFor(config, board, edition){
     const offseason = /pre[ -]?season|off[ -]?season|draft|keeper/i.test(config?.phase || '');
     if(offseason) return 'offseason';

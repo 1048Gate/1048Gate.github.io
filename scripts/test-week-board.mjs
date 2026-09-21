@@ -29,4 +29,6 @@ assert.match(board.standingsSnapshotHtml([
   {team:'G', owner:'G', wins:0, losses:1, pointsFor:4}
 ], 'Live scoring from ESPN.', esc), /is-playoff-line/);
 assert.match(readFileSync(new URL('../js/site-ui.js', import.meta.url), 'utf8'), /gateWeekBoard/);
+assert.match(readFileSync(new URL('../index.html', import.meta.url), 'utf8'), /js\/week-board\.js/);
+assert.doesNotMatch(readFileSync(new URL('../js/home-layout.js', import.meta.url), 'utf8'), /createElement\('script'\)/);
 console.log('This Week board: six cards, live/final/upcoming states, margins, and standings snapshot checks passed.');
