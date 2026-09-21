@@ -220,7 +220,7 @@ function renderWeekBoardFrom(payload){
     </article>`).join('');
   }
   if(standingsHost && standings.length){
-    standingsHost.innerHTML = `<div class="week-standings-wrap"><table class="week-standings-table"><thead><tr><th>Team</th><th>Mgr</th><th>Rec</th><th>PF</th></tr></thead><tbody>${
+    standingsHost.innerHTML = `<div class="week-standings-scroll-hint" aria-hidden="true">Swipe standings →</div><div class="week-standings-wrap"><table class="week-standings-table"><thead><tr><th>Team</th><th>Mgr</th><th>Rec</th><th>PF</th></tr></thead><tbody>${
       standings.map(team => `<tr>
         <td>${escapeHtml(team.team || 'Team')}</td>
         <td>${escapeHtml(team.owner || '')}</td>
