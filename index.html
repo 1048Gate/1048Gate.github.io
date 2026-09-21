@@ -41,6 +41,7 @@
 <link rel="stylesheet" href="css/trades.css">
 <link rel="stylesheet" href="css/intelligence.css">
 <link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/visual-system.css">
 
 <script defer src="js/shared.js"></script>
 <script defer src="js/site-ui.js"></script>
@@ -129,7 +130,7 @@
 
     <section class="home-band home-band-now" aria-labelledby="homeNowTitle">
       <header class="home-band-head"><div><span>Right now</span><h2 id="homeNowTitle">This Week</h2></div><small data-home-context>Scores and standings</small></header>
-    <section class="home-section week-board" id="weekBoard" aria-label="Week 2 matchups and standings">
+    <section class="home-section week-board" data-panel="data" id="weekBoard" aria-label="Week 2 matchups and standings">
       <header class="home-section-head"><div><span>Regular season</span><h2>Week 2</h2></div><small>Week 2 in progress. Live scoring from ESPN.</small></header>
       <div class="week-board-grid">
         <div class="week-matchups" data-week-matchups>
@@ -240,12 +241,12 @@
 
     <section class="home-band home-band-story" aria-labelledby="homeStoryTitle">
       <header class="home-band-head"><div><span>The league story</span><h2 id="homeStoryTitle">Around the League</h2></div><small>Odds, office, and context</small></header>
-    <section class="home-section weekly-feature-section" id="homeWeeklyFeature" aria-label="Weekly edition">
+    <section class="home-section weekly-feature-section" data-panel="editorial" id="homeWeeklyFeature" aria-label="Weekly edition">
       <header class="home-section-head"><div><span>The weekly edition</span><h2>League Wire</h2></div><small data-weekly-feature-status>Loading current issue</small></header>
       <div data-weekly-feature aria-live="polite"><div class="history-loading">Loading the current edition…</div></div>
     </section>
 
-    <section class="home-section futures-section" id="championshipOdds" aria-label="Championship futures odds">
+    <section class="home-section futures-section" data-panel="data" id="championshipOdds" aria-label="Championship futures odds">
       <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small data-futures-status>Post-draft board · Loading</small></header>
       <div class="futures-grid" data-futures aria-live="polite">
         <div class="futures-empty">Setting the lines…</div>
@@ -258,7 +259,7 @@
       <div><span>Table</span><strong>Trevor Hash 1-0</strong></div>
     </section>
 
-    <section class="home-section home-keepers-link" id="homeSeasonPrep" aria-label="Szn 10 keepers">
+    <section class="home-section home-keepers-link" data-panel="navigation" id="homeSeasonPrep" aria-label="Szn 10 keepers">
       <header class="home-section-head">
         <div><span>Next up</span><h2>Draft &amp; Keepers</h2></div>
         <button type="button" class="btn btn-ghost" data-view-link="members" data-scroll-to="membersKeepers">View keepers</button>
@@ -267,11 +268,11 @@
     </section>
 
     <div class="home-dashboard">
-      <section class="home-section home-office" hidden>
+      <section class="home-section home-office" data-panel="editorial" hidden>
         <header class="home-section-head"><div><span>League office</span><h2>Commissioner Updates</h2></div><small>Official announcements</small></header>
         <div class="commissioner-board" id="commissionerBoard" aria-label="Commissioner announcements" aria-live="polite" hidden></div>
       </section>
-      <aside class="home-section home-snapshot">
+      <aside class="home-section home-snapshot" data-panel="data">
         <header class="home-section-head"><div><span>At a glance</span><h2>League Snapshot</h2></div><small>1048 Gate</small></header>
         <div class="snapshot-list">
           <div><span>Established</span><strong data-stat-established>2017</strong></div>
@@ -288,7 +289,7 @@
     <section class="home-band home-band-archive" aria-labelledby="homeArchiveTitle">
       <header class="home-band-head"><div><span>Since 2017</span><h2 id="homeArchiveTitle">Archive</h2></div><small>Records and league memory</small></header>
 
-    <section class="orientation-panel" aria-labelledby="orientationTitle">
+    <section class="orientation-panel" data-panel="navigation" aria-labelledby="orientationTitle">
       <div class="orientation-copy">
         <span class="eyebrow">Start here</span>
         <h2 id="orientationTitle">What is 1048 Gate?</h2>
@@ -302,7 +303,7 @@
       </nav>
     </section>
 
-    <section class="home-section banner-wall-section" aria-label="Championship banners">
+    <section class="home-section banner-wall-section" data-panel="data" aria-label="Championship banners">
       <header class="home-section-head"><div><span>Ring count since 2017</span><h2>Championship Banners</h2></div><small data-banner-status>One banner per title · Loading</small></header>
       <div class="banner-wall" data-banner-wall aria-live="polite">
         <div class="banner-wall-empty">Raising the banners…</div>
@@ -335,7 +336,7 @@
       <button class="transaction-summary-card is-loading" type="button" disabled><span>Completed trades</span><strong>—</strong><small>Only complete player detail</small></button>
       <button class="transaction-summary-card is-loading" type="button" disabled><span>Vetoed trades</span><strong>—</strong><small>Only complete player detail</small></button>
     </div>
-    <div class="panel transaction-workbench">
+    <div class="panel transaction-workbench" data-panel="data">
       <div class="transaction-guide"><span>READ THE WIRE</span><p>Start with a move type, then narrow by season, player, or team. The public archive contains completed, source-supported activity only—failed claims, pending moves, and incomplete trades stay out of the feed.</p></div>
       <div class="transaction-controls">
         <label class="transaction-search"><span>Search player or team</span><input id="transactionSearch" type="search" placeholder="Try The Swifties or a player name" autocomplete="off"></label>
@@ -622,7 +623,7 @@
         <option value="">No weekly editions</option>
       </select>
     </div>
-    <div id="editionContent" class="edition-content" aria-live="polite">
+    <div id="editionContent" class="edition-content" data-panel="editorial" aria-live="polite">
       <div class="edition-loading"><span>Open an edition to load the newspaper.</span></div>
     </div>
     <button type="button" id="editionSourcesToggle" class="toggle-sources" aria-controls="editionSourcesDrawer" aria-expanded="false" hidden>View Sources</button>

@@ -1,0 +1,113 @@
+/* Phase 2: reusable visual roles. Existing theme tokens own all colors. */
+:root{
+  --gate-space-1: .5rem;
+  --gate-space-2: 1rem;
+  --gate-space-3: 1.5rem;
+  --gate-space-4: 2rem;
+  --gate-space-5: 3rem;
+  --gate-display: clamp(1.75rem, 2.4vw, 2.25rem);
+  --gate-section: clamp(1.5rem, 2vw, 1.875rem);
+  --gate-module: 1.25rem;
+  --gate-utility: .75rem;
+  --gate-radius: .75rem;
+  --gate-content-width: 1180px;
+}
+/* Four levels, with aliases for existing renderers. */
+.gate-display{font:700 var(--gate-display)/1.15 Oswald,sans-serif;letter-spacing:-.01em}
+.gate-section-title,
+main > .view:not(#staff) .section-title h2,
+#home .home-band-head h2{font:700 var(--gate-section)/1.2 Oswald,sans-serif;letter-spacing:.01em}
+.gate-module-title,
+#home .home-section-head h2,
+#home .orientation-copy h2{font:600 var(--gate-module)/1.25 Oswald,sans-serif;letter-spacing:.015em}
+.gate-utility,
+#home .home-section-head > small,
+#home .home-section-head > div > span,
+#home .home-band-head small,
+#home .home-band-head > div > span,
+main > .view:not(#staff) .section-title > :is(.see-all,.section-kicker){
+  font:500 var(--gate-utility)/1.5 'Space Mono',monospace;letter-spacing:.025em;
+}
+#home .home-section-head > div > span [data-site-season-number]{display:inline;font:inherit;color:inherit;letter-spacing:inherit}
+main > .view:not(#staff) .section-title{gap:var(--gate-space-2);flex-wrap:wrap;margin-bottom:var(--gate-space-3);padding-bottom:var(--gate-space-2)}
+
+/* Editorial: a leading rule, generous copy measure, and headline-led content. */
+:is(.gate-panel--editorial,[data-panel="editorial"]),
+:is(.weekly-feature-section,.home-office,.edition-content,.rundown-story){
+  border:1px solid var(--line);border-top:3px solid var(--amber);
+  border-radius:var(--gate-radius);background:var(--panel);box-shadow:none;
+}
+#home :is(.gate-panel--editorial,[data-panel="editorial"]) > .home-section-head{background:transparent}
+#home .weekly-feature-card{background:var(--panel)}
+#home .weekly-feature-copy{padding:var(--gate-space-3)}
+#home .weekly-feature-copy h3{font:700 var(--gate-display)/1.16 Oswald,sans-serif;letter-spacing:-.01em;margin:var(--gate-space-2) 0}
+#home .weekly-feature-copy p{font-size:1rem;line-height:1.65;max-width:65ch}
+#home .weekly-feature-facts{background:var(--panel2);padding:var(--gate-space-1) var(--gate-space-3)}
+#home .weekly-feature-facts :is(span,small),#home .weekly-kicker{font-size:var(--gate-utility);line-height:1.5;letter-spacing:.025em}
+#home .weekly-feature-facts strong{font-size:1rem;line-height:1.4}
+
+/* Data: quiet surfaces, aligned figures, restrained borders. Inner score
+   cards/table columns are deliberately left for the Phase 3 redesign. */
+:is(.gate-panel--data,[data-panel="data"]),
+:is(.history-content-panel,.transaction-workbench,.transaction-ledger,.public-record-card,.player-record-grid article){
+  border:1px solid var(--line);border-radius:var(--gate-radius);
+  background:var(--panel);box-shadow:none;font-variant-numeric:tabular-nums;
+}
+#home :is(.gate-panel--data,[data-panel="data"]) > .home-section-head{background:var(--panel2)}
+#home .snapshot-list{padding:var(--gate-space-1) var(--gate-space-3)}
+#home .snapshot-list > div{gap:var(--gate-space-2);border-color:var(--line)}
+#home .snapshot-list span{font-size:.875rem;line-height:1.5}
+#home .snapshot-list strong{font-size:1rem;line-height:1.4}
+#home .home-pulse span{font-size:var(--gate-utility);line-height:1.5;letter-spacing:.025em}
+#home .home-pulse strong{font-size:1rem;line-height:1.4;white-space:normal;overflow-wrap:anywhere}
+
+/* Navigation: lighter framing so destinations do not compete with scores. */
+:is(.gate-panel--navigation,[data-panel="navigation"]),
+:is(.archive-path-card,.archive-season-card,.quick-card){
+  border:1px solid var(--line);border-radius:var(--gate-radius);
+  background:transparent;box-shadow:none;
+}
+#home :is(.gate-panel--navigation,[data-panel="navigation"]){background:transparent;box-shadow:none}
+#home :is(.gate-panel--navigation,[data-panel="navigation"]) > .home-section-head{border-bottom:0}
+#home .orientation-copy p{font-size:1rem;line-height:1.65;max-width:65ch}
+#home .orientation-copy > .eyebrow{font-size:var(--gate-utility);line-height:1.5}
+#home .orientation-link{min-height:44px;font-size:.875rem}
+
+/* One outer grid and rhythm; children retain semantic DOM order. */
+main{max-width:var(--gate-content-width)}
+.gate-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gate-space-3)}
+.gate-grid > *{min-width:0;grid-column:1 / -1}
+#home .home-band{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gate-space-3);margin:0 0 var(--gate-space-5)}
+#home .home-band > *{min-width:0;grid-column:1 / -1;margin:0}
+#home .home-band > .home-band-head{padding:0 0 var(--gate-space-2);gap:var(--gate-space-2);align-items:baseline}
+#home .home-band > :is(.home-section,.orientation-panel,.home-pulse,.home-dashboard){margin:0}
+#home .home-section-head{padding:var(--gate-space-2) var(--gate-space-3);gap:var(--gate-space-2);flex-wrap:wrap}
+#home .home-section-head > div{min-width:0}
+#home .home-section-head > small{max-width:100%;overflow-wrap:anywhere;color:var(--muted);text-transform:none}
+#home .home-dashboard{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gate-space-3)}
+#home .home-office{grid-column:span 8;min-width:0}
+#home .home-snapshot{grid-column:span 4;min-width:0}
+#home .home-office[hidden] + .home-snapshot{grid-column:1 / -1}
+#home .home-office[hidden] + .home-snapshot .snapshot-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--gate-space-3)}
+#home .home-archive-links{gap:var(--gate-space-2)}
+@media(max-width:900px){
+  #home .home-office,#home .home-snapshot{grid-column:1 / -1}
+  #home .home-office[hidden] + .home-snapshot .snapshot-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  #home .home-band{gap:var(--gate-space-2);margin-bottom:var(--gate-space-4)}
+  #home .home-band > .home-band-head{gap:var(--gate-space-1)}
+  #home .home-section-head{padding:var(--gate-space-2)}
+  #home .weekly-feature-copy{padding:var(--gate-space-2)}
+  #home .weekly-feature-facts{padding-inline:var(--gate-space-2)}
+  #home .home-office[hidden] + .home-snapshot .snapshot-list{grid-template-columns:1fr}
+}
+
+#home .futures-body strong{font-size:1rem;line-height:1.4}
+#home .futures-body p{font-size:.875rem;line-height:1.6}
+
+/* Keep the masthead words separated when its line break collapses. */
+#home .hero h1 span{display:inline-block;margin-inline-start:.25em}
+
+/* The newspaper keeps its intentional paper/ink palette in both themes. */
+.edition-content[data-panel="editorial"]{background:#f3ead9;color:#171819}
