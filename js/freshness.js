@@ -1,6 +1,7 @@
-/* Phase 5: shared freshness labels and a last-known-good current-week cache. */
+/* Phase 5 + Week 1: freshness labels, ET clock, last-known-good week cache. */
 (function(){
   const WEEK_CACHE_KEY = '1048-gate-current-week-v1';
+  const LEAGUE_TZ = 'America/New_York';
 
   function validWeek(payload){
     const season=payload?.season;
@@ -16,28 +17,62 @@
       && payload.standings.length === 12;
   }
 
-  function formatted(iso){
+  function relativeFrom(iso, now = Date.now()){
     if(!iso) return '';
     const date = new Date(iso);
     if(Number.isNaN(date.getTime())) return '';
-    return date.toLocaleString(undefined, {
-      month:'short', day:'numeric', hour:'numeric', minute:'2-digit'
-    });
+    const seconds = Math.max(0, Math.floor((now - date.getTime()) / 1000));
+    if(seconds < 10) return 'just now';
+    if(seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if(minutes < 60) return `${minutes} min ago`;
+    const hours = Math.floor(minutes / 60);
+    if(hours < 24) return `${hours}h ago`;
+    return `${Math.floor(hours / 24)}d ago`;
   }
 
-  function setTimestamp(target, {iso, saved = false, source = 'ESPN snapshot'} = {}){
+  function clockLabel(iso){
+    if(!iso) return '';
+    const date = new Date(iso);
+    if(Number.isNaN(date.getTime())) return '';
+    const clock = date.toLocaleString('en-US', {
+      timeZone: LEAGUE_TZ,
+      hour: 'numeric',
+      minute: '2-digit'
+    });
+    return `${clock} ET`;
+  }
+
+  function formatted(iso){
+    const rel = relativeFrom(iso);
+    const clock = clockLabel(iso);
+    if(rel && clock) return `${rel} (${clock})`;
+    return rel || clock;
+  }
+
+  function setTimestamp(target, {iso, saved = false, source = 'ESPN snapshot', live = false, degraded = false} = {}){
     if(!target) return;
-    const label = formatted(iso);
-    const prefix = saved ? 'Saved snapshot' : source;
-    target.replaceChildren(document.createTextNode(label ? `${prefix} · Updated ` : prefix));
-    if(label){
+    const rel = relativeFrom(iso);
+    const clock = clockLabel(iso);
+    let prefix;
+    if(degraded) prefix = 'Scores last updated';
+    else if(saved) prefix = 'Saved snapshot';
+    else if(live) prefix = 'Live';
+    else prefix = source;
+    let text;
+    if(degraded) text = rel ? `${prefix} ${rel} — ESPN feed reconnecting` : 'ESPN feed reconnecting';
+    else text = rel ? `${prefix} · Updated ${rel}` : prefix;
+    target.replaceChildren(document.createTextNode(clock ? `${text} ` : text));
+    if(iso && clock){
       const time = document.createElement('time');
       time.dateTime = iso;
-      time.textContent = label;
-      time.title = new Date(iso).toLocaleString();
+      time.textContent = clock;
+      time.title = clock;
       target.append(time);
     }
     target.classList.toggle('is-saved', saved);
+    target.classList.toggle('is-live', !!(live && !saved && !degraded));
+    target.classList.toggle('is-degraded', !!degraded);
   }
 
   function saveWeek(payload, storage = window.localStorage){
@@ -59,5 +94,15 @@
     }catch{return null;}
   }
 
-  window.gateFreshness = Object.freeze({WEEK_CACHE_KEY, validWeek, formatted, setTimestamp, saveWeek, readWeek});
+  window.gateFreshness = Object.freeze({
+    WEEK_CACHE_KEY,
+    LEAGUE_TZ,
+    validWeek,
+    relativeFrom,
+    clockLabel,
+    formatted,
+    setTimestamp,
+    saveWeek,
+    readWeek
+  });
 })();
