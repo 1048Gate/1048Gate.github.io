@@ -56,6 +56,7 @@ html[data-theme="light"] .hero-meta-grid div{background:rgba(255,255,255,.55)}
 html[data-theme="light"] .btn-primary{color:#fffdf8}
 html[data-theme="light"] .btn-primary:hover{background:#704817}
 html[data-theme="light"] .btn-ghost:hover{background:rgba(0,111,114,.06)}
+html[data-theme="light"] :is(.section-status.is-live,.section-status-bar.is-live,.transaction-sync.is-live){color:#416a52}
 html[data-theme="light"] .quick-card .num{color:#c6bdaf}
 html[data-theme="light"] .corkboard{background:#d8bd91}
 html[data-theme="light"] .pin-note{box-shadow:0 6px 16px rgba(66,45,25,.13)}

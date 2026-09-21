@@ -1,0 +1,49 @@
+name: Phase 1 visual QA (no deployment)
+on:
+  push:
+    branches: [feat/homepage-hierarchy-step-1]
+    paths:
+      - '.github/workflows/phase1-visual-qa.yml'
+      - 'scripts/visual-qa/**'
+      - 'index.html'
+      - 'css/**'
+      - 'js/**'
+      - 'data/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/phase1-visual-qa.yml'
+      - 'scripts/visual-qa/**'
+      - 'index.html'
+      - 'css/**'
+      - 'js/**'
+      - 'data/**'
+permissions:
+  contents: read
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install isolated QA dependencies
+        run: npm install --prefix "$RUNNER_TEMP/phase1-qa" playwright@1.58.2 axe-core@4.11.1 --no-audit --no-fund
+      - name: Install headless Chromium
+        run: node "$RUNNER_TEMP/phase1-qa/node_modules/playwright/cli.js" install --with-deps chromium
+      - run: npm run build
+      - name: Capture homepage matrix
+        env:
+          QA_NODE_MODULES: ${{ runner.temp }}/phase1-qa/node_modules
+        run: node scripts/visual-qa/capture.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase1-visual-qa-${{ github.sha }}
+          path: qa-artifacts/
+          retention-days: 14
+          if-no-files-found: error
