@@ -140,6 +140,7 @@
 
   const api=Object.freeze({buildCards,transactionCard,isOffseason});
   window.gateLeaguePulse=api;
+  if(typeof document === 'undefined') return;
 
   const esc=value=>(window.gateShared?.escapeHtml||((text)=>String(text??'')))(value);
   let archive=null,archiveRequested=false,transactionRequested=false,latestTransaction=null;
@@ -172,7 +173,17 @@
     return archive;
   }
 
+  function cardsFromPayload(){
+    const ready=window.gateHomepageWeek;
+    return Array.isArray(ready?.league_pulse)&&ready.league_pulse.length?ready.league_pulse:null;
+  }
+
   async function refresh(){
+    const prebuilt=cardsFromPayload();
+    if(prebuilt){
+      render(prebuilt);
+      return;
+    }
     const config=window.gateSiteConfig;
     const board=window.gateHomeBoard;
     if(!config||!board) return;
@@ -207,7 +218,7 @@
     if(event.target.closest('[data-pulse-prev]')) scrollPulse(-1);
     if(event.target.closest('[data-pulse-next]')) scrollPulse(1);
   });
-  ['gate:site-ready','gate:home-board-ready'].forEach(name=>document.addEventListener(name,refresh));
+  ['gate:site-ready','gate:home-board-ready','gate:homepage-week-ready'].forEach(name=>document.addEventListener(name,refresh));
   window.addEventListener('gate-supabase-ready',refreshTransaction);
   if(window.gateSupabase) refreshTransaction();
   refresh();
