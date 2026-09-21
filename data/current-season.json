@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 2,
   "phase": "Week 2",
-  "fetchedAt": "2026-09-20T23:12:15.541908+00:00",
+  "fetchedAt": "2026-09-21T01:37:42.734777+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 2 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,13 +165,13 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 148.82
+        "score": 158.36
       },
       "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 109.02
+        "score": 115.62
       }
     },
     {
@@ -185,7 +185,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 98.62
+        "score": 106.22
       },
       "home": {
         "teamId": 15,
@@ -205,7 +205,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 77.78
+        "score": 100.38
       },
       "home": {
         "teamId": 13,
@@ -225,13 +225,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 84.3
+        "score": 101.5
       },
       "home": {
         "teamId": 3,
         "team": "Darty at 1048",
         "owner": "Jared Hall",
-        "score": 50.2
+        "score": 56.2
       }
     },
     {
@@ -245,13 +245,13 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 100.02
+        "score": 101.72
       },
       "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 78.96
+        "score": 94.46
       }
     },
     {
@@ -265,13 +265,13 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 90.46
+        "score": 91.46
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 85.08
+        "score": 98.98
       }
     }
   ]
