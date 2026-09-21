@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "season": 2026,
+  "seasonNumber": 10,
+  "week": 2,
+  "phase": "Week 2",
+  "status": "live",
+  "last_updated": "2026-09-21T15:06:30.129199+00:00",
+  "note": "Week 2 in progress. Live scoring from ESPN.",
+  "matchups": [
+    {"id": 7, "week": 2, "state": "live", "winner": "UNDECIDED", "isPlayoff": false, "matchupType": "NONE", "away": {"teamId": 11, "team": "Your Reigning Champ", "owner": "Thomas Speer", "score": 158.36}, "home": {"teamId": 9, "team": "Ja'Marr-a-Lago", "owner": "JD Daley", "score": 121.32}},
+    {"id": 8, "week": 2, "state": "live", "winner": "UNDECIDED", "isPlayoff": false, "matchupType": "NONE", "away": {"teamId": 5, "team": "Howya Been's", "owner": "Bryan Hunt", "score": 122.42}, "home": {"teamId": 15, "team": "Team Hash", "owner": "Trevor Hash", "score": 106.2}},
+    {"id": 9, "week": 2, "state": "live", "winner": "UNDECIDED", "isPlayoff": false, "matchupType": "NONE", "away": {"teamId": 1, "team": "Madison Beer Garden", "owner": "George Travis", "score": 106.58}, "home": {"teamId": 13, "team": "Breezin\u2019 with Bijan", "owner": "Collin Krum", "score": 61.94}},
+    {"id": 10, "week": 2, "state": "live", "winner": "UNDECIDED", "isPlayoff": false, "matchupType": "NONE", "away": {"teamId": 4, "team": "1912 Titanic Swimteam", "owner": "Kyle Fowler", "score": 119.28}, "home": {"teamId": 3, "team": "Darty at 1048", "owner": "Jared Hall", "score": 79.4}},
+    {"id": 11, "week": 2, "state": "live", "winner": "UNDECIDED", "isPlayoff": false, "matchupType": "NONE", "away": {"teamId": 14, "team": "Ice Has Me Running Back", "owner": "German Haro", "score": 101.72}, "home": {"teamId": 6, "team": "The Buwhops", "owner": "Brian Heino", "score": 109.36}},
+    {"id": 12, "week": 2, "state": "live", "winner": "UNDECIDED", "isPlayoff": false, "matchupType": "NONE", "away": {"teamId": 7, "team": "McConkey Tonk Badonkadonk", "owner": "Vincent Cannarozzi", "score": 91.46}, "home": {"teamId": 8, "team": "Jigalos Jims", "owner": "James Brochu", "score": 98.98}}
+  ],
+  "standings": [
+    {"locker": 12, "teamId": 15, "team": "Team Hash", "owner": "Trevor Hash", "abbrev": "HASH", "wins": 1, "losses": 0, "ties": 0, "pointsFor": 192.56, "pointsAgainst": 90.32},
+    {"locker": 4, "teamId": 5, "team": "Howya Been's", "owner": "Bryan Hunt", "abbrev": "HUNT", "wins": 1, "losses": 0, "ties": 0, "pointsFor": 158.26, "pointsAgainst": 147.36},
+    {"locker": 6, "teamId": 7, "team": "McConkey Tonk Badonkadonk", "owner": "Vincent Cannarozzi", "abbrev": "CANN", "wins": 1, "losses": 0, "ties": 0, "pointsFor": 154.9, "pointsAgainst": 142},
+    {"locker": 7, "teamId": 8, "team": "Jigalos Jims", "owner": "James Brochu", "abbrev": "JIM", "wins": 1, "losses": 0, "ties": 0, "pointsFor": 139.76, "pointsAgainst": 78.62},
+    {"locker": 1, "teamId": 1, "team": "Madison Beer Garden", "owner": "George Travis", "abbrev": "BDS", "wins": 1, "losses": 0, "ties": 0, "pointsFor": 115.96, "pointsAgainst": 101.3},
+    {"locker": 11, "teamId": 14, "team": "Ice Has Me Running Back", "owner": "German Haro", "abbrev": "HARO", "wins": 1, "losses": 0, "ties": 0, "pointsFor": 104.22, "pointsAgainst": 89.26},
+    {"locker": 8, "teamId": 9, "team": "Ja'Marr-a-Lago", "owner": "JD Daley", "abbrev": "MAGA", "wins": 0, "losses": 1, "ties": 0, "pointsFor": 147.36, "pointsAgainst": 158.26},
+    {"locker": 2, "teamId": 3, "team": "Darty at 1048", "owner": "Jared Hall", "abbrev": "HALL", "wins": 0, "losses": 1, "ties": 0, "pointsFor": 142, "pointsAgainst": 154.9},
+    {"locker": 9, "teamId": 11, "team": "Your Reigning Champ", "owner": "Thomas Speer", "abbrev": "SPEE", "wins": 0, "losses": 1, "ties": 0, "pointsFor": 101.3, "pointsAgainst": 115.96},
+    {"locker": 3, "teamId": 4, "team": "1912 Titanic Swimteam", "owner": "Kyle Fowler", "abbrev": "Kyle", "wins": 0, "losses": 1, "ties": 0, "pointsFor": 90.32, "pointsAgainst": 192.56},
+    {"locker": 10, "teamId": 13, "team": "Breezin\u2019 with Bijan", "owner": "Collin Krum", "abbrev": "BB", "wins": 0, "losses": 1, "ties": 0, "pointsFor": 89.26, "pointsAgainst": 104.22},
+    {"locker": 5, "teamId": 6, "team": "The Buwhops", "owner": "Brian Heino", "abbrev": "HEIN", "wins": 0, "losses": 1, "ties": 0, "pointsFor": 78.62, "pointsAgainst": 139.76}
+  ],
+  "featured_story": {
+    "season": 2026,
+    "week": 2,
+    "headline": "The Week 2 table has a shape, but not a verdict",
+    "standfirst": "Week 2 is live; Trevor Hash leads the completed-results table while the current matchup board continues to move.",
+    "path": "data/newspaper_editions/2026/week_02.json",
+    "source_status": "verified_live",
+    "validation_status": "valid",
+    "status": "live",
+    "generated_at": "2026-09-21T15:06:30.206437Z",
+    "table_leader": {"rank": 1, "team": "Team Hash", "owner": "Trevor Hash", "record": "1-0", "pointsFor": "192.56", "tag": "Table leader"},
+    "pressure": {"team": "Ja'Marr-a-Lago", "owner": "JD Daley", "record": "0-1", "title": "Under pressure: JD Daley", "body": "JD Daley enters the live Week 2 board at 0-1. The current matchup can change the direction of that early-season story.", "sourceIds": ["current-season", "seasons"]}
+  },
+  "championship_odds": {
+    "favorite": {"name": "Thomas Speer", "odds": "+300", "case": "Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."},
+    "board": [
+      {"name": "Thomas Speer", "odds": "+300", "case": "Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."},
+      {"name": "Bryan Hunt", "odds": "+500", "case": "Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender resume."},
+      {"name": "James Brochu", "odds": "+950", "case": "Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix."},
+      {"name": "George Travis", "odds": "+1100", "case": "CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."},
+      {"name": "Brian Heino", "odds": "+1200", "case": "Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window."},
+      {"name": "Trevor Hash", "odds": "+1450", "case": "Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite \u2014 the rest has to catch up."},
+      {"name": "JD Daley", "odds": "+1450", "case": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."},
+      {"name": "Collin Krum", "odds": "+1550", "case": "Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip."},
+      {"name": "Vincent Cannarozzi", "odds": "+1600", "case": "JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit."},
+      {"name": "Jared Hall", "odds": "+1700", "case": "Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset."},
+      {"name": "German Haro", "odds": "+2500", "case": "Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence."},
+      {"name": "Kyle Fowler", "odds": "+2500", "case": "AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin."}
+    ]
+  },
+  "league_pulse": [
+    {"id": "odds", "label": "Odds board", "title": "Thomas Speer +300", "detail": "The current championship favorite. Open the full board for every club.", "scrollTo": "championshipOdds"},
+    {"id": "playoff", "label": "Playoff line", "title": "German Haro holds No. 6", "detail": "1-0 at the cut \u00b7 JD Daley is next", "scrollTo": "weekBoard"},
+    {"id": "matchup", "label": "Game watch", "title": "McConkey Tonk Badonkadonk / Jigalos Jims", "detail": "7.5 points apart \u00b7 Live", "scrollTo": "weekBoard"},
+    {"id": "record", "label": "Record watch", "title": "Thomas Speer \u00b7 158.4", "detail": "77.3 shy of the 235.6 all-time mark", "view": "intel"},
+    {"id": "streak", "label": "Form guide", "title": "Brian Heino \u00b7 1 straight", "detail": "Active loss streak for The Buwhops.", "scrollTo": "weekBoard"},
+    {"id": "transactions", "label": "Latest moves", "title": "Transaction Wire", "detail": "Completed adds, waivers, and accepted trades live in the verified archive.", "view": "transactions"}
+  ],
+  "freshness": {
+    "week_fetched_at": "2026-09-21T15:06:30.129199+00:00",
+    "edition_published_at": "2026-09-21T15:06:30.206437Z",
+    "payload_built_at": "2026-09-21T18:39:47.609Z",
+    "sources": ["data/current-season.json", "data/site.json", "data/newspaper_editions/index.json", "data/matchups.json"]
+  }
+}
