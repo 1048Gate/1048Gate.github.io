@@ -14,6 +14,8 @@ for(const patch of [{week:1}, {season:2025}, {source_status:'verified_live'}, {v
   assert.equal(stateFor(config, final, {...edition, ...patch}), 'final');
 }
 assert.equal(stateFor(config, final, null), 'final');
+assert.equal(stateFor(config, {...board, matchups:[{state:'final'}, {state:'scheduled'}]}, edition), 'live');
+assert.equal(stateFor(undefined, board, edition), 'unknown');
 assert.equal(stateFor(config, {...board, matchups:[]}, edition), 'upcoming');
 assert.equal(stateFor(config, {...board, matchups:[{state:'scheduled'}]}, edition), 'upcoming');
 assert.equal(stateFor(config, {...board, season:2025}, edition), 'unknown');

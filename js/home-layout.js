@@ -13,7 +13,7 @@
         && Number(edition.week) === Number(board.week);
       return recap ? 'recap' : 'final';
     }
-    return games.some(game => game.state === 'live') ? 'live' : 'upcoming';
+    return games.some(game => ['live', 'final'].includes(game.state)) ? 'live' : 'upcoming';
   }
 
   function render(){
@@ -27,7 +27,7 @@
     const feature = document.getElementById('homeWeeklyFeature');
     const prep = document.getElementById('homeSeasonPrep');
     const scoreboard = document.getElementById('weekBoard');
-    const pulse = now.querySelector('.home-pulse');
+    const pulse = home.querySelector('.home-pulse');
     const odds = document.getElementById('championshipOdds');
     const heading = now.querySelector('.home-band-head');
     // Move actual nodes so reading and keyboard order match the visual order.
@@ -40,10 +40,10 @@
       }
     }
     const lead = state === 'recap' ? feature : state === 'offseason' ? prep : null;
-    place([lead, pulse, scoreboard], heading);
-    place([state !== 'recap' ? feature : null, odds, state !== 'offseason' ? prep : null], story.querySelector('.home-band-head'));
+    place([lead, state !== 'offseason' ? scoreboard : null], heading);
+    place([state !== 'recap' ? feature : null, odds, pulse, state !== 'offseason' ? prep : null], story.querySelector('.home-band-head'));
     // Keep last season's scoreboard out of the offseason lead without deleting it.
-    if(state === 'offseason' && scoreboard) story.append(scoreboard);
+    if(state === 'offseason' && scoreboard && story.lastElementChild !== scoreboard) story.append(scoreboard);
     if(pulse) pulse.hidden = state === 'offseason';
     home.dataset.homeState = state;
     const title = document.getElementById('homeNowTitle');
@@ -56,6 +56,7 @@
       primary.textContent = state === 'recap' ? 'Read This Week' : state === 'offseason' ? 'Draft & Keepers' : state === 'final' ? 'See Final Scores' : 'See This Week';
     }
     const lede = home.querySelector('.hero-copy > p:not(.hero-tagline)');
+    if(lede && ['live','upcoming'].includes(state)) lede.textContent = `${board.phase || `Week ${board.week}`} ${state === 'live' ? 'is in progress' : 'is on the board'}. Follow the matchups, standings, and championship odds.`;
     if(lede && state === 'offseason') lede.textContent = 'Prepare for the next season: keepers, the draft board, and the league story.';
     if(lede && ['recap','final'].includes(state)) lede.textContent = `${board.phase || `Week ${board.week}`} is final. ${state === 'recap' ? 'Catch up on the weekly edition, then see the results and standings.' : 'See the results and standings while the weekly recap is prepared.'}`;
   }
