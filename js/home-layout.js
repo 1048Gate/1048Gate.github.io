@@ -1,5 +1,10 @@
 /* Homepage hierarchy only: reuse the existing board, edition, and season data. */
 (function(){
+  if(!window.gateWeekBoard && !document.querySelector('script[src="js/week-board.js"]')){
+    const script = document.createElement('script');
+    script.src = 'js/week-board.js';
+    document.head.appendChild(script);
+  }
   function stateFor(config, board, edition){
     const offseason = /pre[ -]?season|off[ -]?season|draft|keeper/i.test(config?.phase || '');
     if(offseason) return 'offseason';
@@ -30,8 +35,6 @@
     const pulse = home.querySelector('.home-pulse');
     const odds = document.getElementById('championshipOdds');
     const heading = now.querySelector('.home-band-head');
-    // Move actual nodes so reading and keyboard order match the visual order.
-    // Repeated events leave an already-correct layout alone (including focus).
     function place(nodes, anchor){
       let previous = anchor;
       for(const node of nodes.filter(Boolean)){
@@ -42,7 +45,6 @@
     const lead = state === 'recap' ? feature : state === 'offseason' ? prep : null;
     place([lead, state !== 'offseason' ? scoreboard : null], heading);
     place([state !== 'recap' ? feature : null, odds, pulse, state !== 'offseason' ? prep : null], story.querySelector('.home-band-head'));
-    // Keep last season's scoreboard out of the offseason lead without deleting it.
     if(state === 'offseason' && scoreboard && story.lastElementChild !== scoreboard) story.append(scoreboard);
     if(pulse) pulse.hidden = state === 'offseason';
     home.dataset.homeState = state;
@@ -69,8 +71,6 @@
       draftTab.scrollIntoView?.({block:'nearest', inline:'nearest'});
       return 'drafts';
     }
-    // The Season Vault contains a draft recap for every archived season, so it is
-    // a safe fallback if the richer Drafts module did not initialize.
     window.gateHistory?.show?.('seasons');
     document.querySelector('[data-history-tab="seasons"]')?.focus?.({preventScroll:true});
     return 'seasons';
