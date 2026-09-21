@@ -1,0 +1,44 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {runInNewContext} from 'node:vm';
+
+const context={
+  window:{gateShared:{escapeHtml:value=>String(value??'')},addEventListener(){}},
+  document:{addEventListener(){},querySelector(){return null},querySelectorAll(){return []},getElementById(){return null}},
+  fetch:async()=>({ok:false}),
+  console
+};
+runInNewContext(readFileSync(new URL('../js/league-pulse.js',import.meta.url),'utf8'),context,{filename:'js/league-pulse.js'});
+const pulse=context.window.gateLeaguePulse;
+
+const config={seasonNumber:10,seasonYear:2026,phase:'Week 2',futures:[{name:'Favorite Manager',odds:'+300'}],draftOrder:Array.from({length:12},(_,index)=>({pick:index+1}))};
+const standings=Array.from({length:12},(_,index)=>({owner:`Manager ${index+1}`,team:`Team ${index+1}`,wins:index<6?1:0,losses:index<6?0:1,pointsFor:200-index*8}));
+const matchups=Array.from({length:6},(_,index)=>({state:'live',away:{owner:`Away ${index}`,team:`Away Team ${index}`,score:100+index},home:{owner:`Home ${index}`,team:`Home Team ${index}`,score:index===3?102.5:90-index}}));
+const currentSeasonScores=standings.map((team,index)=>({owner:team.owner,team:team.team,week:1,score:index<6?120:90,opponentScore:index<6?90:120}));
+const archive={records:{highestScore:[235.64,'Record Holder','Record Team','Opponent','Opponent Team',2022,8,0]},currentSeasonScores,leaderboards:{winningStreaks:[{manager:'Historic Manager',games:8,season:2021}]}};
+
+const cards=pulse.buildCards({config,board:{week:2,standings,matchups},archive});
+assert.deepEqual(Array.from(cards,card=>card.id),['odds','playoff','matchup','record','streak','transactions']);
+assert.equal(cards.find(card=>card.id==='odds').title,'Favorite Manager +300');
+assert.match(cards.find(card=>card.id==='playoff').title,/Manager 6 holds No\. 6/);
+assert.match(cards.find(card=>card.id==='matchup').detail,/0\.5 points apart · Live/);
+assert.match(cards.find(card=>card.id==='record').detail,/130\.6 shy of the 235\.6 all-time mark/);
+assert.equal(cards.find(card=>card.id==='streak').title,'6 teams opened 1–0');
+
+const moving=standings.map((team,index)=>({...team,previousRank:index+1}));
+moving[0].previousRank=4;
+const movement=pulse.buildCards({config,board:{week:2,standings:moving,matchups},archive}).find(card=>card.id==='playoff');
+assert.equal(movement.label,'Playoff movement');
+assert.match(movement.title,/↑3 to No\. 1/);
+
+const offseason=pulse.buildCards({config:{...config,phase:'Offseason'},board:{week:2,standings,matchups},archive});
+assert.deepEqual(Array.from(offseason,card=>card.id),['draft','odds','record','streak','transactions']);
+assert.equal(offseason.find(card=>card.id==='record').title,'Record Holder · 235.6');
+assert.ok(!offseason.some(card=>['playoff','matchup'].includes(card.id)));
+
+const transaction=pulse.transactionCard({transaction_type:'WAIVER',team_name:'Team Hash',items:[{item_type:'ADD',player_name:'Example Player',to_team_name:'Team Hash'}]});
+assert.equal(transaction.title,'Team Hash · Waiver claim');
+assert.equal(transaction.detail,'Example Player · added to Team Hash');
+assert.equal(transaction.view,'transactions');
+
+console.log('League Pulse checks passed: odds, cutoff/movement, live game, record watch, streaks, offseason, and transaction enrichment.');

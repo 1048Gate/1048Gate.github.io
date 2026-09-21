@@ -119,16 +119,7 @@ function firstMatch(selectors){
 
 function renderPulse(config, board){
   const favorite = Array.isArray(config.futures) ? config.futures[0] : null;
-  const favoriteTarget = document.querySelector('[data-home-favorite]');
-  if(favoriteTarget && favorite?.name && favorite?.odds){
-    favoriteTarget.textContent = `${favorite.name} ${favorite.odds}`;
-  }
   if(!board) return;
-  const games = Array.isArray(board.matchups) ? board.matchups.length : 0;
-  const gamesTarget = firstMatch(['[data-home-games]', '.home-pulse > div:nth-child(2) strong']);
-  if(gamesTarget) gamesTarget.textContent = games === 1 ? '1 game' : `${games} games`;
-  const tableTarget = firstMatch(['[data-home-table]', '.home-pulse > div:nth-child(4) strong']);
-  if(tableTarget) tableTarget.textContent = tableLine(board.standings || []);
   const lede = firstMatch(['[data-home-lede]', '.hero-copy > p:not(.hero-tagline)']);
   if(lede) lede.textContent = homeLede(board, favorite);
 }
