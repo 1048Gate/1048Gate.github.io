@@ -23,22 +23,30 @@ const server=http.createServer((req,res)=>{
   await context.addInitScript(t=>{localStorage.setItem('1048-gate-theme',t);localStorage.removeItem('1048-gate-current-week-v1')},theme);
   const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const board=json('data/current-season.json'),config=json('data/site.json'),index=json('data/newspaper_editions/index.json');
+  const homepage=json('data/homepage-week.json');
   const entry=index.editions.find(e=>e.season===board.season&&e.week===board.week);
   const edition=json(entry.path);
   if(state==='recap'){
     board.matchups.forEach(g=>g.state='final');board.note='QA fixture: finalized week; scores retained from checked-in snapshot.';
+    homepage.matchups=board.matchups;homepage.status='final';homepage.note=board.note;
+    if(homepage.featured_story){homepage.featured_story.status='final';homepage.featured_story.source_status='verified_final';}
     edition.source_status=entry.source_status='verified_final';edition.status='final';
     edition.headline=`Week ${board.week} final — visual QA fixture`;
     edition.standfirst='Representative finalized-week layout. These are test fixtures, not newly published league results.';
   }
-  if(state==='offseason')config.phase='Offseason';
-  const fixtures={'/data/site.json':config,'/data/current-season.json':board,'/data/newspaper_editions/index.json':index,['/'+entry.path]:edition};
+  if(state==='offseason'){
+    config.phase='Offseason';
+    homepage.phase='Offseason';
+    homepage.status='offseason';
+    homepage.league_pulse=[];
+  }
+  const fixtures={'/data/site.json':config,'/data/current-season.json':board,'/data/homepage-week.json':homepage,'/data/newspaper_editions/index.json':index,['/'+entry.path]:edition};
   const exerciseFallbacks=state==='live'&&width===1440&&theme==='light';
   let forceWeekFailure=exerciseFallbacks;
   await page.route('**/*',async route=>{
     const u=new URL(route.request().url());
     if(u.hostname==='127.0.0.1'){
-      if(u.pathname==='/data/current-season.json'&&forceWeekFailure)return route.fulfill({status:503,body:'unavailable'});
+      if((u.pathname==='/data/current-season.json'||u.pathname==='/data/homepage-week.json')&&forceWeekFailure)return route.fulfill({status:503,body:'unavailable'});
       if(fixtures[u.pathname])return route.fulfill({json:fixtures[u.pathname]});
       return route.continue();
     }
