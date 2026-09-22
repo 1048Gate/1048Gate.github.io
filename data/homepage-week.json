@@ -5,7 +5,7 @@
   "week": 2,
   "phase": "Week 2",
   "status": "live",
-  "last_updated": "2026-09-21T23:14:14.144688+00:00",
+  "last_updated": "2026-09-22T01:49:46.510458+00:00",
   "note": "Week 2 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -45,7 +45,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 106.2
+        "score": 109.1
       }
     },
     {
@@ -59,7 +59,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 106.58
+        "score": 116.28
       },
       "home": {
         "teamId": 13,
@@ -79,13 +79,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 119.28
+        "score": 150.68
       },
       "home": {
         "teamId": 3,
         "team": "Darty at 1048",
         "owner": "Jared Hall",
-        "score": 79.4
+        "score": 81.3
       }
     },
     {
@@ -99,7 +99,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 101.72
+        "score": 102.72
       },
       "home": {
         "teamId": 6,
@@ -284,7 +284,7 @@
     "source_status": "verified_live",
     "validation_status": "valid",
     "status": "live",
-    "generated_at": "2026-09-21T23:14:14.248729Z",
+    "generated_at": "2026-09-22T01:49:46.602977Z",
     "table_leader": {
       "rank": 1,
       "team": "Team Hash",
@@ -378,8 +378,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "McConkey Tonk Badonkadonk / Jigalos Jims",
-      "detail": "7.5 points apart · Live",
+      "title": "Ice Has Me Running Back / The Buwhops",
+      "detail": "6.6 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -419,9 +419,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-21T23:14:14.144688+00:00",
-    "edition_published_at": "2026-09-21T23:14:14.248729Z",
-    "payload_built_at": "2026-09-21T23:14:14.517Z",
+    "week_fetched_at": "2026-09-22T01:49:46.510458+00:00",
+    "edition_published_at": "2026-09-22T01:49:46.602977Z",
+    "payload_built_at": "2026-09-22T01:49:46.843Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
