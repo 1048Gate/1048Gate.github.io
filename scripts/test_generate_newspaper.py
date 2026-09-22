@@ -36,6 +36,7 @@ class NewspaperTests(unittest.TestCase):
 
     def test_complete_and_sourced(self):
         result=self.make(); self.assertEqual(result["source_status"],"verified_final"); self.assertGreaterEqual(len(result["stories"]),8); self.assertTrue(all(s.get("source") for s in result["stories"]))
+        self.assertNotEqual(result["headline"],result["lead"]["title"])
         self.assertEqual(result["pressure"]["label"],"NEXT TEST")
         recap=next(s for s in result["stories"] if s["story_type"]=="matchup_recap")
         self.assertIn(" beat ",recap["body"]); self.assertNotIn(";",recap["body"])

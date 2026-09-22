@@ -203,7 +203,7 @@ def _build_editorial(
         "headline": f"{high_team['owner']} sets the Week {week} pace as the table takes shape",
         "standfirst": standfirst,
         "lead": {
-            "title": f"{high_team['owner']} sets the Week {week} pace as the table takes shape",
+            "title": f"Inside Week {week}: the high score, the table lead, and the closest call",
             "body": lead_body,
             "sourceIds": ["current-season", "power-rankings"],
         },
