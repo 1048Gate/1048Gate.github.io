@@ -18,7 +18,7 @@
     },
     {
       "name": "Bryan Hunt",
-      "odds": "+500",
+      "odds": "+550",
       "case": "Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé."
     },
     {
@@ -27,34 +27,24 @@
       "case": "Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix."
     },
     {
-      "name": "George Travis",
-      "odds": "+1100",
-      "case": "CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."
-    },
-    {
       "name": "Brian Heino",
-      "odds": "+1200",
+      "odds": "+950",
       "case": "Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window."
     },
     {
-      "name": "Trevor Hash",
-      "odds": "+1450",
-      "case": "Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up."
+      "name": "George Travis",
+      "odds": "+1000",
+      "case": "CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."
     },
     {
       "name": "JD Daley",
-      "odds": "+1450",
+      "odds": "+1350",
       "case": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
     },
     {
-      "name": "Collin Krum",
-      "odds": "+1550",
-      "case": "Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip."
-    },
-    {
-      "name": "Vincent Cannarozzi",
-      "odds": "+1600",
-      "case": "JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit."
+      "name": "Trevor Hash",
+      "odds": "+1650",
+      "case": "Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up."
     },
     {
       "name": "Jared Hall",
@@ -62,14 +52,24 @@
       "case": "Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset."
     },
     {
-      "name": "German Haro",
-      "odds": "+2500",
-      "case": "Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence."
+      "name": "Collin Krum",
+      "odds": "+1850",
+      "case": "Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip."
+    },
+    {
+      "name": "Vincent Cannarozzi",
+      "odds": "+2050",
+      "case": "JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit."
     },
     {
       "name": "Kyle Fowler",
       "odds": "+2500",
       "case": "AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin."
+    },
+    {
+      "name": "German Haro",
+      "odds": "+2500",
+      "case": "Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence."
     }
   ],
   "draftOrder": [

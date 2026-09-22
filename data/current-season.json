@@ -4,10 +4,46 @@
   "seasonNumber": 10,
   "week": 2,
   "phase": "Week 2",
-  "fetchedAt": "2026-09-22T01:49:46.510458+00:00",
+  "fetchedAt": "2026-09-22T11:47:05.910077+00:00",
   "source": "ESPN league endpoint",
-  "note": "Week 2 in progress. Live scoring from ESPN.",
+  "note": "Week 2 slate from ESPN.",
   "standings": [
+    {
+      "locker": 4,
+      "teamId": 5,
+      "team": "Howya Been's",
+      "owner": "Bryan Hunt",
+      "abbrev": "HUNT",
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 280.68,
+      "pointsAgainst": 261.86
+    },
+    {
+      "locker": 7,
+      "teamId": 8,
+      "team": "Jigalos Jims",
+      "owner": "James Brochu",
+      "abbrev": "JIM",
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 238.74,
+      "pointsAgainst": 170.07999999999998
+    },
+    {
+      "locker": 1,
+      "teamId": 1,
+      "team": "Madison Beer Garden",
+      "owner": "George Travis",
+      "abbrev": "BDS",
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 238.24,
+      "pointsAgainst": 163.24
+    },
     {
       "locker": 12,
       "teamId": 15,
@@ -15,22 +51,34 @@
       "owner": "Trevor Hash",
       "abbrev": "HASH",
       "wins": 1,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
-      "pointsFor": 192.56,
-      "pointsAgainst": 90.32
+      "pointsFor": 307.06,
+      "pointsAgainst": 212.74
     },
     {
-      "locker": 4,
-      "teamId": 5,
-      "team": "Howya Been's",
-      "owner": "Bryan Hunt",
-      "abbrev": "HUNT",
+      "locker": 9,
+      "teamId": 11,
+      "team": "Your Reigning Champ",
+      "owner": "Thomas Speer",
+      "abbrev": "SPEE",
       "wins": 1,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
-      "pointsFor": 158.26,
-      "pointsAgainst": 147.36
+      "pointsFor": 259.66,
+      "pointsAgainst": 237.27999999999997
+    },
+    {
+      "locker": 3,
+      "teamId": 4,
+      "team": "1912 Titanic Swimteam",
+      "owner": "Kyle Fowler",
+      "abbrev": "Kyle",
+      "wins": 1,
+      "losses": 1,
+      "ties": 0,
+      "pointsFor": 258.6,
+      "pointsAgainst": 273.86
     },
     {
       "locker": 6,
@@ -39,34 +87,10 @@
       "owner": "Vincent Cannarozzi",
       "abbrev": "CANN",
       "wins": 1,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
-      "pointsFor": 154.9,
-      "pointsAgainst": 142.0
-    },
-    {
-      "locker": 7,
-      "teamId": 8,
-      "team": "Jigalos Jims",
-      "owner": "James Brochu",
-      "abbrev": "JIM",
-      "wins": 1,
-      "losses": 0,
-      "ties": 0,
-      "pointsFor": 139.76,
-      "pointsAgainst": 78.62
-    },
-    {
-      "locker": 1,
-      "teamId": 1,
-      "team": "Madison Beer Garden",
-      "owner": "George Travis",
-      "abbrev": "BDS",
-      "wins": 1,
-      "losses": 0,
-      "ties": 0,
-      "pointsFor": 115.96,
-      "pointsAgainst": 101.3
+      "pointsFor": 246.36,
+      "pointsAgainst": 240.98000000000002
     },
     {
       "locker": 11,
@@ -75,10 +99,22 @@
       "owner": "German Haro",
       "abbrev": "HARO",
       "wins": 1,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
-      "pointsFor": 104.22,
-      "pointsAgainst": 89.26
+      "pointsFor": 208.94,
+      "pointsAgainst": 198.62
+    },
+    {
+      "locker": 5,
+      "teamId": 6,
+      "team": "The Buwhops",
+      "owner": "Brian Heino",
+      "abbrev": "HEIN",
+      "wins": 1,
+      "losses": 1,
+      "ties": 0,
+      "pointsFor": 187.98000000000002,
+      "pointsAgainst": 244.48
     },
     {
       "locker": 8,
@@ -87,10 +123,10 @@
       "owner": "JD Daley",
       "abbrev": "MAGA",
       "wins": 0,
-      "losses": 1,
+      "losses": 2,
       "ties": 0,
-      "pointsFor": 147.36,
-      "pointsAgainst": 158.26
+      "pointsFor": 268.68,
+      "pointsAgainst": 316.62
     },
     {
       "locker": 2,
@@ -99,34 +135,10 @@
       "owner": "Jared Hall",
       "abbrev": "HALL",
       "wins": 0,
-      "losses": 1,
+      "losses": 2,
       "ties": 0,
-      "pointsFor": 142.0,
-      "pointsAgainst": 154.9
-    },
-    {
-      "locker": 9,
-      "teamId": 11,
-      "team": "Your Reigning Champ",
-      "owner": "Thomas Speer",
-      "abbrev": "SPEE",
-      "wins": 0,
-      "losses": 1,
-      "ties": 0,
-      "pointsFor": 101.3,
-      "pointsAgainst": 115.96
-    },
-    {
-      "locker": 3,
-      "teamId": 4,
-      "team": "1912 Titanic Swimteam",
-      "owner": "Kyle Fowler",
-      "abbrev": "Kyle",
-      "wins": 0,
-      "losses": 1,
-      "ties": 0,
-      "pointsFor": 90.32,
-      "pointsAgainst": 192.56
+      "pointsFor": 223.3,
+      "pointsAgainst": 323.18
     },
     {
       "locker": 10,
@@ -135,30 +147,18 @@
       "owner": "Collin Krum",
       "abbrev": "BB",
       "wins": 0,
-      "losses": 1,
+      "losses": 2,
       "ties": 0,
-      "pointsFor": 89.26,
-      "pointsAgainst": 104.22
-    },
-    {
-      "locker": 5,
-      "teamId": 6,
-      "team": "The Buwhops",
-      "owner": "Brian Heino",
-      "abbrev": "HEIN",
-      "wins": 0,
-      "losses": 1,
-      "ties": 0,
-      "pointsFor": 78.62,
-      "pointsAgainst": 139.76
+      "pointsFor": 151.2,
+      "pointsAgainst": 226.5
     }
   ],
   "matchups": [
     {
       "id": 7,
       "week": 2,
-      "state": "live",
-      "winner": "UNDECIDED",
+      "state": "final",
+      "winner": "AWAY",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
@@ -177,8 +177,8 @@
     {
       "id": 8,
       "week": 2,
-      "state": "live",
-      "winner": "UNDECIDED",
+      "state": "final",
+      "winner": "AWAY",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
@@ -191,21 +191,21 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 109.1
+        "score": 114.5
       }
     },
     {
       "id": 9,
       "week": 2,
-      "state": "live",
-      "winner": "UNDECIDED",
+      "state": "final",
+      "winner": "AWAY",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 116.28
+        "score": 122.28
       },
       "home": {
         "teamId": 13,
@@ -217,15 +217,15 @@
     {
       "id": 10,
       "week": 2,
-      "state": "live",
-      "winner": "UNDECIDED",
+      "state": "final",
+      "winner": "AWAY",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 150.68
+        "score": 168.28
       },
       "home": {
         "teamId": 3,
@@ -237,15 +237,15 @@
     {
       "id": 11,
       "week": 2,
-      "state": "live",
-      "winner": "UNDECIDED",
+      "state": "final",
+      "winner": "HOME",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 102.72
+        "score": 104.72
       },
       "home": {
         "teamId": 6,
@@ -257,8 +257,8 @@
     {
       "id": 12,
       "week": 2,
-      "state": "live",
-      "winner": "UNDECIDED",
+      "state": "final",
+      "winner": "HOME",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
