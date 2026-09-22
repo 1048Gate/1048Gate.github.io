@@ -143,7 +143,7 @@ assert.equal(exportContext.window.gateNewspaperExport.fileBase(exportFixture), `
 const drawnText = [];
 const fakeCanvasContext = {
   fillStyle:'', strokeStyle:'', lineWidth:0, font:'', textAlign:'left',
-  fillRect(){}, strokeRect(){},
+  fillRect(){}, strokeRect(){}, beginPath(){}, moveTo(){}, lineTo(){}, stroke(){}, drawImage(){},
   fillText(text, x, y){ drawnText.push({text, x, y}); },
   measureText(text){ return {width:String(text).length * 18}; }
 };
@@ -152,13 +152,22 @@ exportContext.document = {
   fonts:{ready:Promise.resolve()},
   createElement(tag){
     assert.equal(tag, 'canvas');
-    return {width:0, height:0, getContext:() => fakeCanvasContext, toBlob:callback => callback(new Blob(['png'], {type:'image/png'}))};
+    return {width:0, height:0, getContext:() => fakeCanvasContext, toBlob:(callback, type='image/png') => callback(new Blob(['image'], {type}))};
   }
 };
 const shareBlob = await exportContext.window.gateNewspaperExport.createShareImage(exportFixture);
 assert.equal(shareBlob.type, 'image/png');
 assert.ok(drawnText.some(entry => entry.text === '1048 GATE WEEKLY'));
 assert.ok(drawnText.every(entry => entry.y <= 1262), 'Share-card text overflowed its canvas.');
+const fullCanvas = await exportContext.window.gateNewspaperExport.createFullEditionCanvas(exportFixture);
+assert.equal(fullCanvas.width, 1080);
+assert.equal(fullCanvas.height % 1398, 0);
+assert.ok(fullCanvas.height > 1350, 'Full-edition image must retain the complete newspaper instead of the summary crop.');
+const visualPdf = exportContext.window.gateNewspaperExport.buildImagePdf([new Uint8Array([255,216,255,217])], 1080, 1398);
+const visualPdfText = new TextDecoder().decode(visualPdf);
+assert.ok(visualPdfText.startsWith('%PDF-1.4'));
+assert.match(visualPdfText, /\/Subtype \/Image/);
+assert.match(visualPdfText, /%%EOF$/);
 
 await context.window.gateNewspaper.loadEdition('historical');
 assert.match(elements.editionContent.innerHTML, /2017–2025 League History/);
