@@ -163,11 +163,20 @@ const fullCanvas = await exportContext.window.gateNewspaperExport.createFullEdit
 assert.equal(fullCanvas.width, 1080);
 assert.equal(fullCanvas.height % 1398, 0);
 assert.ok(fullCanvas.height > 1350, 'Full-edition image must retain the complete newspaper instead of the summary crop.');
+const pageSet = await exportContext.window.gateNewspaperExport.createEditionPageBlobs(exportFixture);
+assert.equal(pageSet.pages.length, fullCanvas.height / 1398);
+assert.ok(pageSet.pages.every(blob => blob.type === 'image/png'));
 const visualPdf = exportContext.window.gateNewspaperExport.buildImagePdf([new Uint8Array([255,216,255,217])], 1080, 1398);
 const visualPdfText = new TextDecoder().decode(visualPdf);
 assert.ok(visualPdfText.startsWith('%PDF-1.4'));
 assert.match(visualPdfText, /\/Subtype \/Image/);
 assert.match(visualPdfText, /%%EOF$/);
+const zipBytes = exportContext.window.gateNewspaperExport.buildZip([
+  {name:'page-01.png', data:new Uint8Array([1,2,3])},
+  {name:'page-02.png', data:new Uint8Array([4,5,6])}
+]);
+assert.deepEqual(Array.from(zipBytes.slice(0, 4)), [0x50,0x4B,0x03,0x04]);
+assert.deepEqual(Array.from(zipBytes.slice(-22, -18)), [0x50,0x4B,0x05,0x06]);
 
 await context.window.gateNewspaper.loadEdition('historical');
 assert.match(elements.editionContent.innerHTML, /2017–2025 League History/);
