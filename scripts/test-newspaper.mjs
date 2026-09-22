@@ -11,6 +11,8 @@ const playoffs = readJson('data/playoffs.json');
 const matchups = readJson('data/matchups.json');
 const managerProfiles = readJson('data/manager-profiles.json');
 const appSource = readFileSync(new URL('js/app.js', root), 'utf8');
+const exportContext = {window:{}, TextEncoder, console};
+runInNewContext(readFileSync(new URL('js/newspaper-export.js', root), 'utf8'), exportContext, {filename:'js/newspaper-export.js'});
 
 assert.equal(historical.season_start, 2017);
 assert.equal(historical.season_end, 2025);
@@ -96,7 +98,8 @@ class FakeElement {
 const elements = Object.fromEntries([
   'editionTabs', 'editionContent', 'editionSourcesToggle', 'editionSourcesClose',
   'editionSourcesBackdrop', 'editionSourcesDrawer', 'editionSourcesList',
-  'weeklyEditionPicker', 'weeklyEditionSelect'
+  'weeklyEditionPicker', 'weeklyEditionSelect', 'weeklyEditionActions', 'editionExportStatus',
+  'editionPdfDownload', 'editionImageDownload', 'editionShare'
 ].map(id => [id, new FakeElement(id)]));
 const tabs = [new FakeElement(), new FakeElement()];
 tabs[0].dataset.edition = 'historical';
@@ -129,6 +132,33 @@ const context = {
   structuredClone
 };
 runInNewContext(readFileSync(new URL('js/newspaper.js', root), 'utf8'), context, {filename:'js/newspaper.js'});
+
+const exportFixture = readJson(weeklyIndex.editions[0].path);
+const pdfBytes = exportContext.window.gateNewspaperExport.buildWeeklyPdf(exportFixture);
+const pdfText = new TextDecoder().decode(pdfBytes);
+assert.ok(pdfText.startsWith('%PDF-1.4'));
+assert.match(pdfText, /1048 GATE WEEKLY/);
+assert.match(pdfText, /%%EOF$/);
+assert.equal(exportContext.window.gateNewspaperExport.fileBase(exportFixture), `1048-gate-${exportFixture.season}-week-${exportFixture.week}`);
+const drawnText = [];
+const fakeCanvasContext = {
+  fillStyle:'', strokeStyle:'', lineWidth:0, font:'', textAlign:'left',
+  fillRect(){}, strokeRect(){},
+  fillText(text, x, y){ drawnText.push({text, x, y}); },
+  measureText(text){ return {width:String(text).length * 18}; }
+};
+exportContext.Blob = Blob;
+exportContext.document = {
+  fonts:{ready:Promise.resolve()},
+  createElement(tag){
+    assert.equal(tag, 'canvas');
+    return {width:0, height:0, getContext:() => fakeCanvasContext, toBlob:callback => callback(new Blob(['png'], {type:'image/png'}))};
+  }
+};
+const shareBlob = await exportContext.window.gateNewspaperExport.createShareImage(exportFixture);
+assert.equal(shareBlob.type, 'image/png');
+assert.ok(drawnText.some(entry => entry.text === '1048 GATE WEEKLY'));
+assert.ok(drawnText.every(entry => entry.y <= 1262), 'Share-card text overflowed its canvas.');
 
 await context.window.gateNewspaper.loadEdition('historical');
 assert.match(elements.editionContent.innerHTML, /2017–2025 League History/);
@@ -166,4 +196,4 @@ assert.deepEqual(context.window.gateNewspaper.weeklyEntries({editions:[
   {season:2024,week:8,path:'live.json',validation_status:'valid',source_status:'verified_live'}
 ]}).map(entry => entry.path), ['week-1.json','week-14.json','live.json']);
 
-console.log('Newspaper checks passed: historical archive, verified weekly index, empty state, picker, sources, and HTML escaping.');
+console.log('Newspaper checks passed: archive, weekly picker, sources, PDF export, download controls, and HTML escaping.');

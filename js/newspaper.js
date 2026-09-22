@@ -24,6 +24,15 @@
   let weeklyIndex = null;
   let loadSequence = 0;
   let returnFocus = null;
+  let currentWeeklyEdition = null;
+
+  function setExportAvailability(data){
+    currentWeeklyEdition = data || null;
+    const actions = document.getElementById('weeklyEditionActions');
+    const status = document.getElementById('editionExportStatus');
+    if(actions) actions.hidden = !currentWeeklyEdition;
+    if(status) status.textContent = '';
+  }
 
   function formatStoryType(value){
     return String(value || 'league story')
@@ -192,6 +201,7 @@
     });
     const picker = document.getElementById('weeklyEditionPicker');
     if(picker) picker.hidden = editionKey !== 'weekly';
+    if(editionKey !== 'weekly') setExportAvailability(null);
   }
 
   function fillWeeklySelect(index, selectedPath){
@@ -214,6 +224,7 @@
     const container = document.getElementById('editionContent');
     const toggle = document.getElementById('editionSourcesToggle');
     if(toggle) toggle.hidden = true;
+    setExportAvailability(null);
     closeSources();
     if(!container) return;
     container.innerHTML = `
@@ -262,6 +273,7 @@
           container.innerHTML = renderEmptyWeekly();
           const toggle = document.getElementById('editionSourcesToggle');
           if(toggle) toggle.hidden = true;
+          setExportAvailability(null);
           closeSources();
           currentEditionKey = 'weekly';
           return;
@@ -270,6 +282,7 @@
         if(sequence !== loadSequence) return;
         currentEditionKey = 'weekly';
         container.innerHTML = renderEditionMarkup(data, 'weekly');
+        setExportAvailability(data);
         renderSourceList(data);
         return;
       }
@@ -278,6 +291,7 @@
       if(sequence !== loadSequence) return;
       currentEditionKey = editionKey;
       container.innerHTML = renderEditionMarkup(data, editionKey);
+      setExportAvailability(null);
       renderSourceList(data);
     }catch(error){
       if(sequence !== loadSequence) return;
@@ -370,6 +384,34 @@
   document.getElementById('weeklyEditionSelect')?.addEventListener('change', event => {
     const path = event.target.value;
     if(path) loadEdition('weekly', path);
+  });
+  async function runExport(button, work, successMessage){
+    const status = document.getElementById('editionExportStatus');
+    if(!currentWeeklyEdition || !window.gateNewspaperExport) return;
+    button.disabled = true;
+    if(status) status.textContent = 'Preparing your edition…';
+    try{
+      const result = await work(currentWeeklyEdition);
+      if(status) status.textContent = result === 'shared' ? 'Share sheet opened.' : successMessage;
+    }catch(error){
+      if(error?.name === 'AbortError'){
+        if(status) status.textContent = '';
+      }else{
+        console.error('Edition export failed:', error);
+        if(status) status.textContent = 'Could not create that file. Please try again.';
+      }
+    }finally{
+      button.disabled = false;
+    }
+  }
+  document.getElementById('editionPdfDownload')?.addEventListener('click', event => {
+    runExport(event.currentTarget, data => window.gateNewspaperExport.downloadPdf(data), 'PDF downloaded.');
+  });
+  document.getElementById('editionImageDownload')?.addEventListener('click', event => {
+    runExport(event.currentTarget, data => window.gateNewspaperExport.downloadImage(data), 'Image downloaded.');
+  });
+  document.getElementById('editionShare')?.addEventListener('click', event => {
+    runExport(event.currentTarget, data => window.gateNewspaperExport.shareImage(data), 'Image downloaded for sharing.');
   });
   document.getElementById('editionSourcesToggle')?.addEventListener('click', openSources);
   document.getElementById('editionSourcesClose')?.addEventListener('click', closeSources);
