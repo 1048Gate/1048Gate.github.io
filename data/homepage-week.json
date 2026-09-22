@@ -5,7 +5,7 @@
   "week": 2,
   "phase": "Week 2",
   "status": "final",
-  "last_updated": "2026-09-22T13:07:48.957153+00:00",
+  "last_updated": "2026-09-22T14:31:11.789945+00:00",
   "note": "Week 2 slate from ESPN.",
   "matchups": [
     {
@@ -284,7 +284,7 @@
     "source_status": "verified_final",
     "validation_status": "valid",
     "status": "final",
-    "generated_at": "2026-09-22T13:07:49.062145Z",
+    "generated_at": "2026-09-22T14:31:11.875968Z",
     "table_leader": {
       "rank": 1,
       "team": "Howya Been's",
@@ -299,7 +299,7 @@
       "record": "0-2",
       "label": "NEXT TEST",
       "title": "Next test: Collin Krum",
-      "body": "Collin Krum is 0-2 after Week 2. The next matchup offers a chance to change the early direction without overstating what a short opening sample means.",
+      "body": "Collin Krum is 0-2 after Week 2. The next matchup offers a chance to change the early direction without pretending a short opening sample has settled the story.",
       "sourceIds": [
         "current-season",
         "seasons"
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-22T13:07:48.957153+00:00",
-    "edition_published_at": "2026-09-22T13:07:49.062145Z",
-    "payload_built_at": "2026-09-22T13:08:03.076Z",
+    "week_fetched_at": "2026-09-22T14:31:11.789945+00:00",
+    "edition_published_at": "2026-09-22T14:31:11.875968Z",
+    "payload_built_at": "2026-09-22T14:31:28.180Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

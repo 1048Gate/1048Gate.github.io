@@ -4,7 +4,7 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 2,
-  "generated_at": "2026-09-22T13:07:49.062145Z",
+  "generated_at": "2026-09-22T14:31:11.875968Z",
   "source_status": "verified_final",
   "validation_status": "valid",
   "editorial_policy": {
@@ -21,7 +21,7 @@
   "standfirst": "Bryan Hunt leads the verified table after Week 2; Brian Heino survived the week's closest finish by 4.64.",
   "lead": {
     "title": "Inside Week 2: the high score, the table lead, and the closest call",
-    "body": "Kyle Fowler established the Week 2 scoring pace at 168.28, while Bryan Hunt moved to 2-0 with 280.68 points for. The closest result was decided by 4.64 points.",
+    "body": "Kyle Fowler set the Week 2 scoring pace at 168.28, while Bryan Hunt moved to 2-0 with 280.68 points for. The closest result was decided by 4.64 points.",
     "sourceIds": [
       "current-season",
       "power-rankings"
@@ -34,7 +34,7 @@
     "homeTeam": "The Buwhops",
     "homeOwner": "Brian Heino",
     "homeScore": 109.36,
-    "whyItMatters": "The closest game on the final board finished with a 4.64-point margin, making it the tightest result of Week 2.",
+    "whyItMatters": "The closest game on the final board ended with a 4.64-point margin, making it the tightest result of Week 2.",
     "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
     "edge": "Verified result: Brian Heino by 4.64 points.",
     "sourceIds": [
@@ -73,7 +73,7 @@
     "record": "0-2",
     "label": "NEXT TEST",
     "title": "Next test: Collin Krum",
-    "body": "Collin Krum is 0-2 after Week 2. The next matchup offers a chance to change the early direction without overstating what a short opening sample means.",
+    "body": "Collin Krum is 0-2 after Week 2. The next matchup offers a chance to change the early direction without pretending a short opening sample has settled the story.",
     "sourceIds": [
       "current-season",
       "seasons"
@@ -81,14 +81,14 @@
   },
   "surprise": {
     "title": "Biggest surprise: the scoring range is already loud",
-    "body": "The gap between Kyle Fowler's 168.28 and Collin Krum's 61.94 stretches to 106.34 points. It is a completed Week 2 signal, but too early to call a season trend.",
+    "body": "The gap between Kyle Fowler's 168.28 and Collin Krum's 61.94 is 106.34 points. That is a completed Week 2 signal, but it is too early to call a season trend.",
     "sourceIds": [
       "current-season"
     ]
   },
   "recordWatch": {
     "title": "Record to watch: the first benchmark is on the board",
-    "body": "Week 2's results left the checked-in highest-score, blowout, and closest-game marks intact.",
+    "body": "Week 2's results did not break the checked-in highest-score, blowout, or closest-game marks.",
     "sourceIds": [
       "current-season",
       "matchups"
@@ -108,7 +108,7 @@
     {
       "story_type": "matchup_recap",
       "title": "Week 2: The league board",
-      "body": "Thomas Speer handled JD Daley 158.36–121.32. Bryan Hunt edged Trevor Hash 122.42–114.50. George Travis beat Collin Krum 122.28–61.94. Kyle Fowler powered past Jared Hall 168.28–81.30. Brian Heino got by German Haro 109.36–104.72. James Brochu topped Vincent Cannarozzi 98.98–91.46.",
+      "body": "Thomas Speer handled JD Daley 158.36–121.32. Bryan Hunt got past Trevor Hash 122.42–114.50. George Travis rolled by Collin Krum 122.28–61.94. Kyle Fowler stormed past Jared Hall 168.28–81.30. Brian Heino edged German Haro 109.36–104.72. James Brochu topped Vincent Cannarozzi 98.98–91.46, rounding out the board.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
@@ -118,7 +118,7 @@
     {
       "story_type": "biggest_win",
       "title": "Kyle Fowler delivers the week's biggest win",
-      "body": "Kyle Fowler overwhelmed Jared Hall 168.28–81.30, cruising home by a margin of 86.98 points.",
+      "body": "Kyle Fowler put the biggest stamp on the slate, beating Jared Hall 168.28–81.30 by a margin of 86.98 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
@@ -129,7 +129,7 @@
     {
       "story_type": "closest_game",
       "title": "Brian Heino survives the closest finish",
-      "body": "The week's tightest matchup came in at 109.36–104.72, with Brian Heino staying ahead of German Haro by 4.64 points.",
+      "body": "It was the week's nail-biter: Brian Heino finished ahead of German Haro 109.36–104.72, surviving by 4.64 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
@@ -140,7 +140,7 @@
     {
       "story_type": "scoring_leaders",
       "title": "Kyle Fowler sets the Week 2 pace",
-      "body": "Kyle Fowler led the league with 168.28. At the other end, Collin Krum posted the week's low score at 61.94.",
+      "body": "Kyle Fowler owned the scoring column with the league-high 168.28. At the other end, Collin Krum posted the week's low score at 61.94.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
@@ -151,7 +151,7 @@
     {
       "story_type": "standings",
       "title": "Bryan Hunt leads the verified table",
-      "body": "After Week 2, Bryan Hunt sits first at 2-0 with 280.68 points for.",
+      "body": "The verified table has Bryan Hunt sitting first after Week 2, carrying a 2-0 record and 280.68 points for.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;standings",
@@ -162,7 +162,7 @@
     {
       "story_type": "power_rankings",
       "title": "George Travis applies early pressure to the preseason order",
-      "body": "George Travis took his Week 2 matchup with 122.28 points after entering the season with a 44.9 post-draft rating.",
+      "body": "George Travis answered the early noise with a Week 2 win and 122.28 points, following an opening 44.9 post-draft rating.",
       "source": {
         "dataset": "data/current-season.json + data/power-rankings.json",
         "locator": "week=2;ratings",
@@ -173,7 +173,7 @@
     {
       "story_type": "record_watch",
       "title": "The record book holds",
-      "body": "Week 2's results left the checked-in highest-score, blowout, and closest-game marks untouched.",
+      "body": "Week 2 brought plenty of movement, but the checked-in highest-score, blowout, and closest-game marks stayed intact.",
       "source": {
         "dataset": "data/current-season.json + data/matchups.json",
         "locator": "week=2;records",
@@ -183,7 +183,7 @@
     {
       "story_type": "rivalry",
       "title": "Rivalry file: Brian Heino and German Haro",
-      "body": "The archive has the all-time series level at 5-5-0 through 10 meetings.",
+      "body": "The archive keeps this series level at 5-5-0 across 10 meetings.",
       "source": {
         "dataset": "data/matchups.json",
         "locator": "pair=Brian Heino|German Haro",
