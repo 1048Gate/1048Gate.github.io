@@ -36,6 +36,9 @@ class NewspaperTests(unittest.TestCase):
 
     def test_complete_and_sourced(self):
         result=self.make(); self.assertEqual(result["source_status"],"verified_final"); self.assertGreaterEqual(len(result["stories"]),8); self.assertTrue(all(s.get("source") for s in result["stories"]))
+        self.assertEqual(result["pressure"]["label"],"NEXT TEST")
+        recap=next(s for s in result["stories"] if s["story_type"]=="matchup_recap")
+        self.assertIn(" beat ",recap["body"]); self.assertNotIn(";",recap["body"])
     def test_manager_feature_limit_is_applied(self):
         result=self.make()
         counts={}
@@ -89,6 +92,14 @@ class NewspaperTests(unittest.TestCase):
         self.assertNotIn("next_week",{s["story_type"] for s in self.make()["stories"]})
         path=self.root/"data/current-season-weeks/week_02.json"; path.parent.mkdir(); path.write_text(json.dumps({"matchups":[{}]*6}))
         self.assertIn("next_week",{s["story_type"] for s in self.make()["stories"]})
+    def test_rivalry_requires_current_week_matchup(self):
+        result=self.make()
+        rivalry=next(s for s in result["stories"] if s["story_type"]=="rivalry")
+        self.assertIn("Hunt and Daley",rivalry["title"])
+        records=json.loads((self.root/"data/matchups.json").read_text())
+        records["pairs"]=[["Hunt","Speer",[5,8,0,0,0]]]
+        (self.root/"data/matchups.json").write_text(json.dumps(records))
+        self.assertNotIn("rivalry",{s["story_type"] for s in self.make()["stories"]})
     def test_index_order_and_duplicate(self):
         index=self.root/"data/newspaper_editions/index.json"; one=self.make(); two=self.make(); two["week"]=2
         paper.update_index(index,one,self.root/"data/newspaper_editions/2026/week_01.json",root=self.root)

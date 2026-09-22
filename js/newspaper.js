@@ -118,7 +118,7 @@
       ${lead.body?`<article class="weekly-lead"><span class="weekly-kicker">LEAD STORY</span><h4>${esc(lead.title||'The week in view')}</h4><p>${esc(lead.body)}</p></article>`:''}
       ${matchup.awayTeam?`<article class="weekly-matchup"><div class="weekly-kicker">MATCHUP OF THE WEEK</div><div class="weekly-matchup-score"><div><strong>${esc(matchup.awayTeam)}</strong><small>${esc(matchup.awayOwner||'')}</small><b>${esc(matchup.awayScore??'—')}</b></div><span>vs</span><div><strong>${esc(matchup.homeTeam)}</strong><small>${esc(matchup.homeOwner||'')}</small><b>${esc(matchup.homeScore??'—')}</b></div></div><p><strong>Why it matters:</strong> ${esc(matchup.whyItMatters||'')}</p><p><strong>Edge:</strong> ${esc(matchup.edge||'')}</p></article>`:''}
       ${table?`<section class="weekly-table"><div class="weekly-kicker">THE FIVE-MINUTE TABLE</div><ol>${table}</ol></section>`:''}
-      <div class="weekly-editorial-grid">${pressure.body?`<article><span class="weekly-kicker">UNDER PRESSURE</span><h4>${esc(pressure.title||pressure.team||'Under pressure')}</h4><p>${esc(pressure.body)}</p></article>`:''}${surprise.body?`<article><span class="weekly-kicker">BIGGEST SURPRISE</span><h4>${esc(surprise.title||'A surprise from the board')}</h4><p>${esc(surprise.body)}</p></article>`:''}${record.body?`<article><span class="weekly-kicker">RECORD TO WATCH</span><h4>${esc(record.title||'Record watch')}</h4><p>${esc(record.body)}</p></article>`:''}${archive.body?`<article><span class="weekly-kicker">FROM THE ARCHIVE</span><h4>${esc(archive.title||'Archive comparison')}</h4><p>${esc(archive.body)}</p></article>`:''}</div>
+      <div class="weekly-editorial-grid">${pressure.body?`<article><span class="weekly-kicker">${esc(pressure.label||'NEXT TEST')}</span><h4>${esc(pressure.title||pressure.team||'Next test')}</h4><p>${esc(pressure.body)}</p></article>`:''}${surprise.body?`<article><span class="weekly-kicker">BIGGEST SURPRISE</span><h4>${esc(surprise.title||'A surprise from the board')}</h4><p>${esc(surprise.body)}</p></article>`:''}${record.body?`<article><span class="weekly-kicker">RECORD TO WATCH</span><h4>${esc(record.title||'Record watch')}</h4><p>${esc(record.body)}</p></article>`:''}${archive.body?`<article><span class="weekly-kicker">FROM THE ARCHIVE</span><h4>${esc(archive.title||'Archive comparison')}</h4><p>${esc(archive.body)}</p></article>`:''}</div>
       <footer class="weekly-editorial-source"><span>DATA STATUS · ${esc(data.source_status==='verified_live'?'Live board':'Final board')}</span><small>${esc(data.editorial_note||'Claims limited to checked-in sources.')}</small></footer>
     </section>`;
   }
@@ -135,7 +135,9 @@
       ? editionConfig.historical.status
       : (data.source_status === 'verified_live' ? 'live 2026 weekly edition' : data.source_status === 'verified_final' ? 'verified 2026 weekly edition' : editionConfig.weekly.status);
 
-    const stories = data.stories.map((story, index) => `
+    const coveredWeeklyTypes = new Set(['closest_game','scoring_leaders','standings','record_watch']);
+    const visibleStories = historical ? data.stories : data.stories.filter(story => !coveredWeeklyTypes.has(story.story_type));
+    const stories = visibleStories.map((story, index) => `
       <article class="story-item${index === 0 ? ' story-lead' : ''}">
         <div class="story-meta">
           <span>${historical ? `Season ${esc(story.season)} \u00b7 ` : ''}${esc(formatStoryType(story.story_type))}</span>
@@ -162,6 +164,7 @@
       </header>
       <div class="edition-status" aria-label="Source status: ${esc(status)}"><span class="status-dot"></span>${esc(status)}</div>
       ${historical?'':renderWeeklyEditorial(data)}
+      ${historical?'':`<h3 class="edition-more-title">More from Week ${esc(data.week)}</h3>`}
       <div class="edition-stories">${stories}</div>
       <footer class="edition-footer"><small>${historical ? 'Verified league archive' : 'Deterministic edition'} \u00b7 claims limited to checked-in sources</small></footer>`;
   }
