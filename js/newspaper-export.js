@@ -359,7 +359,7 @@
     return concatBytes(output);
   }
 
-  async function createNewspaperPdf(data){
+  async function createEditionPageBlobs(data, type='image/png', quality){
     const full = await createFullEditionCanvas(data);
     const pageHeight = 1398;
     const pages = [];
@@ -371,14 +371,95 @@
       context.fillStyle = '#f3ead9';
       context.fillRect(0, 0, page.width, page.height);
       context.drawImage(full, 0, top, full.width, pageHeight, 0, 0, full.width, pageHeight);
-      const jpeg = await canvasBlob(page, 'image/jpeg', .94);
-      pages.push(new Uint8Array(await jpeg.arrayBuffer()));
+      pages.push(await canvasBlob(page, type, quality));
     }
-    return buildImagePdf(pages, full.width, pageHeight);
+    return {pages, width:full.width, height:pageHeight};
   }
 
-  async function createFullEditionImage(data){
-    return canvasBlob(await createFullEditionCanvas(data), 'image/png');
+  function crc32(bytes){
+    let crc = 0xFFFFFFFF;
+    for(const byte of bytes){
+      crc ^= byte;
+      for(let bit = 0; bit < 8; bit++) crc = (crc >>> 1) ^ ((crc & 1) ? 0xEDB88320 : 0);
+    }
+    return (crc ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function zipRecord(length, writer){
+    const bytes = new Uint8Array(length);
+    writer(new DataView(bytes.buffer));
+    return bytes;
+  }
+
+  function buildZip(entries){
+    const encoder = new TextEncoder();
+    const localParts = [];
+    const centralParts = [];
+    let localOffset = 0;
+    entries.forEach(entry => {
+      const name = encoder.encode(entry.name);
+      const data = entry.data instanceof Uint8Array ? entry.data : new Uint8Array(entry.data);
+      const checksum = crc32(data);
+      const localHeader = zipRecord(30, view => {
+        view.setUint32(0, 0x04034B50, true);
+        view.setUint16(4, 20, true);
+        view.setUint16(8, 0, true);
+        view.setUint32(14, checksum, true);
+        view.setUint32(18, data.length, true);
+        view.setUint32(22, data.length, true);
+        view.setUint16(26, name.length, true);
+      });
+      localParts.push(localHeader, name, data);
+
+      const centralHeader = zipRecord(46, view => {
+        view.setUint32(0, 0x02014B50, true);
+        view.setUint16(4, 20, true);
+        view.setUint16(6, 20, true);
+        view.setUint16(10, 0, true);
+        view.setUint32(16, checksum, true);
+        view.setUint32(20, data.length, true);
+        view.setUint32(24, data.length, true);
+        view.setUint16(28, name.length, true);
+        view.setUint32(42, localOffset, true);
+      });
+      centralParts.push(centralHeader, name);
+      localOffset += localHeader.length + name.length + data.length;
+    });
+    const central = concatBytes(centralParts);
+    const end = zipRecord(22, view => {
+      view.setUint32(0, 0x06054B50, true);
+      view.setUint16(8, entries.length, true);
+      view.setUint16(10, entries.length, true);
+      view.setUint32(12, central.length, true);
+      view.setUint32(16, localOffset, true);
+    });
+    return concatBytes([...localParts, central, end]);
+  }
+
+  async function createNewspaperPdf(data){
+    const pageSet = await createEditionPageBlobs(data, 'image/jpeg', .94);
+    const jpegPages = await Promise.all(pageSet.pages.map(async blob => new Uint8Array(await blob.arrayBuffer())));
+    return buildImagePdf(jpegPages, pageSet.width, pageSet.height);
+  }
+
+  async function savePageImages(data){
+    const pageSet = await createEditionPageBlobs(data, 'image/png');
+    const base = fileBase(data);
+    const pageEntries = pageSet.pages.map((blob, index) => ({blob, name:`${base}-page-${String(index + 1).padStart(2, '0')}.png`}));
+    const files = typeof File === 'function'
+      ? pageEntries.map(entry => new File([entry.blob], entry.name, {type:'image/png'}))
+      : [];
+    if(files.length && navigator.share && (!navigator.canShare || navigator.canShare({files}))){
+      await navigator.share({
+        title:`1048 Gate Week ${data.week} - Full Edition`,
+        text:'Save every page, then swipe through the weekly edition in Photos.',
+        files
+      });
+      return 'shared';
+    }
+    const entries = await Promise.all(pageEntries.map(async entry => ({name:entry.name, data:new Uint8Array(await entry.blob.arrayBuffer())})));
+    downloadBlob(new Blob([buildZip(entries)], {type:'application/zip'}), `${base}-page-images.zip`);
+    return 'downloaded';
   }
 
   async function createShareImage(data){
@@ -459,8 +540,7 @@
   }
 
   async function downloadImage(data){
-    const blob = await createFullEditionImage(data);
-    downloadBlob(blob, `${fileBase(data)}-full-edition.png`);
+    return savePageImages(data);
   }
 
   async function shareImage(data){
@@ -480,12 +560,14 @@
     editionSections,
     buildWeeklyPdf,
     buildImagePdf,
+    buildZip,
     createFullEditionCanvas,
-    createFullEditionImage,
+    createEditionPageBlobs,
     createNewspaperPdf,
     createShareImage,
     downloadPdf,
     downloadImage,
+    savePageImages,
     shareImage
   });
 })();
