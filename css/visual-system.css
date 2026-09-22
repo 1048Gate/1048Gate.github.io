@@ -161,5 +161,9 @@ html[data-theme="light"] #home .week-game.is-final .week-card-badge{color:#1f2a2
 html[data-theme="light"] #home [data-week-stamp].is-final{color:#1f2a2b}
 html[data-theme="light"] #home [data-week-stamp].is-live{color:#416a52}
 #home [data-week-stamp].is-degraded{color:var(--muted)}
+#home [data-week-stamp].is-stale-warning,#home [data-week-stamp].is-stale-critical{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem .6rem;border:1px solid rgba(195,160,108,.5);border-radius:999px;background:rgba(195,160,108,.1);color:var(--amber)}
+#home [data-week-stamp].is-stale-critical{border-color:rgba(169,79,61,.58);background:rgba(169,79,61,.12);color:#efaa9d}
+html[data-theme="light"] #home [data-week-stamp].is-stale-warning{color:#795b28;background:#fff4d8}
+html[data-theme="light"] #home [data-week-stamp].is-stale-critical{color:#8a3025;background:#fff0ed}
 #home .week-refresh,.week-refresh{appearance:none;border:1px solid var(--line, #d7d0c4);background:var(--panel, #fffaf1);color:inherit;font:inherit;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;min-height:44px;min-width:44px;cursor:pointer}
 #home .week-refresh:disabled{opacity:.6;cursor:wait}

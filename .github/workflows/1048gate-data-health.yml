@@ -42,6 +42,12 @@ on:
         required: false
         type: boolean
         default: false
+  repository_dispatch:
+    types: [current-season-refresh]
+
+concurrency:
+  group: data-health-current-season
+  cancel-in-progress: false
 
 permissions:
   contents: read

@@ -2,6 +2,8 @@
 (function(){
   const WEEK_CACHE_KEY = '1048-gate-current-week-v1';
   const LEAGUE_TZ = 'America/New_York';
+  const LIVE_WARNING_MINUTES = 45;
+  const LIVE_CRITICAL_MINUTES = 90;
 
   function validWeek(payload){
     const season=payload?.season;
@@ -61,19 +63,31 @@
     return rel || clock;
   }
 
-  function setTimestamp(target, {iso, saved = false, source = 'ESPN', status = '', live = false, degraded = false} = {}){
+  function liveFreshness(iso, now = Date.now()){
+    const fetchedAt = new Date(iso || '').getTime();
+    if(!Number.isFinite(fetchedAt)) return {level:'unknown', ageMinutes:null};
+    const ageMinutes = Math.max(0, Math.floor((now - fetchedAt) / 60000));
+    if(ageMinutes >= LIVE_CRITICAL_MINUTES) return {level:'critical', ageMinutes};
+    if(ageMinutes >= LIVE_WARNING_MINUTES) return {level:'warning', ageMinutes};
+    return {level:'fresh', ageMinutes};
+  }
+
+  function setTimestamp(target, {iso, saved = false, source = 'ESPN', status = '', live = false, degraded = false, now = Date.now()} = {}){
     if(!target) return;
-    const rel = relativeFrom(iso);
+    const rel = relativeFrom(iso, now);
     const clock = clockLabel(iso);
     const absolute=dateTimeLabel(iso);
     const state=saved?'snapshot':status||(live?'live':'snapshot');
+    const freshness=state==='live' ? liveFreshness(iso, now) : {level:'fresh'};
+    const stale=freshness.level==='warning'||freshness.level==='critical';
     let text='';
     if(degraded) text=rel?`ESPN scores last updated ${rel} · Feed reconnecting`:'ESPN feed reconnecting';
+    else if(stale) text=`Live scores delayed · Last snapshot ${rel || clock || 'unavailable'}`;
     else if(state==='live') text=rel?`${source} live · Updated ${rel}`:`${source} live`;
     else if(state==='final') text=absolute?`Final · ${source} verified · ${absolute}`:`Final · ${source} verified`;
     else if(state==='upcoming') text=absolute?`Upcoming · ${source} schedule · ${absolute}`:`Upcoming · ${source} schedule`;
     else text=absolute?`${source} snapshot · ${absolute}`:`${source} snapshot`;
-    const appendClock=state==='live'&&clock&&!degraded;
+    const appendClock=state==='live'&&clock&&!degraded&&!stale;
     target.replaceChildren(document.createTextNode(appendClock ? `${text} · ` : text));
     if(iso && appendClock){
       const time = document.createElement('time');
@@ -83,10 +97,21 @@
       target.append(time);
     }
     target.classList.toggle('is-saved', saved);
-    target.classList.toggle('is-live', !!(state==='live' && !saved && !degraded));
+    target.classList.toggle('is-live', !!(state==='live' && !saved && !degraded && !stale));
     target.classList.toggle('is-final', !!(state==='final' && !degraded));
     target.classList.toggle('is-upcoming', !!(state==='upcoming' && !degraded));
     target.classList.toggle('is-degraded', !!degraded);
+    target.classList.toggle('is-stale-warning', freshness.level==='warning');
+    target.classList.toggle('is-stale-critical', freshness.level==='critical');
+    if(stale) target.setAttribute?.('title', `Scores are ${freshness.ageMinutes} minutes old. The last saved scores remain visible.`);
+    else target.removeAttribute?.('title');
+  }
+
+  function watchTimestamp(target, options, intervalMs = 60000){
+    if(!target) return () => {};
+    setTimestamp(target, options);
+    const timer=window.setInterval?.(()=>setTimestamp(target, options), intervalMs);
+    return ()=>window.clearInterval?.(timer);
   }
 
   function saveWeek(payload, storage = window.localStorage){
@@ -111,12 +136,16 @@
   window.gateFreshness = Object.freeze({
     WEEK_CACHE_KEY,
     LEAGUE_TZ,
+    LIVE_WARNING_MINUTES,
+    LIVE_CRITICAL_MINUTES,
     validWeek,
     relativeFrom,
     clockLabel,
     dateTimeLabel,
     formatted,
+    liveFreshness,
     setTimestamp,
+    watchTimestamp,
     saveWeek,
     readWeek
   });

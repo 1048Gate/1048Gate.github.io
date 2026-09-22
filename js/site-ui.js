@@ -194,7 +194,9 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
   document.querySelectorAll('[data-week-heading], #weekBoard h2').forEach(el => {el.textContent = weekLabel});
   const stamp = firstMatch(['[data-week-stamp]', '#weekBoard .home-section-head small']);
   const boardStatus=saved?'snapshot':matchups.length&&matchups.every(game=>game.state==='final')?'final':matchups.some(game=>game.state==='live')?'live':'upcoming';
-  window.gateFreshness?.setTimestamp(stamp, {iso:payload.fetchedAt || payload.last_updated, saved, status:boardStatus});
+  window.stopWeekFreshnessMonitor?.();
+  const stampOptions={iso:payload.fetchedAt || payload.last_updated, saved, status:boardStatus};
+  window.stopWeekFreshnessMonitor=window.gateFreshness?.watchTimestamp(stamp,stampOptions) || null;
   const boardNode=document.getElementById('weekBoard');
   if(boardNode){
     boardNode.dataset.weekSource=saved?'saved':'fresh';
