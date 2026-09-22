@@ -53,6 +53,7 @@
 <script defer src="js/staff-loader.js"></script>
 <script defer src="js/home-layout.js"></script>
 <script defer src="js/league-pulse.js"></script>
+<script defer src="js/newspaper-export.js"></script>
 <script defer src="js/newspaper.js"></script>
 
 <script defer src="js/transactions.js"></script>
@@ -597,6 +598,12 @@
       <select id="weeklyEditionSelect" aria-label="Choose a weekly newspaper edition" disabled>
         <option value="">No weekly editions</option>
       </select>
+    </div>
+    <div id="weeklyEditionActions" class="edition-actions" hidden>
+      <button type="button" id="editionPdfDownload" class="edition-action">Download PDF</button>
+      <button type="button" id="editionImageDownload" class="edition-action">Download Image</button>
+      <button type="button" id="editionShare" class="edition-action edition-action-primary">Share Edition</button>
+      <span id="editionExportStatus" class="edition-export-status" role="status" aria-live="polite"></span>
     </div>
     <div id="editionContent" class="edition-content" data-panel="editorial" aria-live="polite">
       <div class="edition-loading"><span>Open an edition to load the newspaper.</span></div>
