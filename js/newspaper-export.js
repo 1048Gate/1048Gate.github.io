@@ -40,25 +40,40 @@
 
   function editionSections(data){
     const sections = [];
+    const seen = new Set();
+    const add = section => {
+      if(!section?.body) return;
+      const key = `${String(section.title || '').trim().toLowerCase()}|${String(section.body).trim().toLowerCase()}`;
+      if(seen.has(key)) return;
+      seen.add(key);
+      sections.push(section);
+    };
     const lead = data.lead || {};
     const matchup = data.matchup || {};
-    if(lead.body) sections.push({label:'Lead story', title:lead.title || 'The week in view', body:lead.body});
+    add({label:'Lead story', title:lead.title || 'The week in view', body:lead.body});
     if(matchup.awayTeam){
       const score = `${matchup.awayTeam} ${matchup.awayScore ?? '-'} - ${matchup.homeScore ?? '-'} ${matchup.homeTeam}`;
-      sections.push({label:'Matchup of the week', title:score, body:[matchup.whyItMatters, matchup.edge].filter(Boolean).join(' ')});
+      add({label:'Matchup of the week', title:score, body:[matchup.whyItMatters, matchup.edge].filter(Boolean).join(' ')});
     }
     const table = Array.isArray(data.tableNotes) ? data.tableNotes : [];
     if(table.length){
-      sections.push({
+      add({
         label:'The five-minute table',
         title:'Standings snapshot',
         body:table.map(note => `${note.rank}. ${note.team} (${note.owner}) - ${note.record}, ${note.pointsFor} PF - ${note.tag || ''}`).join('\n')
       });
     }
-    for(const item of [data.pressure, data.surprise, data.recordWatch, data.archiveComparison]){
-      if(item?.body) sections.push({label:item.label || 'Around the league', title:item.title || item.team || 'League note', body:item.body});
+    const editorialNotes = [
+      [data.pressure, data.pressure?.label || 'Next test'],
+      [data.surprise, 'Biggest surprise'],
+      [data.recordWatch, 'Record to watch'],
+      [data.archiveComparison, 'From the archive']
+    ];
+    for(const [item, label] of editorialNotes){
+      if(item?.body) add({label, title:item.title || item.team || 'League note', body:item.body});
     }
-    (Array.isArray(data.stories) ? data.stories : []).forEach(story => sections.push({
+    const coveredTypes = new Set(['closest_game','scoring_leaders','standings','record_watch']);
+    (Array.isArray(data.stories) ? data.stories : []).filter(story => !coveredTypes.has(story.story_type)).forEach(story => add({
       label:String(story.story_type || 'League story').replaceAll('_', ' '),
       title:story.title,
       body:story.body
@@ -162,8 +177,15 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  function downloadPdf(data){
-    downloadBlob(new Blob([buildWeeklyPdf(data)], {type:'application/pdf'}), `${fileBase(data)}-edition.pdf`);
+  async function downloadPdf(data){
+    let bytes;
+    try{
+      bytes = await createNewspaperPdf(data);
+    }catch(error){
+      console.warn('Falling back to the text edition PDF:', error);
+      bytes = buildWeeklyPdf(data);
+    }
+    downloadBlob(new Blob([bytes], {type:'application/pdf'}), `${fileBase(data)}-edition.pdf`);
   }
 
   function canvasLines(context, value, maxWidth){
@@ -177,6 +199,186 @@
     });
     if(line) lines.push(line);
     return lines;
+  }
+
+  function canvasParagraphLines(context, value, maxWidth){
+    return String(value || '').split('\n').flatMap(paragraph => canvasLines(context, paragraph, maxWidth));
+  }
+
+  function canvasBlob(canvas, type, quality){
+    return new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Image export failed.')), type, quality));
+  }
+
+  async function createFullEditionCanvas(data){
+    if(document.fonts?.ready) await document.fonts.ready;
+    const PAGE_WIDTH = 1080;
+    const PAGE_HEIGHT = 1398;
+    const LEFT = 78;
+    const CONTENT_WIDTH = 924;
+    const BOTTOM = 1276;
+    const measureCanvas = document.createElement('canvas');
+    const measure = measureCanvas.getContext('2d');
+
+    measure.font = '700 58px Oswald, Arial, sans-serif';
+    const headlineLines = canvasParagraphLines(measure, data.headline || `Week ${data.week} Edition`, CONTENT_WIDTH).slice(0, 4);
+    measure.font = '400 26px Georgia, serif';
+    const standfirstLines = canvasParagraphLines(measure, data.standfirst || '', CONTENT_WIDTH).slice(0, 5);
+    const firstContentTop = 205 + (headlineLines.length * 66) + (standfirstLines.length * 38) + 58;
+
+    const blocks = editionSections(data).map(section => {
+      measure.font = '700 34px Oswald, Arial, sans-serif';
+      const titleLines = canvasParagraphLines(measure, section.title || '', CONTENT_WIDTH);
+      measure.font = '400 23px Georgia, serif';
+      const bodyLines = canvasParagraphLines(measure, section.body || '', CONTENT_WIDTH);
+      return {...section, titleLines, bodyLines, height:40 + (titleLines.length * 41) + 12 + (bodyLines.length * 33) + 34};
+    });
+
+    const placed = [];
+    let page = 0;
+    let y = firstContentTop;
+    blocks.forEach(block => {
+      if(y + block.height > BOTTOM){ page += 1; y = 142; }
+      placed.push({...block, page, y});
+      y += block.height;
+    });
+    const pageCount = page + 1;
+    const canvas = document.createElement('canvas');
+    canvas.width = PAGE_WIDTH;
+    canvas.height = PAGE_HEIGHT * pageCount;
+    const context = canvas.getContext('2d');
+
+    for(let pageIndex = 0; pageIndex < pageCount; pageIndex++){
+      const offset = pageIndex * PAGE_HEIGHT;
+      context.fillStyle = '#f3ead9';
+      context.fillRect(0, offset, PAGE_WIDTH, PAGE_HEIGHT);
+      context.strokeStyle = '#b98a52';
+      context.lineWidth = 4;
+      context.strokeRect(38, offset + 38, 1004, 1322);
+      context.strokeStyle = '#1b292b';
+      context.lineWidth = 2;
+      context.strokeRect(52, offset + 52, 976, 1294);
+
+      context.fillStyle = '#1b292b';
+      context.font = '700 45px Oswald, Arial, sans-serif';
+      context.fillText(pageIndex ? '1048 GATE WEEKLY · CONTINUED' : '1048 GATE WEEKLY', LEFT, offset + 112);
+      context.textAlign = 'right';
+      context.fillStyle = '#7b5b2f';
+      context.font = '700 20px "Space Mono", monospace';
+      context.fillText(`WEEK ${data.week}  /  ${data.status === 'live' ? 'LIVE' : 'FINAL'}`, 1002, offset + 108);
+      context.textAlign = 'left';
+      context.fillStyle = '#1b292b';
+      context.fillRect(LEFT, offset + 132, CONTENT_WIDTH, 4);
+
+      context.fillStyle = '#596568';
+      context.font = '700 17px "Space Mono", monospace';
+      context.fillText('1048GATE.COM  ·  VERIFIED LEAGUE EDITION', LEFT, offset + 1325);
+      context.textAlign = 'right';
+      context.fillText(`PAGE ${pageIndex + 1} OF ${pageCount}`, 1002, offset + 1325);
+      context.textAlign = 'left';
+    }
+
+    context.fillStyle = '#1b292b';
+    context.font = '700 58px Oswald, Arial, sans-serif';
+    let headerY = 205;
+    headlineLines.forEach(line => { context.fillText(line.toUpperCase(), LEFT, headerY); headerY += 66; });
+    headerY += 8;
+    context.fillStyle = '#435153';
+    context.font = '400 26px Georgia, serif';
+    standfirstLines.forEach(line => { context.fillText(line, LEFT, headerY); headerY += 38; });
+    context.fillStyle = '#7b5b2f';
+    context.fillRect(LEFT, headerY + 10, CONTENT_WIDTH, 3);
+
+    placed.forEach(block => {
+      let blockY = (block.page * PAGE_HEIGHT) + block.y;
+      context.strokeStyle = 'rgba(39,50,52,.34)';
+      context.lineWidth = 2;
+      context.beginPath();
+      context.moveTo(LEFT, blockY);
+      context.lineTo(LEFT + CONTENT_WIDTH, blockY);
+      context.stroke();
+      blockY += 29;
+      context.fillStyle = '#7b5b2f';
+      context.font = '700 18px "Space Mono", monospace';
+      context.fillText(String(block.label || 'League story').toUpperCase(), LEFT, blockY);
+      blockY += 42;
+      context.fillStyle = '#172022';
+      context.font = '700 34px Oswald, Arial, sans-serif';
+      block.titleLines.forEach(line => { context.fillText(line.toUpperCase(), LEFT, blockY); blockY += 41; });
+      blockY += 7;
+      context.fillStyle = '#273234';
+      context.font = '400 23px Georgia, serif';
+      block.bodyLines.forEach(line => { context.fillText(line, LEFT, blockY); blockY += 33; });
+    });
+    return canvas;
+  }
+
+  function concatBytes(parts){
+    const length = parts.reduce((total, part) => total + part.length, 0);
+    const result = new Uint8Array(length);
+    let offset = 0;
+    parts.forEach(part => { result.set(part, offset); offset += part.length; });
+    return result;
+  }
+
+  function buildImagePdf(jpegPages, width, height){
+    const encoder = new TextEncoder();
+    const ascii = value => encoder.encode(value);
+    const pageIds = jpegPages.map((_, index) => 3 + (index * 3));
+    const objects = [];
+    objects[1] = ascii('<< /Type /Catalog /Pages 2 0 R >>');
+    objects[2] = ascii(`<< /Type /Pages /Kids [${pageIds.map(id => `${id} 0 R`).join(' ')}] /Count ${pageIds.length} >>`);
+    jpegPages.forEach((jpeg, index) => {
+      const pageId = 3 + (index * 3);
+      const contentId = pageId + 1;
+      const imageId = pageId + 2;
+      const imageName = `Im${index}`;
+      const content = `q\n612 0 0 792 0 0 cm\n/${imageName} Do\nQ`;
+      objects[pageId] = ascii(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /XObject << /${imageName} ${imageId} 0 R >> >> /Contents ${contentId} 0 R >>`);
+      objects[contentId] = ascii(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
+      objects[imageId] = concatBytes([
+        ascii(`<< /Type /XObject /Subtype /Image /Width ${width} /Height ${height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>\nstream\n`),
+        jpeg,
+        ascii('\nendstream')
+      ]);
+    });
+
+    const output = [ascii('%PDF-1.4\n')];
+    const offsets = [0];
+    let length = output[0].length;
+    for(let id = 1; id < objects.length; id++){
+      offsets[id] = length;
+      const object = concatBytes([ascii(`${id} 0 obj\n`), objects[id], ascii('\nendobj\n')]);
+      output.push(object);
+      length += object.length;
+    }
+    const xrefOffset = length;
+    const xref = [`xref\n0 ${objects.length}\n`, '0000000000 65535 f \n'];
+    for(let id = 1; id < objects.length; id++) xref.push(`${String(offsets[id]).padStart(10, '0')} 00000 n \n`);
+    xref.push(`trailer\n<< /Size ${objects.length} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`);
+    output.push(ascii(xref.join('')));
+    return concatBytes(output);
+  }
+
+  async function createNewspaperPdf(data){
+    const full = await createFullEditionCanvas(data);
+    const pageHeight = 1398;
+    const pages = [];
+    for(let top = 0; top < full.height; top += pageHeight){
+      const page = document.createElement('canvas');
+      page.width = full.width;
+      page.height = pageHeight;
+      const context = page.getContext('2d');
+      context.fillStyle = '#f3ead9';
+      context.fillRect(0, 0, page.width, page.height);
+      context.drawImage(full, 0, top, full.width, pageHeight, 0, 0, full.width, pageHeight);
+      const jpeg = await canvasBlob(page, 'image/jpeg', .94);
+      pages.push(new Uint8Array(await jpeg.arrayBuffer()));
+    }
+    return buildImagePdf(pages, full.width, pageHeight);
+  }
+
+  async function createFullEditionImage(data){
+    return canvasBlob(await createFullEditionCanvas(data), 'image/png');
   }
 
   async function createShareImage(data){
@@ -257,8 +459,8 @@
   }
 
   async function downloadImage(data){
-    const blob = await createShareImage(data);
-    downloadBlob(blob, `${fileBase(data)}-share.png`);
+    const blob = await createFullEditionImage(data);
+    downloadBlob(blob, `${fileBase(data)}-full-edition.png`);
   }
 
   async function shareImage(data){
@@ -273,5 +475,17 @@
     return 'downloaded';
   }
 
-  window.gateNewspaperExport = Object.freeze({fileBase, editionSections, buildWeeklyPdf, createShareImage, downloadPdf, downloadImage, shareImage});
+  window.gateNewspaperExport = Object.freeze({
+    fileBase,
+    editionSections,
+    buildWeeklyPdf,
+    buildImagePdf,
+    createFullEditionCanvas,
+    createFullEditionImage,
+    createNewspaperPdf,
+    createShareImage,
+    downloadPdf,
+    downloadImage,
+    shareImage
+  });
 })();

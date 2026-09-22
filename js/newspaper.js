@@ -408,7 +408,7 @@
     runExport(event.currentTarget, data => window.gateNewspaperExport.downloadPdf(data), 'PDF downloaded.');
   });
   document.getElementById('editionImageDownload')?.addEventListener('click', event => {
-    runExport(event.currentTarget, data => window.gateNewspaperExport.downloadImage(data), 'Image downloaded.');
+    runExport(event.currentTarget, data => window.gateNewspaperExport.downloadImage(data), 'Full edition image downloaded.');
   });
   document.getElementById('editionShare')?.addEventListener('click', event => {
     runExport(event.currentTarget, data => window.gateNewspaperExport.shareImage(data), 'Image downloaded for sharing.');
