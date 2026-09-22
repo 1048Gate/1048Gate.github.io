@@ -17,11 +17,11 @@
     "description": "Published ESPN board snapshot"
   },
   "status": "final",
-  "headline": "The Week 2 table has a shape, but not a verdict",
-  "standfirst": "Bryan Hunt leads the verified table after Week 2, while Trevor Hash is already looking for a response.",
+  "headline": "Kyle Fowler sets the Week 2 pace as the table takes shape",
+  "standfirst": "Bryan Hunt leads the verified table after Week 2; Brian Heino survived the week's closest finish by 4.64.",
   "lead": {
-    "title": "The Week 2 table has a shape, but not a verdict",
-    "body": "Bryan Hunt owns the Week 2 headline at 2-0 with 280.68 points for. Kyle Fowler supplied the league-high score at 168.28, while Collin Krum finished at 61.94. The completed slate is now part of the season record.",
+    "title": "Kyle Fowler sets the Week 2 pace as the table takes shape",
+    "body": "Kyle Fowler set the Week 2 scoring pace at 168.28, while Bryan Hunt moved to 2-0 with 280.68 points for. The closest result was decided by 4.64 points.",
     "sourceIds": [
       "current-season",
       "power-rankings"
@@ -68,11 +68,12 @@
     }
   ],
   "pressure": {
-    "team": "Team Hash",
-    "owner": "Trevor Hash",
-    "record": "1-1",
-    "title": "Under pressure: Trevor Hash",
-    "body": "Trevor Hash is 1-1 after Week 2. That is an early-season pressure point, not a verdict; the next result determines whether the opening becomes a story.",
+    "team": "Breezin’ with Bijan",
+    "owner": "Collin Krum",
+    "record": "0-2",
+    "label": "NEXT TEST",
+    "title": "Next test: Collin Krum",
+    "body": "Collin Krum is 0-2 after Week 2. The next matchup is a chance to change the early direction without overstating what a short opening sample means.",
     "sourceIds": [
       "current-season",
       "seasons"
@@ -107,7 +108,7 @@
     {
       "story_type": "matchup_recap",
       "title": "Week 2: The league board",
-      "body": "Thomas Speer 158.36–121.32 JD Daley; Bryan Hunt 122.42–114.50 Trevor Hash; George Travis 122.28–61.94 Collin Krum; Kyle Fowler 168.28–81.30 Jared Hall; German Haro 104.72–109.36 Brian Heino; Vincent Cannarozzi 91.46–98.98 James Brochu.",
+      "body": "Thomas Speer beat JD Daley 158.36–121.32. Bryan Hunt beat Trevor Hash 122.42–114.50. George Travis beat Collin Krum 122.28–61.94. Kyle Fowler beat Jared Hall 168.28–81.30. Brian Heino beat German Haro 109.36–104.72. James Brochu beat Vincent Cannarozzi 98.98–91.46.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=2;matchups",
@@ -181,11 +182,11 @@
     },
     {
       "story_type": "rivalry",
-      "title": "Rivalry file: Brian Heino and Bryan Hunt",
-      "body": "The archive has the all-time series at 4-7-0 from 11 meetings—a rivalry with plenty of history still on the page.",
+      "title": "Rivalry file: Brian Heino and German Haro",
+      "body": "The archive lists the all-time series at 5-5-0 from 10 meetings.",
       "source": {
         "dataset": "data/matchups.json",
-        "locator": "pair=Brian Heino|Bryan Hunt",
+        "locator": "pair=Brian Heino|German Haro",
         "description": "All-time head-to-head archive"
       }
     }
