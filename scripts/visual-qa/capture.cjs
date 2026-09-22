@@ -26,6 +26,13 @@ const server=http.createServer((req,res)=>{
   const homepage=json('data/homepage-week.json');
   const entry=index.editions.find(e=>e.season===board.season&&e.week===board.week);
   const edition=json(entry.path);
+  if(state==='live'){
+    board.matchups.forEach(g=>{g.state='live';g.winner='UNDECIDED'});
+    board.note='QA fixture: live week; scores retained from checked-in snapshot.';
+    homepage.matchups=board.matchups;homepage.status='live';homepage.note=board.note;
+    if(homepage.featured_story){homepage.featured_story.status='live';homepage.featured_story.source_status='verified_live';}
+    edition.source_status=entry.source_status='verified_live';edition.status='live';
+  }
   if(state==='recap'){
     board.matchups.forEach(g=>g.state='final');board.note='QA fixture: finalized week; scores retained from checked-in snapshot.';
     homepage.matchups=board.matchups;homepage.status='final';homepage.note=board.note;
