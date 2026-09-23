@@ -2,130 +2,130 @@
   "schemaVersion": 1,
   "season": 2026,
   "seasonNumber": 10,
-  "week": 2,
-  "phase": "Week 2",
-  "status": "final",
-  "last_updated": "2026-09-22T14:31:11.789945+00:00",
-  "note": "Week 2 slate from ESPN.",
+  "week": 3,
+  "phase": "Week 3",
+  "status": "live",
+  "last_updated": "2026-09-23T22:31:33.114168+00:00",
+  "note": "Week 3 slate from ESPN.",
   "matchups": [
     {
-      "id": 7,
-      "week": 2,
-      "state": "final",
-      "winner": "AWAY",
+      "id": 13,
+      "week": 3,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 11,
-        "team": "Your Reigning Champ",
-        "owner": "Thomas Speer",
-        "score": 158.36
-      },
-      "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 121.32
-      }
-    },
-    {
-      "id": 8,
-      "week": 2,
-      "state": "final",
-      "winner": "AWAY",
-      "isPlayoff": false,
-      "matchupType": "NONE",
-      "away": {
-        "teamId": 5,
-        "team": "Howya Been's",
-        "owner": "Bryan Hunt",
-        "score": 122.42
+        "score": 0
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 114.5
+        "score": 0
       }
     },
     {
-      "id": 9,
-      "week": 2,
-      "state": "final",
-      "winner": "AWAY",
+      "id": 14,
+      "week": 3,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 1,
-        "team": "Madison Beer Garden",
-        "owner": "George Travis",
-        "score": 122.28
-      },
-      "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 61.94
+        "score": 0
+      },
+      "home": {
+        "teamId": 11,
+        "team": "Your Reigning Champ",
+        "owner": "Thomas Speer",
+        "score": 0
       }
     },
     {
-      "id": 10,
-      "week": 2,
-      "state": "final",
-      "winner": "AWAY",
+      "id": 15,
+      "week": 3,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 4,
-        "team": "1912 Titanic Swimteam",
-        "owner": "Kyle Fowler",
-        "score": 168.28
-      },
-      "home": {
         "teamId": 3,
-        "team": "Darty at 1048",
+        "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 81.3
+        "score": 0
+      },
+      "home": {
+        "teamId": 5,
+        "team": "Howya Been's",
+        "owner": "Bryan Hunt",
+        "score": 0
       }
     },
     {
-      "id": 11,
-      "week": 2,
-      "state": "final",
-      "winner": "HOME",
+      "id": 16,
+      "week": 3,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 14,
-        "team": "Ice Has Me Running Back",
-        "owner": "German Haro",
-        "score": 104.72
-      },
-      "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 109.36
+        "score": 0
+      },
+      "home": {
+        "teamId": 1,
+        "team": "Madison Beer Garden",
+        "owner": "George Travis",
+        "score": 0
       }
     },
     {
-      "id": 12,
-      "week": 2,
-      "state": "final",
-      "winner": "HOME",
+      "id": 17,
+      "week": 3,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
+      "isPlayoff": false,
+      "matchupType": "NONE",
+      "away": {
+        "teamId": 8,
+        "team": "Jigalos Jims",
+        "owner": "James Brochu",
+        "score": 0
+      },
+      "home": {
+        "teamId": 4,
+        "team": "1912 Titanic Swimteam",
+        "owner": "Kyle Fowler",
+        "score": 0
+      }
+    },
+    {
+      "id": 18,
+      "week": 3,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 91.46
+        "score": 0
       },
       "home": {
-        "teamId": 8,
-        "team": "Jigalos Jims",
-        "owner": "James Brochu",
-        "score": 98.98
+        "teamId": 14,
+        "team": "Ice Has Me Running Back",
+        "owner": "German Haro",
+        "score": 0
       }
     }
   ],
@@ -253,7 +253,7 @@
     {
       "locker": 2,
       "teamId": 3,
-      "team": "Darty at 1048",
+      "team": "No More Darties in LA",
       "owner": "Jared Hall",
       "abbrev": "HALL",
       "wins": 0,
@@ -277,29 +277,29 @@
   ],
   "featured_story": {
     "season": 2026,
-    "week": 2,
-    "headline": "Kyle Fowler sets the Week 2 pace as the table takes shape",
-    "standfirst": "Bryan Hunt leads the verified table after Week 2; Brian Heino survived the week's closest finish by 4.64.",
-    "path": "data/newspaper_editions/2026/week_02.json",
-    "source_status": "verified_final",
+    "week": 3,
+    "headline": "JD Daley sets the Week 3 pace as the table takes shape",
+    "standfirst": "Week 3 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
+    "path": "data/newspaper_editions/2026/week_03.json",
+    "source_status": "verified_live",
     "validation_status": "valid",
-    "status": "final",
-    "generated_at": "2026-09-22T14:31:11.875968Z",
+    "status": "live",
+    "generated_at": "2026-09-23T22:31:33.211648Z",
     "table_leader": {
       "rank": 1,
       "team": "Howya Been's",
       "owner": "Bryan Hunt",
       "record": "2-0",
       "pointsFor": "280.68",
-      "tag": "Highest scoring"
+      "tag": "Table leader"
     },
     "pressure": {
-      "team": "Breezin’ with Bijan",
-      "owner": "Collin Krum",
-      "record": "0-2",
-      "label": "NEXT TEST",
-      "title": "Next test: Collin Krum",
-      "body": "Collin Krum is 0-2 after Week 2. The next matchup offers a chance to change the early direction without pretending a short opening sample has settled the story.",
+      "team": "Jigalos Jims",
+      "owner": "James Brochu",
+      "record": "2-0",
+      "label": "EARLY READ",
+      "title": "Jigalos Jims keeps the leaders honest",
+      "body": "Jigalos Jims (James Brochu) sits 2-0 with 238.74 points for, the clearest early chase line behind the top spot.",
       "sourceIds": [
         "current-season",
         "seasons"
@@ -378,9 +378,9 @@
   "league_pulse": [
     {
       "id": "matchup",
-      "label": "Closest finish",
-      "title": "Ice Has Me Running Back / The Buwhops",
-      "detail": "4.6 points apart · Final",
+      "label": "On deck",
+      "title": "6 matchups posted",
+      "detail": "Week 3 is ready on the league board.",
       "scrollTo": "weekBoard"
     },
     {
@@ -407,8 +407,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Kyle Fowler · 168.3",
-      "detail": "67.4 shy of the 235.6 all-time mark",
+      "title": "JD Daley · 0",
+      "detail": "235.6 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-22T14:31:11.789945+00:00",
-    "edition_published_at": "2026-09-22T14:31:11.875968Z",
-    "payload_built_at": "2026-09-22T14:31:28.180Z",
+    "week_fetched_at": "2026-09-23T22:31:33.114168+00:00",
+    "edition_published_at": "2026-09-23T22:31:33.211648Z",
+    "payload_built_at": "2026-09-23T22:31:33.472Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

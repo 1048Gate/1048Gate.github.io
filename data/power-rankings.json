@@ -4,7 +4,7 @@
   "basis": "weekly-results-blend",
   "currentSeason": {
     "season": 2026,
-    "throughWeek": 2,
+    "throughWeek": 3,
     "gamesPlayed": 2,
     "weight": 0.192,
     "factors": {
