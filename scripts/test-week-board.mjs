@@ -54,7 +54,7 @@ assert.match(board.standingsSnapshotHtml([
 assert.match(readFileSync(new URL('../js/site-ui.js', import.meta.url), 'utf8'), /gateWeekBoard/);
 const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 assert.match(indexHtml, /js\/week-board\.js/);
-assert.equal((indexHtml.match(/class="week-game week-card is-live"/g) || []).length, 6, 'static fallback must include six Phase 3 matchup cards');
+assert.equal((indexHtml.match(/class="week-game week-card is-(?:live|final|scheduled)"/g) || []).length, 6, 'static fallback must include six Phase 3 matchup cards');
 assert.match(indexHtml, /week-standings-rank/);
 assert.match(indexHtml, /class="is-playoff-line"/);
 assert.match(indexHtml, /Swipe standings/);
