@@ -52,27 +52,48 @@
     const matchup = data.matchup || {};
     add({label:'Lead story', title:lead.title || 'The week in view', body:lead.body});
     if(matchup.awayTeam){
-      const score = `${matchup.awayTeam} ${matchup.awayScore ?? '-'} - ${matchup.homeScore ?? '-'} ${matchup.homeTeam}`;
+      const awayWon = Number(matchup.awayScore) >= Number(matchup.homeScore);
+      const first = awayWon
+        ? {team:matchup.awayTeam, owner:matchup.awayOwner, score:matchup.awayScore}
+        : {team:matchup.homeTeam, owner:matchup.homeOwner, score:matchup.homeScore};
+      const second = awayWon
+        ? {team:matchup.homeTeam, owner:matchup.homeOwner, score:matchup.homeScore}
+        : {team:matchup.awayTeam, owner:matchup.awayOwner, score:matchup.awayScore};
+      const score = `${first.team} (${first.owner}) ${first.score ?? '-'} - ${second.score ?? '-'} ${second.team} (${second.owner})`;
       add({label:'Matchup of the week', title:score, body:[matchup.whyItMatters, matchup.edge].filter(Boolean).join(' ')});
     }
     const table = Array.isArray(data.tableNotes) ? data.tableNotes : [];
     if(table.length){
       add({
-        label:'The five-minute table',
-        title:'Standings snapshot',
-        body:table.map(note => `${note.rank}. ${note.team} (${note.owner}) - ${note.record}, ${note.pointsFor} PF - ${note.tag || ''}`).join('\n')
+        label:table.length === 12 ? 'The full table' : 'Top of the table',
+        title:table.length === 12 ? 'All 12 clubs after the week' : 'Standings snapshot',
+        compact:true,
+        body:table.map(note => `${String(note.rank).padStart(2, '0')}  ${note.team} (${note.owner})  ${note.record}  ${note.pointsFor} PF`).join('\n')
       });
     }
-    const editorialNotes = [
-      [data.pressure, data.pressure?.label || 'Next test'],
-      [data.surprise, 'Biggest surprise'],
-      [data.recordWatch, 'Record to watch'],
-      [data.archiveComparison, 'From the archive']
-    ];
+    const editorialNotes = [[data.pressure, data.pressure?.label || 'Early read'], [data.surprise, 'Biggest surprise']];
     for(const [item, label] of editorialNotes){
       if(item?.body) add({label, title:item.title || item.team || 'League note', body:item.body});
     }
-    const coveredTypes = new Set(['closest_game','scoring_leaders','standings','record_watch']);
+    const power = Array.isArray(data.powerTable) ? data.powerTable : [];
+    if(power.length){
+      add({label:'Power rankings', title:'The complete 1–12 early order', compact:true, body:power.map(row => `${String(row.rank).padStart(2, '0')}  ${row.team} (${row.owner})  ${row.rating}  ·  ${row.record}  ·  ${row.why}`).join('\n')});
+    }
+    const results = Array.isArray(data.results) ? data.results : [];
+    if(results.length){
+      add({label:`Week ${data.week} results`, title:'The complete six-game board', compact:true, body:results.map(game => `${game.winnerTeam} (${game.winnerOwner}) ${game.winnerScore}  ·  ${game.loserTeam} (${game.loserOwner}) ${game.loserScore}`).join('\n')});
+    }
+    const records = Array.isArray(data.recordBook) ? data.recordBook : [];
+    if(data.recordWatch?.body || records.length){
+      add({label:'Record book', title:data.recordWatch?.title || 'The archive benchmarks', compact:true, body:[data.recordWatch?.body, ...records.map(row => `${row.label.toUpperCase()}  ${row.value}`)].filter(Boolean).join('\n')});
+    }
+    if(data.rivalryFile?.body) add({label:'Rivalry file', title:data.rivalryFile.title, body:data.rivalryFile.body});
+    const nextSlate = Array.isArray(data.nextSlate) ? data.nextSlate : [];
+    if(nextSlate.length){
+      add({label:'Next week', title:`Week ${Number(data.week) + 1} slate`, compact:true, body:nextSlate.map(game => `${game.awayTeam} (${game.awayOwner}) vs. ${game.homeTeam} (${game.homeOwner})`).join('\n')});
+    }
+    if(data.archiveComparison?.body) add({label:'From the archive', title:data.archiveComparison.title || 'Archive note', body:data.archiveComparison.body});
+    const coveredTypes = new Set(['matchup_recap','closest_game','scoring_leaders','standings','record_watch','rivalry','power_rankings','preseason_order_watch','next_week']);
     (Array.isArray(data.stories) ? data.stories : []).filter(story => !coveredTypes.has(story.story_type)).forEach(story => add({
       label:String(story.story_type || 'League story').replaceAll('_', ' '),
       title:story.title,
@@ -219,29 +240,56 @@
     const measureCanvas = document.createElement('canvas');
     const measure = measureCanvas.getContext('2d');
 
-    measure.font = '700 58px Oswald, Arial, sans-serif';
+    measure.font = '700 54px Oswald, Arial, sans-serif';
     const headlineLines = canvasParagraphLines(measure, data.headline || `Week ${data.week} Edition`, CONTENT_WIDTH).slice(0, 4);
-    measure.font = '400 26px Georgia, serif';
+    measure.font = '400 24px Georgia, serif';
     const standfirstLines = canvasParagraphLines(measure, data.standfirst || '', CONTENT_WIDTH).slice(0, 5);
-    const firstContentTop = 205 + (headlineLines.length * 66) + (standfirstLines.length * 38) + 58;
+    const firstContentTop = 198 + (headlineLines.length * 61) + (standfirstLines.length * 34) + 48;
 
     const blocks = editionSections(data).map(section => {
-      measure.font = '700 34px Oswald, Arial, sans-serif';
+      measure.font = '700 18px "Space Mono", monospace';
+      const labelLines = canvasParagraphLines(measure, String(section.label || 'League story').toUpperCase(), CONTENT_WIDTH);
+      measure.font = '700 30px Oswald, Arial, sans-serif';
       const titleLines = canvasParagraphLines(measure, section.title || '', CONTENT_WIDTH);
-      measure.font = '400 23px Georgia, serif';
+      const bodySize = section.compact ? 17 : 21;
+      const bodyLeading = section.compact ? 24 : 29;
+      measure.font = `400 ${bodySize}px Georgia, serif`;
       const bodyLines = canvasParagraphLines(measure, section.body || '', CONTENT_WIDTH);
-      return {...section, titleLines, bodyLines, height:40 + (titleLines.length * 41) + 12 + (bodyLines.length * 33) + 34};
+      return {...section, labelLines, titleLines, bodyLines, bodySize, bodyLeading, height:24 + (labelLines.length * 23) + 8 + (titleLines.length * 36) + 8 + (bodyLines.length * bodyLeading) + 24};
     });
 
-    const placed = [];
-    let page = 0;
-    let y = firstContentTop;
+    const groups = [[]];
+    const used = [0];
     blocks.forEach(block => {
-      if(y + block.height > BOTTOM){ page += 1; y = 142; }
-      placed.push({...block, page, y});
-      y += block.height;
+      const page = groups.length - 1;
+      const top = page === 0 ? firstContentTop : 142;
+      const capacity = BOTTOM - top;
+      if(used[page] + block.height > capacity && groups[page].length){
+        groups.push([block]);
+        used.push(block.height);
+      }else{
+        groups[page].push(block);
+        used[page] += block.height;
+      }
     });
-    const pageCount = page + 1;
+    if(groups.length > 1){
+      const lastIndex = groups.length - 1;
+      const continuationCapacity = BOTTOM - 142;
+      while(used[lastIndex] < continuationCapacity * .62 && groups[lastIndex - 1].length > 1){
+        const candidate = groups[lastIndex - 1][groups[lastIndex - 1].length - 1];
+        if(used[lastIndex] + candidate.height > continuationCapacity) break;
+        groups[lastIndex - 1].pop();
+        used[lastIndex - 1] -= candidate.height;
+        groups[lastIndex].unshift(candidate);
+        used[lastIndex] += candidate.height;
+      }
+    }
+    const placed = [];
+    groups.forEach((group, page) => {
+      let y = page === 0 ? firstContentTop : 142;
+      group.forEach(block => { placed.push({...block, page, y}); y += block.height; });
+    });
+    const pageCount = groups.length;
     const canvas = document.createElement('canvas');
     canvas.width = PAGE_WIDTH;
     canvas.height = PAGE_HEIGHT * pageCount;
@@ -270,21 +318,22 @@
       context.fillRect(LEFT, offset + 132, CONTENT_WIDTH, 4);
 
       context.fillStyle = '#596568';
-      context.font = '700 17px "Space Mono", monospace';
-      context.fillText('1048GATE.COM  ·  VERIFIED LEAGUE EDITION', LEFT, offset + 1325);
+      context.font = '700 14px "Space Mono", monospace';
+      const sourceStatus = data.source_status === 'verified_live' ? 'ESPN LIVE SNAPSHOT' : 'ESPN FINAL';
+      context.fillText(`SOURCE: ${sourceStatus}  ·  PULLED ${data.generated_at || data.updated_at || 'UNAVAILABLE'}`, LEFT, offset + 1325);
       context.textAlign = 'right';
       context.fillText(`PAGE ${pageIndex + 1} OF ${pageCount}`, 1002, offset + 1325);
       context.textAlign = 'left';
     }
 
     context.fillStyle = '#1b292b';
-    context.font = '700 58px Oswald, Arial, sans-serif';
-    let headerY = 205;
-    headlineLines.forEach(line => { context.fillText(line.toUpperCase(), LEFT, headerY); headerY += 66; });
+    context.font = '700 54px Oswald, Arial, sans-serif';
+    let headerY = 198;
+    headlineLines.forEach(line => { context.fillText(line.toUpperCase(), LEFT, headerY); headerY += 61; });
     headerY += 8;
     context.fillStyle = '#435153';
-    context.font = '400 26px Georgia, serif';
-    standfirstLines.forEach(line => { context.fillText(line, LEFT, headerY); headerY += 38; });
+    context.font = '400 24px Georgia, serif';
+    standfirstLines.forEach(line => { context.fillText(line, LEFT, headerY); headerY += 34; });
     context.fillStyle = '#7b5b2f';
     context.fillRect(LEFT, headerY + 10, CONTENT_WIDTH, 3);
 
@@ -299,15 +348,15 @@
       blockY += 29;
       context.fillStyle = '#7b5b2f';
       context.font = '700 18px "Space Mono", monospace';
-      context.fillText(String(block.label || 'League story').toUpperCase(), LEFT, blockY);
-      blockY += 42;
+      block.labelLines.forEach(line => { context.fillText(line, LEFT, blockY); blockY += 23; });
+      blockY += 13;
       context.fillStyle = '#172022';
-      context.font = '700 34px Oswald, Arial, sans-serif';
-      block.titleLines.forEach(line => { context.fillText(line.toUpperCase(), LEFT, blockY); blockY += 41; });
-      blockY += 7;
+      context.font = '700 30px Oswald, Arial, sans-serif';
+      block.titleLines.forEach(line => { context.fillText(line.toUpperCase(), LEFT, blockY); blockY += 36; });
+      blockY += 5;
       context.fillStyle = '#273234';
-      context.font = '400 23px Georgia, serif';
-      block.bodyLines.forEach(line => { context.fillText(line, LEFT, blockY); blockY += 33; });
+      context.font = `400 ${block.bodySize}px Georgia, serif`;
+      block.bodyLines.forEach(line => { context.fillText(line, LEFT, blockY); blockY += block.bodyLeading; });
     });
     return canvas;
   }

@@ -121,15 +121,28 @@
     const record=data.recordWatch||{};
     const archive=data.archiveComparison||{};
     const notes=Array.isArray(data.tableNotes)?data.tableNotes:[];
+    const power=Array.isArray(data.powerTable)?data.powerTable:[];
+    const results=Array.isArray(data.results)?data.results:[];
+    const records=Array.isArray(data.recordBook)?data.recordBook:[];
+    const nextSlate=Array.isArray(data.nextSlate)?data.nextSlate:[];
     const leadTitle=lead.title&&lead.title.trim()!==String(data.headline||'').trim()?lead.title:'The week in view';
     const table=notes.map(note=>`<li><b>${esc(String(note.rank).padStart(2,'0'))}</b><span><strong>${esc(note.team)}</strong><small>${esc(note.owner)} · ${esc(note.record)} · ${esc(note.pointsFor)} PF</small></span><em>${esc(note.tag)}</em></li>`).join('');
+    const matchupSides=[{team:matchup.awayTeam,owner:matchup.awayOwner,score:matchup.awayScore},{team:matchup.homeTeam,owner:matchup.homeOwner,score:matchup.homeScore}].sort((left,right)=>Number(right.score)-Number(left.score));
+    const powerMarkup=power.map(row=>`<li><b>${esc(String(row.rank).padStart(2,'0'))}</b><span><strong>${esc(row.team)}</strong><small>${esc(row.owner)} · ${esc(row.record)} · ${esc(row.why)}</small></span><em>${esc(row.rating)}</em></li>`).join('');
+    const resultsMarkup=results.map(game=>`<li><span><strong>${esc(game.winnerTeam)} (${esc(game.winnerOwner)})</strong><small>over ${esc(game.loserTeam)} (${esc(game.loserOwner)}) · margin ${esc(game.margin)}</small></span><b>${esc(game.winnerScore)}–${esc(game.loserScore)}</b></li>`).join('');
+    const recordMarkup=records.map(row=>`<li><span>${esc(row.label)}</span><strong>${esc(row.value)}</strong></li>`).join('');
+    const nextMarkup=nextSlate.map(game=>`<li><strong>${esc(game.awayTeam)} (${esc(game.awayOwner)})</strong><span>vs.</span><strong>${esc(game.homeTeam)} (${esc(game.homeOwner)})</strong></li>`).join('');
     return `<section class="weekly-editorial">
       <header class="weekly-editorial-header"><span class="edition-kicker">THE WEEKLY EDITION · ${esc(data.status==='live'?'LIVE':'FINAL')}</span><h3>${esc(data.headline||'The weekly edition')}</h3><p>${esc(data.standfirst||'')}</p><div class="weekly-editorial-meta"><span>Szn ${esc(data.season - 2016)} · Week ${esc(data.week)}</span><span>Updated ${esc(data.updated_at||data.generated_at||'')}</span></div></header>
       ${lead.body?`<article class="weekly-lead"><span class="weekly-kicker">LEAD STORY</span><h4>${esc(leadTitle)}</h4><p>${esc(lead.body)}</p></article>`:''}
-      ${matchup.awayTeam?`<article class="weekly-matchup"><div class="weekly-kicker">MATCHUP OF THE WEEK</div><div class="weekly-matchup-score"><div><strong>${esc(matchup.awayTeam)}</strong><small>${esc(matchup.awayOwner||'')}</small><b>${esc(matchup.awayScore??'—')}</b></div><span>vs</span><div><strong>${esc(matchup.homeTeam)}</strong><small>${esc(matchup.homeOwner||'')}</small><b>${esc(matchup.homeScore??'—')}</b></div></div><p><strong>Why it matters:</strong> ${esc(matchup.whyItMatters||'')}</p><p><strong>Edge:</strong> ${esc(matchup.edge||'')}</p></article>`:''}
-      ${table?`<section class="weekly-table"><div class="weekly-kicker">THE FIVE-MINUTE TABLE</div><ol>${table}</ol></section>`:''}
-      <div class="weekly-editorial-grid">${pressure.body?`<article><span class="weekly-kicker">${esc(pressure.label||'NEXT TEST')}</span><h4>${esc(pressure.title||pressure.team||'Next test')}</h4><p>${esc(pressure.body)}</p></article>`:''}${surprise.body?`<article><span class="weekly-kicker">BIGGEST SURPRISE</span><h4>${esc(surprise.title||'A surprise from the board')}</h4><p>${esc(surprise.body)}</p></article>`:''}${record.body?`<article><span class="weekly-kicker">RECORD TO WATCH</span><h4>${esc(record.title||'Record watch')}</h4><p>${esc(record.body)}</p></article>`:''}${archive.body?`<article><span class="weekly-kicker">FROM THE ARCHIVE</span><h4>${esc(archive.title||'Archive comparison')}</h4><p>${esc(archive.body)}</p></article>`:''}</div>
-      <footer class="weekly-editorial-source"><span>DATA STATUS · ${esc(data.source_status==='verified_live'?'Live board':'Final board')}</span><small>${esc(data.editorial_note||'Claims limited to checked-in sources.')}</small></footer>
+      ${matchup.awayTeam?`<article class="weekly-matchup"><div class="weekly-kicker">MATCHUP OF THE WEEK · WINNER FIRST</div><div class="weekly-matchup-score"><div><strong>${esc(matchupSides[0].team)}</strong><small>${esc(matchupSides[0].owner||'')}</small><b>${esc(matchupSides[0].score??'—')}</b></div><span>over</span><div><strong>${esc(matchupSides[1].team)}</strong><small>${esc(matchupSides[1].owner||'')}</small><b>${esc(matchupSides[1].score??'—')}</b></div></div><p><strong>Why it matters:</strong> ${esc(matchup.whyItMatters||'')}</p><p><strong>Edge:</strong> ${esc(matchup.edge||'')}</p></article>`:''}
+      ${table?`<section class="weekly-table"><div class="weekly-kicker">${notes.length===12?'THE FULL TABLE':'TOP OF THE TABLE'}</div><ol>${table}</ol></section>`:''}
+      <div class="weekly-editorial-grid">${pressure.body?`<article><span class="weekly-kicker">${esc(pressure.label||'EARLY READ')}</span><h4>${esc(pressure.title||pressure.team||'Early read')}</h4><p>${esc(pressure.body)}</p></article>`:''}${surprise.body?`<article><span class="weekly-kicker">BIGGEST SURPRISE</span><h4>${esc(surprise.title||'A surprise from the board')}</h4><p>${esc(surprise.body)}</p></article>`:''}${record.body?`<article><span class="weekly-kicker">RECORD TO WATCH</span><h4>${esc(record.title||'Record watch')}</h4><p>${esc(record.body)}</p>${recordMarkup?`<ul class="weekly-record-lines">${recordMarkup}</ul>`:''}</article>`:''}${archive.body?`<article><span class="weekly-kicker">FROM THE ARCHIVE</span><h4>${esc(archive.title||'Archive comparison')}</h4><p>${esc(archive.body)}</p></article>`:''}</div>
+      ${powerMarkup?`<section class="weekly-table"><div class="weekly-kicker">POWER RANKINGS · COMPLETE 1–12</div><ol>${powerMarkup}</ol></section>`:''}
+      ${resultsMarkup?`<section class="weekly-board"><div class="weekly-kicker">WEEK ${esc(data.week)} · COMPLETE BOARD</div><ol>${resultsMarkup}</ol></section>`:''}
+      ${data.rivalryFile?.body?`<article class="weekly-lead"><span class="weekly-kicker">RIVALRY FILE</span><h4>${esc(data.rivalryFile.title)}</h4><p>${esc(data.rivalryFile.body)}</p></article>`:''}
+      ${nextMarkup?`<section class="weekly-slate"><div class="weekly-kicker">UP NEXT · WEEK ${esc(Number(data.week)+1)}</div><ol>${nextMarkup}</ol></section>`:''}
+      <footer class="weekly-editorial-source"><span>DATA STATUS · ${esc(data.source_status==='verified_live'?'Live board':'Final board')}</span><small>${esc(data.editorial_note||'Claims limited to checked-in sources.')} · Source: ESPN · ${esc(data.generated_at||data.updated_at||'')}</small></footer>
     </section>`;
   }
 
@@ -145,7 +158,7 @@
       ? editionConfig.historical.status
       : (data.source_status === 'verified_live' ? 'live 2026 weekly edition' : data.source_status === 'verified_final' ? 'verified 2026 weekly edition' : editionConfig.weekly.status);
 
-    const coveredWeeklyTypes = new Set(['closest_game','scoring_leaders','standings','record_watch']);
+    const coveredWeeklyTypes = new Set(['matchup_recap','closest_game','scoring_leaders','standings','record_watch','rivalry','power_rankings','preseason_order_watch','next_week']);
     const visibleStories = historical ? data.stories : data.stories.filter(story => !coveredWeeklyTypes.has(story.story_type));
     const stories = visibleStories.map((story, index) => `
       <article class="story-item${index === 0 ? ' story-lead' : ''}">

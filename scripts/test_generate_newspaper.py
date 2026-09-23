@@ -30,14 +30,18 @@ class NewspaperTests(unittest.TestCase):
             for index, owner in enumerate(OWNERS)
         ]
         (data / "power-rankings.json").write_text(json.dumps({"ratings":ratings}))
-        (data / "matchups.json").write_text(json.dumps({"records":{"highestScore":[235.64],"biggestBlowout":[137.42],"closestGame":[0.08]},"pairs":[["Hunt","Daley",[5,8,0,0,0]]]}))
+        (data / "matchups.json").write_text(json.dumps({"records":{"highestScore":[235.64,"Hall","Team Hall","Daley","Team Daley",2023,8],"biggestBlowout":[137.42,"Hall",218.82,"Hash",81.4,2021,5],"closestGame":[0.08,"Hunt",91.22,"Daley",91.14,2018,9]},"pairs":[["Hunt","Daley",[5,8,0,1200.0,1300.0]]]}))
     def tearDown(self): self.tmp.cleanup()
     def make(self, value=None, **kw): return paper.generate_edition(value or board(), 2026, 1, root=self.root, now=datetime(2026,9,15,tzinfo=timezone.utc), **kw)
 
     def test_complete_and_sourced(self):
         result=self.make(); self.assertEqual(result["source_status"],"verified_final"); self.assertGreaterEqual(len(result["stories"]),8); self.assertTrue(all(s.get("source") for s in result["stories"]))
         self.assertNotEqual(result["headline"],result["lead"]["title"])
-        self.assertEqual(result["pressure"]["label"],"NEXT TEST")
+        self.assertEqual(result["pressure"]["label"],"EARLY READ")
+        self.assertEqual(len(result["tableNotes"]),12)
+        self.assertEqual(len(result["results"]),6)
+        self.assertEqual(len(result["powerTable"]),12)
+        self.assertEqual(len(result["recordBook"]),3)
         recap=next(s for s in result["stories"] if s["story_type"]=="matchup_recap")
         self.assertIn(" beat ",recap["body"]); self.assertNotIn(";",recap["body"])
     def test_manager_feature_limit_is_applied(self):
@@ -51,7 +55,7 @@ class NewspaperTests(unittest.TestCase):
         self.assertEqual(counts["Hash"],2)
         standings=next(s for s in result["stories"] if s["story_type"]=="standings")
         self.assertNotIn("primary_owner",standings); self.assertEqual(standings["title"],"The Week 1 standings take shape")
-        power=next(s for s in result["stories"] if s["story_type"]=="power_rankings")
+        power=next(s for s in result["stories"] if s["story_type"]=="preseason_order_watch")
         self.assertNotEqual(power.get("primary_owner"),"Hash")
     def test_manager_feature_limit_is_validated(self):
         result=self.make()
@@ -85,6 +89,9 @@ class NewspaperTests(unittest.TestCase):
         self.assertEqual((result["source_status"],result["validation_status"]),("incomplete_override","preview"))
         with self.assertRaises(ValueError):paper.validate_edition(result)
     def test_record_watch(self): self.assertIn("did not break",next(s for s in self.make()["stories"] if s["story_type"]=="record_watch")["body"])
+    def test_matchup_and_results_put_winner_first(self):
+        result=self.make()
+        self.assertGreaterEqual(result["results"][0]["winnerScore"],result["results"][0]["loserScore"])
     def test_optional_transactions(self):
         self.assertNotIn("transactions",{s["story_type"] for s in self.make()["stories"]})
         path=self.root/"data/transactions/2026.json"; path.parent.mkdir(); path.write_text(json.dumps({"transactions":[{"week":1}]}))
