@@ -44,6 +44,10 @@ for(const entry of weeklyIndex.editions){
   assert.ok(['verified_live','verified_final'].includes(edition.source_status), `Edition ${key} must come from a verified live or final board.`);
   assert.equal(edition.validation_status, 'valid', `Edition ${key} must pass publication validation.`);
   assert.ok(Array.isArray(edition.stories) && edition.stories.length > 0, `Edition ${key} must contain stories.`);
+  if(edition.schema_version >= 3 && edition.source_status === 'verified_final'){
+    assert.equal(edition.tableNotes?.length, 12, `Final edition ${key} must print the full 12-team table.`);
+    assert.equal(edition.results?.length, 6, `Final edition ${key} must print all six results.`);
+  }
 }
 assert.match(appSource, /if \(name === 'weekly'\) name = 'newspaper'/, '#weekly must resolve to the newspaper view.');
 
@@ -145,7 +149,7 @@ const fakeCanvasContext = {
   fillStyle:'', strokeStyle:'', lineWidth:0, font:'', textAlign:'left',
   fillRect(){}, strokeRect(){}, beginPath(){}, moveTo(){}, lineTo(){}, stroke(){}, drawImage(){},
   fillText(text, x, y){ drawnText.push({text, x, y}); },
-  measureText(text){ return {width:String(text).length * 18}; }
+  measureText(text){ return {width:String(text).length * 10}; }
 };
 exportContext.Blob = Blob;
 exportContext.document = {
@@ -163,6 +167,8 @@ const fullCanvas = await exportContext.window.gateNewspaperExport.createFullEdit
 assert.equal(fullCanvas.width, 1080);
 assert.equal(fullCanvas.height % 1398, 0);
 assert.ok(fullCanvas.height > 1350, 'Full-edition image must retain the complete newspaper instead of the summary crop.');
+assert.equal(fullCanvas.height / 1398, 3, 'A complete 12-team edition should fill three balanced pages, not spill into an empty-looking tail page.');
+assert.ok(drawnText.some(entry => String(entry.text).startsWith('SOURCE: ESPN FINAL')), 'Every exported page needs an ESPN source and pull-time line.');
 const pageSet = await exportContext.window.gateNewspaperExport.createEditionPageBlobs(exportFixture);
 assert.equal(pageSet.pages.length, fullCanvas.height / 1398);
 assert.ok(pageSet.pages.every(blob => blob.type === 'image/png'));

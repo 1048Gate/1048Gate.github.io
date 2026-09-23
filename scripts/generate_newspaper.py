@@ -153,6 +153,51 @@ def _load_optional(path: Path) -> Any | None:
         return None
 
 
+def _identity(value: dict[str, Any]) -> str:
+    """Use one first-reference style everywhere in the paper."""
+    return f"{value['team']} ({value['owner']})"
+
+
+def _record_book(archive: dict[str, Any]) -> list[dict[str, str]]:
+    rows = []
+    specs = (
+        ("Highest score", "highestScore", lambda item: f"{float(item[0]):.2f} · {item[2]} ({item[1]}) · {int(item[5])} W{int(item[6])}"),
+        ("Biggest blowout", "biggestBlowout", lambda item: f"{float(item[0]):.2f} pts · {item[1]} over {item[3]} · {int(item[5])} W{int(item[6])}"),
+        ("Closest finish", "closestGame", lambda item: f"{float(item[0]):.2f} pts · {item[1]} over {item[3]} · {int(item[5])} W{int(item[6])}"),
+    )
+    for label, key, formatter in specs:
+        item = archive.get(key)
+        if isinstance(item, list) and len(item) >= 7:
+            rows.append({"label": label, "value": formatter(item)})
+    return rows
+
+
+def _power_table(rankings: Any, standings: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if not isinstance(rankings, dict) or not isinstance(rankings.get("ratings"), list):
+        return []
+    teams = {row.get("owner"): row for row in standings}
+    rows = []
+    for rating in rankings["ratings"]:
+        if not isinstance(rating, dict) or rating.get("name") not in teams:
+            continue
+        owner = rating["name"]
+        team = teams[owner]
+        score = rating.get("currentRating", rating.get("rating"))
+        if not isinstance(score, (int, float)):
+            continue
+        rows.append({
+            "owner": owner,
+            "team": team["team"],
+            "rating": f"{float(score):.1f}",
+            "record": f"{int(team.get('wins', 0))}-{int(team.get('losses', 0))}",
+            "why": f"{float(team.get('pointsFor', 0)) / max(1, int(team.get('wins', 0)) + int(team.get('losses', 0)) + int(team.get('ties', 0))):.2f} PF/G",
+        })
+    rows.sort(key=lambda row: (-float(row["rating"]), -float(row["why"].split()[0]), row["owner"]))
+    for rank, row in enumerate(rows, start=1):
+        row["rank"] = rank
+    return rows
+
+
 def _build_editorial(
     *, season: int, week: int, status: dict[str, Any], facts: list[dict[str, Any]], standings: list[dict[str, Any]],
     leader: dict[str, Any], high_team: dict[str, Any], high_score: float, low_team: dict[str, Any], low_score: float,
@@ -160,20 +205,19 @@ def _build_editorial(
 ) -> dict[str, Any]:
     comparison_facts = facts if status["final"] else ([item for item in facts if item["combined"] > 0] or facts)
     closest = min(comparison_facts, key=lambda item: item["margin"])
-    winless = [row for row in standings if int(row.get("wins", 0)) == 0 and int(row.get("losses", 0)) > 0]
-    pressure = min(winless, key=lambda row: float(row.get("pointsFor", 0))) if winless else standings[-1]
+    early_read = standings[1] if len(standings) > 1 else standings[0]
     matchup = closest
     final = status["final"]
     status_label = "final" if final else "live"
     standfirst = (
-        f"{leader['owner']} leads the verified table after Week {week}; {matchup['winner']['owner']} survived the week's closest finish by {matchup['margin']:.2f}."
+        f"{_identity(leader)} leads the verified table after Week {week}; {_identity(matchup['winner'])} survived the week's closest finish by {matchup['margin']:.2f}."
         if final else
-        f"Week {week} is live; {leader['owner']} leads the completed-results table while the current matchup board continues to move."
+        f"Week {week} is live; {_identity(leader)} leads the completed-results table while the current matchup board continues to move."
     )
     lead_body = (
-        f"{high_team['owner']} set the Week {week} scoring pace at {high_score:.2f}, while {leader['owner']} moved to {int(leader.get('wins', 0))}-{int(leader.get('losses', 0))} with {float(leader.get('pointsFor', 0)):.2f} points for. The closest result was decided by {matchup['margin']:.2f} points."
+        f"{_identity(high_team)} set the Week {week} scoring pace at {high_score:.2f}, while {_identity(leader)} moved to {int(leader.get('wins', 0))}-{int(leader.get('losses', 0))} with {float(leader.get('pointsFor', 0)):.2f} points for. The closest result was decided by {matchup['margin']:.2f} points."
         if final else
-        f"{leader['owner']} is first in the completed-results table at {int(leader.get('wins', 0))}-{int(leader.get('losses', 0))} with {float(leader.get('pointsFor', 0)):.2f} points for. On the live Week {week} board, {high_team['owner']} currently has the high score at {high_score:.2f}, while {low_team['owner']} is at {low_score:.2f}. Those live scores can still change."
+        f"{_identity(leader)} is first in the completed-results table at {int(leader.get('wins', 0))}-{int(leader.get('losses', 0))} with {float(leader.get('pointsFor', 0)):.2f} points for. On the live Week {week} board, {_identity(high_team)} currently has the high score at {high_score:.2f}, while {_identity(low_team)} is at {low_score:.2f}. Those live scores can still change."
     )
     matchup_why = (
         f"The closest game on the final board finished with a {matchup['margin']:.2f}-point margin, making it the tightest result of Week {week}."
@@ -181,18 +225,13 @@ def _build_editorial(
         f"The closest live game currently has a {matchup['margin']:.2f}-point margin, making it the tightest matchup on the Week {week} board right now."
     )
     matchup_edge = (
-        f"Verified result: {matchup['winner']['owner']} by {matchup['margin']:.2f} points."
+        f"Verified result: {_identity(matchup['winner'])} by {matchup['margin']:.2f} points."
         if final else
-        f"Live edge: {matchup['winner']['owner']} by {matchup['margin']:.2f} points."
+        f"Live edge: {_identity(matchup['winner'])} by {matchup['margin']:.2f} points."
     )
-    pressure_is_earned = week >= 3 and int(pressure.get("wins", 0)) == 0
-    pressure_label = "UNDER PRESSURE" if pressure_is_earned else "NEXT TEST"
-    pressure_title = f"Under pressure: {pressure['owner']}" if pressure_is_earned else f"Next test: {pressure['owner']}"
-    pressure_body = (
-        f"{pressure['owner']} is {int(pressure.get('wins', 0))}-{int(pressure.get('losses', 0))} after Week {week}. The next matchup is a chance to change the early direction without overstating what a short opening sample means."
-        if final else
-        f"{pressure['owner']} enters the live Week {week} board at {int(pressure.get('wins', 0))}-{int(pressure.get('losses', 0))}. The current matchup can change the direction of that early-season story."
-    )
+    pressure_label = "EARLY READ"
+    pressure_title = f"{early_read['team']} keeps the leaders honest"
+    pressure_body = f"{_identity(early_read)} sits {int(early_read.get('wins', 0))}-{int(early_read.get('losses', 0))} with {float(early_read.get('pointsFor', 0)):.2f} points for, the clearest early chase line behind the top spot."
     archive_body = (
         f"Week {week} is now part of the verified Szn {season - 2016} record, but the archive does not turn an opening table into a final ranking. Keep the benchmark; wait for the pattern."
         if final else
@@ -224,10 +263,10 @@ def _build_editorial(
                 "pointsFor": f"{float(row.get('pointsFor', 0)):.2f}",
                 "tag": ("Table leader" if not final else "Highest scoring") if index == 1 else ("Current table" if not final else "Early signal"),
             }
-            for index, row in enumerate(standings[:3], start=1)
+            for index, row in enumerate(standings, start=1)
         ],
         "pressure": {
-            "team": pressure["team"], "owner": pressure["owner"], "record": f"{int(pressure.get('wins', 0))}-{int(pressure.get('losses', 0))}",
+            "team": early_read["team"], "owner": early_read["owner"], "record": f"{int(early_read.get('wins', 0))}-{int(early_read.get('losses', 0))}",
             "label": pressure_label,
             "title": pressure_title,
             "body": pressure_body,
@@ -235,7 +274,7 @@ def _build_editorial(
         },
         "surprise": {
             "title": "Biggest surprise: the scoring range is already loud",
-            "body": f"The gap between {high_team['owner']}'s {high_score:.2f} and {low_team['owner']}'s {low_score:.2f} is {high_score - low_score:.2f} points. " + ("It is a completed Week %d signal, but too early to call a season trend." % week if final else "That is the current live spread, not a final Week %d result." % week),
+            "body": f"The gap between {_identity(high_team)} at {high_score:.2f} and {_identity(low_team)} at {low_score:.2f} is {high_score - low_score:.2f} points. " + ("That scoring range is Week %d's sharpest completed result." % week if final else "That is the current live spread, not a final Week %d result." % week),
             "sourceIds": ["current-season"],
         },
         "recordWatch": {
@@ -372,6 +411,7 @@ def generate_edition(
     ))
 
     rankings = _load_optional(root / "data" / "power-rankings.json")
+    power_table = _power_table(rankings, standings)
     if status["final"] and rankings and rankings.get("ratings"):
         rating_rows = {row.get("name"): row for row in rankings["ratings"] if isinstance(row, dict)}
         power_candidates = []
@@ -385,22 +425,23 @@ def generate_edition(
         if power_candidates:
             rating, _, owner, winner_score = min(power_candidates)
             stories.append(feature_story(
-                "power_rankings", owner,
-                f"{owner} applies early pressure to the preseason order",
-                f"{owner} won in Week {week} with {winner_score:.2f} points after entering the season with a {rating:.1f} post-draft rating.",
+                "preseason_order_watch", owner,
+                f"Early read: {owner} presses the preseason order",
+                f"{owner} won in Week {week} with {winner_score:.2f} points after entering the season with a {rating:.1f} post-draft rating. The full 1–12 ranking appears on the league board.",
                 power_source,
                 balanced_title="The opening board challenges the preseason order",
                 balanced_body=f"The verified Week {week} results can now be compared with the checked-in post-draft ratings.",
             ))
         else:
             stories.append(_story(
-                "power_rankings", "The opening board challenges the preseason order",
+                "preseason_order_watch", "The opening board challenges the preseason order",
                 f"The verified Week {week} results can now be compared with the checked-in post-draft ratings.",
                 power_source,
             ))
 
     records = _load_optional(root / "data" / "matchups.json") or {}
     archive = records.get("records", {})
+    record_book = _record_book(archive)
     broken = []
     if archive.get("highestScore") and high_score > float(archive["highestScore"][0]): broken.append("highest single-team score")
     if archive.get("biggestBlowout") and biggest["margin"] > float(archive["biggestBlowout"][0]): broken.append("biggest blowout")
@@ -418,11 +459,17 @@ def generate_edition(
     stories.append(_story("record_watch", record_title, record_body, _source("data/current-season.json + data/matchups.json", f"week={week};records", "Week board compared with archive records")))
 
     pairs = records.get("pairs", [])
+    rivalry_file = None
     current_pairs = {frozenset((fact["away"]["owner"], fact["home"]["owner"])) for fact in facts}
     for pair in pairs:
         if len(pair) >= 3 and frozenset((pair[0], pair[1])) in current_pairs:
             a, b, series = pair[0], pair[1], pair[2]
-            stories.append(_story("rivalry", f"Rivalry file: {a} and {b}", f"The archive lists the all-time series at {int(series[0])}-{int(series[1])}-{int(series[2])} from {int(series[0])+int(series[1])+int(series[2])} meetings.", _source("data/matchups.json", f"pair={a}|{b}", "All-time head-to-head archive")))
+            current = next(fact for fact in facts if frozenset((fact["away"]["owner"], fact["home"]["owner"])) == frozenset((a, b)))
+            points = f"{a} leads series scoring {float(series[3]):.2f}–{float(series[4]):.2f}" if float(series[3]) >= float(series[4]) else f"{b} leads series scoring {float(series[4]):.2f}–{float(series[3]):.2f}"
+            latest = f"{current['winner']['owner']} took the latest meeting {current['winner_score']:.2f}–{current['loser_score']:.2f}" if status["final"] else f"{current['winner']['owner']} currently leads {current['winner_score']:.2f}–{current['loser_score']:.2f}"
+            rivalry_body = f"The series stands {int(series[0])}-{int(series[1])}-{int(series[2])} through {int(series[0])+int(series[1])+int(series[2])} meetings. {points}. {latest}."
+            rivalry_file = {"title": f"{a} vs. {b}", "body": rivalry_body}
+            stories.append(_story("rivalry", f"Rivalry file: {a} and {b}", rivalry_body, _source("data/matchups.json", f"pair={a}|{b}", "All-time head-to-head archive")))
             break
 
     transaction_candidates = [root / "data" / "transactions" / f"{season}.json", root / "data" / f"transactions-{season}.json"]
@@ -433,7 +480,12 @@ def generate_edition(
         stories.append(_story("transactions", f"Week {week} wire activity", f"The checked-in transaction snapshot contains {len(week_rows)} move{'s' if len(week_rows) != 1 else ''} for Week {week}.", _source(str(transaction_candidates[0].relative_to(root)), f"week={week}", "Checked-in transaction snapshot")))
 
     next_board = _load_optional(root / "data" / "current-season-weeks" / f"week_{week + 1:02d}.json")
+    next_slate = []
     if next_board and len(next_board.get("matchups", [])) == EXPECTED_MATCHUPS:
+        for game in next_board["matchups"]:
+            away, home = game.get("away", {}), game.get("home", {})
+            if away.get("team") and home.get("team"):
+                next_slate.append({"awayTeam": away["team"], "awayOwner": away.get("owner", ""), "homeTeam": home["team"], "homeOwner": home.get("owner", "")})
         stories.append(_story("next_week", f"Next: Week {week + 1}", f"The verified Week {week + 1} board contains all {EXPECTED_MATCHUPS} scheduled matchups.", _source(f"data/current-season-weeks/week_{week + 1:02d}.json", f"week={week + 1}", "Checked-in next-week slate")))
     if status["final"] and week >= PLAYOFF_PICTURE_WEEK:
         stories.append(_story("playoff_picture", "The playoff picture comes into focus", f"With Week {week} complete, the verified standings now provide the current six-team playoff order.", _source("data/current-season.json", f"season={season};week={week};standings", "Verified standings table")))
@@ -444,8 +496,13 @@ def generate_edition(
         leader=leader, high_team=high_team, high_score=high_score, low_team=low_team,
         low_score=low_score, record_body=record_body, root=root,
     )
+    results = [{
+        "winnerTeam": fact["winner"]["team"], "winnerOwner": fact["winner"]["owner"], "winnerScore": fact["winner_score"],
+        "loserTeam": fact["loser"]["team"], "loserOwner": fact["loser"]["owner"], "loserScore": fact["loser_score"],
+        "margin": fact["margin"], "state": "final" if status["final"] else str(fact["game"].get("state", "live")),
+    } for fact in sorted(facts, key=lambda item: (-item["winner_score"], -item["loser_score"]))]
     return {
-        "schema_version": 2, "league_name": "1048 Gate", "season": season,
+        "schema_version": 3, "league_name": "1048 Gate", "season": season,
         "edition_year": season, "week": week, "generated_at": timestamp,
         "source_status": "verified_final" if status["final"] else ("incomplete_override" if allow_incomplete else "verified_live"),
         "validation_status": "valid" if status["final"] or not allow_incomplete else "preview",
@@ -455,6 +512,11 @@ def generate_edition(
         },
         "source_trace": _source("data/current-season.json", f"season={season};week={week}", "Published ESPN board snapshot"),
         **editorial,
+        "results": results,
+        "powerTable": power_table,
+        "recordBook": record_book,
+        "rivalryFile": rivalry_file,
+        "nextSlate": next_slate,
         "stories": stories,
     }
 
