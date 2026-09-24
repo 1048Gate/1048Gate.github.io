@@ -11,8 +11,10 @@ function loadJson(path){
 export function statusFor(config = {}, board = {}){
   if(/pre[ -]?season|off[ -]?season|draft|keeper/i.test(String(config.phase || board.phase || ''))) return 'offseason';
   const games = Array.isArray(board.matchups) ? board.matchups : [];
-  if(games.length && games.every(game => String(game.state || '').toLowerCase() === 'final')) return 'final';
-  return 'live';
+  const states = games.map(game => String(game.state || '').toLowerCase());
+  if(games.length && states.every(state => state === 'final')) return 'final';
+  if(states.some(state => state === 'live')) return 'live';
+  return 'scheduled';
 }
 
 export function featuredStory(index, week){

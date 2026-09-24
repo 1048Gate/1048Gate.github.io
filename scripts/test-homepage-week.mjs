@@ -44,4 +44,15 @@ assert.ok(offseason.league_pulse.every(card => !['playoff','matchup'].includes(c
 const finals = week.matchups.map(game => ({...game, state:'final'}));
 assert.equal(statusFor(site, {...week, matchups:finals}), 'final');
 
-console.log('Homepage week payload checks passed: live snapshot, committed file, offseason pulse, and final status.');
+const scheduled = week.matchups.map(game => ({...game, state:'scheduled'}));
+assert.equal(statusFor(site, {...week, matchups:scheduled}), 'scheduled');
+
+const inProgress = week.matchups.map((game, index) => ({...game, state: index === 0 ? 'live' : 'scheduled'}));
+assert.equal(statusFor(site, {...week, matchups:inProgress}), 'live');
+
+const mixedFinal = week.matchups.map((game, index) => ({...game, state: index === 0 ? 'final' : 'scheduled'}));
+assert.equal(statusFor(site, {...week, matchups:mixedFinal}), 'scheduled');
+
+assert.equal(statusFor(site, week), 'scheduled');
+
+console.log('Homepage week payload checks passed: scheduled snapshot, committed file, offseason pulse, live, and final status.');
