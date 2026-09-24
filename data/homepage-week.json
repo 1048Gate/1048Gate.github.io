@@ -5,7 +5,7 @@
   "week": 3,
   "phase": "Week 3",
   "status": "scheduled",
-  "last_updated": "2026-09-24T09:56:07.128188+00:00",
+  "last_updated": "2026-09-24T13:33:29.912288+00:00",
   "note": "Week 3 slate from ESPN.",
   "matchups": [
     {
@@ -279,12 +279,12 @@
     "season": 2026,
     "week": 3,
     "headline": "JD Daley sets the Week 3 pace as the table takes shape",
-    "standfirst": "Week 3 is set; Howya Been's (Bryan Hunt) leads the completed-results table while the Week 3 slate sits on deck.",
+    "standfirst": "Week 3 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
     "path": "data/newspaper_editions/2026/week_03.json",
     "source_status": "verified_live",
     "validation_status": "valid",
-    "status": "scheduled",
-    "generated_at": "2026-09-24T09:56:07.237916Z",
+    "status": "live",
+    "generated_at": "2026-09-24T13:33:29.985671Z",
     "table_leader": {
       "rank": 1,
       "team": "Howya Been's",
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-24T09:56:07.128188+00:00",
-    "edition_published_at": "2026-09-24T09:56:07.237916Z",
-    "payload_built_at": "2026-09-24T09:56:07.522Z",
+    "week_fetched_at": "2026-09-24T13:33:29.912288+00:00",
+    "edition_published_at": "2026-09-24T13:33:29.985671Z",
+    "payload_built_at": "2026-09-24T13:33:30.240Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
