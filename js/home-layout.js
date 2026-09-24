@@ -13,7 +13,7 @@
         && Number(edition.week) === Number(board.week);
       return recap ? 'recap' : 'final';
     }
-    return games.some(game => ['live', 'final'].includes(game.state)) ? 'live' : 'upcoming';
+    return games.some(game => game.state === 'live') ? 'live' : 'upcoming';
   }
 
   function render(){
