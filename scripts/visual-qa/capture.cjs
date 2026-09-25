@@ -24,7 +24,8 @@ const server=http.createServer((req,res)=>{
   const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const board=json('data/current-season.json'),config=json('data/site.json'),index=json('data/newspaper_editions/index.json');
   const homepage=json('data/homepage-week.json');
-  const entry=index.editions.find(e=>e.season===board.season&&e.week===board.week);
+  const entry=index.editions.find(e=>e.season===board.season&&e.week===board.week) || index.editions[0];
+  if(!entry?.path) throw new Error('Visual QA requires at least one published weekly edition.');
   const edition=json(entry.path);
   if(state==='live'){
     board.matchups.forEach(g=>{g.state='live';g.winner='UNDECIDED'});
@@ -36,6 +37,16 @@ const server=http.createServer((req,res)=>{
   if(state==='recap'){
     board.matchups.forEach(g=>g.state='final');board.note='QA fixture: finalized week; scores retained from checked-in snapshot.';
     homepage.matchups=board.matchups;homepage.status='final';homepage.note=board.note;
+    // A real recap is current-week by definition. When checked-in data is still
+    // pre-week, promote the prior edition only inside this intercepted QA fixture.
+    if(Number(entry.week)!==Number(board.week)){
+      entry.season=edition.season=board.season;
+      entry.week=edition.week=board.week;
+      if(homepage.featured_story){
+        homepage.featured_story.season=board.season;
+        homepage.featured_story.week=board.week;
+      }
+    }
     if(homepage.featured_story){homepage.featured_story.status='final';homepage.featured_story.source_status='verified_final';}
     edition.source_status=entry.source_status='verified_final';edition.status='final';
     edition.headline=`Week ${board.week} final — visual QA fixture`;

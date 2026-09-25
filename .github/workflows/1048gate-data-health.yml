@@ -3,7 +3,8 @@ name: Data health and current-season fetch
 on:
   schedule:
     # Daily morning catch-up (~4:15 AM ET). Newspaper generation runs after
-    # the board publish, refreshes a verified live issue, and finalizes it when the slate ends.
+    # the board publish, keeps the prior final issue until real scoring starts,
+    # refreshes a verified live issue in-game, and finalizes it when the slate ends.
     - cron: '15 8 * * *'
     # Every 30 minutes Thursday–Monday so Week slates update during the NFL window.
     - cron: '7,37 * * * 0,1,4,5,6'

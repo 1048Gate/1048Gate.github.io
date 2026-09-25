@@ -10,15 +10,6 @@
   },
   "editions": [
     {
-      "path": "data/newspaper_editions/2026/week_03.json",
-      "season": 2026,
-      "week": 3,
-      "mode": "weekly",
-      "published_at": "2026-09-24T22:21:42.790217Z",
-      "source_status": "verified_live",
-      "validation_status": "valid"
-    },
-    {
       "path": "data/newspaper_editions/2026/week_02.json",
       "season": 2026,
       "week": 2,

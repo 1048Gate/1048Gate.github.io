@@ -138,19 +138,53 @@ if(!html.includes('data-weekly-feature') || !html.includes('data-weekly-feature-
 const weeklyIndex = JSON.parse(readFileSync(new URL('data/newspaper_editions/index.json', root), 'utf8'));
 const finalWinners = new Set(['HOME','AWAY','TIE']);
 const currentWeekFinal = currentSeason.matchups.every(game => String(game.state || '').toLowerCase() === 'final' && finalWinners.has(String(game.winner || '').toUpperCase()));
-const expectedWeeklyStatus = currentWeekFinal ? 'verified_final' : 'verified_live';
-const currentWeekly = weeklyIndex.editions.find(entry =>
-  entry.season === currentSeason.season &&
-  entry.week === currentSeason.week &&
-  entry.source_status === expectedWeeklyStatus &&
-  entry.validation_status === 'valid'
-);
-if(!currentWeekly || !existsSync(new URL(currentWeekly.path, root))){
-  throw new Error(`Current Week ${currentSeason.week} must have a published ${expectedWeeklyStatus} weekly edition.`);
+const currentWeekStarted = currentSeason.matchups.some(game => {
+  const state = String(game.state || '').toLowerCase();
+  const winner = String(game.winner || '').toUpperCase();
+  const scores = [game.away?.score, game.home?.score].map(Number);
+  return (state === 'final' && finalWinners.has(winner)) || scores.some(score => Number.isFinite(score) && score > 0);
+});
+let expectedWeekly = null;
+let expectedWeeklyStatus = null;
+if(currentWeekStarted){
+  expectedWeeklyStatus = currentWeekFinal ? 'verified_final' : 'verified_live';
+  expectedWeekly = weeklyIndex.editions.find(entry =>
+    entry.season === currentSeason.season &&
+    entry.week === currentSeason.week &&
+    entry.source_status === expectedWeeklyStatus &&
+    entry.validation_status === 'valid'
+  );
+  if(!expectedWeekly || !existsSync(new URL(expectedWeekly.path, root))){
+    throw new Error(`Started Week ${currentSeason.week} must have a published ${expectedWeeklyStatus} weekly edition.`);
+  }
+}else{
+  const premature = weeklyIndex.editions.find(entry =>
+    entry.season === currentSeason.season &&
+    entry.week === currentSeason.week &&
+    entry.validation_status === 'valid' &&
+    ['verified_live','verified_final'].includes(entry.source_status)
+  );
+  if(premature){
+    throw new Error(`Week ${currentSeason.week} has no fantasy scoring yet and must not replace the prior newspaper.`);
+  }
+  if(currentSeason.week > 1){
+    expectedWeeklyStatus = 'verified_final';
+    expectedWeekly = weeklyIndex.editions.find(entry =>
+      entry.season === currentSeason.season &&
+      entry.week === currentSeason.week - 1 &&
+      entry.source_status === expectedWeeklyStatus &&
+      entry.validation_status === 'valid'
+    );
+    if(!expectedWeekly || !existsSync(new URL(expectedWeekly.path, root))){
+      throw new Error(`Pre-week Week ${currentSeason.week} must retain the verified final Week ${currentSeason.week - 1} edition.`);
+    }
+  }
 }
-const currentEdition = JSON.parse(readFileSync(new URL(currentWeekly.path, root), 'utf8'));
-if(currentEdition.source_status !== expectedWeeklyStatus || currentEdition.validation_status !== 'valid' || !currentEdition.headline || !currentEdition.lead?.body || !currentEdition.matchup || !Array.isArray(currentEdition.tableNotes)){
-  throw new Error('Current weekly edition is missing its expected status or structured editorial fields.');
+if(expectedWeekly){
+  const currentEdition = JSON.parse(readFileSync(new URL(expectedWeekly.path, root), 'utf8'));
+  if(currentEdition.source_status !== expectedWeeklyStatus || currentEdition.validation_status !== 'valid' || !currentEdition.headline || !currentEdition.lead?.body || !currentEdition.matchup || !Array.isArray(currentEdition.tableNotes)){
+    throw new Error('Published weekly edition is missing its expected status or structured editorial fields.');
+  }
 }
 if(!html.includes('class="home-band home-band-now"') || !html.includes('id="homeNowTitle"') || !html.includes('class="home-band home-band-story"') || !html.includes('class="home-band home-band-archive"')){
   throw new Error('Homepage must preserve the Now, Story, and Archive hierarchy.');
