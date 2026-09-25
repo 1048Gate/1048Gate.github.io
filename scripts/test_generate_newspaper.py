@@ -76,6 +76,31 @@ class NewspaperTests(unittest.TestCase):
         result=self.make(value)
         self.assertGreater(float(result["matchup"]["awayScore"])+float(result["matchup"]["homeScore"]),0)
 
+    def test_preweek_zero_board_is_not_publishable(self):
+        value=board(); value["week"]=2
+        for game in value["matchups"]:
+            game.update(week=2,state="scheduled",winner="UNDECIDED")
+            game["away"]["score"]=0; game["home"]["score"]=0
+        with self.assertRaises(paper.GenerationSkip) as error:self.make(value)
+        self.assertEqual(error.exception.reason,paper.SKIP_NOT_STARTED)
+
+    def test_main_preweek_keeps_previous_final_edition(self):
+        current_value=board(); current_value["week"]=2
+        for game in current_value["matchups"]:
+            game.update(week=2,state="scheduled",winner="UNDECIDED")
+            game["away"]["score"]=0; game["home"]["score"]=0
+        current=self.root/"current.json"; paper.write_json(current,current_value)
+        editions=self.root/"data/newspaper_editions"
+        prior_path=paper.edition_path(2026,1,editions)
+        prior=self.make(); paper.write_json(prior_path,prior)
+        paper.update_index(editions/"index.json",prior,prior_path,root=self.root)
+        with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions):
+            output=io.StringIO()
+            with redirect_stdout(output):code=paper.main(["--season","2026","--writing","deterministic"])
+        self.assertEqual(code,0); self.assertIn("SKIP week_not_started",output.getvalue())
+        self.assertFalse((editions/"2026/week_02.json").exists())
+        self.assertEqual([entry["week"] for entry in paper.read_json(editions/"index.json")["editions"]],[1])
+
     def test_incomplete_skip(self):
         value=board(); value["matchups"].pop()
         with self.assertRaises(paper.GenerationSkip) as error:self.make(value)
