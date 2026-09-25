@@ -5,7 +5,7 @@
   "week": 3,
   "phase": "Week 3",
   "status": "live",
-  "last_updated": "2026-09-25T20:43:57.304940+00:00",
+  "last_updated": "2026-09-25T23:55:58.056369+00:00",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -284,7 +284,7 @@
     "source_status": "verified_live",
     "validation_status": "valid",
     "status": "live",
-    "generated_at": "2026-09-25T20:43:57.523362Z",
+    "generated_at": "2026-09-25T23:55:58.167849Z",
     "table_leader": {
       "rank": 1,
       "team": "Howya Been's",
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-25T20:43:57.304940+00:00",
-    "edition_published_at": "2026-09-25T20:43:57.523362Z",
-    "payload_built_at": "2026-09-25T20:43:57.894Z",
+    "week_fetched_at": "2026-09-25T23:55:58.056369+00:00",
+    "edition_published_at": "2026-09-25T23:55:58.167849Z",
+    "payload_built_at": "2026-09-25T23:55:58.466Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
