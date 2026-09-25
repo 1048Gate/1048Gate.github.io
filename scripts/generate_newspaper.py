@@ -3,9 +3,10 @@
 
 Builds a weekly edition only from checked-in league files. It does not invent
 scores, records, standings, transactions, or next-week slates. Every published
-claim carries a source trace. Normal publishing refreshes a verified live issue
-while games are underway, then replaces it with a verified final edition after
-the week completes. Credentials are read only from the environment and are never
+claim carries a source trace. Normal publishing keeps the most recent final issue
+on the newsstand until the new week has real scoring, then refreshes a verified
+live issue and replaces it with a verified final edition after the week completes.
+Credentials are read only from the environment and are never
 written into edition files or logs.
 """
 from __future__ import annotations
@@ -37,6 +38,7 @@ SKIP_INCOMPLETE = "data_incomplete"
 SKIP_INVALID = "invalid_scores"
 SKIP_DUPLICATE = "edition_already_published"
 SKIP_MISSING = "missing_data"
+SKIP_NOT_STARTED = "week_not_started"
 FINAL_WINNERS = {"HOME", "AWAY", "TIE"}
 MAX_MANAGER_FEATURES = 2
 
@@ -94,15 +96,20 @@ def inspect_week(board: dict[str, Any], season: int, week: int) -> dict[str, Any
         raise GenerationSkip(SKIP_INCOMPLETE, f"Expected {EXPECTED_MATCHUPS} matchups for Week {week}; found {len(matchups)}.")
     team_ids: set[Any] = set()
     live = 0
+    started = False
     for game in matchups:
         for key in ("away", "home"):
             side = game.get(key)
             if not isinstance(side, dict) or side.get("teamId") is None or not side.get("owner"):
                 raise GenerationSkip(SKIP_INCOMPLETE, "A matchup is missing a team or owner.")
-            _score(side)
+            score = _score(side)
+            if score > 0:
+                started = True
             team_ids.add(side["teamId"])
         state = str(game.get("state", "")).lower()
         winner = str(game.get("winner", "")).upper()
+        if state == "final" and winner in FINAL_WINNERS:
+            started = True
         if state != "final" or winner not in FINAL_WINNERS:
             live += 1
     if len(team_ids) != EXPECTED_TEAMS:
@@ -110,7 +117,7 @@ def inspect_week(board: dict[str, Any], season: int, week: int) -> dict[str, Any
     standings = board.get("standings")
     if not isinstance(standings, list) or len(standings) != EXPECTED_TEAMS:
         raise GenerationSkip(SKIP_INCOMPLETE, "The standings table is incomplete.")
-    return {"matchups": matchups, "standings": standings, "live": live, "final": live == 0}
+    return {"matchups": matchups, "standings": standings, "live": live, "final": live == 0, "started": started}
 
 
 def _source(dataset: str, locator: str, description: str) -> dict[str, str]:
@@ -300,6 +307,11 @@ def generate_edition(
     root: Path = ROOT, now: datetime | None = None,
 ) -> dict[str, Any]:
     status = inspect_week(board, season, week)
+    if not status["started"] and not allow_incomplete:
+        raise GenerationSkip(
+            SKIP_NOT_STARTED,
+            f"Week {week} has no scored fantasy points yet; keeping the latest published edition on the newsstand.",
+        )
     live = not status["final"]
     facts = _matchup_facts(status["matchups"])
     comparison_facts = facts if status["final"] else ([fact for fact in facts if fact["combined"] > 0] or facts)
