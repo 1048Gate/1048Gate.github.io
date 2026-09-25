@@ -1,0 +1,434 @@
+{
+  "schema_version": 3,
+  "league_name": "1048 Gate",
+  "season": 2026,
+  "edition_year": 2026,
+  "week": 3,
+  "generated_at": "2026-09-25T06:08:10.797278Z",
+  "source_status": "verified_live",
+  "validation_status": "valid",
+  "editorial_policy": {
+    "max_primary_features_per_manager": 2,
+    "matchup_recap_exempt": true
+  },
+  "source_trace": {
+    "dataset": "data/current-season.json",
+    "locator": "season=2026;week=3",
+    "description": "Published ESPN board snapshot"
+  },
+  "status": "live",
+  "headline": "Collin Krum sets the Week 3 pace as the table takes shape",
+  "standfirst": "Week 3 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
+  "lead": {
+    "title": "Inside Week 3: the high score, the table lead, and the closest call",
+    "body": "Howya Been's (Bryan Hunt) is first in the completed-results table at 2-0 with 280.68 points for. On the live Week 3 board, Breezin’ with Bijan (Collin Krum) currently has the high score at 63.70, while Ja'Marr-a-Lago (JD Daley) is at 0.00. Those live scores can still change.",
+    "sourceIds": [
+      "current-season",
+      "power-rankings"
+    ]
+  },
+  "matchup": {
+    "awayTeam": "McConkey Tonk Badonkadonk",
+    "awayOwner": "Vincent Cannarozzi",
+    "awayScore": 5.3,
+    "homeTeam": "Ice Has Me Running Back",
+    "homeOwner": "German Haro",
+    "homeScore": 1.0,
+    "whyItMatters": "The closest live game currently has a 4.30-point margin, making it the tightest matchup on the Week 3 board right now.",
+    "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
+    "edge": "Live edge: McConkey Tonk Badonkadonk (Vincent Cannarozzi) by 4.30 points.",
+    "sourceIds": [
+      "current-season"
+    ]
+  },
+  "tableNotes": [
+    {
+      "rank": 1,
+      "team": "Howya Been's",
+      "owner": "Bryan Hunt",
+      "record": "2-0",
+      "pointsFor": "280.68",
+      "tag": "Table leader"
+    },
+    {
+      "rank": 2,
+      "team": "Jigalos Jims",
+      "owner": "James Brochu",
+      "record": "2-0",
+      "pointsFor": "238.74",
+      "tag": "Current table"
+    },
+    {
+      "rank": 3,
+      "team": "Madison Beer Garden",
+      "owner": "George Travis",
+      "record": "2-0",
+      "pointsFor": "238.24",
+      "tag": "Current table"
+    },
+    {
+      "rank": 4,
+      "team": "Team Hash",
+      "owner": "Trevor Hash",
+      "record": "1-1",
+      "pointsFor": "307.06",
+      "tag": "Current table"
+    },
+    {
+      "rank": 5,
+      "team": "Your Reigning Champ",
+      "owner": "Thomas Speer",
+      "record": "1-1",
+      "pointsFor": "259.66",
+      "tag": "Current table"
+    },
+    {
+      "rank": 6,
+      "team": "1912 Titanic Swimteam",
+      "owner": "Kyle Fowler",
+      "record": "1-1",
+      "pointsFor": "258.60",
+      "tag": "Current table"
+    },
+    {
+      "rank": 7,
+      "team": "McConkey Tonk Badonkadonk",
+      "owner": "Vincent Cannarozzi",
+      "record": "1-1",
+      "pointsFor": "246.36",
+      "tag": "Current table"
+    },
+    {
+      "rank": 8,
+      "team": "Ice Has Me Running Back",
+      "owner": "German Haro",
+      "record": "1-1",
+      "pointsFor": "208.94",
+      "tag": "Current table"
+    },
+    {
+      "rank": 9,
+      "team": "The Buwhops",
+      "owner": "Brian Heino",
+      "record": "1-1",
+      "pointsFor": "187.98",
+      "tag": "Current table"
+    },
+    {
+      "rank": 10,
+      "team": "Ja'Marr-a-Lago",
+      "owner": "JD Daley",
+      "record": "0-2",
+      "pointsFor": "268.68",
+      "tag": "Current table"
+    },
+    {
+      "rank": 11,
+      "team": "No More Darties in LA",
+      "owner": "Jared Hall",
+      "record": "0-2",
+      "pointsFor": "223.30",
+      "tag": "Current table"
+    },
+    {
+      "rank": 12,
+      "team": "Breezin’ with Bijan",
+      "owner": "Collin Krum",
+      "record": "0-2",
+      "pointsFor": "151.20",
+      "tag": "Current table"
+    }
+  ],
+  "pressure": {
+    "team": "Jigalos Jims",
+    "owner": "James Brochu",
+    "record": "2-0",
+    "label": "EARLY READ",
+    "title": "Jigalos Jims keeps the leaders honest",
+    "body": "Jigalos Jims (James Brochu) sits 2-0 with 238.74 points for, the clearest early chase line behind the top spot.",
+    "sourceIds": [
+      "current-season",
+      "seasons"
+    ]
+  },
+  "surprise": {
+    "title": "Biggest surprise: the scoring range is already loud",
+    "body": "The gap between Breezin’ with Bijan (Collin Krum) at 63.70 and Ja'Marr-a-Lago (JD Daley) at 0.00 is 63.70 points. That is the current live spread, not a final Week 3 result.",
+    "sourceIds": [
+      "current-season"
+    ]
+  },
+  "recordWatch": {
+    "title": "Record to watch: the first benchmark is on the board",
+    "body": "The live Week 3 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+    "sourceIds": [
+      "current-season",
+      "matchups"
+    ]
+  },
+  "archiveComparison": {
+    "title": "From the archive: early leaders need patience",
+    "body": "Week 3 is still underway in Szn 10. The archive keeps completed results separate from the live board, so no unfinished score is treated as a final historical result.",
+    "linkLabel": "Open the newspaper archive",
+    "sourceIds": [
+      "seasons",
+      "newspaper"
+    ]
+  },
+  "editorial_note": "Week 3 live edition generated from the verified board. Scores and live edges may change until the slate is final.",
+  "results": [
+    {
+      "winnerTeam": "Breezin’ with Bijan",
+      "winnerOwner": "Collin Krum",
+      "winnerScore": 63.7,
+      "loserTeam": "Your Reigning Champ",
+      "loserOwner": "Thomas Speer",
+      "loserScore": 0.0,
+      "margin": 63.7,
+      "state": "live"
+    },
+    {
+      "winnerTeam": "Team Hash",
+      "winnerOwner": "Trevor Hash",
+      "winnerScore": 22.6,
+      "loserTeam": "Ja'Marr-a-Lago",
+      "loserOwner": "JD Daley",
+      "loserScore": 0.0,
+      "margin": 22.6,
+      "state": "live"
+    },
+    {
+      "winnerTeam": "No More Darties in LA",
+      "winnerOwner": "Jared Hall",
+      "winnerScore": 21.0,
+      "loserTeam": "Howya Been's",
+      "loserOwner": "Bryan Hunt",
+      "loserScore": 10.0,
+      "margin": 11.0,
+      "state": "live"
+    },
+    {
+      "winnerTeam": "McConkey Tonk Badonkadonk",
+      "winnerOwner": "Vincent Cannarozzi",
+      "winnerScore": 5.3,
+      "loserTeam": "Ice Has Me Running Back",
+      "loserOwner": "German Haro",
+      "loserScore": 1.0,
+      "margin": 4.3,
+      "state": "live"
+    },
+    {
+      "winnerTeam": "The Buwhops",
+      "winnerOwner": "Brian Heino",
+      "winnerScore": 0.0,
+      "loserTeam": "Madison Beer Garden",
+      "loserOwner": "George Travis",
+      "loserScore": 0.0,
+      "margin": 0.0,
+      "state": "scheduled"
+    },
+    {
+      "winnerTeam": "Jigalos Jims",
+      "winnerOwner": "James Brochu",
+      "winnerScore": 0.0,
+      "loserTeam": "1912 Titanic Swimteam",
+      "loserOwner": "Kyle Fowler",
+      "loserScore": 0.0,
+      "margin": 0.0,
+      "state": "scheduled"
+    }
+  ],
+  "powerTable": [
+    {
+      "owner": "Bryan Hunt",
+      "team": "Howya Been's",
+      "rating": "87.5",
+      "record": "2-0",
+      "why": "140.34 PF/G",
+      "rank": 1
+    },
+    {
+      "owner": "James Brochu",
+      "team": "Jigalos Jims",
+      "rating": "68.1",
+      "record": "2-0",
+      "why": "119.37 PF/G",
+      "rank": 2
+    },
+    {
+      "owner": "George Travis",
+      "team": "Madison Beer Garden",
+      "rating": "67.3",
+      "record": "2-0",
+      "why": "119.12 PF/G",
+      "rank": 3
+    },
+    {
+      "owner": "Trevor Hash",
+      "team": "Team Hash",
+      "rating": "67.1",
+      "record": "1-1",
+      "why": "153.53 PF/G",
+      "rank": 4
+    },
+    {
+      "owner": "Kyle Fowler",
+      "team": "1912 Titanic Swimteam",
+      "rating": "60.4",
+      "record": "1-1",
+      "why": "129.30 PF/G",
+      "rank": 5
+    },
+    {
+      "owner": "Thomas Speer",
+      "team": "Your Reigning Champ",
+      "rating": "57.3",
+      "record": "1-1",
+      "why": "129.83 PF/G",
+      "rank": 6
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "team": "McConkey Tonk Badonkadonk",
+      "rating": "54.2",
+      "record": "1-1",
+      "why": "123.18 PF/G",
+      "rank": 7
+    },
+    {
+      "owner": "JD Daley",
+      "team": "Ja'Marr-a-Lago",
+      "rating": "44.5",
+      "record": "0-2",
+      "why": "134.34 PF/G",
+      "rank": 8
+    },
+    {
+      "owner": "German Haro",
+      "team": "Ice Has Me Running Back",
+      "rating": "40.6",
+      "record": "1-1",
+      "why": "104.47 PF/G",
+      "rank": 9
+    },
+    {
+      "owner": "Brian Heino",
+      "team": "The Buwhops",
+      "rating": "39.6",
+      "record": "1-1",
+      "why": "93.99 PF/G",
+      "rank": 10
+    },
+    {
+      "owner": "Jared Hall",
+      "team": "No More Darties in LA",
+      "rating": "33.5",
+      "record": "0-2",
+      "why": "111.65 PF/G",
+      "rank": 11
+    },
+    {
+      "owner": "Collin Krum",
+      "team": "Breezin’ with Bijan",
+      "rating": "5.9",
+      "record": "0-2",
+      "why": "75.60 PF/G",
+      "rank": 12
+    }
+  ],
+  "recordBook": [
+    {
+      "label": "Highest score",
+      "value": "235.64 · Downtown Browns (Collin Krum) · 2022 W8"
+    },
+    {
+      "label": "Biggest blowout",
+      "value": "137.42 pts · Jared Hall over Trevor Hash · 2021 W5"
+    },
+    {
+      "label": "Closest finish",
+      "value": "0.08 pts · Ed Perrine over Brian Heino · 2018 W9"
+    }
+  ],
+  "rivalryFile": {
+    "title": "Brian Heino vs. George Travis",
+    "body": "The series stands 6-10-0 through 16 meetings. George Travis leads series scoring 1989.70–1973.08. Brian Heino currently leads 0.00–0.00."
+  },
+  "nextSlate": [],
+  "stories": [
+    {
+      "story_type": "matchup_recap",
+      "title": "Week 3: Live league board",
+      "body": "Trevor Hash leads JD Daley 22.60–0.00. Collin Krum leads Thomas Speer 63.70–0.00. Jared Hall leads Bryan Hunt 21.00–10.00. Brian Heino leads George Travis 0.00–0.00. James Brochu leads Kyle Fowler 0.00–0.00. Vincent Cannarozzi leads German Haro 5.30–1.00.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=3;matchups",
+        "description": "Live ESPN matchup board"
+      }
+    },
+    {
+      "story_type": "biggest_win",
+      "title": "Collin Krum holds the widest live edge",
+      "body": "Collin Krum currently leads Thomas Speer 63.70–0.00, a live margin of 63.70 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=3;matchups",
+        "description": "Live ESPN matchup board"
+      },
+      "primary_owner": "Collin Krum"
+    },
+    {
+      "story_type": "closest_game",
+      "title": "Vincent Cannarozzi has the narrowest live edge",
+      "body": "The tightest live matchup stands 5.30–1.00, with Vincent Cannarozzi ahead of German Haro by 4.30 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=3;matchups",
+        "description": "Live ESPN matchup board"
+      },
+      "primary_owner": "Vincent Cannarozzi"
+    },
+    {
+      "story_type": "scoring_leaders",
+      "title": "Collin Krum sets the current Week 3 pace",
+      "body": "Collin Krum currently has the league-high 63.70. JD Daley is at the current board-low 0.00; both scores can still move.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=3;matchups",
+        "description": "Live ESPN matchup board"
+      },
+      "primary_owner": "Collin Krum"
+    },
+    {
+      "story_type": "standings",
+      "title": "Bryan Hunt leads the completed-results table",
+      "body": "During live Week 3, Bryan Hunt is listed first at 2-0 with 280.68 points for from completed results.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=3;standings",
+        "description": "Verified standings table"
+      },
+      "primary_owner": "Bryan Hunt"
+    },
+    {
+      "story_type": "record_watch",
+      "title": "Live record watch",
+      "body": "The live Week 3 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+      "source": {
+        "dataset": "data/current-season.json + data/matchups.json",
+        "locator": "week=3;records",
+        "description": "Week board compared with archive records"
+      }
+    },
+    {
+      "story_type": "rivalry",
+      "title": "Rivalry file: Brian Heino and George Travis",
+      "body": "The series stands 6-10-0 through 16 meetings. George Travis leads series scoring 1989.70–1973.08. Brian Heino currently leads 0.00–0.00.",
+      "source": {
+        "dataset": "data/matchups.json",
+        "locator": "pair=Brian Heino|George Travis",
+        "description": "All-time head-to-head archive"
+      }
+    }
+  ]
+}

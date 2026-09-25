@@ -4,9 +4,9 @@
   "seasonNumber": 10,
   "week": 3,
   "phase": "Week 3",
-  "fetchedAt": "2026-09-24T22:21:42.685928+00:00",
+  "fetchedAt": "2026-09-25T06:08:10.721296+00:00",
   "source": "ESPN league endpoint",
-  "note": "Week 3 slate from ESPN.",
+  "note": "Week 3 in progress. Live scoring from ESPN.",
   "standings": [
     {
       "locker": 4,
@@ -157,7 +157,7 @@
     {
       "id": 13,
       "week": 3,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -171,13 +171,13 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 0
+        "score": 22.6
       }
     },
     {
       "id": 14,
       "week": 3,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -185,7 +185,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 0
+        "score": 63.7
       },
       "home": {
         "teamId": 11,
@@ -197,7 +197,7 @@
     {
       "id": 15,
       "week": 3,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -205,13 +205,13 @@
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 0
+        "score": 21
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 0
+        "score": 10
       }
     },
     {
@@ -257,7 +257,7 @@
     {
       "id": 18,
       "week": 3,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -265,13 +265,13 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 0
+        "score": 5.3
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 0
+        "score": 1
       }
     }
   ]
