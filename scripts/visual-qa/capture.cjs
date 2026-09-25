@@ -24,7 +24,8 @@ const server=http.createServer((req,res)=>{
   const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const board=json('data/current-season.json'),config=json('data/site.json'),index=json('data/newspaper_editions/index.json');
   const homepage=json('data/homepage-week.json');
-  const entry=index.editions.find(e=>e.season===board.season&&e.week===board.week);
+  const entry=index.editions.find(e=>e.season===board.season&&e.week===board.week) || index.editions[0];
+  if(!entry?.path) throw new Error('Visual QA requires at least one published weekly edition.');
   const edition=json(entry.path);
   if(state==='live'){
     board.matchups.forEach(g=>{g.state='live';g.winner='UNDECIDED'});
