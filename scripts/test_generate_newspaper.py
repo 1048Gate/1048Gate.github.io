@@ -77,9 +77,9 @@ class NewspaperTests(unittest.TestCase):
         self.assertGreater(float(result["matchup"]["awayScore"])+float(result["matchup"]["homeScore"]),0)
 
     def test_preweek_zero_board_is_not_publishable(self):
-        value=board(); value["week"]=2
+        value=board()
         for game in value["matchups"]:
-            game.update(week=2,state="scheduled",winner="UNDECIDED")
+            game.update(state="scheduled",winner="UNDECIDED")
             game["away"]["score"]=0; game["home"]["score"]=0
         with self.assertRaises(paper.GenerationSkip) as error:self.make(value)
         self.assertEqual(error.exception.reason,paper.SKIP_NOT_STARTED)
