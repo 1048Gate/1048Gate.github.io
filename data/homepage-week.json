@@ -277,21 +277,21 @@
   ],
   "featured_story": {
     "season": 2026,
-    "week": 3,
-    "headline": "JD Daley sets the Week 3 pace as the table takes shape",
-    "standfirst": "Week 3 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
-    "path": "data/newspaper_editions/2026/week_03.json",
-    "source_status": "verified_live",
+    "week": 2,
+    "headline": "Kyle Fowler sets the Week 2 pace as the table takes shape",
+    "standfirst": "Howya Been's (Bryan Hunt) leads the verified table after Week 2; The Buwhops (Brian Heino) survived the week's closest finish by 4.64.",
+    "path": "data/newspaper_editions/2026/week_02.json",
+    "source_status": "verified_final",
     "validation_status": "valid",
-    "status": "live",
-    "generated_at": "2026-09-24T22:21:42.790217Z",
+    "status": "final",
+    "generated_at": "2026-09-23T03:24:46.580679Z",
     "table_leader": {
       "rank": 1,
       "team": "Howya Been's",
       "owner": "Bryan Hunt",
       "record": "2-0",
       "pointsFor": "280.68",
-      "tag": "Table leader"
+      "tag": "Highest scoring"
     },
     "pressure": {
       "team": "Jigalos Jims",
@@ -421,7 +421,7 @@
   ],
   "freshness": {
     "week_fetched_at": "2026-09-24T22:21:42.685928+00:00",
-    "edition_published_at": "2026-09-24T22:21:42.790217Z",
+    "edition_published_at": "2026-09-23T03:24:46.580679Z",
     "payload_built_at": "2026-09-24T22:21:43.081Z",
     "sources": [
       "data/current-season.json",
