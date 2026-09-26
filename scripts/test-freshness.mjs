@@ -21,7 +21,7 @@ assert.equal(freshness.liveFreshness(board.fetchedAt,Date.parse('2026-09-21T15:5
 assert.equal(freshness.liveFreshness(board.fetchedAt,Date.parse('2026-09-21T16:36:30Z')).level,'critical');
 
 const classes=new Map();
-const target={children:[],classList:{toggle(name,value){classes.set(name,value)}},replaceChildren(...children){this.children=children},append(child){this.children.push(child)},setAttribute(){},removeAttribute(){}};
+const target={children:[],dataset:{},classList:{toggle(name,value){classes.set(name,value)}},replaceChildren(...children){this.children=children},append(child){this.children.push(child)},setAttribute(){},removeAttribute(){}};
 freshness.setTimestamp(target,{iso:board.fetchedAt,saved:true});
 assert.match(target.children[0].textContent,/ESPN snapshot · Sep 21, 2026 at 11:06 AM ET/);
 
@@ -38,6 +38,10 @@ freshness.setTimestamp(target,{iso:board.fetchedAt,status:'upcoming'});
 assert.match(target.children[0].textContent,/^Upcoming · ESPN schedule/);
 freshness.setTimestamp(target,{iso:board.fetchedAt,saved:true,degraded:true});
 assert.match(target.children[0].textContent,/ESPN.*feed reconnecting/i);
+assert.match(freshness.sourceLabel({source:'Weekly edition',state:'live',iso:board.fetchedAt}),/^Weekly edition · Live · Updated Sep 21, 2026 at 11:06 AM ET/);
+freshness.setSourceLabel(target,{source:'League archive',state:'archive',detail:'through 2025'});
+assert.equal(target.textContent,'League archive · Verified archive · through 2025');
+assert.equal(target.dataset.sourceState,'archive');
 
 const siteUi=readFileSync(new URL('../js/site-ui.js',import.meta.url),'utf8');
 assert.match(siteUi,/gateFreshness\.saveWeek/);

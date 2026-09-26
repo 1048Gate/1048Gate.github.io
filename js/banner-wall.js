@@ -46,7 +46,11 @@
         });
         host.insertAdjacentElement('afterend', button);
       }
-      setStatus('is-live',`Live · ${banners.length} banners`);
+      if(window.gateFreshness?.setSourceLabel){
+        window.gateFreshness.setSourceLabel(status,{source:'League archive',state:'archive',detail:`through ${banners[0]?.year || 'latest season'} · ${banners.length} banners`});
+      }else{
+        setStatus('is-live',`League archive · Verified · ${banners.length} banners`);
+      }
     }catch(error){
       console.error('Unable to load banner wall:', error);
       setStatus('is-error','Unavailable · Championship archive failed');
