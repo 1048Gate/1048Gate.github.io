@@ -92,7 +92,7 @@ const server=http.createServer((req,res)=>{
         && document.querySelectorAll('#weekBoard .week-standings-table tbody tr').length===12
         && document.querySelector('[data-week-stamp]')?.textContent.includes('ESPN snapshot')
         && document.getElementById('leaguePulse')?.dataset.pulseSource==='saved'
-        && document.querySelector('[data-pulse-status]')?.textContent.includes('Saved league read')
+        && document.querySelector('[data-pulse-status]')?.textContent.includes('Saved snapshot')
         && document.querySelectorAll('#leaguePulse [data-pulse-card]').length===6
     }));
     forceWeekFailure=false;
@@ -206,7 +206,7 @@ const server=http.createServer((req,res)=>{
         && document.querySelectorAll('#weekBoard .week-card').length===6
         && document.querySelector('[data-week-stamp]')?.textContent.includes('ESPN snapshot')
         && document.getElementById('leaguePulse')?.dataset.pulseSource==='saved'
-        && document.querySelector('[data-pulse-status]')?.textContent.includes('Saved league read')
+        && document.querySelector('[data-pulse-status]')?.textContent.includes('Saved snapshot')
         && document.querySelectorAll('#leaguePulse [data-pulse-card]').length===6
     }));
   }
