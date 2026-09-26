@@ -55,7 +55,7 @@ function renderFutures(config){
   const futures = Array.isArray(config.futures) ? config.futures : [];
   if(!futures.length){
     target.innerHTML = '<div class="futures-empty"><strong>No odds posted yet.</strong><span>Championship lines will appear when the board is ready.</span></div>';
-    if(status) status.textContent='Available after draft board';
+    window.gateFreshness?.setSourceLabel(status,{source:'League office',state:'upcoming',detail:'futures board pending'});
     return;
   }
   const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
@@ -69,7 +69,7 @@ function renderFutures(config){
         <p>${escapeHtml(entry.case || '')}</p>
       </div>
     </div>`).join('');
-  if(status) status.textContent=`Live · ${futures.length} clubs priced`;
+  window.gateFreshness?.setSourceLabel(status,{source:'League office',state:'snapshot',detail:`${futures.length} clubs priced · ${config.phase || 'current board'}`});
   const method=document.querySelector('[data-futures-method]');
   if(method) method.textContent=`League-office futures · ${config.phase || `Season ${config.seasonYear}`} board · Not sportsbook lines`;
   document.getElementById('futuresExpand')?.remove();

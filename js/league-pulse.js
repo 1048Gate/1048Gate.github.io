@@ -164,7 +164,9 @@
     const section=document.getElementById('leaguePulse');
     if(section) section.dataset.pulseSource=saved?'saved':'current';
     const status=document.querySelector('[data-pulse-status]');
-    if(status) status.textContent=saved?'Saved league read':'Current league read';
+    if(window.gateFreshness?.setSourceLabel){
+      window.gateFreshness.setSourceLabel(status,{source:'League Pulse',state:saved?'snapshot':'live',detail:saved?'last saved read':'derived from current board'});
+    }else if(status) status.textContent=saved?'Saved league read':'Current league read';
   }
 
   async function loadArchive(){

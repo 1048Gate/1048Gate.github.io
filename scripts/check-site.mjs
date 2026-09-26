@@ -138,6 +138,15 @@ if(!html.includes('data-weekly-feature') || !html.includes('data-weekly-feature-
 if(!html.includes('data-futures-method') || !html.includes('data-league-pulse') || !html.includes('data-pulse-status')){
   throw new Error('Homepage must expose odds methodology and League Pulse status hooks.');
 }
+const freshnessSource = readFileSync(new URL('js/freshness.js', root), 'utf8');
+if(!freshnessSource.includes('function sourceLabel') || !freshnessSource.includes('function setSourceLabel')){
+  throw new Error('Freshness must publish shared source-label helpers.');
+}
+for(const source of ['js/site-ui.js','js/newspaper.js','js/banner-wall.js','js/league-pulse.js']){
+  if(!readFileSync(new URL(source, root), 'utf8').includes('setSourceLabel')){
+    throw new Error(`${source} must use the shared source-label helper.`);
+  }
+}
 const pulseSource = readFileSync(new URL('js/league-pulse.js', root), 'utf8');
 if(!pulseSource.includes("index===0?' is-lead':''")){
   throw new Error('League Pulse must identify its lead signal for visual hierarchy.');

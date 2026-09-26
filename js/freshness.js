@@ -63,6 +63,27 @@
     return rel || clock;
   }
 
+  function sourceLabel({source='1048 Gate', state='snapshot', iso='', detail=''} = {}){
+    const time = dateTimeLabel(iso);
+    const suffix = detail ? ` · ${detail}` : '';
+    if(state === 'live') return `${source} · Live${time ? ` · Updated ${time}` : ''}${suffix}`;
+    if(state === 'final') return `${source} · Verified final${time ? ` · ${time}` : ''}${suffix}`;
+    if(state === 'upcoming') return `${source} · Upcoming${time ? ` · ${time}` : ''}${suffix}`;
+    if(state === 'archive') return `${source} · Verified archive${suffix}`;
+    return `${source} · Saved snapshot${time ? ` · ${time}` : ''}${suffix}`;
+  }
+
+  function setSourceLabel(target, options = {}){
+    if(!target) return;
+    const state = options.state || 'snapshot';
+    target.textContent = sourceLabel(options);
+    target.classList.toggle('is-live', state === 'live');
+    target.classList.toggle('is-final', state === 'final');
+    target.classList.toggle('is-upcoming', state === 'upcoming');
+    target.classList.toggle('is-saved', state === 'snapshot');
+    target.dataset.sourceState = state;
+  }
+
   function liveFreshness(iso, now = Date.now()){
     const fetchedAt = new Date(iso || '').getTime();
     if(!Number.isFinite(fetchedAt)) return {level:'unknown', ageMinutes:null};
@@ -143,6 +164,8 @@
     clockLabel,
     dateTimeLabel,
     formatted,
+    sourceLabel,
+    setSourceLabel,
     liveFreshness,
     setTimestamp,
     watchTimestamp,

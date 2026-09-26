@@ -148,6 +148,11 @@ html[data-theme="light"] #home .week-game.is-final .week-card-badge{color:#1f2a2
 #home .league-pulse-card.is-lead>strong{font-size:1.15rem}
 #home .league-pulse-card.is-lead>p{font-size:.875rem}
 #home .futures-method-note{margin:-.25rem var(--gate-space-3) 0;color:var(--muted);font:var(--gate-utility)/1.5 'Space Mono',monospace;letter-spacing:.02em}
+#home [data-weekly-feature-status],#home [data-futures-status],#home [data-pulse-status],#home [data-banner-status]{max-width:100%;color:var(--muted);font:var(--gate-utility)/1.5 'Space Mono',monospace;letter-spacing:.015em;text-transform:none;overflow-wrap:anywhere}
+#home [data-weekly-feature-status].is-live,#home [data-pulse-status].is-live{color:#8cc8a5}
+#home [data-weekly-feature-status].is-final,#home [data-banner-status].is-saved{color:var(--cream)}
+html[data-theme="light"] #home [data-weekly-feature-status].is-live,html[data-theme="light"] #home [data-pulse-status].is-live{color:#416a52}
+html[data-theme="light"] #home [data-weekly-feature-status].is-final,html[data-theme="light"] #home [data-banner-status].is-saved{color:#1f2a2b}
 html[data-theme="light"] .section-status.is-live,html[data-theme="light"] .section-status-bar.is-live,html[data-theme="light"] .transaction-sync.is-live{color:#416a52}
 @media(max-width:760px){
   #home .futures-method-note{margin-inline:var(--gate-space-2);font-size:.68rem}
