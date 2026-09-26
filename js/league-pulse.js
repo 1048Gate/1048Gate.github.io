@@ -149,11 +149,11 @@
   const esc=value=>(window.gateShared?.escapeHtml||((text)=>String(text??'')))(value);
   let archive=null,archiveRequested=false,transactionRequested=false,latestTransaction=null;
 
-  function cardHtml(card){
+  function cardHtml(card,index){
     const action=card.view
       ? `<button type="button" data-view-link="${esc(card.view)}"${card.scrollTo?` data-scroll-to="${esc(card.scrollTo)}"`:''}>Open <span aria-hidden="true">→</span></button>`
       :card.scrollTo?`<button type="button" data-scroll-to="${esc(card.scrollTo)}">Open <span aria-hidden="true">→</span></button>`:'';
-    return `<article class="league-pulse-card" data-pulse-card="${esc(card.id)}" role="listitem"><span>${esc(card.label)}</span><strong>${esc(card.title)}</strong><p>${esc(card.detail)}</p>${action}</article>`;
+    return `<article class="league-pulse-card${index===0?' is-lead':''}" data-pulse-card="${esc(card.id)}" role="listitem"><span>${esc(card.label)}</span><strong>${esc(card.title)}</strong><p>${esc(card.detail)}</p>${action}</article>`;
   }
 
   function render(cards,{saved=false}={}){

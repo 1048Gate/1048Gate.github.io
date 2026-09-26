@@ -70,6 +70,8 @@ function renderFutures(config){
       </div>
     </div>`).join('');
   if(status) status.textContent=`Live · ${futures.length} clubs priced`;
+  const method=document.querySelector('[data-futures-method]');
+  if(method) method.textContent=`League-office futures · ${config.phase || `Season ${config.seasonYear}`} board · Not sportsbook lines`;
   document.getElementById('futuresExpand')?.remove();
   if(futures.length <= preview) return;
   const button = document.createElement('button');
