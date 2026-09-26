@@ -105,7 +105,7 @@ jobs:
       # newspaper on those half-hour refreshes: it creates editorial churn from
       # partial games and makes the score pipeline slower. The paper gets one
       # daily lifecycle pass, the Tuesday finalization pass, or an explicit
-      # manual/repository dispatch.
+      # manual newspaper run.
       - name: Generate weekly newspaper from the verified board
         if: >-
           github.event_name == 'workflow_dispatch' ||
