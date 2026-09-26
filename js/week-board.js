@@ -94,13 +94,13 @@
       const rank = index + 1;
       const cutoff = rank === slots ? ' class="is-playoff-line"' : '';
       return `<tr${cutoff}><td class="week-standings-rank">${rank}</td>
-        <td>${esc(team.team || 'Team')}</td>
-        <td>${esc(team.owner || '')}</td>
+        <td class="week-standings-team"><strong>${esc(team.team || 'Team')}</strong><small>${esc(team.owner || '')}</small></td>
+        <td class="week-standings-manager">${esc(team.owner || '')}</td>
         <td>${esc(recordLine(team))}</td>
         <td>${esc(pointsLine(team.pointsFor))}</td></tr>`;
     }).join('');
     const cutoffNote = (standings || []).length >= slots ? ' · Top 6 in the playoff picture' : '';
-    return `<div class="week-standings-scroll-hint" aria-hidden="true">Swipe standings →</div><div class="week-standings-wrap"><table class="week-standings-table"><thead><tr><th>#</th><th>Team</th><th>Mgr</th><th>Rec</th><th>PF</th></tr></thead><tbody>${rows}</tbody></table></div><p class="week-standings-note">${esc(note || '')}${cutoffNote}</p>`;
+    return `<div class="week-standings-scroll-hint" aria-hidden="true">Standings · team, record, points</div><div class="week-standings-wrap"><table class="week-standings-table"><thead><tr><th>#</th><th>Team</th><th class="week-standings-manager">Mgr</th><th>Rec</th><th>PF</th></tr></thead><tbody>${rows}</tbody></table></div><p class="week-standings-note">${esc(note || '')}${cutoffNote}</p>`;
   }
 
   window.gateWeekBoard = Object.freeze({
