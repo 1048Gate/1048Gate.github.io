@@ -101,7 +101,18 @@ jobs:
             SEASON=2026
           fi
           python3 scripts/publish_current_season.py --season "$SEASON" "${WEEK_ARGS[@]}"
+      # Score refreshes run frequently during NFL windows. Do not regenerate the
+      # newspaper on those half-hour refreshes: it creates editorial churn from
+      # partial games and makes the score pipeline slower. The paper gets one
+      # daily lifecycle pass, the Tuesday finalization pass, or an explicit
+      # manual newspaper run.
       - name: Generate weekly newspaper from the verified board
+        if: >-
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'schedule' && (
+            github.event.schedule == '15 8 * * *' ||
+            github.event.schedule == '20 12 * * 2'
+          ))
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5.6-luna
@@ -137,15 +148,15 @@ jobs:
           node scripts/build-static-week-board.mjs
       - name: Validate site checks still pass
         run: npm run check
-      - name: Commit updated board and newspaper when they change
+      - name: Commit updated board and derived data when they change
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/streaks.json data/newspaper_editions data/homepage-week.json
           if git diff --cached --quiet; then
-            echo "Current-season board and newspaper unchanged — nothing to commit."
+            echo "Current-season board and derived data unchanged — nothing to commit."
           else
-            git commit -m "Refresh current-season board and weekly newspaper"
+            git commit -m "Refresh current-season board and derived data"
             git push
           fi
 
