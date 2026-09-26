@@ -51,12 +51,16 @@ assert.match(board.standingsSnapshotHtml([
   {team:'F', owner:'F', wins:1, losses:0, pointsFor:5},
   {team:'G', owner:'G', wins:0, losses:1, pointsFor:4}
 ], 'Live scoring from ESPN.', esc), /is-playoff-line/);
+const standingsHtml = board.standingsSnapshotHtml([{team:'Team A', owner:'Manager A', wins:1, losses:0, pointsFor:10}], '', esc);
+assert.match(standingsHtml, /class="week-standings-team"/);
+assert.match(standingsHtml, /<small>Manager A<\/small>/);
+assert.match(standingsHtml, /class="week-standings-manager"/);
 assert.match(readFileSync(new URL('../js/site-ui.js', import.meta.url), 'utf8'), /gateWeekBoard/);
 const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 assert.match(indexHtml, /js\/week-board\.js/);
 assert.equal((indexHtml.match(/class="week-game week-card is-(?:live|final|scheduled)"/g) || []).length, 6, 'static fallback must include six Phase 3 matchup cards');
 assert.match(indexHtml, /week-standings-rank/);
 assert.match(indexHtml, /class="is-playoff-line"/);
-assert.match(indexHtml, /Swipe standings/);
+assert.match(indexHtml, /Standings · team, record, points/);
 assert.doesNotMatch(readFileSync(new URL('../js/home-layout.js', import.meta.url), 'utf8'), /createElement\('script'\)/);
 console.log('This Week board: six cards, live/final/upcoming states, margins, and standings snapshot checks passed.');

@@ -146,6 +146,10 @@ const visualSystem = readFileSync(new URL('css/visual-system.css', root), 'utf8'
 if(!visualSystem.includes('html[data-theme="light"] .section-status.is-live')){
   throw new Error('Light-theme live status must use the accessible contrast override.');
 }
+const weekBoardSource = readFileSync(new URL('js/week-board.js', root), 'utf8');
+if(!weekBoardSource.includes('class="week-standings-team"') || !visualSystem.includes('.week-standings-manager')){
+  throw new Error('Mobile standings must preserve manager context in a compact team cell.');
+}
 const weeklyIndex = JSON.parse(readFileSync(new URL('data/newspaper_editions/index.json', root), 'utf8'));
 const finalWinners = new Set(['HOME','AWAY','TIE']);
 const currentWeekFinal = currentSeason.matchups.every(game => String(game.state || '').toLowerCase() === 'final' && finalWinners.has(String(game.winner || '').toUpperCase()));
