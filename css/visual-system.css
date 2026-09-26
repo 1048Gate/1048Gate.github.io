@@ -139,6 +139,20 @@ html[data-theme="light"] #home .week-game.is-final .week-card-badge{color:#1f2a2
   #home .week-card .week-game-side b{font-size:1.35rem}
   #home .week-card .week-game-side strong{font-size:.8rem}
 }
+
+/* Live-week polish: make status and the lead pulse legible at a glance. */
+#home .week-card-badge{display:inline-flex;align-items:center;gap:.4rem}
+#home .week-card-badge:before{content:'';width:.42rem;height:.42rem;border-radius:50%;background:currentColor;opacity:.8}
+#home .week-game.is-scheduled .week-card-badge:before{opacity:.35}
+#home .league-pulse-card.is-lead{border-top:3px solid var(--amber);background:linear-gradient(145deg,rgba(185,138,82,.12),var(--panel2));}
+#home .league-pulse-card.is-lead>strong{font-size:1.15rem}
+#home .league-pulse-card.is-lead>p{font-size:.875rem}
+#home .futures-method-note{margin:-.25rem var(--gate-space-3) 0;color:var(--muted);font:var(--gate-utility)/1.5 'Space Mono',monospace;letter-spacing:.02em}
+html[data-theme="light"] .section-status.is-live,html[data-theme="light"] .section-status-bar.is-live,html[data-theme="light"] .transaction-sync.is-live{color:#416a52}
+@media(max-width:760px){
+  #home .futures-method-note{margin-inline:var(--gate-space-2);font-size:.68rem}
+  #home .league-pulse-card.is-lead{flex-basis:92%}
+}
 @media (min-width: 761px){
   .phone-more{display:block;position:fixed;inset:0;z-index:90}
   .phone-more[hidden]{display:none!important}

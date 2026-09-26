@@ -135,6 +135,17 @@ if(!html.includes('data-history-status') || !html.includes('data-intel-status') 
 if(!html.includes('data-weekly-feature') || !html.includes('data-weekly-feature-status')){
   throw new Error('Homepage must expose a weekly edition feature target and status.');
 }
+if(!html.includes('data-futures-method') || !html.includes('data-league-pulse') || !html.includes('data-pulse-status')){
+  throw new Error('Homepage must expose odds methodology and League Pulse status hooks.');
+}
+const pulseSource = readFileSync(new URL('js/league-pulse.js', root), 'utf8');
+if(!pulseSource.includes("index===0?' is-lead':''")){
+  throw new Error('League Pulse must identify its lead signal for visual hierarchy.');
+}
+const visualSystem = readFileSync(new URL('css/visual-system.css', root), 'utf8');
+if(!visualSystem.includes('html[data-theme="light"] .section-status.is-live')){
+  throw new Error('Light-theme live status must use the accessible contrast override.');
+}
 const weeklyIndex = JSON.parse(readFileSync(new URL('data/newspaper_editions/index.json', root), 'utf8'));
 const finalWinners = new Set(['HOME','AWAY','TIE']);
 const currentWeekFinal = currentSeason.matchups.every(game => String(game.state || '').toLowerCase() === 'final' && finalWinners.has(String(game.winner || '').toUpperCase()));
