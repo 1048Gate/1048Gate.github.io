@@ -5,7 +5,7 @@
   "week": 3,
   "phase": "Week 3",
   "status": "live",
-  "last_updated": "2026-09-27T23:11:26.649804+00:00",
+  "last_updated": "2026-09-27T23:41:19.772894+00:00",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,13 +19,13 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 67.66
+        "score": 69.66
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 123.56
+        "score": 138.66
       }
     },
     {
@@ -39,13 +39,13 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 125.24
+        "score": 131.44
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 80.7
+        "score": 80.94
       }
     },
     {
@@ -59,13 +59,13 @@
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 132.92
+        "score": 132.6
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 114.66
+        "score": 122.06
       }
     },
     {
@@ -85,7 +85,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 146.88
+        "score": 146.78
       }
     },
     {
@@ -99,7 +99,7 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 97.38
+        "score": 99.78
       },
       "home": {
         "teamId": 4,
@@ -119,13 +119,13 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 118.34
+        "score": 120.04
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 107.46
+        "score": 108.66
       }
     }
   ],
@@ -379,8 +379,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "McConkey Tonk Badonkadonk / Ice Has Me Running Back",
-      "detail": "10.9 points apart · Live",
+      "title": "No More Darties in LA / Howya Been's",
+      "detail": "10.5 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -407,8 +407,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "George Travis · 146.9",
-      "detail": "88.8 shy of the 235.6 all-time mark",
+      "title": "George Travis · 146.8",
+      "detail": "88.9 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-27T23:11:26.649804+00:00",
+    "week_fetched_at": "2026-09-27T23:41:19.772894+00:00",
     "edition_published_at": "2026-09-27T13:58:56.552252Z",
-    "payload_built_at": "2026-09-27T23:11:26.897Z",
+    "payload_built_at": "2026-09-27T23:41:20.062Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
