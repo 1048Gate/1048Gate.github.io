@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 3,
   "phase": "Week 3",
-  "fetchedAt": "2026-09-27T22:41:27.631502+00:00",
+  "fetchedAt": "2026-09-27T23:11:26.649804+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,13 +165,13 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 67.16
+        "score": 67.66
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 115.18
+        "score": 123.56
       }
     },
     {
@@ -185,13 +185,13 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 118.64
+        "score": 125.24
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 70.04
+        "score": 80.7
       }
     },
     {
@@ -205,13 +205,13 @@
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 132.64
+        "score": 132.92
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 109.56
+        "score": 114.66
       }
     },
     {
@@ -225,13 +225,13 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 52.1
+        "score": 55.8
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 125.54
+        "score": 146.88
       }
     },
     {
@@ -245,13 +245,13 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 90.48
+        "score": 97.38
       },
       "home": {
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 80.04
+        "score": 80.14
       }
     },
     {
@@ -265,13 +265,13 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 114.24
+        "score": 118.34
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 89.96
+        "score": 107.46
       }
     }
   ]
