@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 3,
   "phase": "Week 3",
-  "fetchedAt": "2026-09-27T21:34:48.831725+00:00",
+  "fetchedAt": "2026-09-27T21:41:24.782879+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "standings": [
@@ -191,7 +191,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 59.2
+        "score": 59.72
       }
     },
     {
@@ -205,13 +205,13 @@
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 99.32
+        "score": 105.44
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 100.46
+        "score": 102.56
       }
     },
     {
@@ -231,7 +231,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 101.9
+        "score": 103.56
       }
     },
     {
@@ -245,7 +245,7 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 69.78
+        "score": 78.58
       },
       "home": {
         "teamId": 4,
@@ -265,7 +265,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 111.34
+        "score": 111.54
       },
       "home": {
         "teamId": 14,
