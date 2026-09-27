@@ -5,7 +5,7 @@
   "week": 3,
   "phase": "Week 3",
   "status": "live",
-  "last_updated": "2026-09-27T23:41:19.772894+00:00",
+  "last_updated": "2026-09-27T23:57:30.374399+00:00",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -25,7 +25,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 138.66
+        "score": 144.74
       }
     },
     {
@@ -39,7 +39,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 131.44
+        "score": 130.44
       },
       "home": {
         "teamId": 11,
@@ -85,7 +85,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 146.78
+        "score": 149.78
       }
     },
     {
@@ -407,8 +407,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "George Travis · 146.8",
-      "detail": "88.9 shy of the 235.6 all-time mark",
+      "title": "George Travis · 149.8",
+      "detail": "85.9 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-27T23:41:19.772894+00:00",
+    "week_fetched_at": "2026-09-27T23:57:30.374399+00:00",
     "edition_published_at": "2026-09-27T13:58:56.552252Z",
-    "payload_built_at": "2026-09-27T23:41:20.062Z",
+    "payload_built_at": "2026-09-27T23:57:30.660Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
