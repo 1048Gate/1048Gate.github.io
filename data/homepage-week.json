@@ -5,7 +5,7 @@
   "week": 3,
   "phase": "Week 3",
   "status": "live",
-  "last_updated": "2026-09-28T21:12:10.139860+00:00",
+  "last_updated": "2026-09-28T21:42:03.607146+00:00",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-28T21:12:10.139860+00:00",
+    "week_fetched_at": "2026-09-28T21:42:03.607146+00:00",
     "edition_published_at": "2026-09-28T16:45:37.200957Z",
-    "payload_built_at": "2026-09-28T21:12:10.395Z",
+    "payload_built_at": "2026-09-28T21:42:03.988Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
