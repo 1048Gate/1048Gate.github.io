@@ -230,41 +230,137 @@
     return new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Image export failed.')), type, quality));
   }
 
-  async function createFullEditionCanvas(data){
-    if(document.fonts?.ready) await document.fonts.ready;
-    const PAGE_WIDTH = 1080;
-    const PAGE_HEIGHT = 1398;
-    const LEFT = 78;
-    const CONTENT_WIDTH = 924;
-    const BOTTOM = 1276;
-    const measureCanvas = document.createElement('canvas');
-    const measure = measureCanvas.getContext('2d');
+  /* ---- Full-edition page layout -------------------------------------------
+     The PDF and page images are drawn on a canvas, so they never read the
+     site's CSS. Every string is measured in the exact font, size and case it
+     is drawn in, words wider than the column are broken, and oversized
+     sections are split across pages, so nothing can run past the page edge
+     whatever fonts the device has. System font stacks only: no web fonts are
+     loaded (they were removed from the site), and the metric-compatible
+     ChromeOS/Linux faces (Tinos, Arimo, Liberation) are listed explicitly.
+     Colours are fixed newsprint light regardless of the site theme. */
+  const PAGE_WIDTH = 1080;
+  const PAGE_HEIGHT = 1398; // 1080 x 1398 is the US Letter 8.5 x 11 in aspect ratio
+  const LEFT = 78;
+  const CONTENT_WIDTH = 924;
+  const RIGHT = LEFT + CONTENT_WIDTH;
+  const CONTINUATION_TOP = 150;
+  const BOTTOM = 1270;
+  const FONTS = {
+    serif:'Georgia, "Times New Roman", Tinos, "Liberation Serif", "Noto Serif", serif',
+    sans:'"Helvetica Neue", Helvetica, Arial, Arimo, "Liberation Sans", sans-serif'
+  };
+  const INK = {paper:'#f3ead9', rule:'#b98a52', frame:'#1b292b', head:'#172022', body:'#273234', deck:'#435153', label:'#7b5b2f', meta:'#596568'};
 
-    measure.font = '700 54px Oswald, Arial, sans-serif';
-    const headlineLines = canvasParagraphLines(measure, data.headline || `Week ${data.week} Edition`, CONTENT_WIDTH).slice(0, 4);
-    measure.font = '400 24px Georgia, serif';
-    const standfirstLines = canvasParagraphLines(measure, data.standfirst || '', CONTENT_WIDTH).slice(0, 5);
-    const firstContentTop = 198 + (headlineLines.length * 61) + (standfirstLines.length * 34) + 48;
+  const fontSpec = (weight, size, family) => `${weight} ${size}px ${family}`;
 
-    const blocks = editionSections(data).map(section => {
-      measure.font = '700 18px "Space Mono", monospace';
-      const labelLines = canvasParagraphLines(measure, String(section.label || 'League story').toUpperCase(), CONTENT_WIDTH);
-      measure.font = '700 30px Oswald, Arial, sans-serif';
-      const titleLines = canvasParagraphLines(measure, section.title || '', CONTENT_WIDTH);
+  /* Greedy wrap by measured width; a single word wider than the column is
+     broken by characters so it can never overflow. */
+  function measuredLines(context, value, maxWidth){
+    const lines = [];
+    String(value ?? '').split('\n').forEach(paragraph => {
+      let line = '';
+      paragraph.split(/\s+/).filter(Boolean).forEach(word => {
+        const next = line ? `${line} ${word}` : word;
+        if(context.measureText(next).width <= maxWidth){ line = next; return; }
+        if(line) lines.push(line);
+        line = '';
+        if(context.measureText(word).width <= maxWidth){ line = word; return; }
+        let chunk = '';
+        for(const character of Array.from(word)){
+          if(chunk && context.measureText(chunk + character).width > maxWidth){ lines.push(chunk); chunk = character; }
+          else chunk += character;
+        }
+        line = chunk;
+      });
+      lines.push(line);
+    });
+    while(lines.length > 1 && lines[lines.length - 1] === '') lines.pop();
+    return lines;
+  }
+
+  /* Wrap text, stepping the size down until it fits in maxLines. Text is
+     never dropped: at the minimum size every line is kept. */
+  function fitBlockText(context, value, {weight, family, size, minSize, maxLines = Infinity, upper = false, leading = 1.2}){
+    const text = upper ? String(value ?? '').toUpperCase() : String(value ?? '');
+    for(let current = size; ; current -= 2){
+      const nextSize = Math.max(minSize, current);
+      context.font = fontSpec(weight, nextSize, family);
+      const lines = measuredLines(context, text, CONTENT_WIDTH);
+      if(lines.length <= maxLines || nextSize <= minSize){
+        return {lines, font:context.font, size:nextSize, leading:Math.round(nextSize * leading)};
+      }
+    }
+  }
+
+  /* One-line text (masthead, footer): shrink to fit, then shorten with an
+     ellipsis as a last resort. */
+  function fitLine(context, value, maxWidth, {weight, family, size, minSize}){
+    let text = String(value ?? '');
+    for(let current = size; current >= minSize; current -= 1){
+      context.font = fontSpec(weight, current, family);
+      if(context.measureText(text).width <= maxWidth) return {text, font:context.font};
+    }
+    context.font = fontSpec(weight, minSize, family);
+    while(text.length > 1 && context.measureText(`${text}…`).width > maxWidth) text = text.slice(0, -1);
+    return {text:`${text}…`, font:context.font};
+  }
+
+  function pulledLabel(value){
+    const date = new Date(value);
+    if(!value || Number.isNaN(date.getTime())) return value ? String(value) : 'UNAVAILABLE';
+    return `${new Intl.DateTimeFormat('en-US', {timeZone:'America/New_York', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit'}).format(date).toUpperCase()} ET`;
+  }
+
+  const LABEL = {size:16, leading:22};
+  const BLOCK_PAD_TOP = 14, LABEL_GAP = 4, TITLE_GAP = 8, BLOCK_PAD_BOTTOM = 22;
+
+  function blockHeight(block){
+    return BLOCK_PAD_TOP + (block.labelLines.length * LABEL.leading) + LABEL_GAP
+      + (block.title.lines.length * block.title.leading) + TITLE_GAP
+      + (block.bodyLines.length * block.bodyLeading) + BLOCK_PAD_BOTTOM;
+  }
+
+  function layoutEdition(context, data){
+    const headline = fitBlockText(context, data.headline || `Week ${data.week} Edition`, {weight:700, family:FONTS.serif, size:54, minSize:36, maxLines:4, leading:1.14});
+    const standfirst = fitBlockText(context, data.standfirst || '', {weight:400, family:FONTS.serif, size:24, minSize:20, maxLines:5, leading:1.42});
+    const headlineTop = 206;
+    const standfirstTop = headlineTop + (headline.lines.length * headline.leading) + 6;
+    const deckRule = standfirstTop + (standfirst.lines.filter(Boolean).length ? (standfirst.lines.length * standfirst.leading) : 0);
+    const firstContentTop = deckRule + 36;
+
+    const blocks = [];
+    editionSections(data).forEach(section => {
+      context.font = fontSpec(700, LABEL.size, FONTS.sans);
+      const labelLines = measuredLines(context, String(section.label || 'League story').toUpperCase(), CONTENT_WIDTH);
+      const title = fitBlockText(context, section.title || '', {weight:700, family:FONTS.serif, size:30, minSize:22, maxLines:3, leading:1.2});
       const bodySize = section.compact ? 17 : 21;
       const bodyLeading = section.compact ? 24 : 29;
-      measure.font = `400 ${bodySize}px Georgia, serif`;
-      const bodyLines = canvasParagraphLines(measure, section.body || '', CONTENT_WIDTH);
-      return {...section, labelLines, titleLines, bodyLines, bodySize, bodyLeading, height:24 + (labelLines.length * 23) + 8 + (titleLines.length * 36) + 8 + (bodyLines.length * bodyLeading) + 24};
+      context.font = fontSpec(400, bodySize, FONTS.serif);
+      const bodyLines = measuredLines(context, section.body || '', CONTENT_WIDTH);
+      const block = {label:section.label, labelLines, title, bodyLines, bodySize, bodyLeading};
+      const pageCapacity = BOTTOM - CONTINUATION_TOP;
+      if(blockHeight(block) <= pageCapacity){ blocks.push({...block, height:blockHeight(block)}); return; }
+      /* Taller than a whole page: split the body across pages. */
+      const fixed = blockHeight({...block, bodyLines:[]});
+      const perPage = Math.max(1, Math.floor((pageCapacity - fixed) / bodyLeading));
+      for(let index = 0; index < bodyLines.length; index += perPage){
+        const part = {...block, bodyLines:bodyLines.slice(index, index + perPage)};
+        if(index){
+          context.font = fontSpec(700, LABEL.size, FONTS.sans);
+          part.labelLines = measuredLines(context, `${String(section.label || 'League story').toUpperCase()} (CONTINUED)`, CONTENT_WIDTH);
+        }
+        blocks.push({...part, height:blockHeight(part)});
+      }
     });
 
     const groups = [[]];
     const used = [0];
     blocks.forEach(block => {
       const page = groups.length - 1;
-      const top = page === 0 ? firstContentTop : 142;
-      const capacity = BOTTOM - top;
-      if(used[page] + block.height > capacity && groups[page].length){
+      const capacity = BOTTOM - (page === 0 ? firstContentTop : CONTINUATION_TOP);
+      if(used[page] + block.height > capacity && (groups[page].length || page === 0)){
+        if(!groups[page].length && page === 0){ groups[0] = []; }
         groups.push([block]);
         used.push(block.height);
       }else{
@@ -274,7 +370,7 @@
     });
     if(groups.length > 1){
       const lastIndex = groups.length - 1;
-      const continuationCapacity = BOTTOM - 142;
+      const continuationCapacity = BOTTOM - CONTINUATION_TOP;
       while(used[lastIndex] < continuationCapacity * .62 && groups[lastIndex - 1].length > 1){
         const candidate = groups[lastIndex - 1][groups[lastIndex - 1].length - 1];
         if(used[lastIndex] + candidate.height > continuationCapacity) break;
@@ -284,80 +380,105 @@
         used[lastIndex] += candidate.height;
       }
     }
-    const placed = [];
-    groups.forEach((group, page) => {
-      let y = page === 0 ? firstContentTop : 142;
-      group.forEach(block => { placed.push({...block, page, y}); y += block.height; });
+    const pages = groups.map((group, page) => {
+      let y = page === 0 ? firstContentTop : CONTINUATION_TOP;
+      return group.map(block => { const placed = {...block, y}; y += block.height; return placed; });
     });
-    const pageCount = groups.length;
-    const canvas = document.createElement('canvas');
-    canvas.width = PAGE_WIDTH;
-    canvas.height = PAGE_HEIGHT * pageCount;
-    const context = canvas.getContext('2d');
+    return {headline, standfirst, headlineTop, standfirstTop, deckRule, pages, pageCount:pages.length};
+  }
 
-    for(let pageIndex = 0; pageIndex < pageCount; pageIndex++){
-      const offset = pageIndex * PAGE_HEIGHT;
-      context.fillStyle = '#f3ead9';
-      context.fillRect(0, offset, PAGE_WIDTH, PAGE_HEIGHT);
-      context.strokeStyle = '#b98a52';
-      context.lineWidth = 4;
-      context.strokeRect(38, offset + 38, 1004, 1322);
-      context.strokeStyle = '#1b292b';
-      context.lineWidth = 2;
-      context.strokeRect(52, offset + 52, 976, 1294);
+  function drawEditionPage(context, data, layout, pageIndex, offset = 0){
+    const {pageCount} = layout;
+    context.textAlign = 'left';
+    context.fillStyle = INK.paper;
+    context.fillRect(0, offset, PAGE_WIDTH, PAGE_HEIGHT);
+    context.strokeStyle = INK.rule;
+    context.lineWidth = 4;
+    context.strokeRect(38, offset + 38, 1004, 1322);
+    context.strokeStyle = INK.frame;
+    context.lineWidth = 2;
+    context.strokeRect(52, offset + 52, 976, 1294);
 
-      context.fillStyle = '#1b292b';
-      context.font = '700 45px Oswald, Arial, sans-serif';
-      context.fillText(pageIndex ? '1048 GATE WEEKLY · CONTINUED' : '1048 GATE WEEKLY', LEFT, offset + 112);
-      context.textAlign = 'right';
-      context.fillStyle = '#7b5b2f';
-      context.font = '700 20px "Space Mono", monospace';
-      context.fillText(`WEEK ${data.week}  /  ${data.status === 'live' ? 'LIVE' : 'FINAL'}`, 1002, offset + 108);
-      context.textAlign = 'left';
-      context.fillStyle = '#1b292b';
-      context.fillRect(LEFT, offset + 132, CONTENT_WIDTH, 4);
+    /* Masthead: right-hand week tag first, then the title fits the space left. */
+    const tag = fitLine(context, `WEEK ${data.week}  /  ${data.status === 'live' ? 'LIVE' : 'FINAL'}`, 280, {weight:700, family:FONTS.sans, size:19, minSize:13});
+    context.font = tag.font;
+    const tagWidth = context.measureText(tag.text).width;
+    const title = fitLine(context, pageIndex ? '1048 GATE WEEKLY · CONTINUED' : '1048 GATE WEEKLY', CONTENT_WIDTH - tagWidth - 28, {weight:700, family:FONTS.serif, size:44, minSize:26});
+    context.fillStyle = INK.frame;
+    context.font = title.font;
+    context.fillText(title.text, LEFT, offset + 112);
+    context.textAlign = 'right';
+    context.fillStyle = INK.label;
+    context.font = tag.font;
+    context.fillText(tag.text, RIGHT, offset + 108);
+    context.textAlign = 'left';
+    context.fillStyle = INK.frame;
+    context.fillRect(LEFT, offset + 132, CONTENT_WIDTH, 4);
 
-      context.fillStyle = '#596568';
-      context.font = '700 14px "Space Mono", monospace';
-      const sourceStatus = data.source_status === 'verified_live' ? 'ESPN LIVE SNAPSHOT' : 'ESPN FINAL';
-      context.fillText(`SOURCE: ${sourceStatus}  ·  PULLED ${data.generated_at || data.updated_at || 'UNAVAILABLE'}`, LEFT, offset + 1325);
-      context.textAlign = 'right';
-      context.fillText(`PAGE ${pageIndex + 1} OF ${pageCount}`, 1002, offset + 1325);
-      context.textAlign = 'left';
+    /* Footer: page number on the right, source line fits what remains. */
+    const pageLabel = `PAGE ${pageIndex + 1} OF ${pageCount}`;
+    context.font = fontSpec(700, 13, FONTS.sans);
+    const pageLabelWidth = context.measureText(pageLabel).width;
+    const sourceStatus = data.source_status === 'verified_live' ? 'ESPN LIVE SNAPSHOT' : 'ESPN FINAL';
+    const source = fitLine(context, `SOURCE: ${sourceStatus}  ·  PULLED ${pulledLabel(data.generated_at || data.updated_at)}`, CONTENT_WIDTH - pageLabelWidth - 24, {weight:700, family:FONTS.sans, size:13, minSize:10});
+    context.fillStyle = INK.meta;
+    context.font = source.font;
+    context.fillText(source.text, LEFT, offset + 1318);
+    context.textAlign = 'right';
+    context.font = fontSpec(700, 13, FONTS.sans);
+    context.fillText(pageLabel, RIGHT, offset + 1318);
+    context.textAlign = 'left';
+
+    if(pageIndex === 0){
+      context.fillStyle = INK.frame;
+      context.font = layout.headline.font;
+      layout.headline.lines.forEach((line, index) => context.fillText(line, LEFT, offset + layout.headlineTop + (index * layout.headline.leading)));
+      context.fillStyle = INK.deck;
+      context.font = layout.standfirst.font;
+      layout.standfirst.lines.forEach((line, index) => context.fillText(line, LEFT, offset + layout.standfirstTop + 22 + (index * layout.standfirst.leading)));
+      context.fillStyle = INK.label;
+      context.fillRect(LEFT, offset + layout.deckRule + 14, CONTENT_WIDTH, 3);
     }
 
-    context.fillStyle = '#1b292b';
-    context.font = '700 54px Oswald, Arial, sans-serif';
-    let headerY = 198;
-    headlineLines.forEach(line => { context.fillText(line.toUpperCase(), LEFT, headerY); headerY += 61; });
-    headerY += 8;
-    context.fillStyle = '#435153';
-    context.font = '400 24px Georgia, serif';
-    standfirstLines.forEach(line => { context.fillText(line, LEFT, headerY); headerY += 34; });
-    context.fillStyle = '#7b5b2f';
-    context.fillRect(LEFT, headerY + 10, CONTENT_WIDTH, 3);
-
-    placed.forEach(block => {
-      let blockY = (block.page * PAGE_HEIGHT) + block.y;
+    (layout.pages[pageIndex] || []).forEach(block => {
+      let y = offset + block.y;
       context.strokeStyle = 'rgba(39,50,52,.34)';
       context.lineWidth = 2;
       context.beginPath();
-      context.moveTo(LEFT, blockY);
-      context.lineTo(LEFT + CONTENT_WIDTH, blockY);
+      context.moveTo(LEFT, y);
+      context.lineTo(RIGHT, y);
       context.stroke();
-      blockY += 29;
-      context.fillStyle = '#7b5b2f';
-      context.font = '700 18px "Space Mono", monospace';
-      block.labelLines.forEach(line => { context.fillText(line, LEFT, blockY); blockY += 23; });
-      blockY += 13;
-      context.fillStyle = '#172022';
-      context.font = '700 30px Oswald, Arial, sans-serif';
-      block.titleLines.forEach(line => { context.fillText(line.toUpperCase(), LEFT, blockY); blockY += 36; });
-      blockY += 5;
-      context.fillStyle = '#273234';
-      context.font = `400 ${block.bodySize}px Georgia, serif`;
-      block.bodyLines.forEach(line => { context.fillText(line, LEFT, blockY); blockY += block.bodyLeading; });
+      y += BLOCK_PAD_TOP;
+      context.fillStyle = INK.label;
+      context.font = fontSpec(700, LABEL.size, FONTS.sans);
+      block.labelLines.forEach(line => { y += LABEL.leading * .8; context.fillText(line, LEFT, y); y += LABEL.leading * .2; });
+      y += LABEL_GAP;
+      context.fillStyle = INK.head;
+      context.font = block.title.font;
+      block.title.lines.forEach(line => { y += block.title.leading * .82; context.fillText(line, LEFT, y); y += block.title.leading * .18; });
+      y += TITLE_GAP;
+      context.fillStyle = INK.body;
+      context.font = fontSpec(400, block.bodySize, FONTS.serif);
+      block.bodyLines.forEach(line => { y += block.bodyLeading * .8; context.fillText(line, LEFT, y); y += block.bodyLeading * .2; });
     });
+  }
+
+  async function editionLayout(data){
+    if(document.fonts?.ready) await document.fonts.ready;
+    const measure = document.createElement('canvas').getContext('2d');
+    return layoutEdition(measure, data);
+  }
+
+  /* One tall canvas holding every page (kept for callers/tests). The export
+     paths below draw each page on its own canvas instead, which stays well
+     inside iOS Safari's canvas memory limit for long editions. */
+  async function createFullEditionCanvas(data){
+    const layout = await editionLayout(data);
+    const canvas = document.createElement('canvas');
+    canvas.width = PAGE_WIDTH;
+    canvas.height = PAGE_HEIGHT * layout.pageCount;
+    const context = canvas.getContext('2d');
+    for(let pageIndex = 0; pageIndex < layout.pageCount; pageIndex++) drawEditionPage(context, data, layout, pageIndex, pageIndex * PAGE_HEIGHT);
     return canvas;
   }
 
@@ -381,7 +502,12 @@
       const contentId = pageId + 1;
       const imageId = pageId + 2;
       const imageName = `Im${index}`;
-      const content = `q\n612 0 0 792 0 0 cm\n/${imageName} Do\nQ`;
+      /* Fit the page image inside US Letter (612 x 792 pt) without
+         distortion, centred; the paper colour fills any sliver left over. */
+      const fit = Math.min(612 / width, 792 / height);
+      const drawWidth = +(width * fit).toFixed(3), drawHeight = +(height * fit).toFixed(3);
+      const x = +((612 - drawWidth) / 2).toFixed(3), y = +((792 - drawHeight) / 2).toFixed(3);
+      const content = `q\n0.953 0.918 0.851 rg\n0 0 612 792 re f\nQ\nq\n${drawWidth} 0 0 ${drawHeight} ${x} ${y} cm\n/${imageName} Do\nQ`;
       objects[pageId] = ascii(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /XObject << /${imageName} ${imageId} 0 R >> >> /Contents ${contentId} 0 R >>`);
       objects[contentId] = ascii(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
       objects[imageId] = concatBytes([
@@ -408,21 +534,21 @@
     return concatBytes(output);
   }
 
-  async function createEditionPageBlobs(data, type='image/png', quality){
-    const full = await createFullEditionCanvas(data);
-    const pageHeight = 1398;
+  async function createEditionPageBlobs(data, type='image/png', quality, scale = 1){
+    const layout = await editionLayout(data);
     const pages = [];
-    for(let top = 0; top < full.height; top += pageHeight){
+    const width = Math.round(PAGE_WIDTH * scale);
+    const height = Math.round(PAGE_HEIGHT * scale);
+    for(let pageIndex = 0; pageIndex < layout.pageCount; pageIndex++){
       const page = document.createElement('canvas');
-      page.width = full.width;
-      page.height = pageHeight;
+      page.width = width;
+      page.height = height;
       const context = page.getContext('2d');
-      context.fillStyle = '#f3ead9';
-      context.fillRect(0, 0, page.width, page.height);
-      context.drawImage(full, 0, top, full.width, pageHeight, 0, 0, full.width, pageHeight);
+      if(scale !== 1 && typeof context.setTransform === 'function') context.setTransform(scale, 0, 0, scale, 0, 0);
+      drawEditionPage(context, data, layout, pageIndex, 0);
       pages.push(await canvasBlob(page, type, quality));
     }
-    return {pages, width:full.width, height:pageHeight};
+    return {pages, width, height};
   }
 
   function crc32(bytes){
@@ -486,7 +612,7 @@
   }
 
   async function createNewspaperPdf(data){
-    const pageSet = await createEditionPageBlobs(data, 'image/jpeg', .94);
+    const pageSet = await createEditionPageBlobs(data, 'image/jpeg', .9, 2);
     const jpegPages = await Promise.all(pageSet.pages.map(async blob => new Uint8Array(await blob.arrayBuffer())));
     return buildImagePdf(jpegPages, pageSet.width, pageSet.height);
   }
