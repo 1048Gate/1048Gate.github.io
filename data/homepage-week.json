@@ -5,7 +5,7 @@
   "week": 3,
   "phase": "Week 3",
   "status": "live",
-  "last_updated": "2026-09-28T00:11:26.772752+00:00",
+  "last_updated": "2026-09-28T00:41:19.353918+00:00",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -39,7 +39,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 130.44
+        "score": 130.24
       },
       "home": {
         "teamId": 11,
@@ -65,7 +65,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 122.06
+        "score": 133.06
       }
     },
     {
@@ -85,7 +85,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 149.78
+        "score": 152.48
       }
     },
     {
@@ -105,7 +105,7 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 80.14
+        "score": 83.34
       }
     },
     {
@@ -380,7 +380,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "No More Darties in LA / Howya Been's",
-      "detail": "10.5 points apart · Live",
+      "detail": "0.5 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -407,8 +407,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "George Travis · 149.8",
-      "detail": "85.9 shy of the 235.6 all-time mark",
+      "title": "George Travis · 152.5",
+      "detail": "83.2 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-28T00:11:26.772752+00:00",
+    "week_fetched_at": "2026-09-28T00:41:19.353918+00:00",
     "edition_published_at": "2026-09-27T13:58:56.552252Z",
-    "payload_built_at": "2026-09-28T00:11:27.137Z",
+    "payload_built_at": "2026-09-28T00:41:19.637Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
