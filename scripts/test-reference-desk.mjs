@@ -23,7 +23,13 @@ assert.equal(desk.standingsRows(table).length, 12);
 assert.equal(desk.standingsRows(table)[0].owner, table[0].owner);
 assert.equal(desk.standingsRows(table)[5].cut, true);
 
+assert.equal(desk.REGULAR_SEASON_GAMES, 14);
+assert.equal(desk.gamesRemaining({wins:2, losses:0, ties:0}), 12);
+assert.equal(desk.gamesRemaining({wins:9, losses:5, ties:0}), 0);
+assert.equal(desk.standingsRows(table)[0].gr, 14 - desk.completedWeeks(table));
 const race = desk.playoffRace(table);
+assert.ok(race.rows.every(row => row.gr === 14 - (row.record.split('-').map(Number).reduce((a, b) => a + b, 0))));
+assert.ok(!/\bbye/i.test(race.note));
 assert.equal(race.rows.length, 12);
 assert.equal(race.rows[5].seed, 6);
 assert.equal(race.rows[5].inField, true);

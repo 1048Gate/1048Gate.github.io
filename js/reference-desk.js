@@ -6,6 +6,7 @@
    so scripts/test-reference-desk.mjs can check them without a browser. */
 (function(){
   const PLAYOFF_SLOTS = 6;
+  const REGULAR_SEASON_GAMES = 14; // 2026 regular season (confirmed by the commissioner)
   const clean = value => String(value ?? '').trim().replace(/\s+/g, ' ');
   const num = value => { const n = Number(value); return Number.isFinite(n) ? n : null; };
   const fixed = (value, digits = 1) => { const n = num(value); return n == null ? '—' : n.toFixed(digits); };
@@ -24,6 +25,7 @@
     return [...(Array.isArray(rows) ? rows : [])].sort((a, b) => (wins(b) - wins(a)) || (Number(b.pointsFor || 0) - Number(a.pointsFor || 0)));
   }
   function completedWeeks(table){ return table.reduce((max, row) => Math.max(max, played(row)), 0); }
+  const gamesRemaining = row => Math.max(0, REGULAR_SEASON_GAMES - played(row));
   const gamesBehind = (row, ref) => ((Number(ref.wins || 0) - Number(row.wins || 0)) + (Number(row.losses || 0) - Number(ref.losses || 0))) / 2;
 
   function impliedProbability(odds){
@@ -100,7 +102,7 @@
       return {
         rank:index + 1, owner:name(row), team:clean(row.team), w:Number(row.wins || 0), l:Number(row.losses || 0), t:Number(row.ties || 0),
         pct:pct(row), pf, pa, diff:pf != null && pa != null ? pf - pa : null, ppg:gp && pf != null ? pf / gp : null,
-        gb:index === 0 ? null : gamesBehind(row, leader), cut:index + 1 === PLAYOFF_SLOTS
+        gb:index === 0 ? null : gamesBehind(row, leader), gr:gamesRemaining(row), cut:index + 1 === PLAYOFF_SLOTS
       };
     });
   }
@@ -113,7 +115,7 @@
       const inField = seed <= PLAYOFF_SLOTS;
       const ref = inField ? seventh : sixth;
       const games = inField ? gamesBehind(ref, row) : -gamesBehind(row, ref);
-      return {seed, owner:name(row), record:record(row), pf:num(row.pointsFor), inField, gamesVsCut:games, pfVsSixth:num(row.pointsFor) != null && num(sixth.pointsFor) != null ? Number(row.pointsFor) - Number(sixth.pointsFor) : null};
+      return {seed, owner:name(row), record:record(row), pf:num(row.pointsFor), gr:gamesRemaining(row), inField, gamesVsCut:games, pfVsSixth:num(row.pointsFor) != null && num(sixth.pointsFor) != null ? Number(row.pointsFor) - Number(sixth.pointsFor) : null};
     });
     const gap = gamesBehind(seventh, sixth);
     const done = completedWeeks(table);
@@ -121,6 +123,8 @@
     if(!done) note = 'No completed games; the race has not started.';
     else if(gap === 0) note = `${name(sixth)} holds No. 6 at ${record(sixth)}. ${name(seventh)} is level on record and ${fixed(Number(sixth.pointsFor || 0) - Number(seventh.pointsFor || 0))} points behind on the tiebreaker.`;
     else note = `${name(sixth)} holds No. 6 at ${record(sixth)}. ${name(seventh)} is ${gap === 1 ? 'one game' : `${gap} games`} back.`;
+    const left = [...new Set(table.map(gamesRemaining))];
+    if(done && left.length === 1 && left[0] > 0) note += ` ${left[0]} of ${REGULAR_SEASON_GAMES} regular-season games remain for every club.`;
     const level = table.filter(row => wins(row) === wins(sixth) && played(row) === played(sixth)).length;
     if(done && level > 2) note += ` ${wordCount(level)[0].toUpperCase()}${wordCount(level).slice(1)} teams share the ${record(sixth)} record at the cut, so points for is doing the sorting.`;
     return {rows, note};
@@ -255,7 +259,7 @@
     });
   }
 
-  const api = {sortStandings, completedWeeks, impliedProbability, probLabel, weekNote, standingsNote, standingsRows, playoffRace, leaders, historyNotes, oddsNote, transactionRows, record, ordinal};
+  const api = {REGULAR_SEASON_GAMES, gamesRemaining, sortStandings, completedWeeks, impliedProbability, probLabel, weekNote, standingsNote, standingsRows, playoffRace, leaders, historyNotes, oddsNote, transactionRows, record, ordinal};
   window.gateReferenceDesk = Object.freeze(api);
   if(typeof document === 'undefined' || !document.getElementById) return;
 
@@ -284,8 +288,8 @@
     if(table.length < 2){ home?.classList.remove('has-desk-standings'); setHtml('standings', unavailable('Standings unavailable from the current snapshot. The Current Week board shows the saved table.')); return; }
     const rows = standingsRows(table);
     const ties = rows.some(row => row.t);
-    const body = rows.map(row => `<tr${row.cut ? ' class="is-playoff-line"' : ''}><td class="num">${row.rank}</td><td class="desk-strong">${esc(row.owner)}</td><td class="desk-team">${esc(row.team)}</td><td class="num">${row.w}</td><td class="num">${row.l}</td>${ties ? `<td class="num">${row.t}</td>` : ''}<td class="num">${row.pct}</td><td class="num">${fixed(row.pf)}</td><td class="num">${fixed(row.pa)}</td><td class="num">${signed(row.diff)}</td><td class="num">${fixed(row.ppg)}</td><td class="num">${row.gb == null ? '—' : row.gb.toFixed(1)}</td></tr>`).join('');
-    setHtml('standings', `<div class="desk-scroll"><table class="desk-table"><thead><tr><th class="num">Rk</th><th>Manager</th><th class="desk-team">Team</th><th class="num">W</th><th class="num">L</th>${ties ? '<th class="num">T</th>' : ''}<th class="num">Pct</th><th class="num">PF</th><th class="num">PA</th><th class="num">Diff</th><th class="num">PF/G</th><th class="num">GB</th></tr></thead><tbody>${body}</tbody></table></div><p class="desk-foot">Ties in record break on total points for (Rules §5). Rule under No. ${PLAYOFF_SLOTS} marks the playoff line. PF/G uses completed games only.</p>`);
+    const body = rows.map(row => `<tr${row.cut ? ' class="is-playoff-line"' : ''}><td class="num">${row.rank}</td><td class="desk-strong">${esc(row.owner)}</td><td class="desk-team">${esc(row.team)}</td><td class="num">${row.w}</td><td class="num">${row.l}</td>${ties ? `<td class="num">${row.t}</td>` : ''}<td class="num">${row.pct}</td><td class="num">${fixed(row.pf)}</td><td class="num">${fixed(row.pa)}</td><td class="num">${signed(row.diff)}</td><td class="num">${fixed(row.ppg)}</td><td class="num">${row.gb == null ? '—' : row.gb.toFixed(1)}</td><td class="num">${row.gr}</td></tr>`).join('');
+    setHtml('standings', `<div class="desk-scroll"><table class="desk-table"><thead><tr><th class="num">Rk</th><th>Manager</th><th class="desk-team">Team</th><th class="num">W</th><th class="num">L</th>${ties ? '<th class="num">T</th>' : ''}<th class="num">Pct</th><th class="num">PF</th><th class="num">PA</th><th class="num">Diff</th><th class="num">PF/G</th><th class="num">GB</th><th class="num" title="Regular-season games remaining (${REGULAR_SEASON_GAMES}-game schedule)">GR</th></tr></thead><tbody>${body}</tbody></table></div><p class="desk-foot">Ties in record break on total points for (Rules §5). Rule under No. ${PLAYOFF_SLOTS} marks the playoff line. PF/G uses completed games only. GR = games remaining of the ${REGULAR_SEASON_GAMES}-game regular season.</p>`);
     home?.classList.add('has-desk-standings');
     setNote('standings', standingsNote(table));
   }
@@ -300,8 +304,8 @@
     const race = playoffRace(table);
     if(!race){ setHtml('playoff', unavailable('Playoff race unavailable from the current snapshot.')); setNote('playoff', ''); return; }
     setNote('playoff', race.note);
-    const body = race.rows.map(row => `<tr class="${row.inField ? 'is-in' : 'is-out'}${row.seed === PLAYOFF_SLOTS ? ' is-playoff-line' : ''}"><td class="num">${row.seed}</td><td class="desk-strong">${esc(row.owner)}</td><td class="num">${esc(row.record)}</td><td class="num">${fixed(row.pf)}</td><td class="num">${row.gamesVsCut === 0 ? '0.0' : signed(row.gamesVsCut)}</td><td class="num">${row.seed === PLAYOFF_SLOTS ? '—' : signed(row.pfVsSixth)}</td></tr>`).join('');
-    setHtml('playoff', `<div class="desk-scroll"><table class="desk-table desk-race"><thead><tr><th class="num">Seed</th><th>Manager</th><th class="num">Rec</th><th class="num">PF</th><th class="num" title="Seeds 1–6: games ahead of No. 7. Seeds 7–12: games behind No. 6.">G vs cut</th><th class="num" title="Total points for relative to No. 6, the seeding tiebreaker">PF vs No. 6</th></tr></thead><tbody>${body}</tbody></table></div><p class="desk-foot">Six teams qualify (Rules §5). “G vs cut” is games ahead of No. 7 for seeds 1–6 and games behind No. 6 for seeds 7–12. No projections here; the simulation board lives under Playoffs.</p>`);
+    const body = race.rows.map(row => `<tr class="${row.inField ? 'is-in' : 'is-out'}${row.seed === PLAYOFF_SLOTS ? ' is-playoff-line' : ''}"><td class="num">${row.seed}</td><td class="desk-strong">${esc(row.owner)}</td><td class="num">${esc(row.record)}</td><td class="num">${fixed(row.pf)}</td><td class="num">${row.gamesVsCut === 0 ? '0.0' : signed(row.gamesVsCut)}</td><td class="num">${row.seed === PLAYOFF_SLOTS ? '—' : signed(row.pfVsSixth)}</td><td class="num">${row.gr}</td></tr>`).join('');
+    setHtml('playoff', `<div class="desk-scroll"><table class="desk-table desk-race"><thead><tr><th class="num">Seed</th><th>Manager</th><th class="num">Rec</th><th class="num">PF</th><th class="num" title="Seeds 1–6: games ahead of No. 7. Seeds 7–12: games behind No. 6.">G vs cut</th><th class="num" title="Total points for relative to No. 6, the seeding tiebreaker">PF vs No. 6</th><th class="num" title="Regular-season games remaining (${REGULAR_SEASON_GAMES}-game schedule)">Games left</th></tr></thead><tbody>${body}</tbody></table></div><p class="desk-foot">Six teams qualify (Rules §5). “G vs cut” is games ahead of No. 7 for seeds 1–6 and games behind No. 6 for seeds 7–12. “Games left” counts the ${REGULAR_SEASON_GAMES}-game regular season. No projections here; the simulation board lives under Playoffs.</p>`);
   }
 
   function renderHistory(table, config){
