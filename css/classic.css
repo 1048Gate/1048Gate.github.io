@@ -671,3 +671,182 @@ html[data-theme="dark"] .edition-content{background:#1b1b1b !important;}
 .hero-season-card{flex-direction:row !important;}
 .hero-season-card>*{flex:0 0 auto !important;width:auto !important;}
 .hero-season-card>.hero-meta-grid{flex:1 1 auto !important;min-width:0 !important;}
+
+/* ==========================================================================
+   18. Reference Desk cleanup
+   ========================================================================== */
+
+/* ---- Sticky header offset ----
+   js/site-ui.js measures .topbar and sets --sticky-offset (height + 8px) inline
+   on <html>; these are only pre-script fallbacks. The offset lives in ONE place
+   (scroll-padding-top on the scroller) so section targets carry no extra
+   scroll-margin and the two never stack. */
+:root,html[data-theme="light"],html[data-theme="dark"]{--sticky-offset:98px;}
+@media (max-width:760px){
+  :root,html[data-theme="light"],html[data-theme="dark"]{--sticky-offset:50px;}
+}
+html{scroll-padding-top:var(--sticky-offset) !important;}
+html body #home .home-section,
+html body #home .home-band,
+html body #home .week-board,
+html body #home .futures-section,
+html body #championshipOdds,
+html body #homeSeasonPrep,
+html body #homeWeeklyFeature{scroll-margin-top:0 !important;}
+html body #home [hidden]{display:none !important;}
+
+/* visually hidden, still announced (band labels kept for aria-labelledby) */
+html body .desk-sr-only{
+  position:absolute !important;width:1px !important;height:1px !important;
+  margin:-1px !important;padding:0 !important;overflow:hidden !important;
+  clip:rect(0 0 0 0) !important;clip-path:inset(50%) !important;white-space:nowrap !important;border:0 !important;
+}
+
+/* ---- Masthead: title, kicker subtitle, one-line campaign strip ---- */
+html body .desk-masthead{
+  display:grid !important;grid-template-columns:minmax(0,1fr) auto;align-items:end;
+  gap:4px 18px !important;padding:2px 0 6px !important;margin:0 0 10px !important;
+}
+html body .desk-masthead .hero-copy{min-width:0;}
+html body .desk-masthead h1{font-size:26px !important;line-height:1.05 !important;margin:2px 0 0 !important;}
+html body .desk-masthead h1 br{display:inline !important;}
+html body .desk-masthead h1 .desk-masthead-kicker{
+  display:block !important;margin:3px 0 0 !important;
+  font:700 11px/1.2 Helvetica,Arial,sans-serif !important;
+  letter-spacing:.2em !important;text-transform:uppercase !important;
+  color:var(--muted-text) !important;
+}
+html body .desk-masthead .desk-status{
+  margin:6px 0 0 !important;font-size:12px !important;color:var(--muted-text) !important;
+}
+html body .desk-masthead .hero-season-card{
+  margin:0 !important;align-self:end;justify-content:flex-end;
+  background:transparent !important;border:0 !important;padding:0 !important;
+  font-size:12px !important;gap:2px 10px !important;
+}
+html body .desk-masthead .hero-season-card :is(.hero-season-year,.hero-season-edition,.hero-season-phase,strong){font-size:12px !important;}
+html body .desk-masthead .hero-meta-grid{gap:2px 10px !important;}
+html body .desk-masthead .desk-toc{grid-column:1 / -1;margin-top:4px !important;}
+@media (max-width:760px){
+  html body .desk-masthead{grid-template-columns:1fr;gap:4px !important;}
+  html body .desk-masthead h1{font-size:24px !important;}
+  html body .desk-masthead .hero-season-card{justify-content:flex-start;}
+  /* phones navigate with the bottom dock; the 1–7 index is desktop-only */
+  html body .desk-masthead .desk-toc{display:none !important;}
+}
+
+/* ---- Live matchup board ---- */
+html body #weekBoard .week-matchups{
+  display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  border:1px solid var(--rule) !important;border-top:2px solid var(--accent-rule) !important;
+}
+html body #weekBoard .week-card{
+  display:block !important;min-width:0;padding:4px 8px 5px !important;
+  border:0 !important;border-right:1px solid var(--rule) !important;border-bottom:1px solid var(--rule) !important;
+}
+html body #weekBoard .week-card-status{
+  display:flex !important;align-items:baseline;justify-content:space-between;gap:8px;
+  margin:0 0 2px !important;padding:0 !important;min-height:0 !important;
+}
+html body #weekBoard .week-card-badge{
+  border:0 !important;padding:0 !important;
+  font:700 10px/1.3 Helvetica,Arial,sans-serif !important;letter-spacing:.08em !important;
+  text-transform:uppercase !important;color:var(--muted-text) !important;
+}
+html body #weekBoard .week-card.is-live .week-card-badge{color:var(--loss) !important;}
+html body #weekBoard .week-card-status .week-card-margin{font-size:11px !important;color:var(--muted-text) !important;}
+html body #weekBoard .week-card-sides{display:block !important;gap:0 !important;}
+html body #weekBoard .week-game-side{
+  display:grid !important;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 10px;
+  padding:2px 0 2px 6px !important;min-width:0;text-align:left !important;
+  border:0 !important;border-left:2px solid transparent !important;
+}
+html body #weekBoard .week-game-side + .week-game-side{border-top:1px dotted var(--rule) !important;}
+html body #weekBoard .week-game-side.is-leading{border-left-color:var(--win) !important;}
+html body #weekBoard .week-card-name{display:block;min-width:0;}
+html body #weekBoard .week-card-name strong,
+html body #weekBoard .week-card-name .week-card-owner{
+  display:block !important;overflow:hidden !important;white-space:nowrap !important;text-overflow:ellipsis !important;
+  max-width:100%;text-align:left !important;
+}
+html body #weekBoard .week-card-name strong{font-size:13px !important;line-height:1.25 !important;font-weight:400 !important;}
+html body #weekBoard .week-card-name .week-card-owner{font-size:11px !important;line-height:1.2 !important;color:var(--muted-text) !important;font-weight:400 !important;}
+html body #weekBoard .week-card-score{display:flex;flex-direction:column;align-items:flex-end;min-width:3.6em;text-align:right;}
+html body #weekBoard .week-card-score b{
+  font:400 15px/1.15 Helvetica,Arial,sans-serif !important;
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum";
+  color:var(--muted-text) !important;
+}
+html body #weekBoard .week-card-score .week-card-margin{
+  font:400 10px/1.2 Helvetica,Arial,sans-serif !important;color:var(--win) !important;white-space:nowrap;
+}
+html body #weekBoard .week-game-side.is-leading .week-card-name strong{font-weight:700 !important;}
+html body #weekBoard .week-game-side.is-leading .week-card-score b{font-size:17px !important;font-weight:700 !important;color:var(--text) !important;}
+html body #weekBoard .week-game-side.is-trailing .week-card-score b{color:color-mix(in srgb,var(--loss) 45%,var(--muted-text)) !important;}
+html body #weekBoard .week-card.is-scheduled .week-card-score b{color:var(--muted-text) !important;}
+html body #weekBoard .home-section-head small{white-space:nowrap;}
+@media (max-width:1000px){
+  html body #weekBoard .week-matchups{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+}
+@media (max-width:600px){
+  html body #weekBoard .week-matchups{grid-template-columns:1fr !important;}
+  html body #weekBoard .week-card{border-right:0 !important;}
+  html body #weekBoard .home-section-head small{white-space:normal;}
+}
+
+/* ---- Standings: compact on phones, full on desktop ---- */
+html body .desk-standings-tools{display:none;}
+html body .desk-standings .desk-col-compact{display:none !important;}
+@media (max-width:760px){
+  html body .desk-standings-tools{display:flex;justify-content:flex-end;margin:0 0 4px;}
+  html body .desk-standings-toggle{font-size:12px !important;}
+  html body .desk-standings:not(.is-expanded) .desk-col-full{display:none !important;}
+  html body .desk-standings:not(.is-expanded) .desk-col-compact{display:table-cell !important;}
+  html body .desk-standings.is-expanded .desk-team{display:table-cell !important;}
+  html body .desk-standings:not(.is-expanded) .desk-table{display:table !important;width:100% !important;white-space:nowrap;}
+}
+
+/* ---- History landing: archive index first ---- */
+html body .archive-index .archive-overview-head{align-items:baseline;}
+html body .archive-index .archive-overview-metric{display:flex !important;gap:6px;align-items:baseline;border:0 !important;padding:0 !important;background:transparent !important;}
+html body .archive-index .archive-overview-metric strong{font-size:13px !important;}
+html body .archive-index .archive-overview-metric span{font-size:11px !important;color:var(--muted-text) !important;}
+html body .archive-index-table .archive-index-team{color:var(--muted-text) !important;font-size:12px !important;}
+@media (max-width:600px){
+  html body .archive-index-table .archive-index-team{display:none !important;}
+}
+
+/* ---- Top bar: guest label adds nothing; signed-in name still shows ---- */
+html body .auth-user.is-guest{display:none !important;}
+
+/* ---- Dark mode: active nav/tab must read as active, not black-on-black ---- */
+html[data-theme="dark"] nav.tabs button.active,
+html[data-theme="dark"] nav.tabs button[aria-current="page"]{
+  background:#e8e4da !important;color:#1b2d40 !important;
+}
+html[data-theme="dark"] nav.tabs button.active *,
+html[data-theme="dark"] nav.tabs button[aria-current="page"] *{color:#1b2d40 !important;}
+html[data-theme="dark"] .phone-dock button.active,
+html[data-theme="dark"] .phone-dock button[aria-current="page"]{color:#fff !important;}
+html body .phone-dock button.active{border-top:2px solid var(--accent-rule) !important;}
+html[data-theme="dark"] .phone-dock button.active{border-top-color:#c9a44c !important;}
+html[data-theme="dark"] .phone-dock button.active *{color:#fff !important;stroke:#fff !important;}
+html[data-theme="dark"] [role="tab"][aria-selected="true"],
+html[data-theme="dark"] :is(.history-subnav,.ia-subnav,.trade-subnav,.edition-tabs) button.active{
+  color:#fff !important;border-bottom:2px solid #c9a44c !important;
+}
+html body #home .week-card .week-game-side.is-trailing :is(strong,b){opacity:1 !important;}
+html body #home .week-board + .desk-lede{margin-top:-4px !important;}
+/* History landing: the archive index is a plain table, not a card. theme.css /
+   history.css paint a gradient + shadow on this panel with higher specificity. */
+html body #history .archive-overview-panel,
+html[data-theme] body #history .archive-overview-panel{
+  background:transparent !important;background-image:none !important;box-shadow:none !important;
+  border:0 !important;padding:0 !important;overflow:visible !important;
+}
+html body #history .history-shell{gap:6px !important;}
+html body #home .week-board{margin-bottom:6px !important;}
+html body .desk-standings-hint{display:none;}
+@media (max-width:760px){
+  html body .desk-standings.is-expanded .desk-standings-hint{display:inline;margin-right:auto;font-size:11px !important;color:var(--muted-text) !important;}
+}

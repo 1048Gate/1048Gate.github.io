@@ -51,15 +51,16 @@
     if(title) title.textContent = state === 'offseason' ? 'Draft & Keepers' : state === 'recap' ? 'The Week in Review' : 'This Week';
     const context = home.querySelector('[data-home-context]');
     if(context) context.textContent = ({live:'Week in progress · Scores and standings', final:'Final scores · Recap to follow', recap:'Final scores and the weekly story', offseason:'Get ready for the season', upcoming:'Upcoming matchups and standings', unknown:'Scores and standings'})[state];
-    const primary = home.querySelector('[data-home-primary]');
-    if(primary){
-      primary.dataset.scrollTo = state === 'recap' ? 'homeWeeklyFeature' : state === 'offseason' ? 'homeSeasonPrep' : 'weekBoard';
-      primary.textContent = state === 'recap' ? 'Read This Week' : state === 'offseason' ? 'Draft & Keepers' : state === 'final' ? 'See Final Scores' : 'See This Week';
-    }
     const lede = home.querySelector('[data-home-lede], .hero-copy > p:not(.hero-tagline)');
     /* site-ui.js owns the live/upcoming lede from board + odds; only fill the states it skips. */
     if(lede && state === 'offseason') lede.textContent = 'Offseason desk: keepers, the draft board, and the archive.';
-    if(lede && ['recap','final'].includes(state)) lede.textContent = `${board.phase || `Week ${board.week}`} is final. ${state === 'recap' ? 'Weekly edition below, then the results and standings.' : 'Results and standings are posted; the weekly recap is still being prepared.'}`;
+    if(lede && ['recap','final'].includes(state)) lede.textContent = `All ${board.matchups.length} games final.${state === 'recap' ? ' Weekly edition below.' : ''}`;
+    /* Mid-week, the weekly-edition teaser and League Pulse only restate the board,
+       the table, the playoff line, and the odds, which have numbered sections of
+       their own. The teaser returns (and leads) once a verified final recap exists;
+       the Newspaper tab always carries the edition. */
+    if(feature) feature.hidden = state !== 'recap';
+    if(pulse) pulse.hidden = true;
 
     /* Keep the numbered desk sections in order under the Story band. */
     const storyHead = story.querySelector('.home-band-head');

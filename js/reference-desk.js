@@ -48,49 +48,48 @@
     return {game, lead:awayAhead ? game.away : game.home, trail:awayAhead ? game.home : game.away, leadScore:Math.max(a, h), trailScore:Math.min(a, h), margin:Math.abs(a - h), tied:a === h};
   }
 
+  /* Aggregates the board does not show at a glance (top score, closest, widest).
+     Game state lives on the board and in the masthead, so it is not restated here. */
   function weekNote(board){
     const list = games(board);
     const week = board?.week;
     const label = board?.phase || (week ? `Week ${week}` : 'This week');
-    if(!list.length) return `${label}: matchups not posted yet.`;
+    if(!list.length) return '';
     const live = list.filter(g => g.state === 'live').length;
     const final = list.filter(g => g.state === 'final').length;
     const results = list.map(scored).filter(Boolean);
-    if(!results.length || (!live && !final)) return `${label}: ${plural(list.length, 'matchup')} set. No points on the board yet.`;
+    if(!results.length || (!live && !final)) return '';
     const byMargin = [...results].sort((a, b) => a.margin - b.margin);
     const close = byMargin[0], wide = byMargin[byMargin.length - 1];
     const sides = results.flatMap(r => [{owner:name(r.lead), score:r.leadScore}, {owner:name(r.trail), score:r.trailScore}]).sort((a, b) => b.score - a.score);
     const top = sides[0];
     const allFinal = final === list.length;
     const verb = r => r.game.state === 'final' ? 'beat' : 'leads';
-    const lines = [];
-    lines.push(allFinal ? `${label} is final.` : `${label} in progress: ${live} of ${list.length} games live${final ? `, ${final} final` : ''}.`);
-    lines.push(`${allFinal ? 'High score' : 'Top score so far'}: ${top.owner}, ${fixed(top.score)}.`);
+    const lines = [`${label} ${allFinal ? 'high score' : 'top score so far'}: ${top.owner}, ${fixed(top.score)}.`];
     if(close.tied) lines.push(`${name(close.lead)} and ${name(close.trail)} are level at ${fixed(close.leadScore)}.`);
     else lines.push(`Closest: ${name(close.lead)} ${verb(close)} ${name(close.trail)} by ${fixed(close.margin)}.`);
     if(wide !== close && wide.margin > 0) lines.push(`Widest: ${name(wide.lead)} ${verb(wide)} ${name(wide.trail)} by ${fixed(wide.margin)}.`);
     return lines.join(' ');
   }
 
+  /* Only what the table does not say on its own: a tie at the top broken on
+     points, and a points-for leader sitting lower than his scoring suggests. */
   function standingsNote(table){
     if(table.length < 2) return '';
     const done = completedWeeks(table);
     if(!done) return 'No completed games yet. Order reflects points for until results arrive.';
     const leader = table[0];
     const tiedTop = table.filter(row => wins(row) === wins(leader) && played(row) === played(leader));
-    const unbeaten = table.filter(row => Number(row.losses || 0) === 0 && played(row) > 0).length;
-    const winless = table.filter(row => Number(row.wins || 0) === 0 && Number(row.ties || 0) === 0 && played(row) > 0).length;
-    const lines = [`Through ${plural(done, 'completed week')}.`];
+    const lines = [];
     if(tiedTop.length > 1) lines.push(`${wordCount(tiedTop.length)[0].toUpperCase()}${wordCount(tiedTop.length).slice(1)} teams are ${record(leader)}; ${name(leader)} leads on points for (${fixed(leader.pointsFor)}).`);
-    else lines.push(`${name(leader)} leads at ${record(leader)} with ${fixed(leader.pointsFor)} points for.`);
     const pfLeader = [...table].sort((a, b) => Number(b.pointsFor || 0) - Number(a.pointsFor || 0))[0];
     const pfRank = table.indexOf(pfLeader) + 1;
     if(pfLeader && pfRank > 3){
       const paRank = [...table].sort((a, b) => Number(b.pointsAgainst || 0) - Number(a.pointsAgainst || 0)).indexOf(pfLeader) + 1;
       const unlucky = num(pfLeader.pointsAgainst) != null && paRank > 0 && paRank <= Math.ceil(table.length / 3);
-      lines.push(`The league's top scorer, ${name(pfLeader)} (${fixed(pfLeader.pointsFor)} PF), is ${record(pfLeader)} and ${ordinal(pfRank)} in the table${unlucky ? `; ${fixed(pfLeader.pointsAgainst)} points against, ${ordinal(paRank)}-most in the league, explains some of that` : ''}.`);
+      lines.push(`${name(pfLeader)} leads the league in points (${fixed(pfLeader.pointsFor)}) but sits ${ordinal(pfRank)} at ${record(pfLeader)}${unlucky ? `; ${fixed(pfLeader.pointsAgainst)} points against, ${ordinal(paRank)}-most in the league` : ''}.`);
     }
-    if(unbeaten || winless) lines.push(`${unbeaten ? `${plural(unbeaten, 'team')} unbeaten` : 'Nobody unbeaten'}, ${winless ? `${winless} winless` : 'nobody winless'}.`);
+    if(!lines.length) lines.push(`${name(leader)} leads at ${record(leader)} with ${fixed(leader.pointsFor)} points for.`);
     return lines.join(' ');
   }
 
@@ -123,10 +122,8 @@
     if(!done) note = 'No completed games; the race has not started.';
     else if(gap === 0) note = `${name(sixth)} holds No. 6 at ${record(sixth)}. ${name(seventh)} is level on record and ${fixed(Number(sixth.pointsFor || 0) - Number(seventh.pointsFor || 0))} points behind on the tiebreaker.`;
     else note = `${name(sixth)} holds No. 6 at ${record(sixth)}. ${name(seventh)} is ${gap === 1 ? 'one game' : `${gap} games`} back.`;
-    const left = [...new Set(table.map(gamesRemaining))];
-    if(done && left.length === 1 && left[0] > 0) note += ` ${left[0]} of ${REGULAR_SEASON_GAMES} regular-season games remain for every club.`;
     const level = table.filter(row => wins(row) === wins(sixth) && played(row) === played(sixth)).length;
-    if(done && level > 2) note += ` ${wordCount(level)[0].toUpperCase()}${wordCount(level).slice(1)} teams share the ${record(sixth)} record at the cut, so points for is doing the sorting.`;
+    if(done && level > 2) note += ` ${wordCount(level)[0].toUpperCase()}${wordCount(level).slice(1)} teams are ${record(sixth)} around the cut; points for is sorting them.`;
     return {rows, note};
   }
 
@@ -223,12 +220,13 @@
     const p = impliedProbability(fav.odds);
     const week = Number(board?.week) || null;
     const lines = [`${clean(fav.name)} is the league-office favorite${week ? ` in Week ${week}` : ''} at ${fav.odds}${p != null ? ` (${probLabel(p)} implied)` : ''}.`];
-    if(favRow && played(favRow)) lines.push(`The roster is ${record(favRow)} with ${fixed(favRow.pointsFor)} points for, ${ordinal(favRank)} in the table.`);
     const leader = table?.[0];
-    if(leader && played(leader) && name(leader) !== clean(fav.name)){
-      const line = futures.find(row => clean(row.name) === name(leader));
-      if(line) lines.push(`The table leader, ${name(leader)} (${record(leader)}), is ${line.odds}.`);
-    }
+    const leaderLine = leader && played(leader) && name(leader) !== clean(fav.name) ? futures.find(row => clean(row.name) === name(leader)) : null;
+    const favPlace = favRow && played(favRow) ? `The favorite sits ${ordinal(favRank)} at ${record(favRow)}` : '';
+    const leaderText = leaderLine ? `the table leader, ${name(leader)} (${record(leader)}), is ${leaderLine.odds}` : '';
+    if(favPlace && leaderText) lines.push(`${favPlace}; ${leaderText}.`);
+    else if(favPlace) lines.push(`${favPlace}.`);
+    else if(leaderText) lines.push(`${leaderText[0].toUpperCase()}${leaderText.slice(1)}.`);
     const probs = futures.map(row => impliedProbability(row.odds));
     if(probs.every(value => value != null)){
       const total = probs.reduce((sum, value) => sum + value, 0) * 100;
@@ -283,16 +281,32 @@
     render();
   }
 
+  /* Phones default to a compact view (Rk | Manager | W-L | PF | GB) with a toggle
+     for every column; desktop always shows the full table. Same rows, same math:
+     compact only hides cells (.desk-col-full) and shows the combined W-L cell
+     (.desk-col-compact). */
+  let standingsExpanded = false;
   function renderStandings(table){
     const home = document.getElementById('home');
     if(table.length < 2){ home?.classList.remove('has-desk-standings'); setHtml('standings', unavailable('Standings unavailable from the current snapshot. The Current Week board shows the saved table.')); return; }
     const rows = standingsRows(table);
     const ties = rows.some(row => row.t);
-    const body = rows.map(row => `<tr${row.cut ? ' class="is-playoff-line"' : ''}><td class="num">${row.rank}</td><td class="desk-strong">${esc(row.owner)}</td><td class="desk-team">${esc(row.team)}</td><td class="num">${row.w}</td><td class="num">${row.l}</td>${ties ? `<td class="num">${row.t}</td>` : ''}<td class="num">${row.pct}</td><td class="num">${fixed(row.pf)}</td><td class="num">${fixed(row.pa)}</td><td class="num">${signed(row.diff)}</td><td class="num">${fixed(row.ppg)}</td><td class="num">${row.gb == null ? '—' : row.gb.toFixed(1)}</td><td class="num">${row.gr}</td></tr>`).join('');
-    setHtml('standings', `<div class="desk-scroll"><table class="desk-table"><thead><tr><th class="num">Rk</th><th>Manager</th><th class="desk-team">Team</th><th class="num">W</th><th class="num">L</th>${ties ? '<th class="num">T</th>' : ''}<th class="num">Pct</th><th class="num">PF</th><th class="num">PA</th><th class="num">Diff</th><th class="num">PF/G</th><th class="num">GB</th><th class="num" title="Regular-season games remaining (${REGULAR_SEASON_GAMES}-game schedule)">GR</th></tr></thead><tbody>${body}</tbody></table></div><p class="desk-foot">Ties in record break on total points for (Rules §5). Rule under No. ${PLAYOFF_SLOTS} marks the playoff line. PF/G uses completed games only. GR = games remaining of the ${REGULAR_SEASON_GAMES}-game regular season.</p>`);
+    const F = ' desk-col-full', C = ' desk-col-compact';
+    const body = rows.map(row => `<tr${row.cut ? ' class="is-playoff-line"' : ''}><td class="num">${row.rank}</td><td class="desk-strong">${esc(row.owner)}</td><td class="desk-team${F}">${esc(row.team)}</td><td class="num${C}">${esc(record({wins:row.w, losses:row.l, ties:row.t}))}</td><td class="num${F}">${row.w}</td><td class="num${F}">${row.l}</td>${ties ? `<td class="num${F}">${row.t}</td>` : ''}<td class="num${F}">${row.pct}</td><td class="num">${fixed(row.pf)}</td><td class="num${F}">${fixed(row.pa)}</td><td class="num${F}">${signed(row.diff)}</td><td class="num${F}">${fixed(row.ppg)}</td><td class="num">${row.gb == null ? '—' : row.gb.toFixed(1)}</td><td class="num${F}">${row.gr}</td></tr>`).join('');
+    const expanded = standingsExpanded;
+    setHtml('standings', `<div class="desk-standings${expanded ? ' is-expanded' : ''}"><div class="desk-standings-tools"><span class="desk-standings-hint" aria-hidden="true">Swipe for all columns →</span><button type="button" class="desk-link desk-standings-toggle" data-standings-toggle aria-controls="deskStandingsTable" aria-expanded="${expanded}">${expanded ? 'Compact standings' : 'Full standings'}</button></div><div class="desk-scroll" id="deskStandingsTable"><table class="desk-table desk-standings-table"><thead><tr><th class="num">Rk</th><th>Manager</th><th class="desk-team${F}">Team</th><th class="num${C}">W-L</th><th class="num${F}">W</th><th class="num${F}">L</th>${ties ? `<th class="num${F}">T</th>` : ''}<th class="num${F}">Pct</th><th class="num">PF</th><th class="num${F}">PA</th><th class="num${F}">Diff</th><th class="num${F}">PF/G</th><th class="num">GB</th><th class="num${F}" title="Regular-season games remaining (${REGULAR_SEASON_GAMES}-game schedule)">GR</th></tr></thead><tbody>${body}</tbody></table></div></div><p class="desk-foot">Ties in record break on total points for (Rules §5). Rule under No. ${PLAYOFF_SLOTS} marks the playoff line. PF/G uses completed games only. GB = games behind No. 1. GR = games remaining of the ${REGULAR_SEASON_GAMES}-game regular season.</p>`);
     home?.classList.add('has-desk-standings');
     setNote('standings', standingsNote(table));
   }
+  document.addEventListener('click', event => {
+    const toggle = event.target.closest?.('[data-standings-toggle]');
+    if(!toggle) return;
+    const wrap = toggle.closest('.desk-standings');
+    standingsExpanded = !wrap?.classList.contains('is-expanded');
+    wrap?.classList.toggle('is-expanded', standingsExpanded);
+    toggle.setAttribute('aria-expanded', String(standingsExpanded));
+    toggle.textContent = standingsExpanded ? 'Compact standings' : 'Full standings';
+  });
 
   function renderLeaders(table, board, config){
     const blocks = leaders(table, feeds.matchups, board, config?.seasonYear);
