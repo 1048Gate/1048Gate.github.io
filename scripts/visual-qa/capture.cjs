@@ -130,15 +130,45 @@ const server=http.createServer((req,res)=>{
       unexpectedOverflow:[...document.querySelectorAll('#home *')].filter(n=>{const r=n.getBoundingClientRect();return r.width&&r.right>innerWidth+1&&!n.closest('.week-standings-wrap,.league-pulse-rail')}).map(n=>({tag:n.tagName,class:n.className,text:n.textContent.slice(0,90)})),
       teamNames:[...document.querySelectorAll('.week-game-side strong')].map(n=>({text:n.textContent,width:n.clientWidth,scrollWidth:n.scrollWidth,height:n.clientHeight}))};
   });
+  // Reference Desk navigation: desktop uses the numbered 1–7 index; phones hide
+  // that index (the bottom dock handles views), so they exercise URL-hash jumps
+  // and the remaining in-page scroll control instead.
+  const deskTargets=['weekBoard','deskStandings','deskLeaders','deskPlayoff','deskTransactions','deskHistory','championshipOdds'];
+  const landing=id=>page.evaluate(id=>{
+    const target=document.getElementById(id),heading=target?.querySelector('h2')||target;
+    const headerBottom=document.querySelector('.topbar').getBoundingClientRect().bottom;
+    const top=target?.getBoundingClientRect().top??null,headingTop=heading?.getBoundingClientRect().top??null;
+    return {target:id,top,headingTop,headerBottom,visibleHeading:top!==null&&headingTop>=headerBottom&&top>=headerBottom-1};
+  },id);
+  // Wait for the user-facing smooth scroll to finish (scrollY steady for ~10 frames).
+  const settle=()=>page.evaluate(()=>new Promise(resolve=>{let last=-1,steady=0,frames=0;const tick=()=>{frames++;if(Math.abs(scrollY-last)<0.5)steady++;else steady=0;last=scrollY;if(steady>=10||frames>240)resolve();else requestAnimationFrame(tick);};requestAnimationFrame(tick);}));
+  const resetScroll=()=>page.evaluate(()=>{history.replaceState(history.state,'',location.pathname+location.search);window.scrollTo({top:0,left:0,behavior:'instant'});});
   const anchors=[];
-  for(const selector of ['[data-home-primary]','.hero [data-scroll-to="championshipOdds"]']){
-    await page.locator(selector).click();
-    await page.waitForTimeout(800); // let the user-facing smooth scroll settle
-    anchors.push(await page.locator(selector).evaluate(button=>{
-      const target=document.getElementById(button.dataset.scrollTo),r=target.getBoundingClientRect();
-      return {target:target.id,top:r.top,headerBottom:document.querySelector('.topbar').getBoundingClientRect().bottom,visibleHeading:r.top>=document.querySelector('.topbar').getBoundingClientRect().bottom};
-    }));
+  const tocVisible=await page.locator('.desk-toc').isVisible();
+  if(width===1440){
+    for(const id of deskTargets){
+      await resetScroll();
+      await page.locator(`.desk-toc a[href="#${id}"]`).click();
+      await page.waitForTimeout(100);await settle();
+      anchors.push({via:'toc',...await landing(id)});
+    }
+  }else{
+    for(const id of deskTargets){
+      await resetScroll();
+      await page.evaluate(id=>{location.hash=id;},id);
+      await page.waitForTimeout(100);await settle();
+      anchors.push({via:'hash',...await landing(id)});
+    }
+    await resetScroll();
+    await page.locator('.orientation-links [data-scroll-to="weekBoard"]').click();
+    await page.waitForTimeout(100);await settle();
+    anchors.push({via:'scroll-control',...await landing('weekBoard')});
   }
+  await resetScroll();
+  // Park the pointer so the contrast audit below measures resting states, not
+  // whatever control happens to sit under the last click position.
+  await page.mouse.move(0,0);
+  const deskIndex={tocVisible,expectedVisible:width===1440};
   await page.addScriptTag({path:path.join(process.env.QA_NODE_MODULES,'axe-core/axe.min.js')});
   const a11y=await page.evaluate(async()=>{const r=await axe.run('#home',{runOnly:{type:'rule',values:['color-contrast']}});return {violations:r.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),incomplete:r.incomplete.map(v=>({id:v.id,count:v.nodes.length}))};});
   let navigation=null;
@@ -221,7 +251,7 @@ const server=http.createServer((req,res)=>{
       draftPanelActive:document.querySelector('[data-history-panel="drafts"]')?.classList.contains('active')||false
     }));
   }
-  report.cases.push({name,metrics,anchors,a11y,navigation,noCacheFallback,cachedFallback,archiveFallback,draftArchive,errors:[...errors]});
+  report.cases.push({name,metrics,anchors,deskIndex,a11y,navigation,noCacheFallback,cachedFallback,archiveFallback,draftArchive,errors:[...errors]});
   writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
   if(state==='live'){
@@ -253,6 +283,10 @@ const server=http.createServer((req,res)=>{
    if(!item.metrics.leaguePulse.present||item.metrics.leaguePulse.source!=='current'||item.metrics.leaguePulse.cards!==expectedPulseCards){
      failures.push(`${item.name}: League Pulse did not render ${expectedPulseCards} current cards`);
    }
+   for(const anchor of item.anchors||[]){
+     if(!anchor.visibleHeading)failures.push(`${item.name}: #${anchor.target} (${anchor.via}) heading at ${anchor.headingTop}px is hidden under the sticky header (bottom ${anchor.headerBottom}px)`);
+   }
+   if(item.deskIndex&&item.deskIndex.tocVisible!==item.deskIndex.expectedVisible)failures.push(`${item.name}: Reference Desk 1–7 index visibility ${item.deskIndex.tocVisible}, expected ${item.deskIndex.expectedVisible}`);
    if(item.navigation&&!item.navigation.ok)failures.push(`${item.name}: Phase 4 navigation interaction failed`);
    if(item.noCacheFallback&&!item.noCacheFallback.ok)failures.push(`${item.name}: Phase 5 checked-in fallback failed`);
    if(item.cachedFallback&&!item.cachedFallback.ok)failures.push(`${item.name}: Phase 5 cached fallback failed`);
