@@ -1,6 +1,6 @@
 /* ==========================================================================
    1048 Gate — "Classic Reference" theme
-   Old-school sports-reference look: white page, dark text, Helvetica/Arial,
+   Old-school sports-reference look: off-white page, dark text, Helvetica/Arial,
    one dark accent for the header bar, plain blue links, dense bordered tables.
    Loaded LAST so it overrides style.css / theme.css / visual-system.css.
    Pure presentation: no selectors here are used as JS hooks.
@@ -13,7 +13,7 @@ html[data-theme="dark"]{
   --accent:#243b53;
   --accent-2:#1b2d40;
   --link:#0645ad;
-  --page:#ffffff;
+  --page:#f7f4ef;
   --text:#111;
   --btn-bg:#f2f2f2;
   --btn-hover:#e2e2e2;
@@ -480,6 +480,144 @@ html body .history-subnav,html body .ia-subnav,html body #intelNav{flex-wrap:wra
 .transaction-summary-card.active{border:2px solid var(--accent-rule) !important;}
 .skip-link:not(:focus){top:-200px !important;}
 
+
+
+/* ---- Reference-desk type: serif majors, small-caps labels ---- */
+html body h1,
+html body .hero h1,
+html body .home-band-head h2,
+html body .home-section-head h2,
+html body .section-title h2,
+html body .history-section-head h2,
+html body #orientationTitle{
+  font-family:Georgia,"Times New Roman",Times,serif !important;
+  font-weight:700 !important;
+  letter-spacing:0 !important;
+}
+html body .section-kicker,
+html body .eyebrow,
+html body .home-band-head > div > span,
+html body .home-section-head > div > span,
+html body .history-eyebrow,
+html body .transaction-eyebrow,
+html body .weekly-kicker,
+html body .champion-kicker,
+html body .hero-season-kicker,
+html body .desk-toc a,
+html body .desk-mini caption > span,
+html body .league-pulse-card > span{
+  font-size:11px !important;
+  font-weight:700 !important;
+  letter-spacing:.06em !important;
+  text-transform:uppercase !important;
+  font-variant:small-caps !important;
+  font-family:Helvetica,Arial,sans-serif !important;
+}
+html body .desk-lede,
+html body .desk-notes,
+html body .desk-foot,
+html body .desk-unavailable,
+html body .futures-method-note{
+  font-size:13px !important;
+  line-height:1.45 !important;
+  color:var(--muted-text) !important;
+}
+html body .desk-lede{margin:6px 0 8px !important;max-width:none !important;width:auto !important;color:var(--text) !important;}
+html body .desk-notes{
+  max-width:none !important;
+  margin:0 !important;padding:0 0 0 1.2em !important;
+  list-style:decimal !important;
+}
+html body .desk-notes li{margin:0 0 6px !important;padding:0 !important;border:0 !important;background:transparent !important;}
+html body .desk-foot{margin:6px 0 0 !important;font-size:12px !important;}
+html body .desk-unavailable{margin:0 !important;padding:6px 0 !important;font-style:italic;}
+html body .desk-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0;}
+html body .desk-table{
+  width:100%;border-collapse:collapse !important;
+  font-size:13px !important;line-height:1.3 !important;
+  background:var(--table-bg) !important;
+  border:1px solid var(--rule-dark) !important;
+  border-top:2px solid var(--accent-rule) !important;
+}
+html body .desk-table th,
+html body .desk-table td{padding:3px 6px !important;border:1px solid var(--rule) !important;vertical-align:middle;}
+html body .desk-table thead th{background:var(--head-bg) !important;font-weight:700 !important;font-size:11px !important;white-space:nowrap;}
+html body .desk-table tbody tr:nth-child(even) td{background:var(--zebra) !important;}
+html body .desk-table tbody tr:hover td{background:var(--row-hover) !important;}
+html body .desk-table .num{text-align:right;font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
+html body .desk-table .desk-strong{font-weight:700 !important;}
+html body .desk-table .desk-team{color:var(--muted-text) !important;font-size:12px !important;}
+html body .desk-table .desk-nowrap{white-space:nowrap;}
+html body .desk-table.is-playoff-line td,
+html body .desk-table tr.is-playoff-line td{border-bottom:2px solid var(--accent-rule) !important;}
+html body .desk-race tr.is-out td{color:var(--muted-text) !important;}
+html body .desk-leaders{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+html body .desk-mini{
+  width:100%;border-collapse:collapse !important;
+  font-size:12px !important;
+  border:1px solid var(--rule) !important;
+  border-top:2px solid var(--accent-rule) !important;
+  background:var(--table-bg) !important;
+}
+html body .desk-mini{table-layout:auto;display:table !important;white-space:normal !important;}
+html body .desk-mini caption{
+  display:table-caption !important;caption-side:top;text-align:left;padding:3px 6px !important;
+  background:var(--head-bg) !important;border:1px solid var(--rule) !important;border-bottom:0 !important;
+  white-space:nowrap;
+}
+html body .desk-mini caption small{float:right;margin-left:8px;}
+html body .desk-mini td:first-child{width:1.6em;color:var(--muted-text) !important;}
+html body .desk-mini td:last-child{width:4.5em;white-space:nowrap;}
+html body .desk-mini caption small{font-size:11px !important;color:var(--muted-text) !important;font-weight:400 !important;text-transform:none !important;letter-spacing:0 !important;font-variant:normal !important;}
+html body .desk-mini td{padding:2px 6px !important;border-bottom:1px solid var(--rule) !important;}
+html body .desk-mini tr:nth-child(even) td{background:var(--zebra) !important;}
+html body .desk-mini small{color:var(--muted-text) !important;font-size:11px !important;}
+html body .desk-toc{
+  display:flex !important;flex-wrap:wrap !important;gap:0 14px !important;
+  margin:8px 0 0 !important;padding:6px 0 0 !important;
+  border-top:1px solid var(--rule) !important;
+  background:transparent !important;
+}
+html body .desk-toc a{
+  color:var(--link) !important;text-decoration:none !important;
+  padding:2px 0 !important;border:0 !important;background:transparent !important;
+}
+html body .desk-toc a:hover{text-decoration:underline !important;color:var(--link-hover) !important;}
+html body .desk-link{
+  display:inline !important;padding:0 !important;margin:0 !important;
+  border:0 !important;background:transparent !important;
+  color:var(--link) !important;text-decoration:underline !important;
+  font:inherit !important;cursor:pointer;
+}
+html body .desk-section{padding:8px 10px !important;}
+html body .desk-masthead{border-bottom:2px solid var(--accent-rule) !important;}
+/* When the desk standings table is live, hide the duplicate mini-table beside the week board */
+html body #home.has-desk-standings .week-standings{display:none !important;}
+html body #home.has-desk-standings .week-board-grid{grid-template-columns:1fr !important;}
+@media (max-width:760px){
+  html body .desk-toc{gap:0 10px !important;}
+  html body .desk-leaders{grid-template-columns:1fr 1fr !important;}
+}
+@media (max-width:420px){
+  html body .desk-leaders{grid-template-columns:1fr !important;}
+}
+
+
+/* Championship odds as a compact reference table */
+html body .futures-grid.futures-table-host{display:block !important;background:transparent !important;border:0 !important;gap:0 !important;}
+html body .futures-table tr.futures-row{display:table-row !important;padding:0 !important;background:transparent;}
+html body .futures-table tr.futures-row.is-favorite td{font-weight:700 !important;}
+html body .futures-table .futures-odds{font:700 13px Helvetica,Arial,sans-serif !important;}
+html body .futures-table .futures-case{color:var(--muted-text) !important;font-size:12px !important;min-width:240px;}
+html body .futures-grid.is-collapsed .futures-table tr.futures-row:nth-child(n+7){display:none !important;}
+@media (max-width:600px){
+  html body .futures-table .futures-case,html body .futures-table .futures-case-head{display:none !important;}
+  html body .desk-table .desk-team{display:none !important;}
+}
 
 /* ==========================================================================
    17. Classic DARK variant — keyed to html[data-theme="dark"], which the

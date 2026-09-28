@@ -1,10 +1,10 @@
 // Playoff probability projector for the current season.
-// Runs a Monte Carlo over data/power-rankings.json: random 13-game schedules,
+// Runs a Monte Carlo over data/power-rankings.json: random 14-game schedules (2026 regular season),
 // logistic game win probabilities from rating gaps, six-team bracket with
 // first-round byes for the top two seeds.
 (function(){
   const SIMULATIONS = 4000;
-  const GAMES_PER_SEASON = 13;
+  const GAMES_PER_SEASON = 14; // 2026 regular season (confirmed by the commissioner)
   const PLAYOFF_TEAMS = 6;
   const RATING_SCALE = 100;
 

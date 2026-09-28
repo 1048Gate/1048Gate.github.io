@@ -51,6 +51,7 @@
 <script defer src="js/staff-loader.js"></script>
 <script defer src="js/home-layout.js"></script>
 <script defer src="js/league-pulse.js"></script>
+<script defer src="js/reference-desk.js"></script>
 <script defer src="js/newspaper-export.js"></script>
 <script defer src="js/newspaper.js"></script>
 
@@ -105,22 +106,23 @@
 
 <main id="mainContent" tabindex="-1">
   <section class="view active" id="home">
-    <div class="hero">
+    <div class="hero desk-masthead">
       <div class="hero-copy">
-        <span class="eyebrow">Official League Headquarters</span>
+        <span class="eyebrow">League reference desk · Est. 2017</span>
         <h1>1048 GATE<br><span>FANTASY FOOTBALL</span></h1>
-        <p class="hero-tagline">Brotherhood • Competition • Tradition</p>
-        <p>Week 2 is live. Six games are scoring. Championship odds are posted.</p>
+        <p class="hero-tagline">Scores · Standings · History · Odds</p>
+        <p data-home-lede>Week 3 is live. Six games are scoring.</p>
         <div class="hero-buttons">
           <button class="btn btn-primary" data-home-primary data-scroll-to="weekBoard">See This Week</button>
-          <button class="btn btn-ghost" data-scroll-to="championshipOdds">See Championship Odds</button>
+          <button class="btn btn-ghost" data-scroll-to="deskStandings">Standings</button>
+          <button class="btn btn-ghost" data-scroll-to="championshipOdds">Championship Odds</button>
         </div>
       </div>
       <aside class="hero-season-card" aria-label="Current league campaign">
         <span class="hero-season-kicker">Current campaign</span>
         <strong class="hero-season-year" data-site-year>2026</strong>
         <span class="hero-season-edition" data-site-season-label>Season 10</span>
-        <span class="hero-season-phase" data-site-phase>Week 2</span>
+        <span class="hero-season-phase" data-site-phase>Week 3</span>
         <div class="hero-meta-grid">
           <div><strong data-stat-managers>12</strong><span>Managers</span></div>
           <div><strong data-stat-seasons>9</strong><span>Completed seasons</span></div>
@@ -128,10 +130,19 @@
           <div><strong>Keeper</strong><span>Format</span></div>
         </div>
       </aside>
+      <nav class="desk-toc" aria-label="Reference desk sections">
+        <a href="#weekBoard">1 Current Week</a>
+        <a href="#deskStandings">2 Standings</a>
+        <a href="#deskLeaders">3 League Leaders</a>
+        <a href="#deskPlayoff">4 Playoff Race</a>
+        <a href="#deskTransactions">5 Recent Transactions</a>
+        <a href="#deskHistory">6 Historical Notes</a>
+        <a href="#championshipOdds">7 Championship Odds</a>
+      </nav>
     </div>
 
     <section class="home-band home-band-now" aria-labelledby="homeNowTitle">
-      <header class="home-band-head"><div><span>Right now</span><h2 id="homeNowTitle">This Week</h2></div><small data-home-context>Scores and standings</small></header>
+      <header class="home-band-head"><div><span>01 · Current week</span><h2 id="homeNowTitle">This Week</h2></div><small data-home-context>Scores and standings</small></header>
     <section class="home-section week-board" data-panel="data" id="weekBoard" data-week-source="saved" data-week-season="2026" data-week="3" data-week-fetched-at="2026-09-28T15:42:08.864922+00:00" aria-label="Week 3 matchups and standings">
       <header class="home-section-head"><div><span>Regular season</span><h2>Week 3</h2></div><small data-week-stamp class="is-saved" role="status">ESPN snapshot · Sep 28, 2026, 11:42 AM ET</small></header>
       <div class="week-board-grid">
@@ -304,21 +315,51 @@
         </div>
       </div>
     </section>
+      <p class="desk-lede" data-desk-note="week"></p>
     </section>
 
     <section class="home-band home-band-story" aria-labelledby="homeStoryTitle">
-      <header class="home-band-head"><div><span>The league story</span><h2 id="homeStoryTitle">Around the League</h2></div><small>Odds, office, and context</small></header>
-    <section class="home-section weekly-feature-section" data-panel="editorial" id="homeWeeklyFeature" aria-label="Weekly edition">
-      <header class="home-section-head"><div><span>The weekly edition</span><h2>League Wire</h2></div><small data-weekly-feature-status>Weekly edition</small></header>
-      <div data-weekly-feature aria-live="polite"><div class="gate-skeleton" role="status" aria-label="Loading weekly edition"><span></span><span></span><span></span></div></div>
+      <header class="home-band-head"><div><span>Tables, leaders, and the odds board</span><h2 id="homeStoryTitle">League Reference Desk</h2></div><small>Compiled from league data</small></header>
+
+    <section class="home-section desk-section" data-panel="data" id="deskStandings" aria-label="League standings">
+      <header class="home-section-head"><div><span>02 · Standings</span><h2>Standings</h2></div><small data-desk-status="standings">Current season</small></header>
+      <p class="desk-lede" data-desk-note="standings"></p>
+      <div data-desk-body="standings"><p class="desk-unavailable">Loading standings…</p></div>
     </section>
 
+    <section class="home-section desk-section" data-panel="data" id="deskLeaders" aria-label="League leaders">
+      <header class="home-section-head"><div><span>03 · Leaders</span><h2>League Leaders</h2></div><small data-desk-status="leaders">From completed results</small></header>
+      <div data-desk-body="leaders"><p class="desk-unavailable">Loading leaders…</p></div>
+    </section>
+
+    <section class="home-section desk-section" data-panel="data" id="deskPlayoff" aria-label="Playoff race">
+      <header class="home-section-head"><div><span>04 · Playoff race</span><h2>Playoff Race</h2></div><small data-desk-status="playoff">Top 6 qualify</small></header>
+      <p class="desk-lede" data-desk-note="playoff"></p>
+      <div data-desk-body="playoff"><p class="desk-unavailable">Loading playoff race…</p></div>
+    </section>
+
+    <section class="home-section desk-section" data-panel="data" id="deskTransactions" aria-label="Recent transactions">
+      <header class="home-section-head"><div><span>05 · Transactions</span><h2>Recent Transactions</h2></div><small data-desk-status="transactions">Verified archive</small></header>
+      <div data-desk-body="transactions"><p class="desk-unavailable">Loading recent moves…</p></div>
+    </section>
+
+    <section class="home-section desk-section" data-panel="data" id="deskHistory" aria-label="Historical notes">
+      <header class="home-section-head"><div><span>06 · History</span><h2>Historical Notes</h2></div><small data-desk-status="history">Since 2017</small></header>
+      <div data-desk-body="history"><p class="desk-unavailable">Loading archive notes…</p></div>
+    </section>
+
+
     <section class="home-section futures-section" data-panel="data" id="championshipOdds" aria-label="Championship futures odds">
-      <header class="home-section-head"><div><span>Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small data-futures-status>Post-draft board</small></header>
+      <header class="home-section-head"><div><span>07 · Szn <span data-site-season-number>10</span> futures</span><h2>Championship Odds</h2></div><small data-futures-status>Post-draft board</small></header>
+      <p class="desk-lede" data-desk-note="odds"></p>
       <p class="futures-method-note" data-futures-method>League-office futures · Updated with the current season board · Not sportsbook lines</p>
       <div class="futures-grid" data-futures aria-live="polite">
         <div class="gate-skeleton" role="status" aria-label="Loading championship odds"><span></span><span></span><span></span></div>
       </div>
+    </section>
+    <section class="home-section weekly-feature-section" data-panel="editorial" id="homeWeeklyFeature" aria-label="Weekly edition">
+      <header class="home-section-head"><div><span>The weekly edition</span><h2>League Wire</h2></div><small data-weekly-feature-status>Weekly edition</small></header>
+      <div data-weekly-feature aria-live="polite"><div class="gate-skeleton" role="status" aria-label="Loading weekly edition"><span></span><span></span><span></span></div></div>
     </section>
     <section class="home-section league-pulse" data-panel="data" id="leaguePulse" data-pulse-source="saved" aria-label="League Pulse">
       <header class="home-section-head league-pulse-head">
@@ -326,12 +367,12 @@
         <div class="league-pulse-tools"><small data-pulse-status>Saved league read</small><button type="button" data-pulse-prev aria-label="Previous League Pulse item">←</button><button type="button" data-pulse-next aria-label="Next League Pulse item">→</button></div>
       </header>
       <div class="league-pulse-rail" data-league-pulse role="list" aria-live="polite">
-        <article class="league-pulse-card" data-pulse-card="matchup" role="listitem"><span>Game watch</span><strong>McConkey Tonk / Jigalos Jims</strong><p>0.1 points apart · Live</p><button type="button" data-scroll-to="weekBoard">Open <span aria-hidden="true">→</span></button></article>
-        <article class="league-pulse-card" data-pulse-card="playoff" role="listitem"><span>Playoff line</span><strong>German Haro holds No. 6</strong><p>1-0 at the cut · JD Daley is next</p><button type="button" data-scroll-to="weekBoard">Open <span aria-hidden="true">→</span></button></article>
-        <article class="league-pulse-card" data-pulse-card="transactions" role="listitem"><span>Latest move</span><strong>Transaction Wire</strong><p>Completed adds, waivers, and accepted trades live in the verified archive.</p><button type="button" data-view-link="transactions">Open <span aria-hidden="true">→</span></button></article>
-        <article class="league-pulse-card" data-pulse-card="odds" role="listitem"><span>Odds board</span><strong>Thomas Speer +300</strong><p>The current championship favorite. Open the full board for every club.</p><button type="button" data-scroll-to="championshipOdds">Open <span aria-hidden="true">→</span></button></article>
-        <article class="league-pulse-card" data-pulse-card="record" role="listitem"><span>Record watch</span><strong>Thomas Speer · 158.4</strong><p>77.3 shy of the 235.6 all-time mark</p><button type="button" data-view-link="intel">Open <span aria-hidden="true">→</span></button></article>
-        <article class="league-pulse-card" data-pulse-card="streak" role="listitem"><span>Form guide</span><strong>6 teams opened 1–0</strong><p>The first separation in the table is points for.</p><button type="button" data-scroll-to="weekBoard">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="matchup" role="listitem"><span>Game watch</span><strong>Jigalos Jims / 1912 Titanic Swimteam</strong><p>1.1 points apart · Live</p><button type="button" data-scroll-to="weekBoard">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="playoff" role="listitem"><span>Playoff line</span><strong>Kyle Fowler holds No. 6</strong><p>1-1 at the cut · Vincent Cannarozzi is next</p><button type="button" data-scroll-to="weekBoard">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="transactions" role="listitem"><span>Latest moves</span><strong>Transaction Wire</strong><p>Completed adds, waivers, and accepted trades live in the verified archive.</p><button type="button" data-view-link="transactions">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="odds" role="listitem"><span>Odds board</span><strong>Thomas Speer +300</strong><p>Enters Week 3 as the league-office favorite. Full board below.</p><button type="button" data-scroll-to="championshipOdds">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="record" role="listitem"><span>Record watch</span><strong>George Travis · 171.6</strong><p>64.1 shy of the 235.6 all-time mark</p><button type="button" data-view-link="intel">Open <span aria-hidden="true">→</span></button></article>
+        <article class="league-pulse-card" data-pulse-card="streak" role="listitem"><span>Form guide</span><strong>Bryan Hunt · 2 straight</strong><p>Active win streak for Howya Been's.</p><button type="button" data-scroll-to="weekBoard">Open <span aria-hidden="true">→</span></button></article>
       </div>
     </section>
 
@@ -366,7 +407,7 @@
       <div class="orientation-copy">
         <span class="eyebrow">Start here</span>
         <h2 id="orientationTitle">What is 1048 Gate?</h2>
-        <p>The official home of a 12-team keeper league established in 2017. Check this week’s games, meet the managers, or explore the records and rules that make the league ours.</p>
+        <p>A 12-team keeper league established in 2017. This desk carries the current week, the table, the playoff cut, the odds board, and the archive that backs them.</p>
       </div>
       <nav class="orientation-links" aria-label="Explore 1048 Gate">
         <button type="button" class="orientation-link" data-scroll-to="weekBoard">This week <span aria-hidden="true">→</span></button>
@@ -391,7 +432,7 @@
 
   </section>
 
-  <section class="view" id="wire">
+<section class="view" id="wire">
     <div class="section-title"><span class="section-kicker">The league wire</span><h2>Wire</h2><span class="see-all">Transactions and trades</span></div>
     <nav class="ia-subnav" data-wire-nav role="tablist" aria-label="Wire sections">
       <button type="button" class="active" data-wire-tab="transactions" data-view="transactions" role="tab" aria-selected="true">Archive</button>
