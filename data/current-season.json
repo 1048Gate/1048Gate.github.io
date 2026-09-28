@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 3,
   "phase": "Week 3",
-  "fetchedAt": "2026-09-28T01:11:20.970472+00:00",
+  "fetchedAt": "2026-09-28T01:41:22.174699+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "standings": [
@@ -185,13 +185,13 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 130.64
+        "score": 132.34
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 80.94
+        "score": 84.74
       }
     },
     {
@@ -211,7 +211,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 129.06
+        "score": 128.06
       }
     },
     {
@@ -231,7 +231,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 159.38
+        "score": 161.78
       }
     },
     {
@@ -251,7 +251,7 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 83.34
+        "score": 86.54
       }
     },
     {
