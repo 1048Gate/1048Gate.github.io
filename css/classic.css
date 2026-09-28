@@ -1,0 +1,535 @@
+/* ==========================================================================
+   1048 Gate — "Classic Reference" theme
+   Old-school sports-reference look: white page, dark text, Helvetica/Arial,
+   one dark accent for the header bar, plain blue links, dense bordered tables.
+   Loaded LAST so it overrides style.css / theme.css / visual-system.css.
+   Pure presentation: no selectors here are used as JS hooks.
+   ========================================================================== */
+
+:root,
+html[data-theme="light"],
+html[data-theme="dark"]{
+  color-scheme:light;
+  --accent:#243b53;
+  --accent-2:#1b2d40;
+  --link:#0645ad;
+  --page:#ffffff;
+  --text:#111;
+  --btn-bg:#f2f2f2;
+  --btn-hover:#e2e2e2;
+  --row-hover:#fffbe0;
+  --bar-track:#e6e6e6;
+  --link-visited:#551a8b;
+  --link-hover:#c00;
+  --tab-active-ink:#243b53;
+  --accent-rule:#243b53;
+  --bar-fill:#243b53;
+  --table-bg:var(--page);
+  --backdrop:rgba(0,0,0,.55);
+  --muted-text:#555;
+  --rule:#cfcfcf;
+  --rule-dark:#999;
+  --head-bg:#e4e4e4;
+  --zebra:#f4f4f4;
+  --win:#1a6b1a;
+  --loss:#a61b1b;
+  /* remap the legacy tokens so untouched rules inherit the new palette */
+  --bg:var(--page) !important;
+  --panel:var(--page) !important;
+  --panel2:var(--zebra) !important;
+  --panel3:var(--head-bg) !important;
+  --line:var(--rule) !important;
+  --cream:var(--text) !important;
+  --muted:var(--muted-text) !important;
+  --amber:#243b53 !important;
+  --turf:#243b53 !important;
+  --red:#a61b1b !important;
+  --shadow:none !important;
+  --shadow-sm:none !important;
+  --shadow-lg:none !important;
+  --surface-glow:var(--page) !important;
+  --sticky-offset:92px;
+}
+
+/* ---- 1. Global flattening: no gradients, glass, glow, motion, rounding ---- */
+html body *,
+html body *::before,
+html body *::after{
+  box-shadow:none !important;
+  text-shadow:none !important;
+  filter:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  animation:none !important;
+  transition:none !important;
+  border-radius:0 !important;
+  background-image:none !important;
+  letter-spacing:normal !important;
+  text-transform:none !important;
+}
+html body :where(*){ background-color:transparent !important; }
+html body *:not(svg):not(svg *){ border-color:var(--rule) !important; }
+
+html,body{background:var(--page) !important;}
+body{
+  color:var(--text) !important;
+  font:14px/1.4 "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+}
+body *:not(svg):not(svg *){
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif !important;
+  color:var(--text);
+}
+html body *{color:var(--text) !important;}
+
+/* ---- 2. Type scale: small, compact, normal case ---- */
+h1,h2,h3,h4,h5{font-weight:700 !important;line-height:1.2 !important;}
+h1{font-size:22px !important;}
+h2{font-size:18px !important;}
+h3{font-size:15px !important;}
+h4{font-size:13px !important;}
+main h2{margin:0 !important;}
+.section-title{
+  display:flex !important;flex-wrap:wrap;align-items:baseline;gap:4px 12px !important;
+  margin:22px 0 8px !important;padding:0 0 3px !important;
+  border-bottom:2px solid var(--accent-rule) !important;
+}
+.section-title h2,.home-band-head h2,.home-section-head h2,.history-section-head h2{font-size:18px !important;}
+.section-kicker,.eyebrow,.home-band-head span,.home-section-head span,.history-eyebrow,
+.transaction-eyebrow,.weekly-kicker,.champion-kicker,.hero-season-kicker{
+  font-size:11px !important;font-weight:700 !important;color:var(--muted-text) !important;display:block;
+}
+.see-all,.section-status,.mono,.label,.tag,.mgr,small,.story-meta,.story-source,
+.member-card-footer,.rule-note,.member-help,.week-card-owner,.draft-overall,
+.futures-method-note,.title-odds-note,.edition-meta,.staff-meta,.alumni-note,
+.section-status-bar,.week-standings-note,.bracket-note,.transaction-ledger-meta,
+.champ-banner-owner,.champ-banner-record,.champion-owner,.story-body{
+  color:var(--muted-text) !important;
+}
+.see-all,.section-status,.section-status-bar{font-size:12px !important;}
+
+/* ---- 3. Links & buttons ---- */
+html body a,html body a *{color:var(--link) !important;text-decoration:underline;}
+html body a:visited{color:var(--link-visited) !important;}
+html body a:hover{color:var(--link-hover) !important;}
+.btn,.edition-action,.transaction-reset,.home-expand-btn,.mini-link,.toggle-sources,
+.home-archive-links button,.orientation-link,.archive-path-card button,.draft-controls button,
+.player-controls button,button.orientation-link{
+  display:inline-block !important;min-height:0 !important;
+  padding:3px 9px !important;
+  font:12px/1.4 Helvetica,Arial,sans-serif !important;font-weight:400 !important;
+  background:var(--btn-bg) !important;color:var(--text) !important;
+  border:1px solid var(--rule-dark) !important;
+  cursor:pointer;
+}
+.btn:hover,.edition-action:hover{background:var(--btn-hover) !important;}
+.btn-primary,.edition-action-primary{background:var(--accent) !important;border-color:var(--accent) !important;color:#fff !important;}
+.btn-primary *{color:#fff !important;}
+input,select,textarea{
+  font:13px Helvetica,Arial,sans-serif !important;color:var(--text) !important;
+  background:var(--page) !important;border:1px solid var(--rule-dark) !important;
+  padding:3px 6px !important;min-height:0 !important;height:auto !important;
+}
+:focus-visible{outline:2px solid var(--link) !important;outline-offset:1px !important;}
+.skip-link{background:var(--page) !important;color:var(--link) !important;border:1px solid var(--link) !important;}
+.skip-link:focus{transform:none !important;}
+
+/* ---- 4. Header bar + text nav ---- */
+.topbar{
+  background:var(--accent) !important;
+  border-bottom:0 !important;
+}
+.topbar *{color:#fff !important;}
+.topbar-inner{max-width:1180px !important;padding:6px 16px !important;gap:10px !important;min-height:0 !important;}
+.brand{gap:8px !important;}
+.brand-logo{width:30px !important;height:30px !important;background:#fff !important;}
+.brand-text .name{font-size:17px !important;font-weight:700 !important;}
+.brand-text .tag{font-size:11px !important;color:#d5dde6 !important;}
+.week-chip{background:transparent !important;border:0 !important;padding:0 !important;gap:6px !important;}
+.week-chip .digit{background:#fff !important;color:var(--accent) !important;font:700 12px Helvetica,Arial,sans-serif !important;padding:1px 6px !important;}
+.week-chip .digit *{color:var(--accent) !important;}
+.week-chip .label{color:#d5dde6 !important;font-size:12px !important;}
+.theme-toggle{
+  display:grid !important;place-items:center;flex:0 0 26px !important;
+  width:26px !important;height:26px !important;padding:0 !important;
+  background:transparent !important;border:1px solid #9fb0c2 !important;color:#fff !important;cursor:pointer;
+}
+.theme-toggle:hover{background:var(--accent-2) !important;}
+.theme-toggle .theme-icon{width:15px !important;height:15px !important;}
+.auth-control-slot button,.auth-control button,.topbar .btn{
+  background:transparent !important;border:1px solid #9fb0c2 !important;color:#fff !important;
+  padding:2px 8px !important;font-size:12px !important;
+}
+nav.tabs{
+  max-width:none !important;margin:0 !important;padding:0 16px !important;
+  background:var(--accent-2) !important;gap:0 !important;
+  border-top:1px solid #3d5773 !important;
+}
+nav.tabs button{
+  font:700 13px Helvetica,Arial,sans-serif !important;color:#fff !important;
+  padding:6px 12px !important;border:0 !important;border-right:1px solid #3d5773 !important;
+  background:transparent !important;text-decoration:none;
+}
+nav.tabs button:hover{text-decoration:underline;}
+nav.tabs button.active,nav.tabs button[aria-current="page"]{
+  background:var(--page) !important;color:var(--tab-active-ink) !important;
+}
+@media (min-width:1181px){ nav.tabs{padding-left:calc((100% - 1180px)/2 + 16px) !important;} }
+
+/* ---- 5. Page frame ---- */
+main{max-width:1180px !important;padding:12px 16px 40px !important;}
+.view.active{animation:none !important;}
+.panel,.home-section,.history-content-panel,.history-tab-panel,.season-archive-panel,
+.draft-archive-panel,.player-archive-panel,.matchup-panel,.archive-overview-panel,
+.member-card,.league-pulse-card,.weekly-feature-card,.futures-section,.title-odds-card,
+.title-odds-panel,.trophy-card,.champ-banner,.champion-entry,.shame-history-card,.shame,
+.story-item,.career-box,.manager-rival-card,.manager-game-card,.manager-draft-pick,
+.archive-season-card,.archive-path-card,.rundown-block,.transaction-summary-card,
+.transaction-day,.playoff-seed-card,.bracket-matchup,.poll-card,.accordion-item,
+.orientation-panel,.home-snapshot,.commissioner-board,.home-office,.weekly-feature-section,
+.league-pulse,.banner-wall-section,.score-leaderboard,.draft-recap-pick,.intel-power,
+.transaction-workbench,.trade-board-form,.playoff-toolbar,.h2h-builder,.season-hero,
+.alumni-card,.keepers-subsection .rule-grid,.edition-content,.week-card,.futures-row,
+.content-member-card,.archive-explorer-intro,.history-intro,.transaction-guide,.trade-intro{
+  background:var(--page) !important;
+  border:1px solid var(--rule) !important;
+}
+.panel,.home-section,.history-content-panel,.history-tab-panel{padding:10px 12px !important;margin-bottom:12px !important;}
+.member-card,.league-pulse-card,.trophy-card,.champ-banner,.story-item,.career-box,
+.manager-rival-card,.manager-game-card,.archive-season-card,.archive-path-card,
+.playoff-seed-card,.title-odds-card,.transaction-summary-card,.week-card{padding:8px 10px !important;}
+/* bands / wrappers should not look like cards */
+.home-band,.history-shell,.history-tab-panels{background:transparent !important;border:0 !important;padding:0 !important;margin:0 0 14px !important;}
+.home-band-head,.home-section-head,.history-section-head,.archive-overview-head,.trophy-room-head,
+.shame-history-head,.score-leaderboard-head,.league-pulse-head,.transaction-results-head,.drawer-header,
+.trade-board-header,.archive-timeline-head,.playoff-bracket-head{
+  display:flex !important;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px !important;
+  padding:0 0 3px !important;margin:0 0 8px !important;
+  border-bottom:2px solid var(--accent-rule) !important;background:transparent !important;
+}
+.home-band-head{margin-top:18px !important;}
+.score-leaderboard-head{border-bottom-width:1px !important;background:var(--head-bg) !important;padding:3px 6px !important;margin:0 !important;}
+
+/* ---- 6. Home hero → plain title block ---- */
+.hero{
+  display:block !important;padding:0 0 8px !important;margin:0 0 6px !important;
+  background:var(--page) !important;border:0 !important;border-bottom:1px solid var(--rule) !important;
+  min-height:0 !important;
+}
+.hero-copy{padding:0 !important;}
+.hero h1{font-size:24px !important;line-height:1.15 !important;margin:2px 0 4px !important;}
+.hero h1 br{display:none;}
+.hero h1 span{color:var(--text) !important;margin-left:.3em;}
+.hero-tagline{font:italic 13px Georgia,"Times New Roman",serif !important;color:var(--muted-text) !important;margin:0 0 4px !important;}
+.hero p{margin:0 0 6px !important;max-width:none !important;font-size:14px !important;}
+.hero-logo{display:none !important;}
+.hero-buttons{gap:6px !important;margin-top:4px !important;}
+.hero-season-card{
+  display:flex !important;flex-wrap:wrap;align-items:baseline;gap:4px 14px !important;
+  padding:5px 8px !important;margin-top:8px !important;
+  background:var(--zebra) !important;border:1px solid var(--rule) !important;min-height:0 !important;
+}
+.hero-season-year,.hero-season-edition,.hero-season-phase{font:700 13px Helvetica,Arial,sans-serif !important;}
+.hero-meta-grid{display:flex !important;flex-wrap:wrap;gap:4px 14px !important;margin:0 !important;padding:0 !important;border:0 !important;}
+.hero-meta-grid div{display:flex !important;gap:4px;align-items:baseline;padding:0 !important;border:0 !important;background:transparent !important;}
+.hero-meta-grid strong{font-size:13px !important;}
+.hero-meta-grid span{font-size:12px !important;color:var(--muted-text) !important;}
+
+/* big display numerals → normal weight text */
+.value,.champ-banner-year,.champion-year,.season-hero-year,.hero-season-year,.archive-overview-metric strong,
+.h2h-score strong,.score-performance,.shame-history-year,.futures-odds,.career-box .value,
+.week-game-side b,.manager-rival-vs,.season-hero-score,.playoff-year-badge{
+  font-family:Helvetica,Arial,sans-serif !important;font-weight:700 !important;
+  font-size:15px !important;line-height:1.25 !important;
+}
+.champion-trophy,.trophy,.shame-history-icon{font-size:16px !important;}
+
+/* ---- 7. Tables: dense, bordered, gray head, zebra ---- */
+table{
+  border-collapse:collapse !important;border-spacing:0 !important;
+  width:100%;font-size:13px !important;line-height:1.3 !important;
+  background:var(--table-bg) !important;border:1px solid var(--rule-dark) !important;
+  border-top:2px solid var(--accent-rule) !important;
+}
+th,td{
+  padding:3px 6px !important;border:1px solid var(--rule) !important;
+  vertical-align:middle;height:auto !important;
+}
+thead th,th{
+  background:var(--head-bg) !important;font-weight:700 !important;font-size:12px !important;
+  color:var(--text) !important;text-align:left;white-space:nowrap;
+  position:static !important;
+}
+tbody tr:nth-child(even) td,tbody tr:nth-child(even) th{background:var(--zebra) !important;}
+tbody tr:hover td{background:var(--row-hover) !important;}
+td.num,th.num,td[data-align="right"]{text-align:right;}
+.week-standings-wrap,.season-table-wrap,.draft-table-wrap,.player-table-wrap,.rivalry-wrap,
+.manager-weapons-wrap,.bracket-scroll{
+  overflow-x:auto !important;-webkit-overflow-scrolling:touch;
+  border:0 !important;padding:0 !important;background:transparent !important;max-height:none;
+}
+.week-standings-scroll-hint{font-size:11px !important;color:var(--muted-text) !important;}
+.is-playoff-line td{border-bottom:2px solid var(--accent-rule) !important;}
+.rivalry-matrix td,.rivalry-matrix th{text-align:center;padding:2px 4px !important;}
+.rivalry-btn{padding:0 !important;border:0 !important;background:transparent !important;color:var(--link) !important;text-decoration:underline;font-size:12px !important;}
+.rivalry-self{background:var(--head-bg) !important;}
+
+/* Table-like lists built from divs: rows with hairlines + zebra */
+.rule-grid,.snapshot-list,.transaction-ledger,.futures-grid,.intel-power-list,.draft-recap-list,
+.title-odds-grid,.score-leaderboard,.content-season-table,.keeper-list,.playoff-seed-grid{gap:0 !important;}
+.rule-row,.futures-row,.transaction-ledger-row,.draft-recap-pick,.intel-power,.content-season-row,
+.playoff-result-row,.playoff-row,.score-leaderboard li,.score-leaderboard>div:not(.score-leaderboard-head),
+.snapshot-list>*{
+  padding:3px 6px !important;margin:0 !important;
+  border:0 !important;border-bottom:1px solid var(--rule) !important;
+  background:var(--page) !important;min-height:0 !important;
+}
+.rule-row:nth-child(even),.futures-row:nth-child(even),.transaction-ledger-row:nth-child(even),
+.draft-recap-pick:nth-child(even),.intel-power:nth-child(even),.content-season-row:nth-child(even),
+.playoff-result-row:nth-child(even),.score-leaderboard li:nth-child(even),.snapshot-list>*:nth-child(even){
+  background:var(--zebra) !important;
+}
+.rule-grid,.snapshot-list,.futures-grid,.intel-power-list{border:1px solid var(--rule) !important;border-top:2px solid var(--accent-rule) !important;}
+.content-season-row.head{background:var(--head-bg) !important;font-weight:700;}
+.score-rank{color:var(--muted-text) !important;font-weight:400 !important;}
+
+/* ---- 8. Sub-navigation → pipe-separated text links ---- */
+.history-subnav,.ia-subnav,.trade-subnav,.edition-tabs,.season-year-nav,.draft-year-nav,
+.player-year-nav,.player-mode-nav,.trade-year-nav,[role="tablist"]{
+  display:flex !important;flex-wrap:wrap !important;gap:0 !important;
+  padding:4px 0 !important;margin:0 0 10px !important;
+  background:transparent !important;border:0 !important;border-bottom:1px solid var(--rule) !important;
+  overflow:visible !important;position:static !important;
+}
+.history-subnav button,.ia-subnav button,.trade-subnav button,.edition-tabs button,
+.season-year-nav button,.draft-year-nav button,.player-year-nav button,.player-mode-nav button,
+.trade-year-nav button,[role="tablist"] > button,[role="tab"]{
+  background:transparent !important;border:0 !important;
+  border-right:1px solid var(--rule-dark) !important;
+  padding:1px 8px !important;margin:0 0 2px !important;min-height:0 !important;min-width:0 !important;
+  font:13px/1.4 Helvetica,Arial,sans-serif !important;
+  color:var(--link) !important;text-decoration:underline;cursor:pointer;
+}
+.history-subnav button.active,.ia-subnav button.active,.trade-subnav button.active,.edition-tabs button.active,
+.season-year-nav button.active,.draft-year-nav button.active,.player-year-nav button.active,
+.player-mode-nav button.active,.trade-year-nav button.active,[role="tab"][aria-selected="true"]{
+  color:var(--text) !important;font-weight:700 !important;text-decoration:none;
+}
+.history-subnav button:last-child,.ia-subnav button:last-child,[role="tablist"] > button:last-child{border-right:0 !important;}
+
+/* ---- 9. Home widgets ---- */
+.week-board-grid{gap:12px !important;}
+.week-matchups{gap:0 !important;border:1px solid var(--rule) !important;border-top:2px solid var(--accent-rule) !important;}
+.week-card{border:0 !important;border-bottom:1px solid var(--rule) !important;padding:4px 8px !important;}
+.week-card:nth-child(even){background:var(--zebra) !important;}
+.week-card-status{padding:0 !important;margin:0 0 2px !important;font-size:11px !important;}
+.week-card-badge{background:transparent !important;border:0 !important;padding:0 !important;font-weight:700 !important;font-size:11px !important;color:var(--loss) !important;}
+.week-card-margin{font-size:11px !important;color:var(--muted-text) !important;}
+.week-card-sides{gap:6px !important;}
+.week-game-side{padding:0 !important;background:transparent !important;border:0 !important;}
+.week-game-side strong{font-size:13px !important;}
+.week-game-side.is-leading strong,.week-game-side.is-leading b{font-weight:700 !important;}
+.week-game-side.is-trailing strong,.week-game-side.is-trailing b{font-weight:400 !important;}
+.week-game-vs{font-size:11px !important;color:var(--muted-text) !important;background:transparent !important;border:0 !important;}
+.member-avatar,.member-modal-avatar{
+  background:var(--head-bg) !important;border:1px solid var(--rule-dark) !important;
+  width:34px !important;height:34px !important;min-width:34px !important;
+}
+.member-initials,.member-modal-initials{font:700 12px Helvetica,Arial,sans-serif !important;color:var(--text) !important;}
+.member-modal-avatar{width:48px !important;height:48px !important;}
+.member-title-badge,.keeper-tag,.week-card-badge,.transaction-type,.player-pos-tag,.edition-status,.status-dot{
+  background:transparent !important;border:1px solid var(--rule-dark) !important;
+  padding:0 4px !important;font-size:11px !important;font-weight:400 !important;
+}
+.status-dot{border:0 !important;}
+.members-grid{gap:8px !important;}
+.member-stats{gap:0 !important;border:1px solid var(--rule) !important;}
+.member-stat{padding:2px 5px !important;border:0 !important;border-right:1px solid var(--rule) !important;background:transparent !important;}
+.member-stat .label{font-size:10px !important;}
+.member-stat .value{font-size:13px !important;}
+.member-open-arrow{color:var(--link) !important;text-decoration:underline;}
+.member-card{cursor:pointer;}
+.member-card:hover{background:var(--row-hover) !important;}
+.champ-banner-hook{display:none !important;}
+.banner-wall{gap:8px !important;}
+
+/* bars (odds / polls) — keep a flat solid fill */
+.title-odds-bar>div,.bar-track{background:var(--bar-track) !important;height:6px !important;border:1px solid var(--rule) !important;}
+.title-odds-bar i,.bar-fill{background:var(--bar-fill) !important;}
+.title-odds-bar span{font:10px Helvetica,Arial,sans-serif !important;}
+
+/* wins / losses keep a hint of colour */
+.is-winning,.win,.positive-diff,.winner .bracket-score,.is-winner{color:var(--win) !important;}
+.is-losing,.loss,.negative-diff{color:var(--loss) !important;}
+.is-winning *,.positive-diff *{color:var(--win) !important;}
+.is-losing *,.negative-diff *{color:var(--loss) !important;}
+.bracket-team.winner{font-weight:700 !important;}
+
+/* ---- 10. Accordion (rules) ---- */
+.accordion-item{border:0 !important;border-bottom:1px solid var(--rule) !important;}
+.accordion-head{padding:5px 4px !important;background:transparent !important;border:0 !important;}
+.accordion-head h3{font-size:14px !important;}
+.accordion-head .idx{color:var(--muted-text) !important;margin-right:6px;}
+.accordion-body-inner{padding:4px 4px 10px !important;}
+.rule-summary{background:var(--zebra) !important;border:1px solid var(--rule) !important;padding:6px 8px !important;}
+
+/* ---- 11. Modals & drawers ---- */
+.member-modal,.auth-modal{background:rgba(0,0,0,.55) !important;}
+.phone-more-backdrop,.edition-drawer-backdrop{background:rgba(0,0,0,.45) !important;}
+.member-modal-card,.auth-card,.edition-drawer,.phone-more-sheet{
+  background:var(--page) !important;border:1px solid var(--rule-dark) !important;
+}
+.member-modal-card{max-width:980px !important;}
+.member-modal-head{
+  background:var(--page) !important;border-bottom:2px solid var(--accent-rule) !important;
+  padding:10px 14px !important;
+}
+#memberModalName{font-size:22px !important;}
+.member-modal-team{font-weight:700 !important;font-size:14px !important;}
+.modal-close,.drawer-close{
+  background:var(--btn-bg) !important;border:1px solid var(--rule-dark) !important;color:var(--text) !important;
+  width:28px !important;height:28px !important;font-size:18px !important;line-height:1 !important;
+}
+.career-summary{gap:0 !important;border:1px solid var(--rule) !important;border-top:2px solid var(--accent-rule) !important;}
+.career-box{border:0 !important;border-right:1px solid var(--rule) !important;border-bottom:1px solid var(--rule) !important;padding:4px 8px !important;}
+.career-box .label{font-size:11px !important;}
+.manager-resume-grid,.manager-game-grid,.manager-draft-grid{gap:6px !important;}
+.manager-profile-section{padding-top:8px !important;margin-top:8px !important;border-top:1px solid var(--rule) !important;}
+
+/* ---- 12. Newspaper keeps a serif, still flat ---- */
+.edition-content,.edition-content *:not(svg){font-family:Georgia,"Times New Roman",serif !important;}
+.edition-content{padding:12px 14px !important;}
+.story-title{font-size:16px !important;}
+.story-lead .story-title{font-size:20px !important;}
+
+/* ---- 13. Phone dock (bottom nav on phones) ---- */
+.phone-dock{background:var(--page) !important;border-top:2px solid var(--accent-rule) !important;}
+.phone-dock button{background:transparent !important;border:0 !important;color:var(--link) !important;font:12px Helvetica,Arial,sans-serif !important;}
+.phone-dock button *{color:var(--link) !important;}
+.phone-dock svg{stroke:var(--link) !important;}
+.phone-dock button.active,.phone-dock button[aria-current="page"]{color:var(--text) !important;font-weight:700 !important;}
+.phone-dock button.active *{color:var(--text) !important;stroke:var(--text) !important;}
+.phone-more-sheet button{background:transparent !important;border:0 !important;border-bottom:1px solid var(--rule) !important;color:var(--link) !important;text-decoration:underline;text-align:left;}
+
+/* ---- 14. Footer ---- */
+footer{
+  background:var(--page) !important;border-top:2px solid var(--accent-rule) !important;
+  padding:10px 16px 18px !important;font-size:12px !important;color:var(--muted-text) !important;
+}
+footer *{color:var(--muted-text) !important;}
+footer strong{color:var(--text) !important;}
+.thr-footer-credit img{width:18px !important;height:18px !important;}
+
+/* ---- 15. Mobile (~390px) ---- */
+@media (max-width:760px){
+  body{font-size:14px !important;}
+  .topbar-inner{padding:5px 10px !important;}
+  .brand-text .tag,.week-chip .label{display:none !important;}
+  nav.tabs{padding:0 6px !important;overflow-x:auto !important;}
+  nav.tabs button{padding:6px 9px !important;}
+  main{padding:8px 10px 90px !important;}
+  .hero h1{font-size:20px !important;}
+  .hero h1 span{display:block;margin-left:0;}
+  .panel,.home-section,.history-content-panel,.history-tab-panel{padding:8px !important;}
+  /* PFR-style: tables keep their columns and scroll sideways */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;max-width:100%;}
+  .week-standings-wrap table,.season-table-wrap table,.draft-table-wrap table,.player-table-wrap table,
+  .rivalry-wrap table,.manager-weapons-wrap table{display:table;}
+  th,td{padding:3px 5px !important;}
+  .member-modal-card{max-width:none !important;}
+  #memberModalName{font-size:18px !important;}
+}
+
+/* ---- 16. Second pass: de-emphasise display numerals, tidy nesting ---- */
+main strong,main b,.member-modal-card strong,.member-modal-card b{font-size:inherit !important;}
+.season-hero-year,.season-hero-year span{font-size:22px !important;font-weight:700 !important;line-height:1.1 !important;}
+.playoff-season-status{font-size:14px !important;font-weight:700 !important;}
+.archive-season-card strong,.transaction-summary-card strong,.intel-metric strong,.trophy-card strong{font-size:16px !important;}
+html body .member-avatar{width:30px !important;height:30px !important;min-width:30px !important;flex:0 0 30px !important;}
+html body .member-modal-avatar{width:44px !important;height:44px !important;min-width:44px !important;flex:0 0 44px !important;}
+.week-card:nth-child(even){background:var(--page) !important;}
+.week-card{border-right:1px solid var(--rule) !important;}
+.section-title{justify-content:flex-start !important;}
+.section-title .see-all,.section-title .section-status{margin-left:auto;}
+.history-tab-panel,.history-tab-panels>.panel{border:0 !important;padding:0 !important;background:transparent !important;}
+.home-section,.weekly-feature-section,.league-pulse,.futures-section,.banner-wall-section,
+.orientation-panel,.home-dashboard,.home-archive-links{margin-top:0 !important;margin-bottom:12px !important;}
+.league-pulse-card{min-height:0 !important;}
+.hero-season-card>*{display:inline !important;margin:0 !important;padding:0 !important;}
+.hero-season-card .hero-meta-grid{display:flex !important;}
+.hero-season-kicker{display:inline !important;}
+.member-stat{min-height:0 !important;padding:3px 6px !important;}
+.member-stats{margin:6px 0 !important;}
+.member-latest{padding:4px 0 !important;margin:4px 0 !important;}
+.member-card-footer{padding-top:4px !important;margin-top:0 !important;}
+.history-subnav button,.ia-subnav button,.trade-subnav button,.edition-tabs button,[role="tablist"]>button{flex:0 0 auto !important;width:auto !important;}
+@media (max-width:760px){
+  main :is(div,section,article,aside,header,nav,li){min-width:0;}
+  .history-content-panel,.history-tab-panel,.panel,.season-detail,.season-archive-panel{max-width:100% !important;}
+  .week-standings-wrap,.season-table-wrap,.draft-table-wrap,.player-table-wrap,.rivalry-wrap,.manager-weapons-wrap{max-width:100% !important;}
+}
+.career-box,.manager-resume-grid>*,.manager-game-card,.manager-rival-card{min-height:0 !important;}
+html body .history-subnav,html body .ia-subnav,html body #intelNav{flex-wrap:wrap !important;overflow:visible !important;white-space:normal !important;}
+.member-modal-sub,.member-modal-team,.member-modal-identity *{font-family:Helvetica,Arial,sans-serif !important;}
+.history-tab-panels .history-content-panel,.history-tab-panels [data-history-panel]{border:0 !important;padding:0 !important;background:transparent !important;}
+#intelBody article,#intelBody li,.story-item,.champion-entry,.trophy-card,.shame-history-card,.record-card,.archive-season-card{padding:6px 10px !important;margin-bottom:6px !important;min-height:0 !important;}
+.champion-entry{border-left:3px solid var(--accent-rule) !important;}
+.champion-main,.champion-year{padding:0 !important;}
+.transaction-day{margin-bottom:8px !important;}
+.transaction-day-head{background:var(--head-bg) !important;padding:3px 8px !important;border-bottom:1px solid var(--rule-dark) !important;}
+.transaction-summary-card{min-height:0 !important;cursor:pointer;}
+.transaction-summary-card.active{border:2px solid var(--accent-rule) !important;}
+.skip-link:not(:focus){top:-200px !important;}
+
+
+/* ==========================================================================
+   17. Classic DARK variant — keyed to html[data-theme="dark"], which the
+   existing js/theme.js toggle sets (default stays light; choice persists in
+   localStorage "1048-gate-theme"). Same layout, just a dark palette.
+   ========================================================================== */
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#161616;
+  --text:#e2e2e2;
+  --muted-text:#a9a9a9;
+  --rule:#3a3a3a;
+  --rule-dark:#5c5c5c;
+  --head-bg:#2d2d2d;
+  --zebra:#232323;
+  --table-bg:#1e1e1e;
+  --btn-bg:#2a2a2a;
+  --btn-hover:#363636;
+  --row-hover:#2f2b1d;
+  --bar-track:#333333;
+  --bar-fill:#7ea6d6;
+  --link:#8ab4f8;
+  --link-visited:#c3a6f5;
+  --link-hover:#b8d3fb;
+  --tab-active-ink:#e2e2e2;
+  --accent-rule:#5a7ca3;
+  --win:#74c974;
+  --loss:#ff8a80;
+  --backdrop:rgba(0,0,0,.7);
+  --amber:#8fb0d6 !important;
+  --turf:#8fb0d6 !important;
+  --red:#ff8a80 !important;
+}
+html[data-theme="dark"],html[data-theme="dark"] body{background:var(--page) !important;}
+html[data-theme="dark"] tbody td,html[data-theme="dark"] tbody th{background:var(--table-bg) !important;}
+html[data-theme="dark"] tbody tr:nth-child(even) td,html[data-theme="dark"] tbody tr:nth-child(even) th{background:var(--zebra) !important;}
+html[data-theme="dark"] tbody tr:hover td{background:var(--row-hover) !important;}
+html[data-theme="dark"] thead th,html[data-theme="dark"] th{background:var(--head-bg) !important;}
+html[data-theme="dark"] .rule-row,html[data-theme="dark"] .futures-row,html[data-theme="dark"] .transaction-ledger-row,
+html[data-theme="dark"] .draft-recap-pick,html[data-theme="dark"] .intel-power,html[data-theme="dark"] .content-season-row,
+html[data-theme="dark"] .playoff-result-row,html[data-theme="dark"] .score-leaderboard li,html[data-theme="dark"] .snapshot-list>*{background:var(--table-bg) !important;}
+html[data-theme="dark"] .rule-row:nth-child(even),html[data-theme="dark"] .futures-row:nth-child(even),
+html[data-theme="dark"] .transaction-ledger-row:nth-child(even),html[data-theme="dark"] .draft-recap-pick:nth-child(even),
+html[data-theme="dark"] .intel-power:nth-child(even),html[data-theme="dark"] .content-season-row:nth-child(even),
+html[data-theme="dark"] .playoff-result-row:nth-child(even),html[data-theme="dark"] .score-leaderboard li:nth-child(even),
+html[data-theme="dark"] .snapshot-list>*:nth-child(even){background:var(--zebra) !important;}
+html[data-theme="dark"] .member-modal,html[data-theme="dark"] .auth-modal{background:var(--backdrop) !important;}
+html[data-theme="dark"] .brand-logo{background:#fff !important;}
+html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#8a8a8a !important;}
+html[data-theme="dark"] .edition-content{background:#1b1b1b !important;}
+.hero-season-card{flex-direction:row !important;}
+.hero-season-card>*{flex:0 0 auto !important;width:auto !important;}
+.hero-season-card>.hero-meta-grid{flex:1 1 auto !important;min-width:0 !important;}
