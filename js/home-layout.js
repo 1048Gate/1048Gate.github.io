@@ -59,7 +59,13 @@
     const lede = home.querySelector('[data-home-lede], .hero-copy > p:not(.hero-tagline)');
     /* site-ui.js owns the live/upcoming lede from board + odds; only fill the states it skips. */
     if(lede && state === 'offseason') lede.textContent = 'Offseason desk: keepers, the draft board, and the archive.';
-    if(lede && ['recap','final'].includes(state)) lede.textContent = `${board.phase || `Week ${board.week}`} is final. ${state === 'recap' ? 'Weekly edition below, then the results and standings.' : 'Results and standings are posted; the weekly recap is still being prepared.'}`;
+    if(lede && ['recap','final'].includes(state)) lede.textContent = `All ${board.matchups.length} games final.${state === 'recap' ? ' Weekly edition below.' : ''}`;
+    /* Mid-week, the weekly-edition teaser and League Pulse only restate the board,
+       the table, the playoff line, and the odds, which have numbered sections of
+       their own. The teaser returns (and leads) once a verified final recap exists;
+       the Newspaper tab always carries the edition. */
+    if(feature) feature.hidden = state !== 'recap';
+    if(pulse) pulse.hidden = true;
 
     /* Keep the numbered desk sections in order under the Story band. */
     const storyHead = story.querySelector('.home-band-head');

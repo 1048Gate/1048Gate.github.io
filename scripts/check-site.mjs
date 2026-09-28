@@ -200,7 +200,8 @@ if(expectedWeekly){
 if(!html.includes('class="home-band home-band-now"') || !html.includes('id="homeNowTitle"') || !html.includes('class="home-band home-band-story"') || !html.includes('class="home-band home-band-archive"')){
   throw new Error('Homepage must preserve the Now, Story, and Archive hierarchy.');
 }
-if(!html.includes('See This Week') || !html.includes('Explore History') || !html.includes('Search Transaction Archive')){
+/* The masthead jump buttons were retired for the numbered desk index (1 Current Week … 7 Championship Odds). */
+if(!html.includes('<a href="#weekBoard">1 Current Week</a>') || html.includes('class="hero-buttons"') || !html.includes('Explore History') || !html.includes('Search Transaction Archive')){
   throw new Error('Homepage hierarchy needs direct current-week and archive actions.');
 }
 const stateScripts = ['js/transactions.js','js/site-ui.js','js/history-layout.js','js/intelligence.js','js/banner-wall.js','js/title-odds.js'];

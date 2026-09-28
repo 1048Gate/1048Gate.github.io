@@ -28,7 +28,7 @@ window.gateSupabaseReady = new Promise(resolve => {
   const authMount = document.getElementById('authControlMount') || document.querySelector('.topbar-inner');
   const authControl = document.createElement('div');
   authControl.className = 'auth-control';
-  authControl.innerHTML = '<span class="auth-user" id="authUserLabel">Guest</span><button class="btn btn-ghost" id="authButton">Sign in</button>';
+  authControl.innerHTML = '<span class="auth-user is-guest" id="authUserLabel">Guest</span><button class="btn btn-ghost" id="authButton">Sign in</button>';
   authMount?.appendChild(authControl);
 
   const modal = document.createElement('div');
@@ -181,6 +181,7 @@ window.gateSupabaseReady = new Promise(resolve => {
       label.textContent = 'Guest';
       btn.textContent = 'Sign in';
     }
+    label.classList.toggle('is-guest', !user);
     emitAuth();
   }
 

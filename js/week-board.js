@@ -51,12 +51,15 @@
     return `week-game-side is-${which}${lead}`;
   }
 
-  function sideHtml(side, className, escapeHtml){
+  /* One matchup side as a single reference-table row: team (one line, ellipsis),
+     manager beneath, score at the right. The margin rides with the leading side. */
+  function sideHtml(side, className, escapeHtml, margin){
     const score = side?.score == null ? '\u2014' : pointsLine(side.score);
+    const team = side?.team || 'Team';
+    const owner = side?.owner || '';
     return `<div class="${className}">
-      <span class="week-card-owner">${escapeHtml(side?.owner || '')}</span>
-      <strong>${escapeHtml(side?.team || 'Team')}</strong>
-      <b>${escapeHtml(score)}</b>
+      <span class="week-card-name"><strong title="${escapeHtml(team)}">${escapeHtml(team)}</strong><span class="week-card-owner"${owner ? ` title="${escapeHtml(owner)}"` : ''}>${escapeHtml(owner)}</span></span>
+      <span class="week-card-score"><b>${escapeHtml(score)}</b>${margin ? `<span class="week-card-margin">${escapeHtml(margin)}</span>` : ''}</span>
     </div>`;
   }
 
@@ -73,16 +76,17 @@
     const esc = escapeHtml || (value => String(value ?? ''));
     const state = normalizedState(game?.state);
     const leader = leaderSide(game);
-    const vs = state === 'live' ? 'live' : state === 'final' ? 'final' : 'at';
-    return `<article class="week-game week-card is-${esc(state)}" data-state="${esc(state)}">
+    const margin = marginCopy(game);
+    /* A lead attaches to the leading side; a tie (no leader) stays in the status line. */
+    const statusNote = margin && !leader ? margin : '';
+    return `<article class="week-game week-card is-${esc(state)}" data-state="${esc(state)}"${leader ? ` data-leader="${leader}"` : ''}>
       <header class="week-card-status">
-        <span class="week-card-badge">${statusLabel(state)}</span>
-        <span class="week-card-margin">${esc(marginCopy(game))}</span>
+        <span class="week-card-badge">${statusLabel(state)}</span>${statusNote ? `
+        <span class="week-card-margin">${esc(statusNote)}</span>` : ''}
       </header>
       <div class="week-card-sides">
-        ${sideHtml(game?.away, sideClass('away', leader), esc)}
-        <div class="week-game-vs">${vs}</div>
-        ${sideHtml(game?.home, sideClass('home', leader), esc)}
+        ${sideHtml(game?.away, sideClass('away', leader), esc, leader === 'away' ? margin : '')}
+        ${sideHtml(game?.home, sideClass('home', leader), esc, leader === 'home' ? margin : '')}
       </div>
     </article>`;
   }

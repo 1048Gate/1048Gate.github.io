@@ -122,45 +122,22 @@ function firstMatch(selectors){
 }
 
 function renderPulse(config, board){
-  const favorite = Array.isArray(config.futures) ? config.futures[0] : null;
   if(!board) return;
   const lede = firstMatch(['[data-home-lede]', '.hero-copy > p:not(.hero-tagline)']);
-  if(lede) lede.textContent = homeLede(board, favorite);
+  if(lede) lede.textContent = homeLede(board);
 }
 
-function tableLine(standings){
-  if(!standings.length) return '—';
-  const records = new Set(standings.map(recordLine));
-  if(records.size === 1){
-    const only = [...records][0];
-    return only === '0-0' ? 'All 0–0' : `All ${only}`;
-  }
-  const leader = standings[0];
-  return `${leader.owner || leader.team || 'Leader'} ${recordLine(leader)}`;
-}
-
-function homeLede(board, favorite){
-  const week = board.phase || (board.week ? `Week ${board.week}` : 'This week');
+/* Masthead status line: game state only. Week, standings, and odds each have
+   their own numbered section, so the masthead does not restate them. */
+function homeLede(board){
   const games = Array.isArray(board.matchups) ? board.matchups.length : 0;
   const live = (board.matchups || []).filter(game => game.state === 'live').length;
   const final = (board.matchups || []).filter(game => game.state === 'final').length;
-  const table = tableLine(board.standings || []);
-  const favoriteText = favorite?.name && favorite?.odds
-    ? `${favorite.name} enters ${week} as the league-office favorite at ${favorite.odds}.`
-    : 'League-office championship odds are posted.';
-  if(live === 1){
-    return `${week} is live. One game is scoring. ${favoriteText}`;
-  }
-  if(live){
-    return `${week} is live. ${live} of ${games} games are scoring. ${favoriteText}`;
-  }
-  if(final === games && games){
-    return `${week} is final. ${table === 'All 0–0' ? 'The table is even.' : `${table} leads the table.`} ${favoriteText}`;
-  }
-  if(table === 'All 0–0'){
-    return `${week} is on the board. ${games} matchups, a 0–0 table. ${favoriteText}`;
-  }
-  return `${week} is on the board. ${games} matchups; ${table} leads the table. ${favoriteText}`;
+  if(!games) return 'Matchups not posted yet.';
+  if(live) return `${live} of ${games} games live${final ? `, ${final} final` : ''}.`;
+  if(final === games) return `All ${games} games final.`;
+  if(final) return `${final} of ${games} games final; ${games - final} yet to start.`;
+  return `${games} matchups posted; no points yet.`;
 }
 
 function recordLine(team){
@@ -323,5 +300,29 @@ async function loadAnnouncementsHome(){
 }
 
 window.gateHomeAnnouncements = Object.freeze({load: loadAnnouncementsHome});
+
+/* Sticky header offset: measure the real sticky header (brand bar + tabs, or the
+   brand bar alone on phones) and publish it as --sticky-offset so anchor jumps,
+   scrollIntoView, and keyboard paging all clear it. CSS keeps static fallbacks. */
+(function syncStickyOffset(){
+  const bar = document.querySelector('.topbar');
+  if(!bar) return;
+  const GAP = 8;
+  let last = '';
+  const apply = () => {
+    const height = Math.ceil(bar.getBoundingClientRect().height);
+    if(!height) return;
+    const value = `${height + GAP}px`;
+    if(value === last) return;
+    last = value;
+    document.documentElement.style.setProperty('--sticky-offset', value);
+    document.documentElement.style.setProperty('--sticky-header-height', `${height}px`);
+  };
+  apply();
+  if('ResizeObserver' in window) new ResizeObserver(apply).observe(bar);
+  window.addEventListener('resize', apply, {passive:true});
+  window.addEventListener('orientationchange', apply, {passive:true});
+  window.gateStickyOffset = Object.freeze({refresh:apply});
+})();
 window.addEventListener('gate-supabase-ready', () => loadAnnouncementsHome());
 if(window.gateSupabase) loadAnnouncementsHome();
