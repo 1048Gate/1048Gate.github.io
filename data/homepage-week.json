@@ -5,7 +5,7 @@
   "week": 3,
   "phase": "Week 3",
   "status": "live",
-  "last_updated": "2026-09-28T15:42:08.864922+00:00",
+  "last_updated": "2026-09-28T16:12:11.043552+00:00",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -401,7 +401,7 @@
       "id": "odds",
       "label": "Odds board",
       "title": "Thomas Speer +300",
-      "detail": "The current championship favorite. Open the full board for every club.",
+      "detail": "Enters Week 3 as the league-office favorite. Full board below.",
       "scrollTo": "championshipOdds"
     },
     {
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-28T15:42:08.864922+00:00",
+    "week_fetched_at": "2026-09-28T16:12:11.043552+00:00",
     "edition_published_at": "2026-09-27T13:58:56.552252Z",
-    "payload_built_at": "2026-09-28T15:42:09.161Z",
+    "payload_built_at": "2026-09-28T16:12:11.311Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
