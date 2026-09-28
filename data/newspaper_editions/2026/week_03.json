@@ -4,7 +4,7 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 3,
-  "generated_at": "2026-09-28T16:44:40.832210Z",
+  "generated_at": "2026-09-28T16:45:37.200957Z",
   "source_status": "verified_live",
   "validation_status": "valid",
   "editorial_policy": {
@@ -21,7 +21,7 @@
   "standfirst": "Week 3 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
   "lead": {
     "title": "Inside Week 3: the high score, the table lead, and the closest call",
-    "body": "Howya Been's (Bryan Hunt) sits first in the completed-results table at 2-0 with 280.68 points for. On the live Week 3 board, Madison Beer Garden (George Travis) owns the high score at 171.58, while The Buwhops (Brian Heino) is at 55.80. Those live scores can still change.",
+    "body": "Howya Been's (Bryan Hunt) is first in the completed-results table at 2-0 with 280.68 points for. On the live Week 3 board, Madison Beer Garden (George Travis) currently has the high score at 171.58, while The Buwhops (Brian Heino) is at 55.80. Those live scores can still change.",
     "sourceIds": [
       "current-season",
       "power-rankings"
@@ -160,7 +160,7 @@
   },
   "recordWatch": {
     "title": "Record to watch: the first benchmark is on the board",
-    "body": "The live Week 3 board has not yet topped the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+    "body": "The live Week 3 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
     "sourceIds": [
       "current-season",
       "matchups"
@@ -359,7 +359,7 @@
     {
       "story_type": "matchup_recap",
       "title": "Week 3: Live league board",
-      "body": "Trevor Hash has JD Daley chasing at 144.74–69.66. Collin Krum is in front of Thomas Speer 136.74–89.24. Jared Hall holds a slim lead over Bryan Hunt 132.60–131.06. George Travis has opened a commanding gap on Brian Heino 171.58–55.80. Kyle Fowler edges James Brochu 100.84–99.78. Vincent Cannarozzi leads German Haro 120.04–108.66.",
+      "body": "Trevor Hash leads JD Daley 144.74–69.66. Collin Krum leads Thomas Speer 136.74–89.24. Jared Hall leads Bryan Hunt 132.60–131.06. George Travis leads Brian Heino 171.58–55.80. Kyle Fowler leads James Brochu 100.84–99.78. Vincent Cannarozzi leads German Haro 120.04–108.66.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=3;matchups",
@@ -368,8 +368,8 @@
     },
     {
       "story_type": "biggest_win",
-      "title": "George Travis owns the widest live edge",
-      "body": "George Travis currently has Brian Heino at arm’s length, leading 171.58–55.80 for a live margin of 115.78 points.",
+      "title": "George Travis holds the widest live edge",
+      "body": "George Travis currently leads Brian Heino 171.58–55.80, a live margin of 115.78 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=3;matchups",
@@ -379,8 +379,8 @@
     },
     {
       "story_type": "closest_game",
-      "title": "Kyle Fowler clings to the narrowest live edge",
-      "body": "The day’s tightest live matchup sits at 100.84–99.78, with Kyle Fowler just 1.06 points ahead of James Brochu.",
+      "title": "Kyle Fowler has the narrowest live edge",
+      "body": "The tightest live matchup stands 100.84–99.78, with Kyle Fowler ahead of James Brochu by 1.06 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=3;matchups",
@@ -391,7 +391,7 @@
     {
       "story_type": "scoring_leaders",
       "title": "George Travis sets the current Week 3 pace",
-      "body": "George Travis is setting the league’s current high-water mark at 171.58. Brian Heino sits at the board-low 55.80; both scores can still move.",
+      "body": "George Travis currently has the league-high 171.58. Brian Heino is at the current board-low 55.80; both scores can still move.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=3;matchups",
@@ -401,8 +401,8 @@
     },
     {
       "story_type": "standings",
-      "title": "Bryan Hunt tops the completed-results table",
-      "body": "With Week 3 live, Bryan Hunt sits first at 2-0 with 280.68 points for from completed results.",
+      "title": "Bryan Hunt leads the completed-results table",
+      "body": "During live Week 3, Bryan Hunt is listed first at 2-0 with 280.68 points for from completed results.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=3;standings",
@@ -413,7 +413,7 @@
     {
       "story_type": "record_watch",
       "title": "Live record watch",
-      "body": "The live Week 3 board has not yet topped the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+      "body": "The live Week 3 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
       "source": {
         "dataset": "data/current-season.json + data/matchups.json",
         "locator": "week=3;records",
@@ -430,6 +430,5 @@
         "description": "All-time head-to-head archive"
       }
     }
-  ],
-  "writing_mode": "openai_verified_rewrite"
+  ]
 }
