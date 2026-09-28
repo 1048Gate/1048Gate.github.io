@@ -43,7 +43,7 @@
     const lead = state === 'recap' ? feature : state === 'offseason' ? prep : null;
     place([lead, state !== 'offseason' ? scoreboard : null], heading);
     if(prep) prep.hidden=state!=='offseason';
-    place([state !== 'recap' ? feature : null, pulse, odds], story.querySelector('.home-band-head'));
+    /* desk order handled above */
     place([orientation,dashboard],archive.querySelector('.home-band-head'));
     if(state === 'offseason' && scoreboard && story.lastElementChild !== scoreboard) story.append(scoreboard);
     home.dataset.homeState = state;
@@ -56,10 +56,16 @@
       primary.dataset.scrollTo = state === 'recap' ? 'homeWeeklyFeature' : state === 'offseason' ? 'homeSeasonPrep' : 'weekBoard';
       primary.textContent = state === 'recap' ? 'Read This Week' : state === 'offseason' ? 'Draft & Keepers' : state === 'final' ? 'See Final Scores' : 'See This Week';
     }
-    const lede = home.querySelector('.hero-copy > p:not(.hero-tagline)');
-    if(lede && ['live','upcoming'].includes(state)) lede.textContent = `${board.phase || `Week ${board.week}`} ${state === 'live' ? 'is in progress' : 'is on the board'}. Follow the matchups, standings, and championship odds.`;
-    if(lede && state === 'offseason') lede.textContent = 'Prepare for the next season: keepers, the draft board, and the league story.';
-    if(lede && ['recap','final'].includes(state)) lede.textContent = `${board.phase || `Week ${board.week}`} is final. ${state === 'recap' ? 'Catch up on the weekly edition, then see the results and standings.' : 'See the results and standings while the weekly recap is prepared.'}`;
+    const lede = home.querySelector('[data-home-lede], .hero-copy > p:not(.hero-tagline)');
+    /* site-ui.js owns the live/upcoming lede from board + odds; only fill the states it skips. */
+    if(lede && state === 'offseason') lede.textContent = 'Offseason desk: keepers, the draft board, and the archive.';
+    if(lede && ['recap','final'].includes(state)) lede.textContent = `${board.phase || `Week ${board.week}`} is final. ${state === 'recap' ? 'Weekly edition below, then the results and standings.' : 'Results and standings are posted; the weekly recap is still being prepared.'}`;
+
+    /* Keep the numbered desk sections in order under the Story band. */
+    const storyHead = story.querySelector('.home-band-head');
+    const deskIds = ['deskStandings','deskLeaders','deskPlayoff','deskTransactions','deskHistory'];
+    const deskNodes = deskIds.map(id => document.getElementById(id)).filter(Boolean);
+    place([...deskNodes, odds, state !== 'recap' ? feature : null, pulse], storyHead);
   }
   function openDraftArchive(){
     window.switchView?.('history', {scroll:false});

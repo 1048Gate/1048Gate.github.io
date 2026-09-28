@@ -20,10 +20,16 @@
   ]);
   const isOffseason=config=>/pre[ -]?season|off[ -]?season|draft|keeper/i.test(config?.phase||'');
 
+  function weekPhrase(config){
+    const phase=clean(config?.phase);
+    if(/^Week\s+\d+/i.test(phase)) return `Enters ${phase}`;
+    return 'Listed';
+  }
+
   function oddsCard(config){
     const favorite=Array.isArray(config?.futures)?config.futures[0]:null;
     if(!favorite?.name||!favorite?.odds) return null;
-    return {id:'odds',label:'Odds board',title:`${favorite.name} ${favorite.odds}`,detail:'The current championship favorite. Open the full board for every club.',scrollTo:'championshipOdds'};
+    return {id:'odds',label:'Odds board',title:`${favorite.name} ${favorite.odds}`,detail:`${weekPhrase(config)} as the league-office favorite. Full board below.`,scrollTo:'championshipOdds'};
   }
 
   function playoffCard(board){
@@ -160,6 +166,8 @@
     const host=document.querySelector('[data-league-pulse]');
     if(!host||!cards.length) return;
     if(latestTransaction) cards=cards.map(card=>card.id==='transactions'?transactionCard(latestTransaction):card);
+    /* Prebuilt payloads may carry older odds copy; rebuild that card from site.json when it is loaded. */
+    if(window.gateSiteConfig) cards=cards.map(card=>card.id==='odds'?(oddsCard(window.gateSiteConfig)||card):card);
     host.innerHTML=cards.map(cardHtml).join('');
     const section=document.getElementById('leaguePulse');
     if(section) section.dataset.pulseSource=saved?'saved':'current';

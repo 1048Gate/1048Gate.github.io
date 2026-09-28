@@ -59,30 +59,32 @@ function renderFutures(config){
     return;
   }
   const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
-  const preview = 3;
+  const implied = odds => {
+    const match = /^\s*([+-])(\d+(?:\.\d+)?)\s*$/.exec(String(odds ?? ''));
+    if(!match) return '—';
+    const price = Number(match[2]);
+    const p = match[1] === '+' ? 100 / (price + 100) : price / (price + 100);
+    return `${(p * 100).toFixed(1)}%`;
+  };
+  const preview = 6;
   target.classList.toggle('is-collapsed', futures.length > preview);
-  target.innerHTML = futures.map((entry, index) => `
-    <div class="futures-row${index === 0 ? ' is-favorite' : ''}">
-      <span class="futures-odds">${escapeHtml(entry.odds || '')}</span>
-      <div class="futures-body">
-        <strong>${escapeHtml(entry.name || '')}</strong>
-        <p>${escapeHtml(entry.case || '')}</p>
-      </div>
-    </div>`).join('');
-  if(status) status.textContent=`Live · ${futures.length} clubs priced`;
+  target.classList.add('futures-table-host');
+  target.innerHTML = `<div class="desk-scroll"><table class="desk-table futures-table"><thead><tr><th class="num">Rk</th><th>Manager</th><th class="num">Odds</th><th class="num" title="Implied probability from the American price, before removing the office margin">Impl.</th><th class="futures-case-head">Office note</th></tr></thead><tbody>${futures.map((entry, index) => `
+    <tr class="futures-row${index === 0 ? ' is-favorite' : ''}"><td class="num">${index + 1}</td><td class="desk-strong">${escapeHtml(entry.name || '')}</td><td class="num futures-odds">${escapeHtml(entry.odds || '')}</td><td class="num">${implied(entry.odds)}</td><td class="futures-case">${escapeHtml(entry.case || '')}</td></tr>`).join('')}</tbody></table></div>`;
+  if(status) status.textContent=`${futures.length} clubs priced`;
   const method=document.querySelector('[data-futures-method]');
-  if(method) method.textContent=`League-office futures · ${config.phase || `Season ${config.seasonYear}`} board · Not sportsbook lines`;
+  if(method) method.textContent=`League-office futures · ${config.phase || `Season ${config.seasonYear}`} board · Not sportsbook lines · Implied % includes the office margin`;
   document.getElementById('futuresExpand')?.remove();
   if(futures.length <= preview) return;
   const button = document.createElement('button');
   button.type = 'button';
   button.id = 'futuresExpand';
   button.className = 'btn btn-ghost home-expand-btn';
-  button.textContent = 'Show the rest';
+  button.textContent = 'Show all clubs';
   button.setAttribute('aria-expanded', 'false');
   button.addEventListener('click', () => {
     const collapsed = target.classList.toggle('is-collapsed');
-    button.textContent = collapsed ? 'Show the rest' : 'Show top 3';
+    button.textContent = collapsed ? 'Show all clubs' : 'Show top 6';
     button.setAttribute('aria-expanded', String(!collapsed));
   });
   target.insertAdjacentElement('afterend', button);
@@ -141,18 +143,24 @@ function homeLede(board, favorite){
   const week = board.phase || (board.week ? `Week ${board.week}` : 'This week');
   const games = Array.isArray(board.matchups) ? board.matchups.length : 0;
   const live = (board.matchups || []).filter(game => game.state === 'live').length;
+  const final = (board.matchups || []).filter(game => game.state === 'final').length;
   const table = tableLine(board.standings || []);
-  const favoriteText = favorite?.name && favorite?.odds ? `${favorite.name} is ${favorite.odds}.` : 'Championship odds are posted.';
+  const favoriteText = favorite?.name && favorite?.odds
+    ? `${favorite.name} enters ${week} as the league-office favorite at ${favorite.odds}.`
+    : 'League-office championship odds are posted.';
   if(live === 1){
-    return `${week} is live. 1 game is scoring. ${favoriteText}`;
+    return `${week} is live. One game is scoring. ${favoriteText}`;
   }
   if(live){
     return `${week} is live. ${live} of ${games} games are scoring. ${favoriteText}`;
   }
-  if(table === 'All 0–0'){
-    return `${week} is on the board. ${games} matchups, a 0–0 table, and the championship odds are live off the rosters.`;
+  if(final === games && games){
+    return `${week} is final. ${table === 'All 0–0' ? 'The table is even.' : `${table} leads the table.`} ${favoriteText}`;
   }
-  return `${week} is on the board. ${games} matchups, ${table.toLowerCase()} leads the table. ${favoriteText}`;
+  if(table === 'All 0–0'){
+    return `${week} is on the board. ${games} matchups, a 0–0 table. ${favoriteText}`;
+  }
+  return `${week} is on the board. ${games} matchups; ${table} leads the table. ${favoriteText}`;
 }
 
 function recordLine(team){
