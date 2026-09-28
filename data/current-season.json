@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 3,
   "phase": "Week 3",
-  "fetchedAt": "2026-09-28T02:11:17.968972+00:00",
+  "fetchedAt": "2026-09-28T02:41:21.705998+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "standings": [
@@ -185,13 +185,13 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 133.34
+        "score": 134.94
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 84.74
+        "score": 87.84
       }
     },
     {
@@ -231,7 +231,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 162.98
+        "score": 165.38
       }
     },
     {
