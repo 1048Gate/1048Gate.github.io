@@ -5,7 +5,7 @@
   "week": 3,
   "phase": "Week 3",
   "status": "live",
-  "last_updated": "2026-09-28T16:42:13.273653+00:00",
+  "last_updated": "2026-09-28T16:44:40.725376+00:00",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -278,13 +278,13 @@
   "featured_story": {
     "season": 2026,
     "week": 3,
-    "headline": "Collin Krum sets the Week 3 pace as the table takes shape",
+    "headline": "George Travis sets the Week 3 pace as the table takes shape",
     "standfirst": "Week 3 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
     "path": "data/newspaper_editions/2026/week_03.json",
     "source_status": "verified_live",
     "validation_status": "valid",
     "status": "live",
-    "generated_at": "2026-09-27T13:58:56.552252Z",
+    "generated_at": "2026-09-28T16:44:40.832210Z",
     "table_leader": {
       "rank": 1,
       "team": "Howya Been's",
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-28T16:42:13.273653+00:00",
-    "edition_published_at": "2026-09-27T13:58:56.552252Z",
-    "payload_built_at": "2026-09-28T16:42:13.614Z",
+    "week_fetched_at": "2026-09-28T16:44:40.725376+00:00",
+    "edition_published_at": "2026-09-28T16:44:40.832210Z",
+    "payload_built_at": "2026-09-28T16:44:53.681Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
