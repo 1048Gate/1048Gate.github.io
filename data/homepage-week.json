@@ -5,7 +5,7 @@
   "week": 3,
   "phase": "Week 3",
   "status": "live",
-  "last_updated": "2026-09-29T01:12:09.567778+00:00",
+  "last_updated": "2026-09-29T01:42:05.939827+00:00",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,7 +19,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 69.96
+        "score": 69.56
       },
       "home": {
         "teamId": 15,
@@ -65,7 +65,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 134.76
+        "score": 135.56
       }
     },
     {
@@ -79,7 +79,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 63.64
+        "score": 73.74
       },
       "home": {
         "teamId": 1,
@@ -105,7 +105,7 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 104.64
+        "score": 111.94
       }
     },
     {
@@ -379,8 +379,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "Jigalos Jims / 1912 Titanic Swimteam",
-      "detail": "1.1 points apart · Live",
+      "title": "No More Darties in LA / Howya Been's",
+      "detail": "3 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-29T01:12:09.567778+00:00",
+    "week_fetched_at": "2026-09-29T01:42:05.939827+00:00",
     "edition_published_at": "2026-09-28T16:45:37.200957Z",
-    "payload_built_at": "2026-09-29T01:12:09.887Z",
+    "payload_built_at": "2026-09-29T01:42:06.135Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

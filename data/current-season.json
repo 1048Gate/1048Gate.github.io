@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 3,
   "phase": "Week 3",
-  "fetchedAt": "2026-09-29T01:12:09.567778+00:00",
+  "fetchedAt": "2026-09-29T01:42:05.939827+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 69.96
+        "score": 69.56
       },
       "home": {
         "teamId": 15,
@@ -211,7 +211,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 134.76
+        "score": 135.56
       }
     },
     {
@@ -225,7 +225,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 63.64
+        "score": 73.74
       },
       "home": {
         "teamId": 1,
@@ -251,7 +251,7 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 104.64
+        "score": 111.94
       }
     },
     {
