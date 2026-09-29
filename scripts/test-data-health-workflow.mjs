@@ -10,6 +10,7 @@ const rolloverStep = workflow.match(/- name: Finalize outgoing newspaper before 
 assert.ok(rolloverStep, 'rollover finalization step should exist before the public board publish');
 assert.match(rolloverStep, /--output "\$CANDIDATE" --no-sync-site-phase/);
 assert.match(rolloverStep, /--week "\$SAVED_WEEK"/);
+assert.match(rolloverStep, /update_matchup_leaderboards\.py[\s\S]*npm run futures[\s\S]*generate_newspaper\.py/);
 assert.match(rolloverStep, /FINAL_STATUS/);
 assert.match(rolloverStep, /verified_final/);
 assert.match(rolloverStep, /refusing to advance the public board/);
@@ -18,8 +19,9 @@ assert.ok(
   'outgoing newspaper must finalize before current-season.json advances to the next week',
 );
 
-const newspaperStep = workflow.match(/- name: Generate weekly newspaper[\s\S]*?(?=\n\s*- name: Refresh championship odds)/)?.[0] || '';
+const newspaperStep = workflow.match(/- name: Generate weekly newspaper[\s\S]*?(?=\n\s*- name: Rebuild the homepage week payload)/)?.[0] || '';
 assert.ok(newspaperStep, 'newspaper step should exist');
+assert.ok(workflow.indexOf('- name: Refresh completed scores and weekly ratings') < workflow.indexOf('- name: Generate weekly newspaper'));
 assert.match(newspaperStep, /github\.event_name == 'workflow_dispatch'/);
 assert.match(newspaperStep, /github\.event\.schedule == '15 8 \* \* \*'/);
 assert.match(newspaperStep, /github\.event\.schedule == '20 12 \* \* 2'/);

@@ -251,7 +251,10 @@ const previous = new Map((config.futures || []).map(f => [clean(f.name), f]));
 config.futures = ratings.map((r, i) => ({
   name: r.name,
   odds: `+${americanOdds(probs[i])}`,
-  case: previous.get(r.name)?.case || ''
+  case: r.current
+    ? `${r.current.wins}-${r.current.losses}${r.current.ties ? `-${r.current.ties}` : ''} · ${r.current.pfpg.toFixed(2)} PF/G through ${currentSeason.games}. Draft note: ${previous.get(r.name)?.draftCase || previous.get(r.name)?.case || ''}`
+    : previous.get(r.name)?.draftCase || previous.get(r.name)?.case || '',
+  ...(r.current ? {draftCase: previous.get(r.name)?.draftCase || previous.get(r.name)?.case || ''} : {})
 }));
 
 const unmatched = [...previous.keys()].filter(name => !ratings.some(r => r.name === name));
