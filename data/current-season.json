@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 3,
   "phase": "Week 3",
-  "fetchedAt": "2026-09-29T01:42:05.939827+00:00",
+  "fetchedAt": "2026-09-29T02:12:05.255794+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "standings": [
@@ -211,7 +211,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 135.56
+        "score": 136.56
       }
     },
     {
@@ -225,7 +225,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 73.74
+        "score": 75.14
       },
       "home": {
         "teamId": 1,
@@ -245,7 +245,7 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 105.78
+        "score": 104.78
       },
       "home": {
         "teamId": 4,
