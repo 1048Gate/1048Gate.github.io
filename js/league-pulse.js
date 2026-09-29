@@ -62,7 +62,9 @@
   }
 
   function recordCard(board,archive){
-    const leader=sides(board).sort((a,b)=>Number(b.score||0)-Number(a.score||0))[0];
+    const leader=sides(board).filter(side=>
+      (side.state==='live'||side.state==='final') && Number.isFinite(Number(side.score))
+    ).sort((a,b)=>Number(b.score)-Number(a.score))[0];
     const recordRow=archive?.records?.highestScore;
     const allTime=Number(Array.isArray(recordRow)?recordRow[0]:recordRow?.score);
     if(!Number.isFinite(allTime)){
@@ -87,7 +89,7 @@
     return score===opponent?'T':score>opponent?'W':'L';
   }
 
-  function streakCard(archive){
+  function streakCard(archive,board){
     const rows=Array.isArray(archive?.currentSeasonScores)?archive.currentSeasonScores:[];
     const byOwner=new Map();
     for(const row of rows){
@@ -105,7 +107,10 @@
       if(count) streaks.push({owner,team:games[0].team,type,count});
     }
     streaks.sort((a,b)=>b.count-a.count||a.owner.localeCompare(b.owner));
-    if(streaks.length){
+    const completed=Array.isArray(board?.standings) ? Math.max(0,...board.standings.map(row=>Number(row.wins||0)+Number(row.losses||0)+Number(row.ties||0))) : 0;
+    const archivedWeeks=new Set(rows.map(row=>Number(row.week))).size;
+    if(rows.length && completed && archivedWeeks<completed) return {id:'streak',label:'Form guide',title:'Recent form pending',detail:'The completed-game archive is catching up with the standings.',scrollTo:'weekBoard'};
+    if(streaks.length && (!completed || archivedWeeks>=completed)){
       const best=streaks[0],tied=streaks.filter(item=>item.count===best.count&&item.type===best.type);
       if(best.count===1&&best.type==='W'&&tied.length>1){
         return {id:'streak',label:'Form guide',title:`${tied.length} teams opened 1–0`,detail:'The first separation in the table is points for.',scrollTo:'weekBoard'};
@@ -131,8 +136,8 @@
 
   function buildCards({config={},board={},archive={}}={}){
     const cards=isOffseason(config)
-      ? [draftCard(config),transactionFallback(),oddsCard(config),recordCard(null,archive),streakCard(archive)]
-      : [matchupCard(board),playoffCard(board),transactionFallback(),oddsCard(config),recordCard(board,archive),streakCard(archive)];
+      ? [draftCard(config),transactionFallback(),oddsCard(config),recordCard(null,archive),streakCard(archive,board)]
+      : [matchupCard(board),playoffCard(board),transactionFallback(),oddsCard(config),recordCard(board,archive),streakCard(archive,board)];
     return cards.filter(Boolean);
   }
 

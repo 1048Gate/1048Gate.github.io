@@ -242,95 +242,95 @@
     {
       "owner": "Bryan Hunt",
       "team": "Howya Been's",
-      "rating": "87.5",
+      "rating": "89.0",
       "record": "3-0",
       "why": "140.85 PF/G",
       "rank": 1
     },
     {
-      "owner": "James Brochu",
-      "team": "Jigalos Jims",
-      "rating": "68.1",
-      "record": "2-1",
-      "why": "112.51 PF/G",
-      "rank": 2
-    },
-    {
       "owner": "George Travis",
       "team": "Madison Beer Garden",
-      "rating": "67.3",
+      "rating": "76.0",
       "record": "3-0",
       "why": "136.61 PF/G",
-      "rank": 3
+      "rank": 2
     },
     {
       "owner": "Trevor Hash",
       "team": "Team Hash",
-      "rating": "67.1",
+      "rating": "73.0",
       "record": "2-1",
       "why": "150.60 PF/G",
-      "rank": 4
+      "rank": 3
     },
     {
       "owner": "Kyle Fowler",
       "team": "1912 Titanic Swimteam",
-      "rating": "60.4",
+      "rating": "61.7",
       "record": "2-1",
       "why": "123.98 PF/G",
-      "rank": 5
-    },
-    {
-      "owner": "Thomas Speer",
-      "team": "Your Reigning Champ",
-      "rating": "57.3",
-      "record": "1-2",
-      "why": "116.30 PF/G",
-      "rank": 6
+      "rank": 4
     },
     {
       "owner": "Vincent Cannarozzi",
       "team": "McConkey Tonk Badonkadonk",
-      "rating": "54.2",
+      "rating": "59.0",
       "record": "2-1",
       "why": "122.13 PF/G",
+      "rank": 5
+    },
+    {
+      "owner": "James Brochu",
+      "team": "Jigalos Jims",
+      "rating": "48.3",
+      "record": "2-1",
+      "why": "112.51 PF/G",
+      "rank": 6
+    },
+    {
+      "owner": "Thomas Speer",
+      "team": "Your Reigning Champ",
+      "rating": "41.8",
+      "record": "1-2",
+      "why": "116.30 PF/G",
       "rank": 7
     },
     {
-      "owner": "JD Daley",
-      "team": "Ja'Marr-a-Lago",
-      "rating": "44.5",
+      "owner": "Jared Hall",
+      "team": "No More Darties in LA",
+      "rating": "34.4",
       "record": "0-3",
-      "why": "113.81 PF/G",
+      "why": "118.63 PF/G",
       "rank": 8
     },
     {
       "owner": "German Haro",
       "team": "Ice Has Me Running Back",
-      "rating": "40.6",
+      "rating": "31.4",
       "record": "1-2",
       "why": "105.87 PF/G",
       "rank": 9
     },
     {
-      "owner": "Brian Heino",
-      "team": "The Buwhops",
-      "rating": "39.6",
-      "record": "1-2",
-      "why": "88.47 PF/G",
+      "owner": "JD Daley",
+      "team": "Ja'Marr-a-Lago",
+      "rating": "31.1",
+      "record": "0-3",
+      "why": "113.81 PF/G",
       "rank": 10
     },
     {
-      "owner": "Jared Hall",
-      "team": "No More Darties in LA",
-      "rating": "33.5",
-      "record": "0-3",
-      "why": "118.63 PF/G",
+      "owner": "Brian Heino",
+      "team": "The Buwhops",
+      "rating": "26.7",
+      "record": "1-2",
+      "why": "88.47 PF/G",
       "rank": 11
     },
     {
       "owner": "Collin Krum",
       "team": "Breezin’ with Bijan",
-      "rating": "5.9",
+      "rating": "24.9",
       "record": "1-2",
       "why": "95.98 PF/G",
       "rank": 12

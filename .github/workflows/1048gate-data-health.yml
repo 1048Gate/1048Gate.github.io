@@ -119,6 +119,8 @@ jobs:
 
           echo "ESPN advanced to Week $DETECTED_WEEK while Week $SAVED_WEEK newspaper is ${EXISTING_STATUS:-missing}; finalizing the outgoing week first."
           python3 scripts/publish_current_season.py --season "$SEASON" --week "$SAVED_WEEK"
+          python3 scripts/update_matchup_leaderboards.py
+          npm run futures
           python3 scripts/generate_newspaper.py --season "$SEASON" --week "$SAVED_WEEK" --writing auto
 
           FINAL_STATUS="$(python3 -c 'import json,sys; data=json.load(open("data/newspaper_editions/index.json")); season=int(sys.argv[1]); week=int(sys.argv[2]); entry=next((item for item in data.get("editions", []) if item.get("season")==season and item.get("week")==week and item.get("validation_status")=="valid"), {}); print(entry.get("source_status", ""))' "$SEASON" "$SAVED_WEEK")"
@@ -142,6 +144,10 @@ jobs:
             SEASON=2026
           fi
           python3 scripts/publish_current_season.py --season "$SEASON" "${WEEK_ARGS[@]}"
+      - name: Refresh completed scores and weekly ratings
+        run: |
+          python3 scripts/update_matchup_leaderboards.py
+          npm run futures
       # Score refreshes run frequently during NFL windows. Do not regenerate the
       # newspaper on those half-hour refreshes: it creates editorial churn from
       # partial games and makes the score pipeline slower. The paper gets one
@@ -179,10 +185,6 @@ jobs:
             echo "Verified-AI regeneration is enabled for this run only."
           fi
           python3 scripts/generate_newspaper.py "${PAPER_ARGS[@]}"
-      - name: Refresh championship odds from the updated season board
-        run: npm run futures
-      - name: Refresh all-time score leaderboards from final results
-        run: python3 scripts/update_matchup_leaderboards.py
       - name: Rebuild the homepage week payload
         run: |
           node scripts/build-homepage-week.mjs
