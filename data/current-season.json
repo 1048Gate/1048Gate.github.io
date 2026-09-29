@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 3,
   "phase": "Week 3",
-  "fetchedAt": "2026-09-29T00:42:05.109919+00:00",
+  "fetchedAt": "2026-09-29T01:12:09.567778+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "standings": [
@@ -211,7 +211,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 134.66
+        "score": 134.76
       }
     },
     {
@@ -225,7 +225,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 58.32
+        "score": 63.64
       },
       "home": {
         "teamId": 1,
@@ -245,13 +245,13 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 107.78
+        "score": 105.78
       },
       "home": {
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 100.84
+        "score": 104.64
       }
     },
     {
