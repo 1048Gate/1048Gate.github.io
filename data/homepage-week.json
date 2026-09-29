@@ -2,36 +2,16 @@
   "schemaVersion": 1,
   "season": 2026,
   "seasonNumber": 10,
-  "week": 3,
-  "phase": "Week 3",
-  "status": "live",
-  "last_updated": "2026-09-29T03:42:04.019811+00:00",
-  "note": "Week 3 in progress. Live scoring from ESPN.",
+  "week": 4,
+  "phase": "Week 4",
+  "status": "scheduled",
+  "last_updated": "2026-09-29T13:14:17.567168+00:00",
+  "note": "Week 4 slate from ESPN.",
   "matchups": [
     {
-      "id": 13,
-      "week": 3,
-      "state": "live",
-      "winner": "UNDECIDED",
-      "isPlayoff": false,
-      "matchupType": "NONE",
-      "away": {
-        "teamId": 9,
-        "team": "Ja'Marr-a-Lago",
-        "owner": "JD Daley",
-        "score": 72.76
-      },
-      "home": {
-        "teamId": 15,
-        "team": "Team Hash",
-        "owner": "Trevor Hash",
-        "score": 144.74
-      }
-    },
-    {
-      "id": 14,
-      "week": 3,
-      "state": "live",
+      "id": 19,
+      "week": 4,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -39,93 +19,113 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 136.74
+        "score": 0
       },
       "home": {
-        "teamId": 11,
-        "team": "Your Reigning Champ",
-        "owner": "Thomas Speer",
-        "score": 89.24
+        "teamId": 9,
+        "team": "Ja'Marr-a-Lago",
+        "owner": "JD Daley",
+        "score": 0
       }
     },
     {
-      "id": 15,
-      "week": 3,
-      "state": "live",
+      "id": 20,
+      "week": 4,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
+        "teamId": 15,
+        "team": "Team Hash",
+        "owner": "Trevor Hash",
+        "score": 0
+      },
+      "home": {
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 132.6
-      },
-      "home": {
-        "teamId": 5,
-        "team": "Howya Been's",
-        "owner": "Bryan Hunt",
-        "score": 141.86
+        "score": 0
       }
     },
     {
-      "id": 16,
-      "week": 3,
-      "state": "live",
+      "id": 21,
+      "week": 4,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
+        "teamId": 11,
+        "team": "Your Reigning Champ",
+        "owner": "Thomas Speer",
+        "score": 0
+      },
+      "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 77.42
-      },
-      "home": {
-        "teamId": 1,
-        "team": "Madison Beer Garden",
-        "owner": "George Travis",
-        "score": 171.58
+        "score": 0
       }
     },
     {
-      "id": 17,
-      "week": 3,
-      "state": "live",
+      "id": 22,
+      "week": 4,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
+        "teamId": 5,
+        "team": "Howya Been's",
+        "owner": "Bryan Hunt",
+        "score": 0
+      },
+      "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 98.78
-      },
-      "home": {
-        "teamId": 4,
-        "team": "1912 Titanic Swimteam",
-        "owner": "Kyle Fowler",
-        "score": 113.34
+        "score": 0
       }
     },
     {
-      "id": 18,
-      "week": 3,
-      "state": "live",
+      "id": 23,
+      "week": 4,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
+        "teamId": 1,
+        "team": "Madison Beer Garden",
+        "owner": "George Travis",
+        "score": 0
+      },
+      "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 120.04
+        "score": 0
+      }
+    },
+    {
+      "id": 24,
+      "week": 4,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
+      "isPlayoff": false,
+      "matchupType": "NONE",
+      "away": {
+        "teamId": 4,
+        "team": "1912 Titanic Swimteam",
+        "owner": "Kyle Fowler",
+        "score": 0
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 108.66
+        "score": 0
       }
     }
   ],
@@ -136,11 +136,59 @@
       "team": "Howya Been's",
       "owner": "Bryan Hunt",
       "abbrev": "HUNT",
-      "wins": 2,
+      "wins": 3,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 280.68,
-      "pointsAgainst": 261.86
+      "pointsFor": 422.54,
+      "pointsAgainst": 394.46000000000004
+    },
+    {
+      "locker": 1,
+      "teamId": 1,
+      "team": "Madison Beer Garden",
+      "owner": "George Travis",
+      "abbrev": "BDS",
+      "wins": 3,
+      "losses": 0,
+      "ties": 0,
+      "pointsFor": 409.82000000000005,
+      "pointsAgainst": 240.66000000000003
+    },
+    {
+      "locker": 12,
+      "teamId": 15,
+      "team": "Team Hash",
+      "owner": "Trevor Hash",
+      "abbrev": "HASH",
+      "wins": 2,
+      "losses": 1,
+      "ties": 0,
+      "pointsFor": 451.8,
+      "pointsAgainst": 285.5
+    },
+    {
+      "locker": 3,
+      "teamId": 4,
+      "team": "1912 Titanic Swimteam",
+      "owner": "Kyle Fowler",
+      "abbrev": "Kyle",
+      "wins": 2,
+      "losses": 1,
+      "ties": 0,
+      "pointsFor": 371.94000000000005,
+      "pointsAgainst": 372.64
+    },
+    {
+      "locker": 6,
+      "teamId": 7,
+      "team": "McConkey Tonk Badonkadonk",
+      "owner": "Vincent Cannarozzi",
+      "abbrev": "CANN",
+      "wins": 2,
+      "losses": 1,
+      "ties": 0,
+      "pointsFor": 366.40000000000003,
+      "pointsAgainst": 349.64
     },
     {
       "locker": 7,
@@ -149,34 +197,10 @@
       "owner": "James Brochu",
       "abbrev": "JIM",
       "wins": 2,
-      "losses": 0,
-      "ties": 0,
-      "pointsFor": 238.74,
-      "pointsAgainst": 170.07999999999998
-    },
-    {
-      "locker": 1,
-      "teamId": 1,
-      "team": "Madison Beer Garden",
-      "owner": "George Travis",
-      "abbrev": "BDS",
-      "wins": 2,
-      "losses": 0,
-      "ties": 0,
-      "pointsFor": 238.24,
-      "pointsAgainst": 163.24
-    },
-    {
-      "locker": 12,
-      "teamId": 15,
-      "team": "Team Hash",
-      "owner": "Trevor Hash",
-      "abbrev": "HASH",
-      "wins": 1,
       "losses": 1,
       "ties": 0,
-      "pointsFor": 307.06,
-      "pointsAgainst": 212.74
+      "pointsFor": 337.52,
+      "pointsAgainst": 283.41999999999996
     },
     {
       "locker": 9,
@@ -185,34 +209,10 @@
       "owner": "Thomas Speer",
       "abbrev": "SPEE",
       "wins": 1,
-      "losses": 1,
+      "losses": 2,
       "ties": 0,
-      "pointsFor": 259.66,
-      "pointsAgainst": 237.27999999999997
-    },
-    {
-      "locker": 3,
-      "teamId": 4,
-      "team": "1912 Titanic Swimteam",
-      "owner": "Kyle Fowler",
-      "abbrev": "Kyle",
-      "wins": 1,
-      "losses": 1,
-      "ties": 0,
-      "pointsFor": 258.6,
-      "pointsAgainst": 273.86
-    },
-    {
-      "locker": 6,
-      "teamId": 7,
-      "team": "McConkey Tonk Badonkadonk",
-      "owner": "Vincent Cannarozzi",
-      "abbrev": "CANN",
-      "wins": 1,
-      "losses": 1,
-      "ties": 0,
-      "pointsFor": 246.36,
-      "pointsAgainst": 240.98000000000002
+      "pointsFor": 348.90000000000003,
+      "pointsAgainst": 374.02
     },
     {
       "locker": 11,
@@ -221,10 +221,22 @@
       "owner": "German Haro",
       "abbrev": "HARO",
       "wins": 1,
-      "losses": 1,
+      "losses": 2,
       "ties": 0,
-      "pointsFor": 208.94,
-      "pointsAgainst": 198.62
+      "pointsFor": 317.6,
+      "pointsAgainst": 318.66
+    },
+    {
+      "locker": 10,
+      "teamId": 13,
+      "team": "Breezin’ with Bijan",
+      "owner": "Collin Krum",
+      "abbrev": "BB",
+      "wins": 1,
+      "losses": 2,
+      "ties": 0,
+      "pointsFor": 287.94,
+      "pointsAgainst": 315.74
     },
     {
       "locker": 5,
@@ -233,22 +245,10 @@
       "owner": "Brian Heino",
       "abbrev": "HEIN",
       "wins": 1,
-      "losses": 1,
-      "ties": 0,
-      "pointsFor": 187.98000000000002,
-      "pointsAgainst": 244.48
-    },
-    {
-      "locker": 8,
-      "teamId": 9,
-      "team": "Ja'Marr-a-Lago",
-      "owner": "JD Daley",
-      "abbrev": "MAGA",
-      "wins": 0,
       "losses": 2,
       "ties": 0,
-      "pointsFor": 268.68,
-      "pointsAgainst": 316.62
+      "pointsFor": 265.40000000000003,
+      "pointsAgainst": 416.06
     },
     {
       "locker": 2,
@@ -257,49 +257,49 @@
       "owner": "Jared Hall",
       "abbrev": "HALL",
       "wins": 0,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "pointsFor": 223.3,
-      "pointsAgainst": 323.18
+      "pointsFor": 355.9,
+      "pointsAgainst": 465.04
     },
     {
-      "locker": 10,
-      "teamId": 13,
-      "team": "Breezin’ with Bijan",
-      "owner": "Collin Krum",
-      "abbrev": "BB",
+      "locker": 8,
+      "teamId": 9,
+      "team": "Ja'Marr-a-Lago",
+      "owner": "JD Daley",
+      "abbrev": "MAGA",
       "wins": 0,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "pointsFor": 151.2,
-      "pointsAgainst": 226.5
+      "pointsFor": 341.44,
+      "pointsAgainst": 461.36
     }
   ],
   "featured_story": {
     "season": 2026,
     "week": 3,
     "headline": "George Travis sets the Week 3 pace as the table takes shape",
-    "standfirst": "Week 3 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
+    "standfirst": "Howya Been’s (Bryan Hunt) leads the verified table after Week 3; Howya Been’s (Bryan Hunt) survived the week’s closest finish by 9.26.",
     "path": "data/newspaper_editions/2026/week_03.json",
-    "source_status": "verified_live",
+    "source_status": "verified_final",
     "validation_status": "valid",
-    "status": "live",
-    "generated_at": "2026-09-28T16:45:37.200957Z",
+    "status": "final",
+    "generated_at": "2026-09-29T13:13:57.281338Z",
     "table_leader": {
       "rank": 1,
-      "team": "Howya Been's",
+      "team": "Howya Been’s",
       "owner": "Bryan Hunt",
-      "record": "2-0",
-      "pointsFor": "280.68",
-      "tag": "Table leader"
+      "record": "3-0",
+      "pointsFor": "422.54",
+      "tag": "Highest scoring"
     },
     "pressure": {
-      "team": "Jigalos Jims",
-      "owner": "James Brochu",
-      "record": "2-0",
+      "team": "Madison Beer Garden",
+      "owner": "George Travis",
+      "record": "3-0",
       "label": "EARLY READ",
-      "title": "Jigalos Jims keeps the leaders honest",
-      "body": "Jigalos Jims (James Brochu) sits 2-0 with 238.74 points for, the clearest early chase line behind the top spot.",
+      "title": "Madison Beer Garden keeps the leaders honest",
+      "body": "Madison Beer Garden (George Travis) sits 3-0 with 409.82 points for, the clearest early chase line behind the top spot.",
       "sourceIds": [
         "current-season",
         "seasons"
@@ -320,48 +320,48 @@
       },
       {
         "name": "Bryan Hunt",
-        "odds": "+550",
+        "odds": "+400",
         "case": "Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé."
       },
       {
+        "name": "George Travis",
+        "odds": "+750",
+        "case": "CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."
+      },
+      {
         "name": "James Brochu",
-        "odds": "+950",
+        "odds": "+1350",
         "case": "Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix."
       },
       {
         "name": "Brian Heino",
-        "odds": "+950",
+        "odds": "+1350",
         "case": "Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window."
       },
       {
-        "name": "George Travis",
-        "odds": "+1000",
-        "case": "CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."
-      },
-      {
-        "name": "JD Daley",
-        "odds": "+1350",
-        "case": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
-      },
-      {
         "name": "Trevor Hash",
-        "odds": "+1650",
+        "odds": "+1450",
         "case": "Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up."
       },
       {
-        "name": "Jared Hall",
-        "odds": "+1700",
-        "case": "Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset."
-      },
-      {
         "name": "Collin Krum",
-        "odds": "+1850",
+        "odds": "+1700",
         "case": "Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip."
       },
       {
         "name": "Vincent Cannarozzi",
-        "odds": "+2050",
+        "odds": "+2000",
         "case": "JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit."
+      },
+      {
+        "name": "JD Daley",
+        "odds": "+2000",
+        "case": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
+      },
+      {
+        "name": "Jared Hall",
+        "odds": "+2050",
+        "case": "Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset."
       },
       {
         "name": "Kyle Fowler",
@@ -378,16 +378,16 @@
   "league_pulse": [
     {
       "id": "matchup",
-      "label": "Game watch",
-      "title": "No More Darties in LA / Howya Been's",
-      "detail": "9.3 points apart · Live",
+      "label": "On deck",
+      "title": "6 matchups posted",
+      "detail": "Week 4 is ready on the league board.",
       "scrollTo": "weekBoard"
     },
     {
       "id": "playoff",
       "label": "Playoff line",
-      "title": "Kyle Fowler holds No. 6",
-      "detail": "1-1 at the cut · Vincent Cannarozzi is next",
+      "title": "James Brochu holds No. 6",
+      "detail": "2-1 at the cut · Thomas Speer is next",
       "scrollTo": "weekBoard"
     },
     {
@@ -401,14 +401,14 @@
       "id": "odds",
       "label": "Odds board",
       "title": "Thomas Speer +300",
-      "detail": "Enters Week 3 as the league-office favorite. Full board below.",
+      "detail": "Enters Week 4 as the league-office favorite. Full board below.",
       "scrollTo": "championshipOdds"
     },
     {
       "id": "record",
       "label": "Record watch",
-      "title": "George Travis · 171.6",
-      "detail": "64.1 shy of the 235.6 all-time mark",
+      "title": "Collin Krum · 0",
+      "detail": "235.6 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -420,9 +420,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-09-29T03:42:04.019811+00:00",
-    "edition_published_at": "2026-09-28T16:45:37.200957Z",
-    "payload_built_at": "2026-09-29T03:42:04.301Z",
+    "week_fetched_at": "2026-09-29T13:14:17.567168+00:00",
+    "edition_published_at": "2026-09-29T13:13:57.281338Z",
+    "payload_built_at": "2026-09-29T13:14:18.292Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
