@@ -86,6 +86,47 @@ jobs:
       - name: Test ESPN normalizers, publisher, and newspaper lifecycle
         run: |
           python3 -m unittest scripts/test_fetch_current.py scripts/test_publish_current_season.py scripts/test_update_matchup_leaderboards.py scripts/test_generate_newspaper.py
+      - name: Finalize outgoing newspaper before week rollover
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5.6-luna
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
+        run: |
+          SEASON="${{ inputs.season }}"
+          if [ -z "$SEASON" ]; then
+            SEASON=2026
+          fi
+          SAVED_WEEK="$(python3 -c 'import json; print(int(json.load(open("data/current-season.json"))["week"]))')"
+          CANDIDATE="$(mktemp)"
+          python3 scripts/publish_current_season.py --season "$SEASON" --output "$CANDIDATE" --no-sync-site-phase
+          DETECTED_WEEK="$(python3 -c 'import json,sys; print(int(json.load(open(sys.argv[1]))["week"]))' "$CANDIDATE")"
+          rm -f "$CANDIDATE"
+
+          if [ "$DETECTED_WEEK" -le "$SAVED_WEEK" ]; then
+            echo "No week rollover detected (saved Week $SAVED_WEEK, ESPN Week $DETECTED_WEEK)."
+            exit 0
+          fi
+
+          EXISTING_STATUS="$(python3 -c 'import json,sys; data=json.load(open("data/newspaper_editions/index.json")); season=int(sys.argv[1]); week=int(sys.argv[2]); entry=next((item for item in data.get("editions", []) if item.get("season")==season and item.get("week")==week and item.get("validation_status")=="valid"), {}); print(entry.get("source_status", ""))' "$SEASON" "$SAVED_WEEK")"
+          if [ "$EXISTING_STATUS" = "verified_final" ]; then
+            echo "Week $SAVED_WEEK newspaper is already verified final; rollover may proceed."
+            exit 0
+          fi
+
+          echo "ESPN advanced to Week $DETECTED_WEEK while Week $SAVED_WEEK newspaper is ${EXISTING_STATUS:-missing}; finalizing the outgoing week first."
+          python3 scripts/publish_current_season.py --season "$SEASON" --week "$SAVED_WEEK"
+          python3 scripts/generate_newspaper.py --season "$SEASON" --week "$SAVED_WEEK" --writing auto
+
+          FINAL_STATUS="$(python3 -c 'import json,sys; data=json.load(open("data/newspaper_editions/index.json")); season=int(sys.argv[1]); week=int(sys.argv[2]); entry=next((item for item in data.get("editions", []) if item.get("season")==season and item.get("week")==week and item.get("validation_status")=="valid"), {}); print(entry.get("source_status", ""))' "$SEASON" "$SAVED_WEEK")"
+          if [ "$FINAL_STATUS" != "verified_final" ]; then
+            echo "Outgoing Week $SAVED_WEEK did not finalize (status=${FINAL_STATUS:-missing}); refusing to advance the public board to Week $DETECTED_WEEK." >&2
+            exit 1
+          fi
+          echo "Finalized Week $SAVED_WEEK newspaper; Week $DETECTED_WEEK rollover may proceed."
       - name: Publish standings and scoreboard into data/current-season.json
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
