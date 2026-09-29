@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 3,
   "phase": "Week 3",
-  "fetchedAt": "2026-09-29T00:12:05.239797+00:00",
+  "fetchedAt": "2026-09-29T00:20:17.438010+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 3 in progress. Live scoring from ESPN.",
   "standings": [
@@ -211,7 +211,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 131.06
+        "score": 132.36
       }
     },
     {
@@ -245,7 +245,7 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 99.78
+        "score": 109.78
       },
       "home": {
         "teamId": 4,
