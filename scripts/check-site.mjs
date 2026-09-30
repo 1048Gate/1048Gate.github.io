@@ -506,7 +506,7 @@ if(!appSource.includes('closePhoneMore') || !appSource.includes('phoneDock') || 
   throw new Error('Phone dock navigation handlers are missing from app.js.');
 }
 if(!appSource.includes("newspaper: {view: 'office', nav: 'newspaper'") ||
-   !appSource.includes("const primaryTabViews = new Set(['home', 'league', 'wire', 'history', 'newspaper'])") ||
+   !appSource.includes("const primaryTabViews = new Set(['home', 'league', 'wire', 'history', 'newspaper', 'intel'])") ||
    !appSource.includes('function moreMenuOwns(route, key)') ||
    !appSource.includes('function toggleMoreMenu()')){
   throw new Error('Phase 4 navigation routing or More ownership logic is missing from app.js.');
