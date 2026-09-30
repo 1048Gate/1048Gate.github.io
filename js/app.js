@@ -56,7 +56,7 @@ const gateRoutes = {
   staff: {view: 'staff', nav: 'staff', event: 'staff'}
 };
 const dockViews = new Set(['home', 'league', 'wire', 'history']);
-const primaryTabViews = new Set(['home', 'league', 'wire', 'history', 'newspaper']);
+const primaryTabViews = new Set(['home', 'league', 'wire', 'history', 'newspaper', 'intel']);
 
 function moreMenuOwns(route, key){
   const phone = window.matchMedia('(max-width: 760px)').matches;
