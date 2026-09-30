@@ -324,6 +324,8 @@ td.num,th.num,td[data-align="right"]{text-align:right;}
 .week-card-status{padding:0 !important;margin:0 0 2px !important;font-size:11px !important;}
 .week-card-badge{background:transparent !important;border:0 !important;padding:0 !important;font-weight:700 !important;font-size:11px !important;color:var(--loss) !important;}
 .week-card-margin{font-size:11px !important;color:var(--muted-text) !important;}
+.week-card-context{display:block;font-size:11px !important;line-height:1.25 !important;color:var(--muted-text) !important;font-variant-numeric:tabular-nums;}
+.week-game.is-scheduled .week-card-score b{color:var(--muted-text) !important;font-weight:400 !important;}
 .week-card-sides{gap:6px !important;}
 .week-game-side{padding:0 !important;background:transparent !important;border:0 !important;}
 .week-game-side strong{font-size:13px !important;}
@@ -435,6 +437,11 @@ footer strong{color:var(--text) !important;}
   .week-standings-wrap table,.season-table-wrap table,.draft-table-wrap table,.player-table-wrap table,
   .rivalry-wrap table,.manager-weapons-wrap table{display:table;}
   th,td{padding:3px 5px !important;}
+  .week-standings-table th:nth-child(3),.week-standings-table td:nth-child(3){display:none;}
+  .week-standings-table{min-width:0 !important;width:100% !important;table-layout:auto;}
+  .week-standings-table th,.week-standings-table td{white-space:nowrap;}
+  .week-standings-table th:nth-child(2),.week-standings-table td:nth-child(2){white-space:normal;min-width:120px;}
+  .week-standings-scroll-hint{display:none !important;}
   .member-modal-card{max-width:none !important;}
   #memberModalName{font-size:18px !important;}
 }
