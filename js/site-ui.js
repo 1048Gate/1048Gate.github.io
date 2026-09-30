@@ -192,7 +192,7 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
   const weekBoard = window.gateWeekBoard;
   if(matchupsHost && matchups.length){
     matchupsHost.innerHTML = weekBoard
-      ? matchups.map(game => weekBoard.matchupCardHtml(game, escapeHtml)).join('')
+      ? matchups.map(game => weekBoard.matchupCardHtml(game, escapeHtml, standings)).join('')
       : matchups.map(game => `<article class="week-game${game.state ? ` is-${escapeHtml(game.state)}` : ''}">
       ${gameSide(game.away, 'is-away', escapeHtml)}
       <div class="week-game-vs">${game.state === 'live' ? 'live' : game.state === 'final' ? 'final' : 'at'}</div>
