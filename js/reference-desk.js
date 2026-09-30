@@ -325,7 +325,7 @@
   function renderHistory(table, config){
     if(!feeds.seasons && !feeds.matchups && !feeds.streaks){ if(feedsRequested) setHtml('history', unavailable('Archive feeds are loading or unavailable.')); return; }
     const notes = historyNotes({seasons:feeds.seasons, archive:feeds.matchups, streaks:feeds.streaks, config, table});
-    setHtml('history', notes.length ? `<ol class="desk-notes">${notes.map(note => `<li>${esc(note)}</li>`).join('')}</ol><p class="desk-foot">From the season, matchup, and streak archives (2017–present).</p>` : unavailable('Historical notes unavailable.'));
+    setHtml('history', notes.length ? `<ol class="desk-notes">${notes.map(note => `<li>${esc(note)}</li>`).join('')}</ol><p class="desk-foot"><strong>From The Book.</strong> Season, matchup, and streak archives (2017–present). <button type="button" class="desk-link" data-view-link="intel">Open The Book →</button></p>` : unavailable('Historical notes unavailable.'));
   }
 
   function render(){

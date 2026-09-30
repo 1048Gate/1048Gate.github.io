@@ -36,7 +36,7 @@
     document.getElementById('pollCount').textContent = String(polls.length);
     notice('Informal feedback only · aggregate results are public · your response stays on this device.');
     if(!polls.length){
-      host.innerHTML = '<div class="panel community-empty">No informal polls are posted yet.</div>';
+      host.innerHTML = '<div class="panel community-empty"><strong>The Vote Booth is quiet.</strong><span>No league question is on the floor right now. A poll will appear here when the office opens one.</span></div>';
       return;
     }
 

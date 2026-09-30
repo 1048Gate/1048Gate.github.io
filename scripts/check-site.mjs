@@ -343,7 +343,7 @@ if(!html.includes('id="intel"') || !html.includes('data-view="intel"') || !scrip
 const primaryNavStart = html.indexOf('<nav class="tabs" id="tabs"');
 const primaryNavEnd = primaryNavStart >= 0 ? html.indexOf('</nav>', primaryNavStart) : -1;
 const primaryNav = primaryNavStart >= 0 && primaryNavEnd >= 0 ? html.slice(primaryNavStart, primaryNavEnd + 6) : '';
-for(const [view, label] of [['home','This Week'],['league','League'],['wire','Wire'],['history','History'],['newspaper','Newspaper']]){
+for(const [view, label] of [['home','This Week'],['league','League'],['wire','Wire'],['history','History'],['newspaper','Newspaper'],['intel','The Book']]){
   if(!primaryNav.includes(`data-view="${view}"`) || !primaryNav.includes(`>${label}</button>`)){
     throw new Error(`Desktop primary navigation is missing ${label}.`);
   }
@@ -351,8 +351,8 @@ for(const [view, label] of [['home','This Week'],['league','League'],['wire','Wi
 if(!primaryNav.includes('data-more-toggle') || !primaryNav.includes('>More</button>')){
   throw new Error('Desktop primary navigation must end with More.');
 }
-if(primaryNav.includes('data-view="intel"') || primaryNav.includes('data-view="office"') || primaryNav.includes('data-view="staff"')){
-  throw new Error('The Book, League Office, and Staff must live under More instead of the desktop primary navigation.');
+if(primaryNav.includes('data-view="office"') || primaryNav.includes('data-view="staff"')){
+  throw new Error('League Office and Staff must stay under More instead of the desktop primary navigation.');
 }
 if(!html.includes('class="nav-more-phone-only" data-view="newspaper">Newspaper</button>') ||
    !html.includes('data-view="intel" aria-label="The Book — league analytics">The Book</button>') ||
@@ -421,6 +421,13 @@ if(!html.includes('Madison Beer Garden') || !html.includes('1912 Titanic Swimtea
 const siteUiSource = readFileSync(new URL('js/site-ui.js', root), 'utf8');
 if(!siteUiSource.includes('renderWeekBoard') || !siteUiSource.includes('data/current-season.json')){
   throw new Error('site-ui.js must render the week board from current-season.json.');
+}
+const weekBoardSource = readFileSync(new URL('js/week-board.js', root), 'utf8');
+if(!weekBoardSource.includes("state === 'scheduled' ? 'Scores open at kickoff'") || !weekBoardSource.includes('PF/G') || !weekBoardSource.includes("const score = scheduled ? '\\u2014'")){
+  throw new Error('Scheduled matchup cards must show real season context and avoid fake 0-0 scores.');
+}
+if(html.includes('<span>Trade deadline</span><span>TBA</span>')){
+  throw new Error('Unknown trade deadlines must not be published as TBA.');
 }
 
 function webpDimensions(fileUrl){
@@ -499,7 +506,7 @@ if(!appSource.includes('closePhoneMore') || !appSource.includes('phoneDock') || 
   throw new Error('Phone dock navigation handlers are missing from app.js.');
 }
 if(!appSource.includes("newspaper: {view: 'office', nav: 'newspaper'") ||
-   !appSource.includes("const primaryTabViews = new Set(['home', 'league', 'wire', 'history', 'newspaper'])") ||
+   !appSource.includes("const primaryTabViews = new Set(['home', 'league', 'wire', 'history', 'newspaper', 'intel'])") ||
    !appSource.includes('function moreMenuOwns(route, key)') ||
    !appSource.includes('function toggleMoreMenu()')){
   throw new Error('Phase 4 navigation routing or More ownership logic is missing from app.js.');
