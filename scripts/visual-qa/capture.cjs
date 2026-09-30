@@ -181,21 +181,28 @@ const server=http.createServer((req,res)=>{
         primaryActive:document.querySelector('#tabs [data-view="newspaper"]')?.classList.contains('active')||false,
         moreActive:document.querySelector('#tabs [data-more-toggle]')?.classList.contains('active')||false
       }));
+      await page.locator('#tabs [data-view="intel"]').click();
+      await page.waitForFunction(()=>document.getElementById('intel')?.classList.contains('active'));
+      const book=await page.evaluate(()=>({
+        hash:location.hash,
+        primaryActive:document.querySelector('#tabs [data-view="intel"]')?.classList.contains('active')||false,
+        moreActive:document.querySelector('#tabs [data-more-toggle]')?.classList.contains('active')||false
+      }));
       await page.locator('#tabs [data-more-toggle]').click();
       await page.waitForFunction(()=>document.getElementById('phoneMore')?.hidden===false);
       const moreOpen=await page.evaluate(()=>({
         expanded:document.querySelector('#tabs [data-more-toggle]')?.getAttribute('aria-expanded'),
         visible:document.getElementById('phoneMore')?.hidden===false
       }));
-      await page.locator('#phoneMore [data-view="intel"]').click();
-      await page.waitForFunction(()=>document.getElementById('intel')?.classList.contains('active'));
-      const book=await page.evaluate(()=>({
+      await page.locator('#phoneMore [data-view="office"]').click();
+      await page.waitForFunction(()=>document.getElementById('office')?.classList.contains('active'));
+      const office=await page.evaluate(()=>({
         hash:location.hash,
         moreActive:document.querySelector('#tabs [data-more-toggle]')?.classList.contains('active')||false,
         sheetClosed:document.getElementById('phoneMore')?.hidden===true
       }));
-      navigation={mode:'desktop',newspaper,moreOpen,book,
-        ok:newspaper.hash==='#newspaper'&&newspaper.primaryActive&&!newspaper.moreActive&&moreOpen.expanded==='true'&&moreOpen.visible&&book.hash==='#intel'&&book.moreActive&&book.sheetClosed};
+      navigation={mode:'desktop',newspaper,book,moreOpen,office,
+        ok:newspaper.hash==='#newspaper'&&newspaper.primaryActive&&!newspaper.moreActive&&book.hash==='#intel'&&book.primaryActive&&!book.moreActive&&moreOpen.expanded==='true'&&moreOpen.visible&&office.hash==='#office'&&office.moreActive&&office.sheetClosed};
     }else{
       await page.locator('#phoneDock [data-more-toggle]').click();
       await page.waitForFunction(()=>document.getElementById('phoneMore')?.hidden===false);
