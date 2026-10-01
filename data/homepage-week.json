@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "scheduled",
-  "last_updated": "2026-10-01T10:41:34.096970+00:00",
+  "last_updated": "2026-10-01T11:11:49.672839+00:00",
   "note": "Week 4 slate from ESPN.",
   "matchups": [
     {
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-01T10:41:34.096970+00:00",
+    "week_fetched_at": "2026-10-01T11:11:49.672839+00:00",
     "edition_published_at": "2026-09-29T13:13:57.281338Z",
-    "payload_built_at": "2026-10-01T10:41:34.370Z",
+    "payload_built_at": "2026-10-01T11:11:49.984Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
