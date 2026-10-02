@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "live",
-  "last_updated": "2026-10-02T10:41:57.241367+00:00",
+  "last_updated": "2026-10-02T11:11:56.848798+00:00",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-02T10:41:57.241367+00:00",
+    "week_fetched_at": "2026-10-02T11:11:56.848798+00:00",
     "edition_published_at": "2026-10-02T02:42:58.742302Z",
-    "payload_built_at": "2026-10-02T10:41:57.464Z",
+    "payload_built_at": "2026-10-02T11:11:57.104Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
