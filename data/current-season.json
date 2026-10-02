@@ -4,9 +4,9 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-02T00:11:37.217808+00:00",
+  "fetchedAt": "2026-10-02T02:42:58.462725+00:00",
   "source": "ESPN league endpoint",
-  "note": "Week 4 slate from ESPN.",
+  "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
     {
       "locker": 4,
@@ -257,7 +257,7 @@
     {
       "id": 24,
       "week": 4,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -265,13 +265,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 0
+        "score": 7
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 0
+        "score": 11.9
       }
     }
   ]

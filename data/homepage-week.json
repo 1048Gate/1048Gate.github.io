@@ -4,9 +4,9 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "status": "scheduled",
-  "last_updated": "2026-10-02T00:11:37.217808+00:00",
-  "note": "Week 4 slate from ESPN.",
+  "status": "live",
+  "last_updated": "2026-10-02T02:42:58.462725+00:00",
+  "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
       "id": 19,
@@ -111,7 +111,7 @@
     {
       "id": 24,
       "week": 4,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -119,13 +119,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 0
+        "score": 7
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 0
+        "score": 11.9
       }
     }
   ],
@@ -277,21 +277,21 @@
   ],
   "featured_story": {
     "season": 2026,
-    "week": 3,
-    "headline": "George Travis sets the Week 3 pace as the table takes shape",
-    "standfirst": "Howya Been’s (Bryan Hunt) leads the verified table after Week 3; Howya Been’s (Bryan Hunt) survived the week’s closest finish by 9.26.",
-    "path": "data/newspaper_editions/2026/week_03.json",
-    "source_status": "verified_final",
+    "week": 4,
+    "headline": "German Haro sets the Week 4 pace as the table takes shape",
+    "standfirst": "Week 4 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
+    "path": "data/newspaper_editions/2026/week_04.json",
+    "source_status": "verified_live",
     "validation_status": "valid",
-    "status": "final",
-    "generated_at": "2026-09-29T13:13:57.281338Z",
+    "status": "live",
+    "generated_at": "2026-10-02T02:42:58.742302Z",
     "table_leader": {
       "rank": 1,
-      "team": "Howya Been’s",
+      "team": "Howya Been's",
       "owner": "Bryan Hunt",
       "record": "3-0",
       "pointsFor": "422.54",
-      "tag": "Highest scoring"
+      "tag": "Table leader"
     },
     "pressure": {
       "team": "Madison Beer Garden",
@@ -390,9 +390,9 @@
   "league_pulse": [
     {
       "id": "matchup",
-      "label": "On deck",
-      "title": "6 matchups posted",
-      "detail": "Week 4 is ready on the league board.",
+      "label": "Game watch",
+      "title": "1912 Titanic Swimteam / Ice Has Me Running Back",
+      "detail": "4.9 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -418,9 +418,9 @@
     },
     {
       "id": "record",
-      "label": "Record book",
-      "title": "Collin Krum · 235.6",
-      "detail": "Highest single-team week · 2022.",
+      "label": "Record watch",
+      "title": "German Haro · 11.9",
+      "detail": "223.7 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-02T00:11:37.217808+00:00",
-    "edition_published_at": "2026-09-29T13:13:57.281338Z",
-    "payload_built_at": "2026-10-02T00:11:37.541Z",
+    "week_fetched_at": "2026-10-02T02:42:58.462725+00:00",
+    "edition_published_at": "2026-10-02T02:42:58.742302Z",
+    "payload_built_at": "2026-10-02T02:43:15.087Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
