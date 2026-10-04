@@ -4,7 +4,7 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 4,
-  "generated_at": "2026-10-03T13:23:13.474448Z",
+  "generated_at": "2026-10-04T14:05:00.827065Z",
   "source_status": "verified_live",
   "validation_status": "valid",
   "editorial_policy": {
@@ -21,22 +21,22 @@
   "standfirst": "Week 4 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
   "lead": {
     "title": "Inside Week 4: the high score, the table lead, and the closest call",
-    "body": "Howya Been's (Bryan Hunt) is first in the completed-results table at 3-0 with 422.54 points for. On the live Week 4 board, Ice Has Me Running Back (German Haro) currently has the high score at 15.60, while 1912 Titanic Swimteam (Kyle Fowler) is at 8.00. Those live scores can still change.",
+    "body": "Howya Been's (Bryan Hunt) is first in the completed-results table at 3-0 with 422.54 points for. On the live Week 4 board, Ice Has Me Running Back (German Haro) currently has the high score at 15.60, while Team Hash (Trevor Hash) is at 0.00. Those live scores can still change.",
     "sourceIds": [
       "current-season",
       "power-rankings"
     ]
   },
   "matchup": {
-    "awayTeam": "1912 Titanic Swimteam",
-    "awayOwner": "Kyle Fowler",
-    "awayScore": 8.0,
-    "homeTeam": "Ice Has Me Running Back",
-    "homeOwner": "German Haro",
-    "homeScore": 15.6,
-    "whyItMatters": "The closest live game currently has a 7.60-point margin, making it the tightest matchup on the Week 4 board right now.",
+    "awayTeam": "Team Hash",
+    "awayOwner": "Trevor Hash",
+    "awayScore": 0.0,
+    "homeTeam": "No More Darties in LA",
+    "homeOwner": "Jared Hall",
+    "homeScore": 1.5,
+    "whyItMatters": "The closest live game currently has a 1.50-point margin, making it the tightest matchup on the Week 4 board right now.",
     "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
-    "edge": "Live edge: Ice Has Me Running Back (German Haro) by 7.60 points.",
+    "edge": "Live edge: No More Darties in LA (Jared Hall) by 1.50 points.",
     "sourceIds": [
       "current-season"
     ]
@@ -153,7 +153,7 @@
   },
   "surprise": {
     "title": "Biggest surprise: the scoring range is already loud",
-    "body": "The gap between Ice Has Me Running Back (German Haro) at 15.60 and 1912 Titanic Swimteam (Kyle Fowler) at 8.00 is 7.60 points. That is the current live spread, not a final Week 4 result.",
+    "body": "The gap between Ice Has Me Running Back (German Haro) at 15.60 and Team Hash (Trevor Hash) at 0.00 is 15.60 points. That is the current live spread, not a final Week 4 result.",
     "sourceIds": [
       "current-season"
     ]
@@ -188,6 +188,36 @@
       "state": "live"
     },
     {
+      "winnerTeam": "McConkey Tonk Badonkadonk",
+      "winnerOwner": "Vincent Cannarozzi",
+      "winnerScore": 4.6,
+      "loserTeam": "Madison Beer Garden",
+      "loserOwner": "George Travis",
+      "loserScore": 0.0,
+      "margin": 4.6,
+      "state": "live"
+    },
+    {
+      "winnerTeam": "Howya Been's",
+      "winnerOwner": "Bryan Hunt",
+      "winnerScore": 3.4,
+      "loserTeam": "Jigalos Jims",
+      "loserOwner": "James Brochu",
+      "loserScore": 1.2,
+      "margin": 2.2,
+      "state": "live"
+    },
+    {
+      "winnerTeam": "No More Darties in LA",
+      "winnerOwner": "Jared Hall",
+      "winnerScore": 1.5,
+      "loserTeam": "Team Hash",
+      "loserOwner": "Trevor Hash",
+      "loserScore": 0.0,
+      "margin": 1.5,
+      "state": "live"
+    },
+    {
       "winnerTeam": "Breezin’ with Bijan",
       "winnerOwner": "Collin Krum",
       "winnerScore": 0.0,
@@ -198,41 +228,11 @@
       "state": "scheduled"
     },
     {
-      "winnerTeam": "Team Hash",
-      "winnerOwner": "Trevor Hash",
-      "winnerScore": 0.0,
-      "loserTeam": "No More Darties in LA",
-      "loserOwner": "Jared Hall",
-      "loserScore": 0.0,
-      "margin": 0.0,
-      "state": "scheduled"
-    },
-    {
       "winnerTeam": "Your Reigning Champ",
       "winnerOwner": "Thomas Speer",
       "winnerScore": 0.0,
       "loserTeam": "The Buwhops",
       "loserOwner": "Brian Heino",
-      "loserScore": 0.0,
-      "margin": 0.0,
-      "state": "scheduled"
-    },
-    {
-      "winnerTeam": "Howya Been's",
-      "winnerOwner": "Bryan Hunt",
-      "winnerScore": 0.0,
-      "loserTeam": "Jigalos Jims",
-      "loserOwner": "James Brochu",
-      "loserScore": 0.0,
-      "margin": 0.0,
-      "state": "scheduled"
-    },
-    {
-      "winnerTeam": "Madison Beer Garden",
-      "winnerOwner": "George Travis",
-      "winnerScore": 0.0,
-      "loserTeam": "McConkey Tonk Badonkadonk",
-      "loserOwner": "Vincent Cannarozzi",
       "loserScore": 0.0,
       "margin": 0.0,
       "state": "scheduled"
@@ -359,7 +359,7 @@
     {
       "story_type": "matchup_recap",
       "title": "Week 4: Live league board",
-      "body": "Collin Krum leads JD Daley 0.00–0.00. Trevor Hash leads Jared Hall 0.00–0.00. Thomas Speer leads Brian Heino 0.00–0.00. Bryan Hunt leads James Brochu 0.00–0.00. George Travis leads Vincent Cannarozzi 0.00–0.00. German Haro leads Kyle Fowler 15.60–8.00.",
+      "body": "Collin Krum leads JD Daley 0.00–0.00. Jared Hall leads Trevor Hash 1.50–0.00. Thomas Speer leads Brian Heino 0.00–0.00. Bryan Hunt leads James Brochu 3.40–1.20. Vincent Cannarozzi leads George Travis 4.60–0.00. German Haro leads Kyle Fowler 15.60–8.00.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
@@ -379,24 +379,25 @@
     },
     {
       "story_type": "closest_game",
-      "title": "German Haro has the narrowest live edge",
-      "body": "The tightest live matchup stands 15.60–8.00, with German Haro ahead of Kyle Fowler by 7.60 points.",
+      "title": "Jared Hall has the narrowest live edge",
+      "body": "The tightest live matchup stands 1.50–0.00, with Jared Hall ahead of Trevor Hash by 1.50 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=4;matchups",
+        "description": "Live ESPN matchup board"
+      },
+      "primary_owner": "Jared Hall"
+    },
+    {
+      "story_type": "scoring_leaders",
+      "title": "German Haro sets the current Week 4 pace",
+      "body": "German Haro currently has the league-high 15.60. Trevor Hash is at the current board-low 0.00; both scores can still move.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
         "description": "Live ESPN matchup board"
       },
       "primary_owner": "German Haro"
-    },
-    {
-      "story_type": "scoring_leaders",
-      "title": "Week 4's live scoring range",
-      "body": "The current league-high score is 15.60, while the current board-low is 8.00.",
-      "source": {
-        "dataset": "data/current-season.json",
-        "locator": "season=2026;week=4;matchups",
-        "description": "Live ESPN matchup board"
-      }
     },
     {
       "story_type": "standings",
