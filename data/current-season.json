@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-04T20:12:09.173236+00:00",
+  "fetchedAt": "2026-10-04T20:23:46.470215+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 25.8
+        "score": 26
       },
       "home": {
         "teamId": 9,
@@ -185,7 +185,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 89.78
+        "score": 91.68
       },
       "home": {
         "teamId": 3,
@@ -231,7 +231,7 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 158.26
+        "score": 158.62
       }
     },
     {
@@ -245,13 +245,13 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 95.6
+        "score": 95.7
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 40.98
+        "score": 40.78
       }
     },
     {
