@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-04T23:34:31.985199+00:00",
+  "fetchedAt": "2026-10-04T23:41:35.544444+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -225,7 +225,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 80.4
+        "score": 82.4
       },
       "home": {
         "teamId": 8,
@@ -245,13 +245,13 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 139.02
+        "score": 138.82
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 75.78
+        "score": 77.98
       }
     },
     {
@@ -271,7 +271,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 110.54
+        "score": 109.78
       }
     }
   ]
