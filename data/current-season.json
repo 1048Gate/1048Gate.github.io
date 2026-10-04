@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-04T15:42:35.656400+00:00",
+  "fetchedAt": "2026-10-04T16:12:16.230686+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -171,7 +171,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 6
+        "score": 12
       }
     },
     {
@@ -191,7 +191,7 @@
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 18.6
+        "score": 22.6
       }
     },
     {
@@ -211,7 +211,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 6.4
+        "score": 7.3
       }
     },
     {
@@ -251,7 +251,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 5.9
+        "score": 6
       }
     },
     {
