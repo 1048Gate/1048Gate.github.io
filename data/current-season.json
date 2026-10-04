@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-04T17:32:48.204753+00:00",
+  "fetchedAt": "2026-10-04T17:42:13.783356+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -171,7 +171,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 34.04
+        "score": 35.94
       }
     },
     {
@@ -185,13 +185,13 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 25.5
+        "score": 29.22
       },
       "home": {
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 48
+        "score": 57.2
       }
     },
     {
@@ -205,13 +205,13 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 8.58
+        "score": 10.24
       },
       "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 30.98
+        "score": 30.38
       }
     },
     {
@@ -225,13 +225,13 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 10
+        "score": 16.6
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 43.38
+        "score": 46.96
       }
     },
     {
@@ -245,13 +245,13 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 9.4
+        "score": 17.6
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 16.22
+        "score": 18.22
       }
     },
     {
@@ -271,7 +271,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 29.5
+        "score": 39.2
       }
     }
   ]
