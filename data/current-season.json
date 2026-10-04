@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-04T18:42:09.078783+00:00",
+  "fetchedAt": "2026-10-04T19:12:09.445343+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,13 +165,13 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 22.6
+        "score": 28.6
       },
       "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 76.66
+        "score": 80.98
       }
     },
     {
@@ -185,13 +185,13 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 67.48
+        "score": 71.98
       },
       "home": {
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 79.5
+        "score": 91.6
       }
     },
     {
@@ -205,13 +205,13 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 23.28
+        "score": 34.4
       },
       "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 43.62
+        "score": 50.62
       }
     },
     {
@@ -225,13 +225,13 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 23.2
+        "score": 21.6
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 75.74
+        "score": 109.54
       }
     },
     {
@@ -245,13 +245,13 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 28.6
+        "score": 46.5
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 30.14
+        "score": 30.74
       }
     },
     {
@@ -265,13 +265,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 20.7
+        "score": 23.7
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 41
+        "score": 44.3
       }
     }
   ]
