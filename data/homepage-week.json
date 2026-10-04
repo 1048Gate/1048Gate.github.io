@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "live",
-  "last_updated": "2026-10-04T17:42:13.783356+00:00",
+  "last_updated": "2026-10-04T18:12:13.366568+00:00",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,13 +19,13 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 15
+        "score": 20.1
       },
       "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 35.94
+        "score": 65.72
       }
     },
     {
@@ -39,13 +39,13 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 29.22
+        "score": 52.22
       },
       "home": {
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 57.2
+        "score": 59.7
       }
     },
     {
@@ -59,13 +59,13 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 10.24
+        "score": 12.58
       },
       "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 30.38
+        "score": 37.02
       }
     },
     {
@@ -79,13 +79,13 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 16.6
+        "score": 20.9
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 46.96
+        "score": 59.1
       }
     },
     {
@@ -99,13 +99,13 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 17.6
+        "score": 23.7
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 18.22
+        "score": 20.86
       }
     },
     {
@@ -119,13 +119,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 12.7
+        "score": 18.8
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 39.2
+        "score": 41
       }
     }
   ],
@@ -392,7 +392,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "Madison Beer Garden / McConkey Tonk Badonkadonk",
-      "detail": "0.6 points apart · Live",
+      "detail": "2.8 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -419,8 +419,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Jared Hall · 57.2",
-      "detail": "178.4 shy of the 235.6 all-time mark",
+      "title": "JD Daley · 65.7",
+      "detail": "169.9 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-04T17:42:13.783356+00:00",
+    "week_fetched_at": "2026-10-04T18:12:13.366568+00:00",
     "edition_published_at": "2026-10-04T14:05:00.827065Z",
-    "payload_built_at": "2026-10-04T17:42:14.138Z",
+    "payload_built_at": "2026-10-04T18:12:13.553Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
