@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "live",
-  "last_updated": "2026-10-04T14:12:14.558376+00:00",
+  "last_updated": "2026-10-04T14:42:10.272341+00:00",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -45,13 +45,13 @@
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 2.5
+        "score": 10
       }
     },
     {
       "id": 21,
       "week": 4,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -65,7 +65,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 0
+        "score": 2.2
       }
     },
     {
@@ -79,13 +79,13 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 3.4
+        "score": 5.1
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 3.1
+        "score": 4.6
       }
     },
     {
@@ -105,7 +105,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 5.2
+        "score": 5.6
       }
     },
     {
@@ -392,7 +392,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "Howya Been's / Jigalos Jims",
-      "detail": "0.3 points apart · Live",
+      "detail": "0.5 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-04T14:12:14.558376+00:00",
+    "week_fetched_at": "2026-10-04T14:42:10.272341+00:00",
     "edition_published_at": "2026-10-04T14:05:00.827065Z",
-    "payload_built_at": "2026-10-04T14:12:14.911Z",
+    "payload_built_at": "2026-10-04T14:42:10.469Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
