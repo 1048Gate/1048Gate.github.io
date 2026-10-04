@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "live",
-  "last_updated": "2026-10-04T16:12:16.230686+00:00",
+  "last_updated": "2026-10-04T16:42:14.371009+00:00",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -25,7 +25,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 12
+        "score": 16
       }
     },
     {
@@ -45,7 +45,7 @@
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 22.6
+        "score": 22.7
       }
     },
     {
@@ -65,7 +65,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 7.3
+        "score": 9.1
       }
     },
     {
@@ -79,7 +79,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 6.5
+        "score": 8.5
       },
       "home": {
         "teamId": 8,
@@ -105,7 +105,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 6
+        "score": 7
       }
     },
     {
@@ -392,7 +392,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "Howya Been's / Jigalos Jims",
-      "detail": "1.9 points apart · Live",
+      "detail": "3.9 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -419,8 +419,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Jared Hall · 22.6",
-      "detail": "213 shy of the 235.6 all-time mark",
+      "title": "Jared Hall · 22.7",
+      "detail": "212.9 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-04T16:12:16.230686+00:00",
+    "week_fetched_at": "2026-10-04T16:42:14.371009+00:00",
     "edition_published_at": "2026-10-04T14:05:00.827065Z",
-    "payload_built_at": "2026-10-04T16:12:16.496Z",
+    "payload_built_at": "2026-10-04T16:42:14.708Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
