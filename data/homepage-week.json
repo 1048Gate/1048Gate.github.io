@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "live",
-  "last_updated": "2026-10-04T15:12:12.882769+00:00",
+  "last_updated": "2026-10-04T15:42:35.656400+00:00",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -25,7 +25,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 5
+        "score": 6
       }
     },
     {
@@ -45,7 +45,7 @@
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 10.4
+        "score": 18.6
       }
     },
     {
@@ -65,7 +65,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 4.1
+        "score": 6.4
       }
     },
     {
@@ -105,7 +105,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 5.6
+        "score": 5.9
       }
     },
     {
@@ -419,8 +419,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "German Haro · 15.6",
-      "detail": "220 shy of the 235.6 all-time mark",
+      "title": "Jared Hall · 18.6",
+      "detail": "217 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-04T15:12:12.882769+00:00",
+    "week_fetched_at": "2026-10-04T15:42:35.656400+00:00",
     "edition_published_at": "2026-10-04T14:05:00.827065Z",
-    "payload_built_at": "2026-10-04T15:12:13.167Z",
+    "payload_built_at": "2026-10-04T15:42:35.930Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
