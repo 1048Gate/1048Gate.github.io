@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "live",
-  "last_updated": "2026-10-04T23:11:39.200647+00:00",
+  "last_updated": "2026-10-04T23:34:31.985199+00:00",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -25,7 +25,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 98.32
+        "score": 98.92
       }
     },
     {
@@ -59,13 +59,13 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 96.8
+        "score": 113.8
       },
       "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 79.12
+        "score": 80.12
       }
     },
     {
@@ -79,7 +79,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 56.8
+        "score": 80.4
       },
       "home": {
         "teamId": 8,
@@ -99,13 +99,13 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 128.12
+        "score": 139.02
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 72.18
+        "score": 75.78
       }
     },
     {
@@ -125,7 +125,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 91.14
+        "score": 110.54
       }
     }
   ],
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-04T23:11:39.200647+00:00",
+    "week_fetched_at": "2026-10-04T23:34:31.985199+00:00",
     "edition_published_at": "2026-10-04T14:05:00.827065Z",
-    "payload_built_at": "2026-10-04T23:11:39.528Z",
+    "payload_built_at": "2026-10-04T23:34:32.256Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
