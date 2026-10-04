@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "live",
-  "last_updated": "2026-10-04T21:41:35.373052+00:00",
+  "last_updated": "2026-10-04T22:11:35.529432+00:00",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,7 +19,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 36.4
+        "score": 39
       },
       "home": {
         "teamId": 9,
@@ -59,7 +59,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 88.8
+        "score": 91.8
       },
       "home": {
         "teamId": 6,
@@ -79,7 +79,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 48.4
+        "score": 46
       },
       "home": {
         "teamId": 8,
@@ -99,13 +99,13 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 109.52
+        "score": 111.66
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 51.78
+        "score": 60.18
       }
     },
     {
@@ -119,13 +119,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 40.56
+        "score": 41.24
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 83.96
+        "score": 88.76
       }
     }
   ],
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-04T21:41:35.373052+00:00",
+    "week_fetched_at": "2026-10-04T22:11:35.529432+00:00",
     "edition_published_at": "2026-10-04T14:05:00.827065Z",
-    "payload_built_at": "2026-10-04T21:41:35.665Z",
+    "payload_built_at": "2026-10-04T22:11:35.706Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
