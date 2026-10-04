@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-04T14:42:10.272341+00:00",
+  "fetchedAt": "2026-10-04T15:12:12.882769+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -157,7 +157,7 @@
     {
       "id": 19,
       "week": 4,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -171,7 +171,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 0
+        "score": 5
       }
     },
     {
@@ -191,7 +191,7 @@
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 10
+        "score": 10.4
       }
     },
     {
@@ -211,7 +211,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 2.2
+        "score": 4.1
       }
     },
     {
@@ -225,7 +225,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 5.1
+        "score": 6.5
       },
       "home": {
         "teamId": 8,
