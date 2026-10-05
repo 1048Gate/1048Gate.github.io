@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "live",
-  "last_updated": "2026-10-05T00:11:40.321009+00:00",
+  "last_updated": "2026-10-05T00:41:37.100398+00:00",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,7 +19,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 51.5
+        "score": 52.58
       },
       "home": {
         "teamId": 9,
@@ -39,7 +39,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 91.68
+        "score": 92.68
       },
       "home": {
         "teamId": 3,
@@ -59,7 +59,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 113.8
+        "score": 116.6
       },
       "home": {
         "teamId": 6,
@@ -79,7 +79,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 82.4
+        "score": 83.36
       },
       "home": {
         "teamId": 8,
@@ -119,13 +119,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 49.9
+        "score": 49.6
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 111.7
+        "score": 115.9
       }
     }
   ],
@@ -392,7 +392,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "Team Hash / No More Darties in LA",
-      "detail": "11.1 points apart · Live",
+      "detail": "10.1 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-05T00:11:40.321009+00:00",
+    "week_fetched_at": "2026-10-05T00:41:37.100398+00:00",
     "edition_published_at": "2026-10-04T14:05:00.827065Z",
-    "payload_built_at": "2026-10-05T00:11:40.642Z",
+    "payload_built_at": "2026-10-05T00:41:37.387Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
