@@ -5,7 +5,7 @@
   "week": 4,
   "phase": "Week 4",
   "status": "live",
-  "last_updated": "2026-10-05T02:23:35.917059+00:00",
+  "last_updated": "2026-10-05T02:41:39.613473+00:00",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,7 +19,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 73.28
+        "score": 75.48
       },
       "home": {
         "teamId": 9,
@@ -39,7 +39,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 104.78
+        "score": 105.18
       },
       "home": {
         "teamId": 3,
@@ -59,7 +59,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 120.5
+        "score": 123.4
       },
       "home": {
         "teamId": 6,
@@ -79,7 +79,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 91.12
+        "score": 92.44
       },
       "home": {
         "teamId": 8,
@@ -119,7 +119,7 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 66
+        "score": 75
       },
       "home": {
         "teamId": 14,
@@ -392,7 +392,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "Team Hash / No More Darties in LA",
-      "detail": "2 points apart · Live",
+      "detail": "2.4 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -432,9 +432,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-05T02:23:35.917059+00:00",
+    "week_fetched_at": "2026-10-05T02:41:39.613473+00:00",
     "edition_published_at": "2026-10-04T14:05:00.827065Z",
-    "payload_built_at": "2026-10-05T02:23:36.301Z",
+    "payload_built_at": "2026-10-05T02:41:39.940Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
