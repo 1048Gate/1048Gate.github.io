@@ -4,7 +4,7 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 4,
-  "generated_at": "2026-10-04T14:05:00.827065Z",
+  "generated_at": "2026-10-05T17:09:04.285932Z",
   "source_status": "verified_live",
   "validation_status": "valid",
   "editorial_policy": {
@@ -17,11 +17,11 @@
     "description": "Published ESPN board snapshot"
   },
   "status": "live",
-  "headline": "German Haro sets the Week 4 pace as the table takes shape",
+  "headline": "James Brochu sets the Week 4 pace as the table takes shape",
   "standfirst": "Week 4 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
   "lead": {
     "title": "Inside Week 4: the high score, the table lead, and the closest call",
-    "body": "Howya Been's (Bryan Hunt) is first in the completed-results table at 3-0 with 422.54 points for. On the live Week 4 board, Ice Has Me Running Back (German Haro) currently has the high score at 15.60, while Team Hash (Trevor Hash) is at 0.00. Those live scores can still change.",
+    "body": "Howya Been's (Bryan Hunt) is first in the completed-results table at 3-0 with 422.54 points for. On the live Week 4 board, Jigalos Jims (James Brochu) currently has the high score at 158.62, while Breezin’ with Bijan (Collin Krum) is at 76.96. Those live scores can still change.",
     "sourceIds": [
       "current-season",
       "power-rankings"
@@ -30,13 +30,13 @@
   "matchup": {
     "awayTeam": "Team Hash",
     "awayOwner": "Trevor Hash",
-    "awayScore": 0.0,
+    "awayScore": 109.38,
     "homeTeam": "No More Darties in LA",
     "homeOwner": "Jared Hall",
-    "homeScore": 1.5,
-    "whyItMatters": "The closest live game currently has a 1.50-point margin, making it the tightest matchup on the Week 4 board right now.",
+    "homeScore": 102.8,
+    "whyItMatters": "The closest live game currently has a 6.58-point margin, making it the tightest matchup on the Week 4 board right now.",
     "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
-    "edge": "Live edge: No More Darties in LA (Jared Hall) by 1.50 points.",
+    "edge": "Live edge: Team Hash (Trevor Hash) by 6.58 points.",
     "sourceIds": [
       "current-season"
     ]
@@ -153,7 +153,7 @@
   },
   "surprise": {
     "title": "Biggest surprise: the scoring range is already loud",
-    "body": "The gap between Ice Has Me Running Back (German Haro) at 15.60 and Team Hash (Trevor Hash) at 0.00 is 15.60 points. That is the current live spread, not a final Week 4 result.",
+    "body": "The gap between Jigalos Jims (James Brochu) at 158.62 and Breezin’ with Bijan (Collin Krum) at 76.96 is 81.66 points. That is the current live spread, not a final Week 4 result.",
     "sourceIds": [
       "current-season"
     ]
@@ -178,64 +178,64 @@
   "editorial_note": "Week 4 live edition generated from the verified board. Scores and live edges may change until the slate is final.",
   "results": [
     {
+      "winnerTeam": "Jigalos Jims",
+      "winnerOwner": "James Brochu",
+      "winnerScore": 158.62,
+      "loserTeam": "Howya Been's",
+      "loserOwner": "Bryan Hunt",
+      "loserScore": 104.88,
+      "margin": 53.74,
+      "state": "live"
+    },
+    {
       "winnerTeam": "Ice Has Me Running Back",
       "winnerOwner": "German Haro",
-      "winnerScore": 15.6,
+      "winnerScore": 156.9,
       "loserTeam": "1912 Titanic Swimteam",
       "loserOwner": "Kyle Fowler",
-      "loserScore": 8.0,
-      "margin": 7.6,
+      "loserScore": 98.2,
+      "margin": 58.7,
       "state": "live"
     },
     {
-      "winnerTeam": "McConkey Tonk Badonkadonk",
-      "winnerOwner": "Vincent Cannarozzi",
-      "winnerScore": 4.6,
-      "loserTeam": "Madison Beer Garden",
-      "loserOwner": "George Travis",
-      "loserScore": 0.0,
-      "margin": 4.6,
+      "winnerTeam": "Madison Beer Garden",
+      "winnerOwner": "George Travis",
+      "winnerScore": 138.82,
+      "loserTeam": "McConkey Tonk Badonkadonk",
+      "loserOwner": "Vincent Cannarozzi",
+      "loserScore": 77.98,
+      "margin": 60.84,
       "state": "live"
-    },
-    {
-      "winnerTeam": "Howya Been's",
-      "winnerOwner": "Bryan Hunt",
-      "winnerScore": 3.4,
-      "loserTeam": "Jigalos Jims",
-      "loserOwner": "James Brochu",
-      "loserScore": 1.2,
-      "margin": 2.2,
-      "state": "live"
-    },
-    {
-      "winnerTeam": "No More Darties in LA",
-      "winnerOwner": "Jared Hall",
-      "winnerScore": 1.5,
-      "loserTeam": "Team Hash",
-      "loserOwner": "Trevor Hash",
-      "loserScore": 0.0,
-      "margin": 1.5,
-      "state": "live"
-    },
-    {
-      "winnerTeam": "Breezin’ with Bijan",
-      "winnerOwner": "Collin Krum",
-      "winnerScore": 0.0,
-      "loserTeam": "Ja'Marr-a-Lago",
-      "loserOwner": "JD Daley",
-      "loserScore": 0.0,
-      "margin": 0.0,
-      "state": "scheduled"
     },
     {
       "winnerTeam": "Your Reigning Champ",
       "winnerOwner": "Thomas Speer",
-      "winnerScore": 0.0,
+      "winnerScore": 129.3,
       "loserTeam": "The Buwhops",
       "loserOwner": "Brian Heino",
-      "loserScore": 0.0,
-      "margin": 0.0,
-      "state": "scheduled"
+      "loserScore": 80.12,
+      "margin": 49.18,
+      "state": "live"
+    },
+    {
+      "winnerTeam": "Team Hash",
+      "winnerOwner": "Trevor Hash",
+      "winnerScore": 109.38,
+      "loserTeam": "No More Darties in LA",
+      "loserOwner": "Jared Hall",
+      "loserScore": 102.8,
+      "margin": 6.58,
+      "state": "live"
+    },
+    {
+      "winnerTeam": "Ja'Marr-a-Lago",
+      "winnerOwner": "JD Daley",
+      "winnerScore": 98.92,
+      "loserTeam": "Breezin’ with Bijan",
+      "loserOwner": "Collin Krum",
+      "loserScore": 76.96,
+      "margin": 21.96,
+      "state": "live"
     }
   ],
   "powerTable": [
@@ -352,14 +352,14 @@
   ],
   "rivalryFile": {
     "title": "Brian Heino vs. Thomas Speer",
-    "body": "The series stands 6-9-0 through 15 meetings. Thomas Speer leads series scoring 2013.88–1700.90. Thomas Speer currently leads 0.00–0.00."
+    "body": "The series stands 6-9-0 through 15 meetings. Thomas Speer leads series scoring 2013.88–1700.90. Thomas Speer currently leads 129.30–80.12."
   },
   "nextSlate": [],
   "stories": [
     {
       "story_type": "matchup_recap",
       "title": "Week 4: Live league board",
-      "body": "Collin Krum leads JD Daley 0.00–0.00. Jared Hall leads Trevor Hash 1.50–0.00. Thomas Speer leads Brian Heino 0.00–0.00. Bryan Hunt leads James Brochu 3.40–1.20. Vincent Cannarozzi leads George Travis 4.60–0.00. German Haro leads Kyle Fowler 15.60–8.00.",
+      "body": "JD Daley leads Collin Krum 98.92–76.96. Trevor Hash leads Jared Hall 109.38–102.80. Thomas Speer leads Brian Heino 129.30–80.12. James Brochu leads Bryan Hunt 158.62–104.88. George Travis leads Vincent Cannarozzi 138.82–77.98. German Haro leads Kyle Fowler 156.90–98.20.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
@@ -368,36 +368,36 @@
     },
     {
       "story_type": "biggest_win",
-      "title": "German Haro holds the widest live edge",
-      "body": "German Haro currently leads Kyle Fowler 15.60–8.00, a live margin of 7.60 points.",
+      "title": "George Travis holds the widest live edge",
+      "body": "George Travis currently leads Vincent Cannarozzi 138.82–77.98, a live margin of 60.84 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
         "description": "Live ESPN matchup board"
       },
-      "primary_owner": "German Haro"
+      "primary_owner": "George Travis"
     },
     {
       "story_type": "closest_game",
-      "title": "Jared Hall has the narrowest live edge",
-      "body": "The tightest live matchup stands 1.50–0.00, with Jared Hall ahead of Trevor Hash by 1.50 points.",
+      "title": "Trevor Hash has the narrowest live edge",
+      "body": "The tightest live matchup stands 109.38–102.80, with Trevor Hash ahead of Jared Hall by 6.58 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
         "description": "Live ESPN matchup board"
       },
-      "primary_owner": "Jared Hall"
+      "primary_owner": "Trevor Hash"
     },
     {
       "story_type": "scoring_leaders",
-      "title": "German Haro sets the current Week 4 pace",
-      "body": "German Haro currently has the league-high 15.60. Trevor Hash is at the current board-low 0.00; both scores can still move.",
+      "title": "James Brochu sets the current Week 4 pace",
+      "body": "James Brochu currently has the league-high 158.62. Collin Krum is at the current board-low 76.96; both scores can still move.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
         "description": "Live ESPN matchup board"
       },
-      "primary_owner": "German Haro"
+      "primary_owner": "James Brochu"
     },
     {
       "story_type": "standings",
@@ -423,7 +423,7 @@
     {
       "story_type": "rivalry",
       "title": "Rivalry file: Brian Heino and Thomas Speer",
-      "body": "The series stands 6-9-0 through 15 meetings. Thomas Speer leads series scoring 2013.88–1700.90. Thomas Speer currently leads 0.00–0.00.",
+      "body": "The series stands 6-9-0 through 15 meetings. Thomas Speer leads series scoring 2013.88–1700.90. Thomas Speer currently leads 129.30–80.12.",
       "source": {
         "dataset": "data/matchups.json",
         "locator": "pair=Brian Heino|Thomas Speer",
