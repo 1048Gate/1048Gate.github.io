@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-05T02:41:39.613473+00:00",
+  "fetchedAt": "2026-10-05T03:11:42.998867+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 75.48
+        "score": 76.48
       },
       "home": {
         "teamId": 9,
@@ -185,7 +185,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 105.18
+        "score": 107.88
       },
       "home": {
         "teamId": 3,
@@ -205,7 +205,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 123.4
+        "score": 126.5
       },
       "home": {
         "teamId": 6,
@@ -225,7 +225,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 92.44
+        "score": 95.4
       },
       "home": {
         "teamId": 8,
@@ -265,13 +265,13 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 75
+        "score": 85.2
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 150.9
+        "score": 152.7
       }
     }
   ]
