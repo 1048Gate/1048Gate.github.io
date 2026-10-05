@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-05T02:11:35.354886+00:00",
+  "fetchedAt": "2026-10-05T02:23:35.917059+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 66.32
+        "score": 73.28
       },
       "home": {
         "teamId": 9,
@@ -185,7 +185,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 104.08
+        "score": 104.78
       },
       "home": {
         "teamId": 3,
@@ -225,7 +225,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 88.52
+        "score": 91.12
       },
       "home": {
         "teamId": 8,
@@ -271,7 +271,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 142.9
+        "score": 150.9
       }
     }
   ]
