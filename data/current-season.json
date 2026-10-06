@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-06T00:45:59.769225+00:00",
+  "fetchedAt": "2026-10-06T01:11:55.836903+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 94.96
+        "score": 103.46
       },
       "home": {
         "teamId": 9,
@@ -185,13 +185,13 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 109.38
+        "score": 114.78
       },
       "home": {
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 103.8
+        "score": 107
       }
     },
     {
@@ -211,7 +211,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 80.12
+        "score": 84.92
       }
     },
     {
@@ -225,7 +225,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 105.88
+        "score": 106.88
       },
       "home": {
         "teamId": 8,
