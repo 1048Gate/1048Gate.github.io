@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-06T03:11:53.094027+00:00",
+  "fetchedAt": "2026-10-06T03:41:52.855403+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -185,13 +185,13 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 122.68
+        "score": 128.98
       },
       "home": {
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 112.9
+        "score": 120.74
       }
     },
     {
@@ -225,7 +225,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 112.88
+        "score": 113.88
       },
       "home": {
         "teamId": 8,
@@ -265,7 +265,7 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 106.8
+        "score": 115.6
       },
       "home": {
         "teamId": 14,
