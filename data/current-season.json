@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 4,
   "phase": "Week 4",
-  "fetchedAt": "2026-10-06T02:11:55.191115+00:00",
+  "fetchedAt": "2026-10-06T02:41:52.984295+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 4 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 119.86
+        "score": 128.26
       },
       "home": {
         "teamId": 9,
@@ -185,13 +185,13 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 118.58
+        "score": 122.68
       },
       "home": {
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 108.56
+        "score": 111.04
       }
     },
     {
@@ -211,7 +211,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 92.42
+        "score": 94.82
       }
     },
     {
@@ -225,7 +225,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 110.88
+        "score": 111.88
       },
       "home": {
         "teamId": 8,
@@ -265,7 +265,7 @@
         "teamId": 4,
         "team": "1912 Titanic Swimteam",
         "owner": "Kyle Fowler",
-        "score": 99.4
+        "score": 102.2
       },
       "home": {
         "teamId": 14,
