@@ -2,157 +2,145 @@
   "schemaVersion": 1,
   "season": 2026,
   "seasonNumber": 10,
-  "week": 4,
-  "phase": "Week 4",
-  "status": "live",
-  "last_updated": "2026-10-06T03:41:52.855403+00:00",
-  "note": "Week 4 in progress. Live scoring from ESPN.",
+  "week": 5,
+  "phase": "Week 5",
+  "status": "scheduled",
+  "last_updated": "2026-10-06T15:13:03.920432+00:00",
+  "note": "Week 5 slate from ESPN.",
   "matchups": [
     {
-      "id": 19,
-      "week": 4,
-      "state": "live",
+      "id": 25,
+      "week": 5,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 13,
-        "team": "Breezin’ with Bijan",
-        "owner": "Collin Krum",
-        "score": 131.16
-      },
-      "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 98.92
-      }
-    },
-    {
-      "id": 20,
-      "week": 4,
-      "state": "live",
-      "winner": "UNDECIDED",
-      "isPlayoff": false,
-      "matchupType": "NONE",
-      "away": {
-        "teamId": 15,
-        "team": "Team Hash",
-        "owner": "Trevor Hash",
-        "score": 128.98
+        "score": 0
       },
       "home": {
         "teamId": 3,
         "team": "No More Darties in LA",
         "owner": "Jared Hall",
-        "score": 120.74
+        "score": 0
       }
     },
     {
-      "id": 21,
-      "week": 4,
-      "state": "live",
+      "id": 26,
+      "week": 5,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 11,
-        "team": "Your Reigning Champ",
-        "owner": "Thomas Speer",
-        "score": 129.3
-      },
-      "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 102.92
+        "score": 0
+      },
+      "home": {
+        "teamId": 13,
+        "team": "Breezin’ with Bijan",
+        "owner": "Collin Krum",
+        "score": 0
       }
     },
     {
-      "id": 22,
-      "week": 4,
-      "state": "live",
+      "id": 27,
+      "week": 5,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 5,
-        "team": "Howya Been's",
-        "owner": "Bryan Hunt",
-        "score": 113.88
-      },
-      "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 158.62
+        "score": 0
+      },
+      "home": {
+        "teamId": 15,
+        "team": "Team Hash",
+        "owner": "Trevor Hash",
+        "score": 0
       }
     },
     {
-      "id": 23,
-      "week": 4,
-      "state": "live",
+      "id": 28,
+      "week": 5,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 1,
-        "team": "Madison Beer Garden",
-        "owner": "George Travis",
-        "score": 138.82
-      },
-      "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 85.68
+        "score": 0
+      },
+      "home": {
+        "teamId": 11,
+        "team": "Your Reigning Champ",
+        "owner": "Thomas Speer",
+        "score": 0
       }
     },
     {
-      "id": 24,
-      "week": 4,
-      "state": "live",
+      "id": 29,
+      "week": 5,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
+      "isPlayoff": false,
+      "matchupType": "NONE",
+      "away": {
+        "teamId": 14,
+        "team": "Ice Has Me Running Back",
+        "owner": "German Haro",
+        "score": 0
+      },
+      "home": {
+        "teamId": 5,
+        "team": "Howya Been's",
+        "owner": "Bryan Hunt",
+        "score": 0
+      }
+    },
+    {
+      "id": 30,
+      "week": 5,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
         "teamId": 4,
-        "team": "1912 Titanic Swimteam",
+        "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 115.6
+        "score": 0
       },
       "home": {
-        "teamId": 14,
-        "team": "Ice Has Me Running Back",
-        "owner": "German Haro",
-        "score": 156.9
+        "teamId": 1,
+        "team": "Madison Beer Garden",
+        "owner": "George Travis",
+        "score": 0
       }
     }
   ],
   "standings": [
-    {
-      "locker": 4,
-      "teamId": 5,
-      "team": "Howya Been's",
-      "owner": "Bryan Hunt",
-      "abbrev": "HUNT",
-      "wins": 3,
-      "losses": 0,
-      "ties": 0,
-      "pointsFor": 422.54,
-      "pointsAgainst": 394.46000000000004
-    },
     {
       "locker": 1,
       "teamId": 1,
       "team": "Madison Beer Garden",
       "owner": "George Travis",
       "abbrev": "BDS",
-      "wins": 3,
+      "wins": 4,
       "losses": 0,
       "ties": 0,
-      "pointsFor": 409.82000000000005,
-      "pointsAgainst": 240.66000000000003
+      "pointsFor": 548.6400000000001,
+      "pointsAgainst": 326.34000000000003
     },
     {
       "locker": 12,
@@ -160,23 +148,71 @@
       "team": "Team Hash",
       "owner": "Trevor Hash",
       "abbrev": "HASH",
-      "wins": 2,
+      "wins": 3,
       "losses": 1,
       "ties": 0,
-      "pointsFor": 451.8,
-      "pointsAgainst": 285.5
+      "pointsFor": 580.78,
+      "pointsAgainst": 406.24
+    },
+    {
+      "locker": 4,
+      "teamId": 5,
+      "team": "Howya Been's",
+      "owner": "Bryan Hunt",
+      "abbrev": "HUNT",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "pointsFor": 536.4200000000001,
+      "pointsAgainst": 553.08
+    },
+    {
+      "locker": 7,
+      "teamId": 8,
+      "team": "Jigalos Jims",
+      "owner": "James Brochu",
+      "abbrev": "JIM",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "pointsFor": 496.14,
+      "pointsAgainst": 397.29999999999995
     },
     {
       "locker": 3,
       "teamId": 4,
-      "team": "1912 Titanic Swimteam",
+      "team": "You Just Made the List!",
       "owner": "Kyle Fowler",
       "abbrev": "Kyle",
       "wins": 2,
-      "losses": 1,
+      "losses": 2,
       "ties": 0,
-      "pointsFor": 371.94000000000005,
-      "pointsAgainst": 372.64
+      "pointsFor": 487.5400000000001,
+      "pointsAgainst": 529.54
+    },
+    {
+      "locker": 9,
+      "teamId": 11,
+      "team": "Your Reigning Champ",
+      "owner": "Thomas Speer",
+      "abbrev": "SPEE",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "pointsFor": 478.20000000000005,
+      "pointsAgainst": 476.94
+    },
+    {
+      "locker": 11,
+      "teamId": 14,
+      "team": "Ice Has Me Running Back",
+      "owner": "German Haro",
+      "abbrev": "HARO",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "pointsFor": 474.5,
+      "pointsAgainst": 434.26
     },
     {
       "locker": 6,
@@ -185,46 +221,10 @@
       "owner": "Vincent Cannarozzi",
       "abbrev": "CANN",
       "wins": 2,
-      "losses": 1,
-      "ties": 0,
-      "pointsFor": 366.40000000000003,
-      "pointsAgainst": 349.64
-    },
-    {
-      "locker": 7,
-      "teamId": 8,
-      "team": "Jigalos Jims",
-      "owner": "James Brochu",
-      "abbrev": "JIM",
-      "wins": 2,
-      "losses": 1,
-      "ties": 0,
-      "pointsFor": 337.52,
-      "pointsAgainst": 283.41999999999996
-    },
-    {
-      "locker": 9,
-      "teamId": 11,
-      "team": "Your Reigning Champ",
-      "owner": "Thomas Speer",
-      "abbrev": "SPEE",
-      "wins": 1,
       "losses": 2,
       "ties": 0,
-      "pointsFor": 348.90000000000003,
-      "pointsAgainst": 374.02
-    },
-    {
-      "locker": 11,
-      "teamId": 14,
-      "team": "Ice Has Me Running Back",
-      "owner": "German Haro",
-      "abbrev": "HARO",
-      "wins": 1,
-      "losses": 2,
-      "ties": 0,
-      "pointsFor": 317.6,
-      "pointsAgainst": 318.66
+      "pointsFor": 452.08000000000004,
+      "pointsAgainst": 488.46
     },
     {
       "locker": 10,
@@ -232,11 +232,11 @@
       "team": "Breezin’ with Bijan",
       "owner": "Collin Krum",
       "abbrev": "BB",
-      "wins": 1,
+      "wins": 2,
       "losses": 2,
       "ties": 0,
-      "pointsFor": 287.94,
-      "pointsAgainst": 315.74
+      "pointsFor": 419.1,
+      "pointsAgainst": 414.66
     },
     {
       "locker": 5,
@@ -245,10 +245,10 @@
       "owner": "Brian Heino",
       "abbrev": "HEIN",
       "wins": 1,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "pointsFor": 265.40000000000003,
-      "pointsAgainst": 416.06
+      "pointsFor": 368.32000000000005,
+      "pointsAgainst": 545.36
     },
     {
       "locker": 2,
@@ -257,10 +257,10 @@
       "owner": "Jared Hall",
       "abbrev": "HALL",
       "wins": 0,
-      "losses": 3,
+      "losses": 4,
       "ties": 0,
-      "pointsFor": 355.9,
-      "pointsAgainst": 465.04
+      "pointsFor": 476.64,
+      "pointsAgainst": 594.02
     },
     {
       "locker": 8,
@@ -269,37 +269,37 @@
       "owner": "JD Daley",
       "abbrev": "MAGA",
       "wins": 0,
-      "losses": 3,
+      "losses": 4,
       "ties": 0,
-      "pointsFor": 341.44,
-      "pointsAgainst": 461.36
+      "pointsFor": 440.36,
+      "pointsAgainst": 592.52
     }
   ],
   "featured_story": {
     "season": 2026,
     "week": 4,
     "headline": "James Brochu sets the Week 4 pace as the table takes shape",
-    "standfirst": "Week 4 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
+    "standfirst": "Madison Beer Garden (George Travis) leads the verified table after Week 4; Team Hash (Trevor Hash) survived the week's closest finish by 8.24.",
     "path": "data/newspaper_editions/2026/week_04.json",
-    "source_status": "verified_live",
+    "source_status": "verified_final",
     "validation_status": "valid",
-    "status": "live",
-    "generated_at": "2026-10-05T17:09:04.285932Z",
+    "status": "final",
+    "generated_at": "2026-10-06T15:12:48.235799Z",
     "table_leader": {
       "rank": 1,
-      "team": "Howya Been's",
-      "owner": "Bryan Hunt",
-      "record": "3-0",
-      "pointsFor": "422.54",
-      "tag": "Table leader"
-    },
-    "pressure": {
       "team": "Madison Beer Garden",
       "owner": "George Travis",
-      "record": "3-0",
+      "record": "4-0",
+      "pointsFor": "548.64",
+      "tag": "Highest scoring"
+    },
+    "pressure": {
+      "team": "Team Hash",
+      "owner": "Trevor Hash",
+      "record": "3-1",
       "label": "EARLY READ",
-      "title": "Madison Beer Garden keeps the leaders honest",
-      "body": "Madison Beer Garden (George Travis) sits 3-0 with 409.82 points for, the clearest early chase line behind the top spot.",
+      "title": "Team Hash keeps the leaders honest",
+      "body": "Team Hash (Trevor Hash) sits 3-1 with 580.78 points for, the clearest early chase line behind the top spot.",
       "sourceIds": [
         "current-season",
         "seasons"
@@ -310,96 +310,96 @@
     "favorite": {
       "name": "Thomas Speer",
       "odds": "+300",
-      "case": "1-2 · 116.30 PF/G through 3. Draft note: Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."
+      "case": "2-2 · 119.55 PF/G through 4. Draft note: Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."
     },
     "board": [
       {
         "name": "Thomas Speer",
         "odds": "+300",
-        "case": "1-2 · 116.30 PF/G through 3. Draft note: Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four.",
+        "case": "2-2 · 119.55 PF/G through 4. Draft note: Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four.",
         "draftCase": "Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."
       },
       {
         "name": "Bryan Hunt",
-        "odds": "+400",
-        "case": "3-0 · 140.85 PF/G through 3. Draft note: Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé.",
+        "odds": "+500",
+        "case": "3-1 · 134.11 PF/G through 4. Draft note: Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé.",
         "draftCase": "Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé."
       },
       {
         "name": "George Travis",
-        "odds": "+750",
-        "case": "3-0 · 136.61 PF/G through 3. Draft note: CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan.",
+        "odds": "+700",
+        "case": "4-0 · 137.16 PF/G through 4. Draft note: CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan.",
         "draftCase": "CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."
       },
       {
         "name": "James Brochu",
-        "odds": "+1350",
-        "case": "2-1 · 112.51 PF/G through 3. Draft note: Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix.",
+        "odds": "+1000",
+        "case": "3-1 · 124.03 PF/G through 4. Draft note: Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix.",
         "draftCase": "Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix."
       },
       {
-        "name": "Brian Heino",
-        "odds": "+1350",
-        "case": "1-2 · 88.47 PF/G through 3. Draft note: Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window.",
-        "draftCase": "Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window."
-      },
-      {
         "name": "Trevor Hash",
-        "odds": "+1450",
-        "case": "2-1 · 150.60 PF/G through 3. Draft note: Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up.",
+        "odds": "+1100",
+        "case": "3-1 · 145.19 PF/G through 4. Draft note: Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up.",
         "draftCase": "Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up."
       },
       {
         "name": "Collin Krum",
-        "odds": "+1700",
-        "case": "1-2 · 95.98 PF/G through 3. Draft note: Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip.",
+        "odds": "+1450",
+        "case": "2-2 · 104.78 PF/G through 4. Draft note: Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip.",
         "draftCase": "Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip."
       },
       {
-        "name": "Vincent Cannarozzi",
-        "odds": "+2000",
-        "case": "2-1 · 122.13 PF/G through 3. Draft note: JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit.",
-        "draftCase": "JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit."
-      },
-      {
-        "name": "JD Daley",
-        "odds": "+2000",
-        "case": "0-3 · 113.81 PF/G through 3. Draft note: Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version.",
-        "draftCase": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
+        "name": "Brian Heino",
+        "odds": "+1750",
+        "case": "1-3 · 92.08 PF/G through 4. Draft note: Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window.",
+        "draftCase": "Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window."
       },
       {
         "name": "Jared Hall",
-        "odds": "+2050",
-        "case": "0-3 · 118.63 PF/G through 3. Draft note: Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset.",
+        "odds": "+2150",
+        "case": "0-4 · 119.16 PF/G through 4. Draft note: Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset.",
         "draftCase": "Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset."
       },
       {
-        "name": "Kyle Fowler",
+        "name": "JD Daley",
+        "odds": "+2450",
+        "case": "0-4 · 110.09 PF/G through 4. Draft note: Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version.",
+        "draftCase": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
+      },
+      {
+        "name": "Vincent Cannarozzi",
         "odds": "+2500",
-        "case": "2-1 · 123.98 PF/G through 3. Draft note: AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin.",
-        "draftCase": "AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin."
+        "case": "2-2 · 113.02 PF/G through 4. Draft note: JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit.",
+        "draftCase": "JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit."
       },
       {
         "name": "German Haro",
         "odds": "+2500",
-        "case": "1-2 · 105.87 PF/G through 3. Draft note: Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence.",
+        "case": "2-2 · 118.63 PF/G through 4. Draft note: Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence.",
         "draftCase": "Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence."
+      },
+      {
+        "name": "Kyle Fowler",
+        "odds": "+2500",
+        "case": "2-2 · 121.89 PF/G through 4. Draft note: AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin.",
+        "draftCase": "AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin."
       }
     ]
   },
   "league_pulse": [
     {
       "id": "matchup",
-      "label": "Game watch",
-      "title": "Team Hash / No More Darties in LA",
-      "detail": "8.2 points apart · Live",
+      "label": "On deck",
+      "title": "6 matchups posted",
+      "detail": "Week 5 is ready on the league board.",
       "scrollTo": "weekBoard"
     },
     {
       "id": "playoff",
       "label": "Playoff line",
-      "title": "James Brochu holds No. 6",
-      "detail": "2-1 at the cut · Thomas Speer is next",
+      "title": "Thomas Speer holds No. 6",
+      "detail": "2-2 at the cut · German Haro is next",
       "scrollTo": "weekBoard"
     },
     {
@@ -413,28 +413,28 @@
       "id": "odds",
       "label": "Odds board",
       "title": "Thomas Speer +300",
-      "detail": "Enters Week 4 as the league-office favorite. Full board below.",
+      "detail": "Enters Week 5 as the league-office favorite. Full board below.",
       "scrollTo": "championshipOdds"
     },
     {
       "id": "record",
-      "label": "Record watch",
-      "title": "James Brochu · 158.6",
-      "detail": "77 shy of the 235.6 all-time mark",
+      "label": "Record book",
+      "title": "Collin Krum · 235.6",
+      "detail": "Highest single-team week · 2022.",
       "view": "intel"
     },
     {
       "id": "streak",
       "label": "Form guide",
-      "title": "Bryan Hunt · 3 straight",
-      "detail": "Active win streak for Howya Been's.",
+      "title": "George Travis · 4 straight",
+      "detail": "Active win streak for Madison Beer Garden.",
       "scrollTo": "weekBoard"
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-06T03:41:52.855403+00:00",
-    "edition_published_at": "2026-10-05T17:09:04.285932Z",
-    "payload_built_at": "2026-10-06T03:41:53.163Z",
+    "week_fetched_at": "2026-10-06T15:13:03.920432+00:00",
+    "edition_published_at": "2026-10-06T15:12:48.235799Z",
+    "payload_built_at": "2026-10-06T15:13:04.262Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

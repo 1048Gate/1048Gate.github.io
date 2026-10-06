@@ -4,8 +4,8 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 4,
-  "generated_at": "2026-10-05T17:09:04.285932Z",
-  "source_status": "verified_live",
+  "generated_at": "2026-10-06T15:12:48.235799Z",
+  "source_status": "verified_final",
   "validation_status": "valid",
   "editorial_policy": {
     "max_primary_features_per_manager": 2,
@@ -16,12 +16,12 @@
     "locator": "season=2026;week=4",
     "description": "Published ESPN board snapshot"
   },
-  "status": "live",
+  "status": "final",
   "headline": "James Brochu sets the Week 4 pace as the table takes shape",
-  "standfirst": "Week 4 is live; Howya Been's (Bryan Hunt) leads the completed-results table while the current matchup board continues to move.",
+  "standfirst": "Madison Beer Garden (George Travis) leads the verified table after Week 4; Team Hash (Trevor Hash) survived the week's closest finish by 8.24.",
   "lead": {
     "title": "Inside Week 4: the high score, the table lead, and the closest call",
-    "body": "Howya Been's (Bryan Hunt) is first in the completed-results table at 3-0 with 422.54 points for. On the live Week 4 board, Jigalos Jims (James Brochu) currently has the high score at 158.62, while Breezin’ with Bijan (Collin Krum) is at 76.96. Those live scores can still change.",
+    "body": "Jigalos Jims (James Brochu) set the Week 4 scoring pace at 158.62, while Madison Beer Garden (George Travis) moved to 4-0 with 548.64 points for. The closest result was decided by 8.24 points.",
     "sourceIds": [
       "current-season",
       "power-rankings"
@@ -30,13 +30,13 @@
   "matchup": {
     "awayTeam": "Team Hash",
     "awayOwner": "Trevor Hash",
-    "awayScore": 109.38,
+    "awayScore": 128.98,
     "homeTeam": "No More Darties in LA",
     "homeOwner": "Jared Hall",
-    "homeScore": 102.8,
-    "whyItMatters": "The closest live game currently has a 6.58-point margin, making it the tightest matchup on the Week 4 board right now.",
+    "homeScore": 120.74,
+    "whyItMatters": "The closest game on the final board finished with an 8.24-point margin, making it the tightest result of Week 4.",
     "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
-    "edge": "Live edge: Team Hash (Trevor Hash) by 6.58 points.",
+    "edge": "Verified result: Team Hash (Trevor Hash) by 8.24 points.",
     "sourceIds": [
       "current-season"
     ]
@@ -44,108 +44,108 @@
   "tableNotes": [
     {
       "rank": 1,
-      "team": "Howya Been's",
-      "owner": "Bryan Hunt",
-      "record": "3-0",
-      "pointsFor": "422.54",
-      "tag": "Table leader"
+      "team": "Madison Beer Garden",
+      "owner": "George Travis",
+      "record": "4-0",
+      "pointsFor": "548.64",
+      "tag": "Highest scoring"
     },
     {
       "rank": 2,
-      "team": "Madison Beer Garden",
-      "owner": "George Travis",
-      "record": "3-0",
-      "pointsFor": "409.82",
-      "tag": "Current table"
+      "team": "Team Hash",
+      "owner": "Trevor Hash",
+      "record": "3-1",
+      "pointsFor": "580.78",
+      "tag": "Early signal"
     },
     {
       "rank": 3,
-      "team": "Team Hash",
-      "owner": "Trevor Hash",
-      "record": "2-1",
-      "pointsFor": "451.80",
-      "tag": "Current table"
+      "team": "Howya Been's",
+      "owner": "Bryan Hunt",
+      "record": "3-1",
+      "pointsFor": "536.42",
+      "tag": "Early signal"
     },
     {
       "rank": 4,
-      "team": "1912 Titanic Swimteam",
-      "owner": "Kyle Fowler",
-      "record": "2-1",
-      "pointsFor": "371.94",
-      "tag": "Current table"
+      "team": "Jigalos Jims",
+      "owner": "James Brochu",
+      "record": "3-1",
+      "pointsFor": "496.14",
+      "tag": "Early signal"
     },
     {
       "rank": 5,
-      "team": "McConkey Tonk Badonkadonk",
-      "owner": "Vincent Cannarozzi",
-      "record": "2-1",
-      "pointsFor": "366.40",
-      "tag": "Current table"
+      "team": "You Just Made the List!",
+      "owner": "Kyle Fowler",
+      "record": "2-2",
+      "pointsFor": "487.54",
+      "tag": "Early signal"
     },
     {
       "rank": 6,
-      "team": "Jigalos Jims",
-      "owner": "James Brochu",
-      "record": "2-1",
-      "pointsFor": "337.52",
-      "tag": "Current table"
+      "team": "Your Reigning Champ",
+      "owner": "Thomas Speer",
+      "record": "2-2",
+      "pointsFor": "478.20",
+      "tag": "Early signal"
     },
     {
       "rank": 7,
-      "team": "Your Reigning Champ",
-      "owner": "Thomas Speer",
-      "record": "1-2",
-      "pointsFor": "348.90",
-      "tag": "Current table"
+      "team": "Ice Has Me Running Back",
+      "owner": "German Haro",
+      "record": "2-2",
+      "pointsFor": "474.50",
+      "tag": "Early signal"
     },
     {
       "rank": 8,
-      "team": "Ice Has Me Running Back",
-      "owner": "German Haro",
-      "record": "1-2",
-      "pointsFor": "317.60",
-      "tag": "Current table"
+      "team": "McConkey Tonk Badonkadonk",
+      "owner": "Vincent Cannarozzi",
+      "record": "2-2",
+      "pointsFor": "452.08",
+      "tag": "Early signal"
     },
     {
       "rank": 9,
       "team": "Breezin’ with Bijan",
       "owner": "Collin Krum",
-      "record": "1-2",
-      "pointsFor": "287.94",
-      "tag": "Current table"
+      "record": "2-2",
+      "pointsFor": "419.10",
+      "tag": "Early signal"
     },
     {
       "rank": 10,
       "team": "The Buwhops",
       "owner": "Brian Heino",
-      "record": "1-2",
-      "pointsFor": "265.40",
-      "tag": "Current table"
+      "record": "1-3",
+      "pointsFor": "368.32",
+      "tag": "Early signal"
     },
     {
       "rank": 11,
       "team": "No More Darties in LA",
       "owner": "Jared Hall",
-      "record": "0-3",
-      "pointsFor": "355.90",
-      "tag": "Current table"
+      "record": "0-4",
+      "pointsFor": "476.64",
+      "tag": "Early signal"
     },
     {
       "rank": 12,
       "team": "Ja'Marr-a-Lago",
       "owner": "JD Daley",
-      "record": "0-3",
-      "pointsFor": "341.44",
-      "tag": "Current table"
+      "record": "0-4",
+      "pointsFor": "440.36",
+      "tag": "Early signal"
     }
   ],
   "pressure": {
-    "team": "Madison Beer Garden",
-    "owner": "George Travis",
-    "record": "3-0",
+    "team": "Team Hash",
+    "owner": "Trevor Hash",
+    "record": "3-1",
     "label": "EARLY READ",
-    "title": "Madison Beer Garden keeps the leaders honest",
-    "body": "Madison Beer Garden (George Travis) sits 3-0 with 409.82 points for, the clearest early chase line behind the top spot.",
+    "title": "Team Hash keeps the leaders honest",
+    "body": "Team Hash (Trevor Hash) sits 3-1 with 580.78 points for, the clearest early chase line behind the top spot.",
     "sourceIds": [
       "current-season",
       "seasons"
@@ -153,14 +153,14 @@
   },
   "surprise": {
     "title": "Biggest surprise: the scoring range is already loud",
-    "body": "The gap between Jigalos Jims (James Brochu) at 158.62 and Breezin’ with Bijan (Collin Krum) at 76.96 is 81.66 points. That is the current live spread, not a final Week 4 result.",
+    "body": "The gap between Jigalos Jims (James Brochu) at 158.62 and McConkey Tonk Badonkadonk (Vincent Cannarozzi) at 85.68 is 72.94 points. That scoring range is Week 4's sharpest completed result.",
     "sourceIds": [
       "current-season"
     ]
   },
   "recordWatch": {
     "title": "Record to watch: the first benchmark is on the board",
-    "body": "The live Week 4 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+    "body": "Week 4's results did not break the checked-in highest-score, blowout, or closest-game marks.",
     "sourceIds": [
       "current-season",
       "matchups"
@@ -168,14 +168,14 @@
   },
   "archiveComparison": {
     "title": "From the archive: early leaders need patience",
-    "body": "Week 4 is still underway in Szn 10. The archive keeps completed results separate from the live board, so no unfinished score is treated as a final historical result.",
+    "body": "Week 4 is now part of the verified Szn 10 record, but the archive does not turn an opening table into a final ranking. Keep the benchmark; wait for the pattern.",
     "linkLabel": "Open the newspaper archive",
     "sourceIds": [
       "seasons",
       "newspaper"
     ]
   },
-  "editorial_note": "Week 4 live edition generated from the verified board. Scores and live edges may change until the slate is final.",
+  "editorial_note": "Week 4 edition generated from the verified final board.",
   "results": [
     {
       "winnerTeam": "Jigalos Jims",
@@ -183,19 +183,19 @@
       "winnerScore": 158.62,
       "loserTeam": "Howya Been's",
       "loserOwner": "Bryan Hunt",
-      "loserScore": 104.88,
-      "margin": 53.74,
-      "state": "live"
+      "loserScore": 113.88,
+      "margin": 44.74,
+      "state": "final"
     },
     {
       "winnerTeam": "Ice Has Me Running Back",
       "winnerOwner": "German Haro",
       "winnerScore": 156.9,
-      "loserTeam": "1912 Titanic Swimteam",
+      "loserTeam": "You Just Made the List!",
       "loserOwner": "Kyle Fowler",
-      "loserScore": 98.2,
-      "margin": 58.7,
-      "state": "live"
+      "loserScore": 115.6,
+      "margin": 41.3,
+      "state": "final"
     },
     {
       "winnerTeam": "Madison Beer Garden",
@@ -203,9 +203,19 @@
       "winnerScore": 138.82,
       "loserTeam": "McConkey Tonk Badonkadonk",
       "loserOwner": "Vincent Cannarozzi",
-      "loserScore": 77.98,
-      "margin": 60.84,
-      "state": "live"
+      "loserScore": 85.68,
+      "margin": 53.14,
+      "state": "final"
+    },
+    {
+      "winnerTeam": "Breezin’ with Bijan",
+      "winnerOwner": "Collin Krum",
+      "winnerScore": 131.16,
+      "loserTeam": "Ja'Marr-a-Lago",
+      "loserOwner": "JD Daley",
+      "loserScore": 98.92,
+      "margin": 32.24,
+      "state": "final"
     },
     {
       "winnerTeam": "Your Reigning Champ",
@@ -213,126 +223,116 @@
       "winnerScore": 129.3,
       "loserTeam": "The Buwhops",
       "loserOwner": "Brian Heino",
-      "loserScore": 80.12,
-      "margin": 49.18,
-      "state": "live"
+      "loserScore": 102.92,
+      "margin": 26.38,
+      "state": "final"
     },
     {
       "winnerTeam": "Team Hash",
       "winnerOwner": "Trevor Hash",
-      "winnerScore": 109.38,
+      "winnerScore": 128.98,
       "loserTeam": "No More Darties in LA",
       "loserOwner": "Jared Hall",
-      "loserScore": 102.8,
-      "margin": 6.58,
-      "state": "live"
-    },
-    {
-      "winnerTeam": "Ja'Marr-a-Lago",
-      "winnerOwner": "JD Daley",
-      "winnerScore": 98.92,
-      "loserTeam": "Breezin’ with Bijan",
-      "loserOwner": "Collin Krum",
-      "loserScore": 76.96,
-      "margin": 21.96,
-      "state": "live"
+      "loserScore": 120.74,
+      "margin": 8.24,
+      "state": "final"
     }
   ],
   "powerTable": [
     {
-      "owner": "Bryan Hunt",
-      "team": "Howya Been's",
-      "rating": "89.0",
-      "record": "3-0",
-      "why": "140.85 PF/G",
-      "rank": 1
-    },
-    {
       "owner": "George Travis",
       "team": "Madison Beer Garden",
-      "rating": "76.0",
-      "record": "3-0",
-      "why": "136.61 PF/G",
-      "rank": 2
+      "rating": "78.9",
+      "record": "4-0",
+      "why": "137.16 PF/G",
+      "rank": 1
     },
     {
       "owner": "Trevor Hash",
       "team": "Team Hash",
-      "rating": "73.0",
-      "record": "2-1",
-      "why": "150.60 PF/G",
+      "rating": "78.2",
+      "record": "3-1",
+      "why": "145.19 PF/G",
+      "rank": 2
+    },
+    {
+      "owner": "Bryan Hunt",
+      "team": "Howya Been's",
+      "rating": "78.1",
+      "record": "3-1",
+      "why": "134.11 PF/G",
       "rank": 3
-    },
-    {
-      "owner": "Kyle Fowler",
-      "team": "1912 Titanic Swimteam",
-      "rating": "61.7",
-      "record": "2-1",
-      "why": "123.98 PF/G",
-      "rank": 4
-    },
-    {
-      "owner": "Vincent Cannarozzi",
-      "team": "McConkey Tonk Badonkadonk",
-      "rating": "59.0",
-      "record": "2-1",
-      "why": "122.13 PF/G",
-      "rank": 5
     },
     {
       "owner": "James Brochu",
       "team": "Jigalos Jims",
-      "rating": "48.3",
-      "record": "2-1",
-      "why": "112.51 PF/G",
-      "rank": 6
+      "rating": "61.8",
+      "record": "3-1",
+      "why": "124.03 PF/G",
+      "rank": 4
+    },
+    {
+      "owner": "Kyle Fowler",
+      "team": "You Just Made the List!",
+      "rating": "56.3",
+      "record": "2-2",
+      "why": "121.89 PF/G",
+      "rank": 5
     },
     {
       "owner": "Thomas Speer",
       "team": "Your Reigning Champ",
-      "rating": "41.8",
-      "record": "1-2",
-      "why": "116.30 PF/G",
-      "rank": 7
-    },
-    {
-      "owner": "Jared Hall",
-      "team": "No More Darties in LA",
-      "rating": "34.4",
-      "record": "0-3",
-      "why": "118.63 PF/G",
-      "rank": 8
+      "rating": "51.6",
+      "record": "2-2",
+      "why": "119.55 PF/G",
+      "rank": 6
     },
     {
       "owner": "German Haro",
       "team": "Ice Has Me Running Back",
-      "rating": "31.4",
-      "record": "1-2",
-      "why": "105.87 PF/G",
-      "rank": 9
+      "rating": "48.5",
+      "record": "2-2",
+      "why": "118.62 PF/G",
+      "rank": 7
     },
     {
-      "owner": "JD Daley",
-      "team": "Ja'Marr-a-Lago",
-      "rating": "31.1",
-      "record": "0-3",
-      "why": "113.81 PF/G",
-      "rank": 10
-    },
-    {
-      "owner": "Brian Heino",
-      "team": "The Buwhops",
-      "rating": "26.7",
-      "record": "1-2",
-      "why": "88.47 PF/G",
-      "rank": 11
+      "owner": "Vincent Cannarozzi",
+      "team": "McConkey Tonk Badonkadonk",
+      "rating": "47.4",
+      "record": "2-2",
+      "why": "113.02 PF/G",
+      "rank": 8
     },
     {
       "owner": "Collin Krum",
       "team": "Breezin’ with Bijan",
-      "rating": "24.9",
-      "record": "1-2",
-      "why": "95.98 PF/G",
+      "rating": "37.0",
+      "record": "2-2",
+      "why": "104.78 PF/G",
+      "rank": 9
+    },
+    {
+      "owner": "Jared Hall",
+      "team": "No More Darties in LA",
+      "rating": "35.4",
+      "record": "0-4",
+      "why": "119.16 PF/G",
+      "rank": 10
+    },
+    {
+      "owner": "JD Daley",
+      "team": "Ja'Marr-a-Lago",
+      "rating": "28.5",
+      "record": "0-4",
+      "why": "110.09 PF/G",
+      "rank": 11
+    },
+    {
+      "owner": "Brian Heino",
+      "team": "The Buwhops",
+      "rating": "23.5",
+      "record": "1-3",
+      "why": "92.08 PF/G",
       "rank": 12
     }
   ],
@@ -352,68 +352,79 @@
   ],
   "rivalryFile": {
     "title": "Brian Heino vs. Thomas Speer",
-    "body": "The series stands 6-9-0 through 15 meetings. Thomas Speer leads series scoring 2013.88–1700.90. Thomas Speer currently leads 129.30–80.12."
+    "body": "The series stands 6-9-0 through 15 meetings. Thomas Speer leads series scoring 2013.88–1700.90. Thomas Speer took the latest meeting 129.30–102.92."
   },
   "nextSlate": [],
   "stories": [
     {
       "story_type": "matchup_recap",
-      "title": "Week 4: Live league board",
-      "body": "JD Daley leads Collin Krum 98.92–76.96. Trevor Hash leads Jared Hall 109.38–102.80. Thomas Speer leads Brian Heino 129.30–80.12. James Brochu leads Bryan Hunt 158.62–104.88. George Travis leads Vincent Cannarozzi 138.82–77.98. German Haro leads Kyle Fowler 156.90–98.20.",
+      "title": "Week 4: The league board",
+      "body": "Collin Krum beat JD Daley 131.16–98.92. Trevor Hash beat Jared Hall 128.98–120.74. Thomas Speer beat Brian Heino 129.30–102.92. James Brochu beat Bryan Hunt 158.62–113.88. George Travis beat Vincent Cannarozzi 138.82–85.68. German Haro beat Kyle Fowler 156.90–115.60.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
-        "description": "Live ESPN matchup board"
+        "description": "Final ESPN matchup board"
       }
     },
     {
       "story_type": "biggest_win",
-      "title": "George Travis holds the widest live edge",
-      "body": "George Travis currently leads Vincent Cannarozzi 138.82–77.98, a live margin of 60.84 points.",
+      "title": "George Travis owns the week's biggest win",
+      "body": "George Travis handled Vincent Cannarozzi 138.82–85.68, winning by a hefty 53.14 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
-        "description": "Live ESPN matchup board"
+        "description": "Final ESPN matchup board"
       },
       "primary_owner": "George Travis"
     },
     {
       "story_type": "closest_game",
-      "title": "Trevor Hash has the narrowest live edge",
-      "body": "The tightest live matchup stands 109.38–102.80, with Trevor Hash ahead of Jared Hall by 6.58 points.",
+      "title": "Trevor Hash hangs on in the closest finish",
+      "body": "The week's tightest matchup ended 128.98–120.74, with Trevor Hash edging Jared Hall by 8.24 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
-        "description": "Live ESPN matchup board"
+        "description": "Final ESPN matchup board"
       },
       "primary_owner": "Trevor Hash"
     },
     {
       "story_type": "scoring_leaders",
-      "title": "James Brochu sets the current Week 4 pace",
-      "body": "James Brochu currently has the league-high 158.62. Collin Krum is at the current board-low 76.96; both scores can still move.",
+      "title": "James Brochu sets the Week 4 pace",
+      "body": "James Brochu topped the league with 158.62. At the other end, Vincent Cannarozzi posted the week's low score at 85.68.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;matchups",
-        "description": "Live ESPN matchup board"
+        "description": "Final ESPN matchup board"
       },
       "primary_owner": "James Brochu"
     },
     {
       "story_type": "standings",
-      "title": "Bryan Hunt leads the completed-results table",
-      "body": "During live Week 4, Bryan Hunt is listed first at 3-0 with 422.54 points for from completed results.",
+      "title": "George Travis sits atop the verified table",
+      "body": "After Week 4, George Travis holds first place at 4-0 with 548.64 points for.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=4;standings",
         "description": "Verified standings table"
       },
-      "primary_owner": "Bryan Hunt"
+      "primary_owner": "George Travis"
+    },
+    {
+      "story_type": "preseason_order_watch",
+      "title": "Early read: German Haro presses the preseason order",
+      "body": "German Haro won in Week 4 with 156.90 points after entering the season with a 31.2 post-draft rating. The full 1–12 ranking appears on the league board.",
+      "source": {
+        "dataset": "data/current-season.json + data/power-rankings.json",
+        "locator": "week=4;ratings",
+        "description": "Weekly results compared with checked-in post-draft ratings"
+      },
+      "primary_owner": "German Haro"
     },
     {
       "story_type": "record_watch",
-      "title": "Live record watch",
-      "body": "The live Week 4 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+      "title": "The record book holds",
+      "body": "Week 4's results left the checked-in highest-score, blowout, and closest-game marks untouched.",
       "source": {
         "dataset": "data/current-season.json + data/matchups.json",
         "locator": "week=4;records",
@@ -423,12 +434,13 @@
     {
       "story_type": "rivalry",
       "title": "Rivalry file: Brian Heino and Thomas Speer",
-      "body": "The series stands 6-9-0 through 15 meetings. Thomas Speer leads series scoring 2013.88–1700.90. Thomas Speer currently leads 129.30–80.12.",
+      "body": "Through 15 meetings, the series stands 6-9-0. Thomas Speer owns the scoring edge 2013.88–1700.90 and took the latest meeting 129.30–102.92.",
       "source": {
         "dataset": "data/matchups.json",
         "locator": "pair=Brian Heino|Thomas Speer",
         "description": "All-time head-to-head archive"
       }
     }
-  ]
+  ],
+  "writing_mode": "openai_verified_rewrite"
 }
