@@ -44,29 +44,29 @@ up to 1,000 available/waiver players selected by ownership percentage. The pool
 is labeled as bounded, not a complete player universe. Snapshots are retained
 until explicitly removed by trusted administration.
 
-Only player IDs/names, positions, NFL team IDs, injury status, and projected
-points are written to `data/player-projections.json`. Fantasy team assignments,
-lineup slots, available-player status, ownership percentages, and scoring
-settings are excluded from that public file. No raw ESPN response, account
-email, credential, or private snapshot is written to disk or uploaded as an
-Actions artifact. Private save failure retains the prior public projection file.
-No weekly projection is substituted with an actual score or season total.
-Missing projections display as a dash; zero projections remain zero.
+Player-level projections, rosters, lineup slots, ownership, availability, and
+scoring settings are stored only in the private Supabase snapshot and viewed
+through Owner Desk. The collector does not write a public player projection feed.
+The public `/projections/` page displays team totals only.
 
-The public `data/current-season.json` board also includes each team's current
-starters (player ID/name, position, lineup slot, and weekly projected points),
-plus a starter total and projection timestamp. It excludes bench/IR players,
-availability, ownership, and scoring settings. Totals require a filled starting
-lineup with projections for every starter; incomplete totals remain unavailable.
-The collector updates this board only when season and week match its snapshot.
-Pregame cards show projected totals; live/final cards continue to show actual
-scores. Team-name buttons open the manager profile's starter projection table.
+The public `data/current-season.json` board includes each team's starter-based
+projection total, a completeness flag, and a projection timestamp. It contains
+no player names, IDs, individual points, or lineup slots. Totals require a filled
+starting lineup with projections for every starter; incomplete totals remain
+unavailable. Zero remains zero. The collector updates this board only when
+season and week match its snapshot. Pregame cards show projected totals;
+live/final cards show actual scores. Team-name buttons open the manager profile's
+team total above its history.
+
+No raw ESPN response, account email, credential, or private snapshot is written
+to disk or uploaded as an Actions artifact. Private save failure retains the
+previous public board. No weekly projection is substituted with an actual score
+or season total.
 
 The collector is a nonblocking step: an ESPN projection failure cannot prevent
 the existing score/newspaper pipeline from proceeding. Read its step logs to
 confirm both outputs after an authenticated production run. A final step marks
-the workflow failed if collection failed, after score updates finish. The initial
-checked-in public file intentionally has no fabricated player projections.
+the workflow failed if collection failed, after score updates finish. Missing totals are never fabricated.
 
 ## Verification
 

@@ -863,4 +863,4 @@ html body #weekBoard .week-team-link:focus-visible{outline:2px solid currentColo
 html body #weekBoard .is-leading .week-team-link{font-weight:700}
 html[data-theme="dark"] body #weekBoard .week-team-link{color:#8dc4ef}
 .team-projection-section{margin:16px 0;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.team-projection-section h3{margin:0 0 8px}.team-projection-section p{font-size:12px;margin:8px 0}.team-projection-section table{width:100%;border-collapse:collapse;font-size:12px}.team-projection-section td,.team-projection-section th{text-align:left;padding:8px 4px;border-bottom:1px solid var(--line)}.team-projection-section .num{text-align:right;font-variant-numeric:tabular-nums}
+.team-projection-section h3{margin:0 0 8px}.team-projection-section p{font-size:12px;margin:8px 0}

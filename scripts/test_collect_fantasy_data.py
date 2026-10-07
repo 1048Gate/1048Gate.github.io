@@ -33,13 +33,10 @@ class FantasyDataTests(unittest.TestCase):
         self.assertEqual(player_row({'player':player()},2026,5)['projected_points'],12.5)
         self.assertIsNone(player_row({'player':player()},2026,6)['projected_points'])
     def test_allowlist_and_private_public_boundary(self):
-        private,public=normalize(*self.fixtures(),2026,1237285,5)
+        private=normalize(*self.fixtures(),2026,1237285,5)
         self.assertEqual(private['teams'][0]['roster'][0]['lineup_slot'],'Bench')
         self.assertEqual([row['availability'] for row in private['available_players']],['FREEAGENT','WAIVERS'])
-        text=json.dumps([private,public]); self.assertNotIn('secret',text)
-        for key in ['teams','available_players','settings','lineup_slot','availability','percent_owned','Private Team']:
-            self.assertNotIn(key,json.dumps(public))
-        self.assertEqual(next(p for p in public['players'] if p['id']==2)['projected_points'],0)
+        text=json.dumps(private); self.assertNotIn('secret',text)
         self.assertFalse(private['available_pool']['complete'])
     def test_reject_missing_rosters_and_unavailable_pool(self):
         league,pool=self.fixtures()
@@ -54,9 +51,10 @@ class FantasyDataTests(unittest.TestCase):
         league,pool=self.fixtures()
         league['scoringPeriodId']=5
         with TemporaryDirectory() as folder:
-            output=Path(folder)/'projections.json'
+            output=Path(folder)/'board.json'
+            output.write_text(json.dumps({'season':2026,'week':5,'matchups':[]}))
             with patch.dict('os.environ',{'ESPN_S2':'cookie','ESPN_SWID':'cookie','SUPABASE_URL':'https://example.test','SUPABASE_SERVICE_ROLE_KEY':'service'}), \
-                 patch('sys.argv',['collector','--week','5','--public-output',str(output),'--board-output',str(Path(folder)/'board.json')]), \
+                 patch('sys.argv',['collector','--week','5','--board-output',str(output)]), \
                  patch('collect_fantasy_data.request_espn',side_effect=[league,pool,{'players':[{'player':player(1,17.5)}]}]) as espn, \
                  patch('collect_fantasy_data.supabase_request',side_effect=[[],None]) as database:
                 self.assertEqual(main(),0)
@@ -70,15 +68,17 @@ class FantasyDataTests(unittest.TestCase):
                 self.assertEqual(detail_filters['filterIds']['value'], [1])
                 self.assertIn('teams',database.call_args_list[1].args[2]['payload'])
                 public=json.loads(output.read_text())
-                self.assertNotIn('teams',public)
-                self.assertEqual(next(row for row in public['players'] if row['id']==1)['projected_points'],17.5)
-                self.assertEqual([f.name for f in Path(folder).iterdir()],['projections.json'])
+                self.assertNotIn('roster',json.dumps(public))
+                self.assertNotIn('Test Player',json.dumps(public))
+                self.assertEqual(database.call_args_list[1].args[2]['payload']['teams'][0]['roster'][0]['projected_points'],17.5)
+                self.assertEqual([f.name for f in Path(folder).iterdir()],['board.json'])
     def test_private_save_failure_preserves_public_file(self):
         league,pool=self.fixtures();league['scoringPeriodId']=5
         with TemporaryDirectory() as folder:
-            output=Path(folder)/'projections.json';output.write_text('previous')
+            output=Path(folder)/'board.json'
+            output.write_text(json.dumps({'season':2026,'week':5,'matchups':[]}));output.write_text('previous')
             with patch.dict('os.environ',{'ESPN_S2':'cookie','ESPN_SWID':'cookie','SUPABASE_URL':'https://example.test','SUPABASE_SERVICE_ROLE_KEY':'service'}), \
-                 patch('sys.argv',['collector','--week','5','--public-output',str(output),'--board-output',str(Path(folder)/'board.json')]), \
+                 patch('sys.argv',['collector','--week','5','--board-output',str(output)]), \
                  patch('collect_fantasy_data.request_espn',side_effect=[league,pool,{'players':[]}]), \
                  patch('collect_fantasy_data.supabase_request',side_effect=RuntimeError('private response')):
                 self.assertEqual(main(),1)
@@ -90,7 +90,7 @@ class FantasyDataTests(unittest.TestCase):
             normalize(league,pool,2026,1237285,5)
 
     def test_team_projections_only_count_complete_current_starters(self):
-        private,_ = normalize(*self.fixtures(),2026,1237285,5)
+        private = normalize(*self.fixtures(),2026,1237285,5)
         private['settings']['lineup_slots'] = [{'id':2,'count':1},{'id':20,'count':7},{'id':21,'count':1}]
         roster = private['teams'][0]['roster']
         starter = dict(roster[0], id=9, lineup_slot_id=2, lineup_slot='RB', projected_points=0)
@@ -99,7 +99,8 @@ class FantasyDataTests(unittest.TestCase):
         result = add_team_projections(board,private)
         self.assertEqual(result['matchups'][0]['away']['projectedScore'],0)
         self.assertEqual(result['matchups'][0]['away']['score'],0)
-        self.assertEqual(len(result['teamProjections'][0]['starters']),1)
+        self.assertEqual(set(result['teamProjections'][0]),{'teamId','projectedScore','complete'})
+        self.assertNotIn('Test Player',json.dumps(result))
         self.assertNotIn('percent_owned',json.dumps(result))
         self.assertNotIn('Bench',json.dumps(result))
         starter['projected_points']=None

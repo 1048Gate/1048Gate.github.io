@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish allowlisted ESPN projections; store normalized private snapshots in Supabase.
+"""Publish team projection totals; store player projections privately in Supabase.
 
 No raw responses, account details, or cookies are saved. Private snapshots are
 sent directly to Supabase and are never written into the site's data directory.
@@ -105,19 +105,11 @@ def normalize(league, pool, season, league_id, week):
                 'available_pool':{'limit':AVAILABLE_LIMIT, 'complete':False, 'selection':'Top available players by ESPN ownership; not the full player universe.'}}
     if not any(row['projected_points'] is not None for team in teams for row in team['roster']):
         raise RuntimeError('No weekly ESPN roster projections returned; previous saved data was retained.')
-    # Public feed contains player projections only: no fantasy team, lineup, availability, or settings.
-    public_players = {}
-    for row in [player for team in teams for player in team['roster']] + available:
-        public_players[row['id']] = {key:row[key] for key in ('id','name','position','nfl_team_id','injury_status','projected_points')}
-    projections = {'schema_version':1, 'source':'ESPN · league scoring', 'season':season, 'week':week, 'fetched_at':timestamp,
-                   'players':sorted(public_players.values(), key=lambda player:-(player['projected_points'] if player['projected_points'] is not None else -999))}
-    if not any(player['projected_points'] is not None for player in projections['players']):
-        raise RuntimeError('No weekly ESPN projections returned; previous saved data was retained.')
-    return snapshot, projections
+    return snapshot
 
 
 def add_team_projections(board, snapshot):
-    """Publish current starters and totals only, matched to this board's week."""
+    """Publish aggregate starter totals only, matched to this board's week."""
     if (board.get('season'), board.get('week')) != (snapshot['season'], snapshot['week']):
         return board
     expected = {slot['id']:slot['count'] for slot in snapshot['settings']['lineup_slots']
@@ -129,8 +121,7 @@ def add_team_projections(board, snapshot):
                                          for slot,count in expected.items())
         complete = complete and all(row['projected_points'] is not None for row in starters)
         teams.append({'teamId':team['id'], 'projectedScore':round(sum(row['projected_points'] for row in starters),2) if complete else None,
-                      'complete':complete,
-                      'starters':[{key:row[key] for key in ('id','name','position','lineup_slot','projected_points')} for row in starters]})
+                      'complete':complete})
     board['teamProjections'] = teams
     board['projectionsFetchedAt'] = snapshot['fetched_at']
     by_id = {str(team['teamId']):team for team in teams}
@@ -144,7 +135,6 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--season',type=int,default=DEFAULT_SEASON)
     parser.add_argument('--week',type=int)
-    parser.add_argument('--public-output',type=Path,default=Path('data/player-projections.json'))
     parser.add_argument('--board-output',type=Path,default=Path('data/current-season.json'))
     args = parser.parse_args()
     if not all(os.getenv(key) for key in ('ESPN_S2','ESPN_SWID')):
@@ -174,7 +164,7 @@ def main():
                     card = entry.get('playerPoolEntry') or {}
                     pid = (card.get('player') or {}).get('id')
                     if pid in by_id: card['player'] = by_id[pid]
-        snapshot, projections = normalize(league,pool,args.season,league_id,week)
+        snapshot = normalize(league,pool,args.season,league_id,week)
         if os.getenv('SUPABASE_URL') and os.getenv('SUPABASE_SERVICE_ROLE_KEY'):
             # Never echo server response bodies: they can include private payloads.
             try:
@@ -190,10 +180,6 @@ def main():
                 raise RuntimeError('Private snapshot save failed; no private data was written to disk.') from None
             print('Private ESPN archive is current (unchanged snapshots are not duplicated).')
         else: print('Private save skipped: configure existing Supabase service credentials for this workflow.')
-        args.public_output.parent.mkdir(parents=True,exist_ok=True)
-        temporary = args.public_output.with_suffix('.tmp')
-        temporary.write_text(json.dumps(projections,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
-        temporary.replace(args.public_output)
         if args.board_output.exists():
             board = json.loads(args.board_output.read_text())
             if (board.get('season'),board.get('week')) == (snapshot['season'],snapshot['week']):
@@ -201,7 +187,7 @@ def main():
                 temporary_board = args.board_output.with_suffix('.tmp')
                 temporary_board.write_text(json.dumps(board,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
                 temporary_board.replace(args.board_output)
-        print(f'Published {len(projections["players"])} player projections for Week {week}.')
+        print(f'Collected private player projections and public team totals for Week {week}.')
         return 0
     except RuntimeError as exc:
         print(str(exc),file=sys.stderr); return 1

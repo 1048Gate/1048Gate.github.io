@@ -106,7 +106,7 @@ try{
   }
   // Includes lazy staff assets that are not linked directly from index.html.
   for(const path of hashed) assert.ok(artifactFiles.includes(path), `Missing manifest asset ${path}`);
-  for(const path of ['/missing', '/trades', '/newspaper', '/data/missing.json', '/js/missing.js', '/images/missing.png', '/_headers', '/.env', '/.dev.vars', '/package.json', '/wrangler.jsonc', '/supabase/schema.sql', '/scripts/build-site.mjs', '/archive/legacy-board-production-export-2026-08-25.json']){
+  for(const path of ['/missing', '/trades', '/newspaper', '/data/missing.json', '/data/player-projections.json', '/js/missing.js', '/images/missing.png', '/_headers', '/.env', '/.dev.vars', '/package.json', '/wrangler.jsonc', '/supabase/schema.sql', '/scripts/build-site.mjs', '/archive/legacy-board-production-export-2026-08-25.json']){
     const response = await request(path, {headers:{'Sec-Fetch-Mode':'navigate'}});
     assert.equal(response.status, 404, `${path} must be a real 404, never the application HTML`);
   }

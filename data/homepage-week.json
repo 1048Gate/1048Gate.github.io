@@ -446,7 +446,7 @@
   "freshness": {
     "week_fetched_at": "2026-10-07T03:39:40.828814+00:00",
     "edition_published_at": "2026-10-06T15:12:48.235799Z",
-    "payload_built_at": "2026-10-07T03:47:54.337Z",
+    "payload_built_at": "2026-10-07T03:53:13.765Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
