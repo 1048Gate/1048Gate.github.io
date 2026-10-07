@@ -9,18 +9,26 @@
 // plus a career win% prior        weight .15
 //
 // After a completed current-season draft, blend 45% career / 55% roster.
+//
+// In season (scripts/futures-model.mjs scoreBlend): 2026 points per game,
+// regressed toward the league mean with the evidence weight
+// w = n*TAU^2 / (n*TAU^2 + SIGMA^2); the preseason rating keeps the other
+// (1 - w). Record and points against no longer move the rating. The same
+// pass writes the scoring parameters and the known/inferred schedule that
+// js/title-odds.js uses to simulate weekly scores.
 // Roster value uses ESPN PPR ranks from data/draft-ranks.json: best 1QB/2RB/2WR/1TE/1FLEX
 // plus a discounted bench, DST, and kicker.
 //
 // Odds conversion: implied probability p_i ∝ rating^K, K tuned so the
 // favorite lands near 24%, then rendered as American odds rounded to $50.
 import {existsSync, readFileSync, writeFileSync} from 'node:fs';
-import {blendRating, currentSeasonRatings} from './futures-model.mjs';
+import {REGULAR_SEASON_WEEKS, currentSeasonRatings, inferRoundRobin, scoreBlend, scoringParameters} from './futures-model.mjs';
 
 const root = new URL('..', import.meta.url);
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
 
 const clean = v => String(v ?? '').trim();
+const round = (value, digits) => Math.round(value * 10 ** digits) / 10 ** digits;
 const parseRecord = record => {
   const parts = String(record ?? '').split('-');
   return [(Number(parts[0]) || 0), (Number(parts[1]) || 0), (Number(parts[2]) || 0)];
@@ -204,15 +212,83 @@ const currentSeason = Number(currentPayload?.season) === Number(config.seasonYea
   ? currentSeasonRatings(currentPayload)
   : null;
 const ROSTER_WEIGHT = 0.55;
-const ratings = careerRatings.map(m => {
+const preseason = careerRatings.map(m => {
   const rosterRating = rosterRatings?.get(m.name);
   const preseasonRating = rosterRating == null
     ? m.careerRating
     : ((1 - ROSTER_WEIGHT) * m.careerRating) + (ROSTER_WEIGHT * rosterRating);
+  return {...m, rosterRating, preseasonRating};
+});
+
+// Completed 2026 weeks (final scores only) from data/matchups.json.
+const matchupsUrl = new URL('data/matchups.json', root);
+const seasonScores = existsSync(matchupsUrl)
+  ? (JSON.parse(readFileSync(matchupsUrl, 'utf8')).currentSeasonScores || [])
+      .filter(row => Number(row.season) === Number(config.seasonYear) && !row.isPlayoff)
+  : [];
+const gamesPlayed = currentSeason?.games || 0;
+const completedWeeks = new Map();
+for(let week = 1; week <= gamesPlayed; week++){
+  const rows = seasonScores.filter(row => Number(row.week) === week);
+  if(rows.length === 12) completedWeeks.set(week, rows);
+}
+const standingsOrder = currentSeason ? [...currentSeason.ratings.keys()] : [];
+const weeklyScores = [...completedWeeks.values()].map(rows => standingsOrder.map(name => {
+  const row = rows.find(r => clean(r.owner) === name);
+  return row ? Number(row.score) : NaN;
+})).filter(week => week.every(Number.isFinite));
+
+const scoring = scoringParameters({
+  seasons: seasonsData,
+  playoffs: playoffsData,
+  weeklyScores,
+  pointsPerGame: currentSeason ? [...currentSeason.ratings.values()].map(row => row.pfpg) : [],
+  gamesPlayed
+});
+const blend = scoreBlend(new Map(preseason.map(m => [m.name, m.preseasonRating])), currentSeason, scoring);
+const ratings = preseason.map(m => {
   const current = currentSeason?.ratings.get(m.name);
-  const rating = blendRating(preseasonRating, current, currentSeason?.weight || 0);
-  return {...m, rosterRating, preseasonRating, current, rating};
+  const blended = blend.ratings.get(m.name);
+  return {...m, current, ...blended};
 }).sort((a, b) => b.rating - a.rating);
+
+// Schedule for the simulation: completed weeks, any posted ESPN week from
+// data/current-season.json, and circle-method inference for the rest.
+const knownWeeks = new Map();
+for(const [week, rows] of completedWeeks){
+  const seen = new Set();
+  const games = [];
+  rows.forEach(row => {
+    const pair = [clean(row.owner), clean(row.opponentOwner)];
+    const key = [...pair].sort().join('|');
+    if(!seen.has(key)){ seen.add(key); games.push(pair); }
+  });
+  if(games.length === 6) knownWeeks.set(week, games);
+}
+const postedWeeks = new Set();
+if(currentSeason){
+  const byWeek = new Map();
+  (currentPayload.matchups || [])
+    .filter(m => !m.isPlayoff && Number(m.week) > gamesPlayed && Number(m.week) <= REGULAR_SEASON_WEEKS)
+    .forEach(m => {
+      const games = byWeek.get(Number(m.week)) || [];
+      games.push([clean(m.away?.owner), clean(m.home?.owner)]);
+      byWeek.set(Number(m.week), games);
+    });
+  byWeek.forEach((games, week) => {
+    if(games.length === 6 && games.every(pair => pair.every(name => currentSeason.ratings.has(name)))){
+      knownWeeks.set(week, games);
+      postedWeeks.add(week);
+    }
+  });
+}
+const inferred = currentSeason ? inferRoundRobin(standingsOrder, knownWeeks) : null;
+const remainingWeeks = [];
+for(let week = gamesPlayed + 1; week <= REGULAR_SEASON_WEEKS; week++){
+  if(knownWeeks.has(week)) remainingWeeks.push({week, source: 'espn', games: knownWeeks.get(week)});
+  else if(inferred) remainingWeeks.push({week, source: 'inferred', games: inferred.schedule.get(week)});
+  else remainingWeeks.push({week, source: 'random', games: null});
+}
 
 let lo = 1, hi = 14, K = 6;
 const probFor = k => {
@@ -236,13 +312,13 @@ const americanOdds = p => {
 const preseasonBasis = rosterRatings ? 'post-draft' : 'career';
 const basis = currentSeason ? 'weekly-results-blend' : preseasonBasis;
 console.log(currentSeason
-  ? `Rating model — ${(100-currentSeason.weight*100).toFixed(1)}% preseason / ${(currentSeason.weight*100).toFixed(1)}% current results through ${currentSeason.games} game(s)\n`
+  ? `Rating model — 2026 PF/G regressed with w=${blend.weight.toFixed(3)} (SIGMA ${scoring.sigma}, TAU ${scoring.tau.toFixed(2)}, ${currentSeason.games} game(s)); preseason keeps ${((1 - blend.weight) * 100).toFixed(1)}% · league mean ${scoring.leagueMean.toFixed(2)} · rho ${scoring.preseasonCorrelation.toFixed(3)}\n`
   : rosterRatings ? 'Rating model — 45% career form / 55% 2026 roster ranks\n' : 'Rating model — last 3 seasons weighted .5/.3/.2\n');
-console.log('Manager               Rating  Base   Current  Odds');
+console.log('Manager               Rating  Base   Current  Pts/wk  Odds');
 ratings.forEach((r, i) => {
-  const current = r.current == null ? '      —' : r.current.rating.toFixed(1).padStart(7);
+  const current = r.currentRating == null ? '      —' : r.currentRating.toFixed(1).padStart(7);
   console.log(
-    `${r.name.padEnd(21)} ${r.rating.toFixed(1).padStart(6)}  ${r.preseasonRating.toFixed(1).padStart(5)}  ${current}  +${americanOdds(probs[i])}`
+    `${r.name.padEnd(21)} ${r.rating.toFixed(1).padStart(6)}  ${r.preseasonRating.toFixed(1).padStart(5)}  ${current}  ${r.projectedPoints.toFixed(1).padStart(6)}  +${americanOdds(probs[i])}`
   );
 });
 console.log(`\nExponent K=${K.toFixed(2)} (favorite implied ${(probs[0] * 100).toFixed(1)}%) · basis ${basis}`);
@@ -271,19 +347,51 @@ writeFileSync(new URL('data/power-rankings.json', root), JSON.stringify({
     season: config.seasonYear,
     throughWeek: currentSeason.week,
     gamesPlayed: currentSeason.games,
-    weight: Math.round(currentSeason.weight * 1000) / 1000,
-    factors: {record: 0.45, pointsFor: 0.40, pointsAgainstSchedule: 0.15}
+    // Blend weight actually applied: the evidence-based reliability weight w.
+    weight: Math.round(blend.weight * 1000) / 1000,
+    // Former 0.10 + 0.60*g/13 schedule, reported for comparison only.
+    scheduleWeight: Math.round(currentSeason.weight * 1000) / 1000,
+    factors: {pointsFor: 1}
+  } : null,
+  scoring: {
+    model: 'normal-weekly-scores',
+    regularSeasonWeeks: REGULAR_SEASON_WEEKS,
+    leagueMean: round(scoring.leagueMean, 2),
+    sigma: scoring.sigma,
+    tau: round(scoring.tau, 3),
+    reliabilityWeight: round(scoring.reliabilityWeight, 4),
+    posteriorSd: round(scoring.posteriorSd, 3),
+    preseasonCorrelation: round(scoring.preseasonCorrelation, 3),
+    pointsPerRatingPoint: round(blend.pointsPerRatingPoint, 4),
+    inputs: {
+      completedWeeksUsed: weeklyScores.length,
+      pooledWithinSd: scoring.pooledWithinSd == null ? null : round(scoring.pooledWithinSd, 2),
+      historicalGameSd: scoring.historicalGameSd == null ? null : round(scoring.historicalGameSd, 2),
+      historicalGameCount: scoring.historicalGameCount,
+      talentSeasons: scoring.talentSeasons,
+      yearToYearCorrelation: scoring.yearToYearCorrelation == null ? null : round(scoring.yearToYearCorrelation, 3),
+      yearToYearPairs: scoring.yearToYearPairs
+    }
+  },
+  schedule: currentSeason ? {
+    method: inferred ? 'circle-method round robin fitted to known weeks' : 'random round robin for unknown weeks',
+    knownWeeks: [...knownWeeks.keys()].sort((a, b) => a - b),
+    ...(inferred ? {fixedTeam: inferred.fixedTeam} : {}),
+    remaining: remainingWeeks
   } : null,
   ratings: ratings.map(r => ({
     name: r.name,
     rating: Math.round(r.rating * 10) / 10,
     preseasonRating: Math.round(r.preseasonRating * 10) / 10,
+    projectedPoints: round(r.projectedPoints, 2),
     ...(r.current ? {
-      currentRating: Math.round(r.current.rating * 10) / 10,
+      currentRating: Math.round(r.currentRating * 10) / 10,
+      inSeasonPoints: round(r.inSeasonPoints, 2),
       wins: r.current.wins,
       losses: r.current.losses,
       ties: r.current.ties,
       record: `${r.current.wins}-${r.current.losses}${r.current.ties ? `-${r.current.ties}` : ''}`,
+      pointsFor: round(r.current.pointsFor, 2),
       pointsForPerGame: Math.round(r.current.pfpg * 100) / 100,
       pointsAgainstPerGame: Math.round(r.current.papg * 100) / 100
     } : {})
