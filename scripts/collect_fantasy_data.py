@@ -12,6 +12,7 @@ import math
 import os
 from pathlib import Path
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -30,13 +31,30 @@ def request_espn(season, league_id, views, week=None, filters=None):
     headers = {'Accept':'application/json', 'User-Agent':'1048Gate-fantasy-desk/1.0',
                'Cookie':f"espn_s2={os.environ['ESPN_S2']}; SWID={os.environ['ESPN_SWID']}"}
     if filters: headers['X-Fantasy-Filter'] = json.dumps(filters)
-    try:
-        with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as response:
-            result = json.load(response)
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
-        raise RuntimeError('ESPN fantasy data request failed; previous saved data was retained.') from None
-    if not isinstance(result, dict): raise RuntimeError('Unexpected ESPN response shape.')
-    return result
+    label = ','.join(views)
+    for attempt in range(3):
+        retryable = False
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as response:
+                result = json.load(response)
+            if not isinstance(result, dict):
+                raise RuntimeError(f'ESPN {label}: unexpected response shape; previous saved data was retained.')
+            return result
+        except urllib.error.HTTPError as error:
+            # Only expose the status: response bodies and exception text can contain private data.
+            reason = f'HTTP {error.code}'
+            retryable = error.code == 429 or 500 <= error.code <= 599
+            error.close()
+        except (urllib.error.URLError, TimeoutError):
+            reason = 'network connection failed'
+            retryable = True
+        except json.JSONDecodeError:
+            reason = 'invalid JSON response'
+        if retryable and attempt < 2:
+            time.sleep(2 ** attempt)
+            continue
+        raise RuntimeError(f'ESPN {label}: {reason}; previous saved data was retained.') from None
+
 
 
 def number(value):
@@ -113,9 +131,7 @@ def main():
             league = request_espn(args.season,league_id,['mSettings','mTeam','mRoster'],week)
         pool = request_espn(args.season,league_id,['kona_player_info'],week,{'players':{
             'filterStatus':{'value':['FREEAGENT','WAIVERS']}, 'limit':AVAILABLE_LIMIT,
-            'sortPercOwned':{'sortPriority':1,'sortAsc':False},
-            'filterStatsForExternalIds':{'value':[args.season]},
-            'filterStatsForSourceIds':{'value':[0,1]}}})
+            'sortPercOwned':{'sortPriority':1,'sortAsc':False}}})
         # Fetch weekly stat detail for rostered players too; mRoster can omit weekly stats.
         roster_ids = [entry.get('playerPoolEntry', {}).get('player', {}).get('id')
                       for team in league.get('teams') or []
