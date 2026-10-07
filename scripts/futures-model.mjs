@@ -330,3 +330,41 @@ export function priceFromProbability(probability, {overround = OFFICE_OVERROUND,
 export function formatAmericanOdds(price){
   return price > 0 ? `+${price}` : String(price);
 }
+
+// ---------------------------------------------------------------------------
+// Plain-language method note for both odds boards, filled from build output.
+// audience 'home' quotes the house edge on prices; 'playoffs' explains the
+// per-card points and points to Home for prices.
+// ---------------------------------------------------------------------------
+const percent = value => `${Math.round(value * 100)}%`;
+
+export function methodShares(gamesPlayed, scoringWeight){
+  const scoring = gamesPlayed > 0 ? Math.round(Math.min(Math.max(scoringWeight, 0), 1) * 100) : 0;
+  return {preseason: 100 - scoring, scoring};
+}
+
+export function oddsMethodNote({gamesPlayed = 0, scoringWeight = 0, rosterWeight = 0, simulations, houseEdge, randomWeeks = 0} = {}, audience = 'home'){
+  const {preseason, scoring} = methodShares(gamesPlayed, scoringWeight);
+  const career = 'career form (recent and career win %, scoring vs. league, playoff finishes)';
+  const preseasonLine = rosterWeight > 0
+    ? `Preseason: ${percent(1 - rosterWeight)} ${career} + ${percent(rosterWeight)} post-draft roster (2026 draft ranks).`
+    : `Preseason: ${career}.`;
+  const split = gamesPlayed > 0
+    ? `After Week ${gamesPlayed}, preseason carries ${preseason}% of each rating and 2026 scoring ${scoring}%.`
+    : 'No 2026 games are final yet, so ratings are 100% preseason.';
+  const schedule = randomWeeks > 0
+    ? `on the league schedule (random pairings for ${randomWeeks} unconfirmed week${randomWeeks === 1 ? '' : 's'})`
+    : 'on the real schedule';
+  const runs = Number(simulations).toLocaleString('en-US');
+  const edge = `${Math.round(houseEdge * 100)}% house edge`;
+  return [
+    'Each rating blends a preseason rating with 2026 scoring.',
+    preseasonLine,
+    '2026 scoring: points per game, pulled toward the league average while the sample is small; its share grows each week.',
+    split,
+    `The rest of the season is simulated ${runs} times ${schedule}; standings ties go to points for; six-team bracket, top two seeds get byes.`,
+    audience === 'playoffs'
+      ? `Each card shows points per week: preseason, 2026, and the blend the simulation uses. Home's futures prices add a ${edge}.`
+      : `Prices include a ${edge}.`
+  ].join(' ');
+}

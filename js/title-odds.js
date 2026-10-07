@@ -127,7 +127,10 @@
       points:Number.isFinite(Number(t.projectedPoints)) ? Number(t.projectedPoints) : leagueMean + (Number(t.rating) - meanRating) * perRatingPoint,
       wins:Number(t.wins)||0,
       ties:Number(t.ties)||0,
-      pointsFor:Number(t.pointsFor)||0
+      pointsFor:Number(t.pointsFor)||0,
+      // Display only: preseason points/week and 2026 points per game behind the blend.
+      preseasonPoints:Number.isFinite(Number(t.preseasonPoints)) ? Number(t.preseasonPoints) : null,
+      pointsPerGame:Number.isFinite(Number(t.pointsForPerGame)) ? Number(t.pointsForPerGame) : null
     }));
     const gamesPlayed = Number(payload?.currentSeason?.gamesPlayed) || 0;
     const index = new Map(teams.map((t, i) => [t.name, i]));
@@ -147,7 +150,8 @@
         weeks,
         seed:(Number(payload?.generatedForSeason) || 0) * 1000 + gamesPlayed * 17 + 1048
       },
-      unknownWeeks
+      unknownWeeks,
+      methodText:String(payload?.method?.text || '')
     };
   }
 
@@ -217,12 +221,12 @@
   host.addEventListener('click', event => { if(event.target.closest('[data-title-odds-retry]')) load(); });
 
   function render(prepared, odds, seasonNumber, basis, gamesPlayed){
-    const {teams, unknownWeeks} = prepared;
+    const {teams, unknownWeeks, methodText} = prepared;
     const {made, bye, title} = odds;
     const runs = odds.simulations;
     const pct = value => `${Math.round(value * 100)}%`;
     const rows = teams
-      .map((t, i) => ({name:t.name, madePct:made[i], byePct:bye[i], titlePct:title[i]}))
+      .map((t, i) => ({name:t.name, madePct:made[i], byePct:bye[i], titlePct:title[i], pre:t.preseasonPoints, ppg:t.pointsPerGame, blend:t.points}))
       .sort((a, b) => b.titlePct - a.titlePct || b.madePct - a.madePct);
     const maxTitle = Math.max(...rows.map(r => r.titlePct)) || 1;
     const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
@@ -241,12 +245,13 @@
     host.innerHTML = `<div class="history-section-head"><div><span>${kicker}</span><h3>Playoff Probability Board<span class="odds-asterisk" aria-hidden="true">*</span></h3></div><small>${sub}</small></div><div class="title-odds-grid">${rows.map(r => `
       <div class="title-odds-card${r.titlePct === maxTitle ? ' is-favorite' : ''}">
         <div class="title-odds-name"><strong>${escapeHtml(r.name)}</strong>${r.titlePct === maxTitle ? '<em>Favorite</em>' : ''}</div>
+        ${Number.isFinite(r.pre) ? `<div class="title-odds-points" title="Points per week: preseason view, 2026 points per game, and the blend the simulation uses">Pts/wk · Pre ${r.pre.toFixed(1)}${Number.isFinite(r.ppg) ? ` · 2026 ${r.ppg.toFixed(1)}` : ''} · Blend ${r.blend.toFixed(1)}</div>` : ''}
         <div class="title-odds-bars">
           <div class="title-odds-bar" title="Chance to make the six-team bracket"><span>Playoff</span><div style="--w:${Math.round(r.madePct * 100)}%"><i></i></div><b>${pct(r.madePct)}</b></div>
           <div class="title-odds-bar" title="Chance at a top-two seed and first-round bye"><span>Bye</span><div style="--w:${Math.round(r.byePct * 100)}%"><i></i></div><b>${pct(r.byePct)}</b></div>
           <div class="title-odds-bar is-title" title="Chance to win the title"><span>Title</span><div style="--w:${Math.max(Math.round(r.titlePct * 1000) / 10, 1.5)}%"><i></i></div><b>${r.titlePct < 0.0005 ? '<0.1%' : pct(r.titlePct)}</b></div>
         </div>
-      </div>`).join('')}</div><p class="title-odds-note">${note}</p><p class="title-odds-note title-odds-footnote">${AI_FOOTNOTE}</p>`;
+      </div>`).join('')}</div><p class="title-odds-note">${note}</p>${methodText ? `<details class="title-odds-note title-odds-method" data-odds-method><summary>How the odds are set</summary><p>${escapeHtml(methodText)}</p></details>` : ''}<p class="title-odds-note title-odds-footnote">${AI_FOOTNOTE}</p>`;
   }
 
   load();

@@ -14,3 +14,6 @@
 .title-odds-note{margin:14px 0 0;color:var(--muted);font-size:10px;line-height:1.6}
 @media(max-width:860px){.title-odds-grid{grid-template-columns:1fr}}
 .title-odds-footnote{margin-top:6px}
+.title-odds-method{margin-top:6px}
+.title-odds-method p{margin:4px 0 0}
+.title-odds-points{margin-top:-4px;color:var(--muted);font-size:10px;line-height:1.4;font-variant-numeric:tabular-nums}

@@ -176,5 +176,15 @@
     "note": "192 picks are in. Gibbs went 1.01, Puka came back in the 9th, Achane in the 12th. Odds are live off the rosters.",
     "where": "Draft archive · History → Drafts",
     "status": "complete"
+  },
+  "futuresMethod": {
+    "gamesPlayed": 4,
+    "preseasonShare": 81,
+    "scoringShare": 19,
+    "careerShare": 45,
+    "rosterShare": 55,
+    "simulations": 10000,
+    "houseEdgePct": 5,
+    "text": "Each rating blends a preseason rating with 2026 scoring. Preseason: 45% career form (recent and career win %, scoring vs. league, playoff finishes) + 55% post-draft roster (2026 draft ranks). 2026 scoring: points per game, pulled toward the league average while the sample is small; its share grows each week. After Week 4, preseason carries 81% of each rating and 2026 scoring 19%. The rest of the season is simulated 10,000 times on the real schedule; standings ties go to points for; six-team bracket, top two seeds get byes. Prices include a 5% house edge."
   }
 }

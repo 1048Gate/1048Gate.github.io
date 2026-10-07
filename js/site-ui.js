@@ -45,6 +45,7 @@
     document.querySelector('[data-futures-status]')?.replaceChildren(document.createTextNode('Unavailable · Try refreshing'));
     const futures=document.querySelector('[data-futures]');
     document.querySelector('[data-futures-footnote]')?.setAttribute('hidden','');
+    document.querySelector('[data-futures-method-details]')?.setAttribute('hidden','');
     if(futures) futures.innerHTML='<div class="futures-empty state-error"><strong>Championship odds could not load.</strong><span>Check your connection, then refresh the page.</span></div>';
   }
 })();
@@ -55,6 +56,9 @@ function renderFutures(config){
   const status=document.querySelector('[data-futures-status]');
   const futures = Array.isArray(config.futures) ? config.futures : [];
   document.querySelector('[data-futures-footnote]')?.toggleAttribute('hidden', !futures.length);
+  document.querySelector('[data-futures-method-details]')?.toggleAttribute('hidden', !futures.length);
+  const methodText = document.querySelector('[data-futures-method-text]');
+  if(methodText && config.futuresMethod?.text) methodText.textContent = config.futuresMethod.text;
   if(!futures.length){
     target.innerHTML = '<div class="futures-empty"><strong>No odds posted yet.</strong><span>Championship lines will appear when the board is ready.</span></div>';
     if(status) status.textContent='Available after draft board';

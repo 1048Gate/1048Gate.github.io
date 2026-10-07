@@ -26,7 +26,7 @@
 // (futures-model.mjs priceFromProbability).
 import {existsSync, readFileSync, writeFileSync} from 'node:fs';
 import vm from 'node:vm';
-import {LONG_SHOT_CAP, OFFICE_OVERROUND, REGULAR_SEASON_WEEKS, currentSeasonRatings, formatAmericanOdds, inferRoundRobin, priceFromProbability, scoreBlend, scoringParameters} from './futures-model.mjs';
+import {LONG_SHOT_CAP, OFFICE_OVERROUND, REGULAR_SEASON_WEEKS, currentSeasonRatings, formatAmericanOdds, inferRoundRobin, methodShares, oddsMethodNote, priceFromProbability, scoreBlend, scoringParameters} from './futures-model.mjs';
 
 const root = new URL('..', import.meta.url);
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
@@ -349,6 +349,8 @@ const powerRankings = {
     rating: Math.round(r.rating * 10) / 10,
     preseasonRating: Math.round(r.preseasonRating * 10) / 10,
     projectedPoints: round(r.projectedPoints, 2),
+    // Preseason view in points per week; projectedPoints = (1-w)*preseasonPoints + w*pointsForPerGame.
+    preseasonPoints: round(scoring.leagueMean + (r.preseasonRating - blend.preMean) * blend.pointsPerRatingPoint, 2),
     ...(r.current ? {
       currentRating: Math.round(r.currentRating * 10) / 10,
       inSeasonPoints: round(r.inSeasonPoints, 2),
@@ -381,6 +383,28 @@ powerRankings.projection = {
   seed: prepared.options.seed,
   teams: prepared.teams.map(team => ({name: team.name, ...projectionByName.get(team.name)}))
 };
+
+const methodInputs = {
+  gamesPlayed,
+  scoringWeight: blend.weight,
+  rosterWeight: rosterRatings ? ROSTER_WEIGHT : 0,
+  simulations: simulation.simulations,
+  houseEdge: OFFICE_OVERROUND - 1,
+  randomWeeks: remainingWeeks.filter(week => !week.games).length
+};
+const shares = methodShares(gamesPlayed, blend.weight);
+const methodFields = {
+  gamesPlayed,
+  preseasonShare: shares.preseason,
+  scoringShare: shares.scoring,
+  careerShare: Math.round((1 - methodInputs.rosterWeight) * 100),
+  rosterShare: Math.round(methodInputs.rosterWeight * 100),
+  simulations: simulation.simulations,
+  houseEdgePct: Math.round(methodInputs.houseEdge * 100)
+};
+powerRankings.method = {...methodFields, text: oddsMethodNote(methodInputs, 'playoffs')};
+config.futuresMethod = {...methodFields, text: oddsMethodNote(methodInputs, 'home')};
+
 const titleOf = name => projectionByName.get(name)?.title ?? 0;
 const priceOf = name => formatAmericanOdds(priceFromProbability(titleOf(name)));
 // Same order as the Playoffs tab: title %, then playoff %, then rating.
