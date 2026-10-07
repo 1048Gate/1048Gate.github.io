@@ -6,7 +6,7 @@ from unittest.mock import patch
 from tempfile import TemporaryDirectory
 from pathlib import Path
 from collect_fantasy_data import main
-from collect_fantasy_data import normalize, player_row, request_espn
+from collect_fantasy_data import normalize, player_row, request_espn, add_team_projections
 
 
 def player(pid=1,points=12.5):
@@ -56,33 +56,60 @@ class FantasyDataTests(unittest.TestCase):
         with TemporaryDirectory() as folder:
             output=Path(folder)/'projections.json'
             with patch.dict('os.environ',{'ESPN_S2':'cookie','ESPN_SWID':'cookie','SUPABASE_URL':'https://example.test','SUPABASE_SERVICE_ROLE_KEY':'service'}), \
-                 patch('sys.argv',['collector','--week','5','--public-output',str(output)]), \
-                 patch('collect_fantasy_data.request_espn',side_effect=[league,pool,{'players':[]}]) as espn, \
+                 patch('sys.argv',['collector','--week','5','--public-output',str(output),'--board-output',str(Path(folder)/'board.json')]), \
+                 patch('collect_fantasy_data.request_espn',side_effect=[league,pool,{'players':[{'player':player(1,17.5)}]}]) as espn, \
                  patch('collect_fantasy_data.supabase_request',side_effect=[[],None]) as database:
                 self.assertEqual(main(),0)
                 filters = espn.call_args_list[1].args[4]['players']
                 self.assertEqual(set(filters), {'filterStatus', 'limit', 'sortPercOwned'})
                 detail_request = espn.call_args_list[2].args
-                self.assertEqual(detail_request[2], ['kona_playercard'])
+                self.assertEqual(detail_request[2], ['kona_player_info'])
                 detail_filters = detail_request[4]['players']
-                self.assertNotIn('limit', detail_filters)
+                self.assertEqual(detail_filters['limit'],1)
+                self.assertEqual(detail_filters['sortPercOwned'],{'sortPriority':1,'sortAsc':False})
                 self.assertEqual(detail_filters['filterIds']['value'], [1])
-                self.assertEqual(detail_filters['filterStatsForTopScoringPeriodIds'],
-                                 {'value':5, 'additionalValue':['002026','102026']})
                 self.assertIn('teams',database.call_args_list[1].args[2]['payload'])
                 public=json.loads(output.read_text())
                 self.assertNotIn('teams',public)
+                self.assertEqual(next(row for row in public['players'] if row['id']==1)['projected_points'],17.5)
                 self.assertEqual([f.name for f in Path(folder).iterdir()],['projections.json'])
     def test_private_save_failure_preserves_public_file(self):
         league,pool=self.fixtures();league['scoringPeriodId']=5
         with TemporaryDirectory() as folder:
             output=Path(folder)/'projections.json';output.write_text('previous')
             with patch.dict('os.environ',{'ESPN_S2':'cookie','ESPN_SWID':'cookie','SUPABASE_URL':'https://example.test','SUPABASE_SERVICE_ROLE_KEY':'service'}), \
-                 patch('sys.argv',['collector','--week','5','--public-output',str(output)]), \
+                 patch('sys.argv',['collector','--week','5','--public-output',str(output),'--board-output',str(Path(folder)/'board.json')]), \
                  patch('collect_fantasy_data.request_espn',side_effect=[league,pool,{'players':[]}]), \
                  patch('collect_fantasy_data.supabase_request',side_effect=RuntimeError('private response')):
                 self.assertEqual(main(),1)
                 self.assertEqual(output.read_text(),'previous')
+    def test_reject_missing_roster_projections_even_when_free_agents_have_them(self):
+        league,pool = self.fixtures()
+        league['teams'][0]['roster']['entries'][0]['playerPoolEntry']['player']['stats'] = []
+        with self.assertRaisesRegex(RuntimeError,'No weekly ESPN roster projections'):
+            normalize(league,pool,2026,1237285,5)
+
+    def test_team_projections_only_count_complete_current_starters(self):
+        private,_ = normalize(*self.fixtures(),2026,1237285,5)
+        private['settings']['lineup_slots'] = [{'id':2,'count':1},{'id':20,'count':7},{'id':21,'count':1}]
+        roster = private['teams'][0]['roster']
+        starter = dict(roster[0], id=9, lineup_slot_id=2, lineup_slot='RB', projected_points=0)
+        roster.append(starter)
+        board = {'season':2026,'week':5,'matchups':[{'away':{'teamId':10,'score':0},'home':{'teamId':11,'score':0}}]}
+        result = add_team_projections(board,private)
+        self.assertEqual(result['matchups'][0]['away']['projectedScore'],0)
+        self.assertEqual(result['matchups'][0]['away']['score'],0)
+        self.assertEqual(len(result['teamProjections'][0]['starters']),1)
+        self.assertNotIn('percent_owned',json.dumps(result))
+        self.assertNotIn('Bench',json.dumps(result))
+        starter['projected_points']=None
+        self.assertIsNone(add_team_projections(board,private)['teamProjections'][0]['projectedScore'])
+        roster.pop()
+        self.assertIsNone(add_team_projections(board,private)['teamProjections'][0]['projectedScore'])
+        other = {'season':2026,'week':6}
+        self.assertEqual(add_team_projections(other,private),other)
+        self.assertNotIn('teamProjections',other)
+
     def test_nonfinite_projection_is_missing(self):
         self.assertIsNone(player_row({'player':player(points=float('nan'))},2026,5)['projected_points'])
 

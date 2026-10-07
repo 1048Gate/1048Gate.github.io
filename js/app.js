@@ -395,7 +395,8 @@ async function initializeMembers() {
 window.gateMembers = Object.freeze({
   current: () => leagueMembers,
   refresh: refreshLeagueMembers,
-  render: renderMembers
+  render: renderMembers,
+  open: name => { const index = leagueMembers.findIndex(member => member.name === name); if(index >= 0) openMember(index); }
 });
 
 document.getElementById('memberModalClose')?.addEventListener('click', closeMember);

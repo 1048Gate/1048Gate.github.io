@@ -53,9 +53,19 @@ Actions artifact. Private save failure retains the prior public projection file.
 No weekly projection is substituted with an actual score or season total.
 Missing projections display as a dash; zero projections remain zero.
 
+The public `data/current-season.json` board also includes each team's current
+starters (player ID/name, position, lineup slot, and weekly projected points),
+plus a starter total and projection timestamp. It excludes bench/IR players,
+availability, ownership, and scoring settings. Totals require a filled starting
+lineup with projections for every starter; incomplete totals remain unavailable.
+The collector updates this board only when season and week match its snapshot.
+Pregame cards show projected totals; live/final cards continue to show actual
+scores. Team-name buttons open the manager profile's starter projection table.
+
 The collector is a nonblocking step: an ESPN projection failure cannot prevent
 the existing score/newspaper pipeline from proceeding. Read its step logs to
-confirm both outputs after the first authenticated production run. The initial
+confirm both outputs after an authenticated production run. A final step marks
+the workflow failed if collection failed, after score updates finish. The initial
 checked-in public file intentionally has no fabricated player projections.
 
 ## Verification

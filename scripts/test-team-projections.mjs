@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {runInNewContext} from 'node:vm';
+const esc=v=>String(v??'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+const context={window:{gateShared:{escapeHtml:esc}},document:{addEventListener(){}}};
+runInNewContext(readFileSync(new URL('../js/team-projections.js',import.meta.url),'utf8'),context);
+const render=context.window.gateTeamProjections.teamHtml;
+const board={week:5,standings:[{teamId:10,owner:'Collin',team:'Team <test>'}],teamProjections:[{teamId:10,complete:true,projectedScore:123.45,starters:[{name:'<script>',lineup_slot:'RB',projected_points:0}]}]};
+const html=render(board,'Collin');
+assert.match(html,/123.45 projected points/);
+assert.match(html,/&lt;script&gt;/);
+assert.doesNotMatch(html,/<script>/);
+assert.match(html,/>0.00</);
+assert.match(render(board,'Other'),/unavailable/);
+board.teamProjections[0].complete=false;board.teamProjections[0].projectedScore=null;
+assert.match(render(board,'Collin'),/Incomplete lineup/);
+assert.doesNotMatch(render(board,'Collin'),/0.00 projected points/);
+console.log('Team projections: starter totals, zero points, missing data, and HTML escaping passed.');

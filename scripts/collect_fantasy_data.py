@@ -103,6 +103,8 @@ def normalize(league, pool, season, league_id, week):
                             'lineup_slots':[{'id':int(key), 'name':SLOTS.get(int(key),f'Slot {key}'), 'count':count} for key,count in slots.items()]},
                 'teams':teams, 'available_players':available,
                 'available_pool':{'limit':AVAILABLE_LIMIT, 'complete':False, 'selection':'Top available players by ESPN ownership; not the full player universe.'}}
+    if not any(row['projected_points'] is not None for team in teams for row in team['roster']):
+        raise RuntimeError('No weekly ESPN roster projections returned; previous saved data was retained.')
     # Public feed contains player projections only: no fantasy team, lineup, availability, or settings.
     public_players = {}
     for row in [player for team in teams for player in team['roster']] + available:
@@ -114,11 +116,36 @@ def normalize(league, pool, season, league_id, week):
     return snapshot, projections
 
 
+def add_team_projections(board, snapshot):
+    """Publish current starters and totals only, matched to this board's week."""
+    if (board.get('season'), board.get('week')) != (snapshot['season'], snapshot['week']):
+        return board
+    expected = {slot['id']:slot['count'] for slot in snapshot['settings']['lineup_slots']
+                if slot['id'] not in (20,21) and slot['count'] > 0}
+    teams = []
+    for team in snapshot['teams']:
+        starters = [row for row in team['roster'] if row.get('lineup_slot_id') in expected]
+        complete = bool(expected) and all(sum(row['lineup_slot_id'] == slot for row in starters) == count
+                                         for slot,count in expected.items())
+        complete = complete and all(row['projected_points'] is not None for row in starters)
+        teams.append({'teamId':team['id'], 'projectedScore':round(sum(row['projected_points'] for row in starters),2) if complete else None,
+                      'complete':complete,
+                      'starters':[{key:row[key] for key in ('id','name','position','lineup_slot','projected_points')} for row in starters]})
+    board['teamProjections'] = teams
+    board['projectionsFetchedAt'] = snapshot['fetched_at']
+    by_id = {str(team['teamId']):team for team in teams}
+    for game in board.get('matchups',[]):
+        for side in ('away','home'):
+            game[side]['projectedScore'] = by_id.get(str(game[side].get('teamId')),{}).get('projectedScore')
+    return board
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--season',type=int,default=DEFAULT_SEASON)
     parser.add_argument('--week',type=int)
     parser.add_argument('--public-output',type=Path,default=Path('data/player-projections.json'))
+    parser.add_argument('--board-output',type=Path,default=Path('data/current-season.json'))
     args = parser.parse_args()
     if not all(os.getenv(key) for key in ('ESPN_S2','ESPN_SWID')):
         print('ESPN credentials are missing.',file=sys.stderr); return 2
@@ -138,10 +165,9 @@ def main():
                       for entry in (team.get('roster') or {}).get('entries') or []]
         roster_ids = [pid for pid in roster_ids if pid is not None]
         if roster_ids:
-            details = request_espn(args.season,league_id,['kona_playercard'],week,{'players':{
-                'filterIds':{'value':roster_ids},
-                'filterStatsForTopScoringPeriodIds':{
-                    'value':week, 'additionalValue':[f'00{args.season}',f'10{args.season}']}}})
+            details = request_espn(args.season,league_id,['kona_player_info'],week,{'players':{
+                'filterIds':{'value':roster_ids}, 'limit':len(roster_ids),
+                'sortPercOwned':{'sortPriority':1,'sortAsc':False}}})
             by_id = {entry['player']['id']:entry['player'] for entry in details.get('players') or [] if entry.get('player')}
             for team in league.get('teams') or []:
                 for entry in (team.get('roster') or {}).get('entries') or []:
@@ -168,6 +194,13 @@ def main():
         temporary = args.public_output.with_suffix('.tmp')
         temporary.write_text(json.dumps(projections,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
         temporary.replace(args.public_output)
+        if args.board_output.exists():
+            board = json.loads(args.board_output.read_text())
+            if (board.get('season'),board.get('week')) == (snapshot['season'],snapshot['week']):
+                board = add_team_projections(board,snapshot)
+                temporary_board = args.board_output.with_suffix('.tmp')
+                temporary_board.write_text(json.dumps(board,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
+                temporary_board.replace(args.board_output)
         print(f'Published {len(projections["players"])} player projections for Week {week}.')
         return 0
     except RuntimeError as exc:
