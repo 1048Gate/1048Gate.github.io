@@ -144,6 +144,16 @@ jobs:
             SEASON=2026
           fi
           python3 scripts/publish_current_season.py --season "$SEASON" "${WEEK_ARGS[@]}"
+      - name: Collect public projections and private owner snapshots
+        continue-on-error: true
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 scripts/collect_fantasy_data.py --season "$(python3 -c 'import json; print(json.load(open("data/current-season.json"))["season"])')" --week "$(python3 -c 'import json; print(json.load(open("data/current-season.json"))["week"])')"
       - name: Refresh completed scores and weekly ratings
         run: |
           python3 scripts/update_matchup_leaderboards.py
@@ -195,6 +205,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/player-projections.json
           git add index.html data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/streaks.json data/newspaper_editions data/homepage-week.json
           if git diff --cached --quiet; then
             echo "Current-season board and derived data unchanged — nothing to commit."

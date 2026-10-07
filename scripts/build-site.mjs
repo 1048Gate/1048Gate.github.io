@@ -7,7 +7,9 @@ const dist = new URL('dist/', root);
 await rm(dist, {recursive:true, force:true});
 await mkdir(dist, {recursive:true});
 
-let html = await readFile(new URL('index.html', root), 'utf8');
+const pages = ['index.html', 'owner/index.html', 'projections/index.html'];
+const htmlPages = await Promise.all(pages.map(page => readFile(new URL(page, root), 'utf8')));
+let html = htmlPages[0];
 const assetPattern = /(?:href|src)="((?:css|js)\/[^"?]+\.(?:css|js))(?:\?[^"#]*)?"/g;
 const lazyStaffAssets = [
   'js/admin.js',
@@ -16,7 +18,7 @@ const lazyStaffAssets = [
   'css/admin.css',
   'css/playoffs-admin.css'
 ];
-const assets = [...new Set([...html.matchAll(assetPattern)].map(match => match[1]))];
+const assets = [...new Set(htmlPages.flatMap(page => [...page.replaceAll('../css/', 'css/').replaceAll('../js/', 'js/').matchAll(assetPattern)].map(match => match[1])))];
 const manifest = {};
 
 async function writeHashedAsset(asset, contents){
@@ -56,6 +58,12 @@ await cp(new URL('images/two-hounds-mark.png', root), new URL('images/two-hounds
 await cp(new URL('.nojekyll', root), new URL('.nojekyll', dist));
 await cp(new URL('_headers', root), new URL('_headers', dist));
 await writeFile(new URL('index.html', dist), html);
+for(let index = 1; index < pages.length; index++){
+  let page = htmlPages[index].replaceAll('../css/', '/css/').replaceAll('../js/', '/js/');
+  for(const [asset, hashed] of Object.entries(manifest)) page = page.replaceAll(`"/${asset}"`, `"/${hashed}"`);
+  await mkdir(new URL(`${dirname(pages[index])}/`, dist), {recursive:true});
+  await writeFile(new URL(pages[index], dist), page);
+}
 await writeFile(new URL('asset-manifest.json', dist), `${JSON.stringify(manifest, null, 2)}\n`);
 
 console.log(`Built dist with ${assets.length} content-hashed CSS/JS assets.\n`);

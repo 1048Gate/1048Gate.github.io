@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f4f0e8">
+<title>Owner Desk · 1048 Gate</title>
+<script src="../js/theme.js"></script>
+<link rel="stylesheet" href="../css/style.css"><link rel="stylesheet" href="../css/admin.css">
+<link rel="stylesheet" href="../css/auth-recovery.css"><link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/fantasy-desk.css">
+<script defer src="../js/shared.js"></script><script defer src="../js/supabase-config.js"></script>
+<script defer src="../js/auth.js"></script><script defer src="../js/owner-desk.js"></script>
+</head>
+<body>
+<header class="desk-header"><a href="/">1048 Gate</a><nav aria-label="Desk navigation"><a href="/projections/">Projections</a><button type="button" data-theme-toggle>Theme</button><div id="authControlMount"></div></nav></header>
+<main class="fantasy-desk">
+<p class="desk-kicker">Private reference desk</p><h1>Owner Desk</h1>
+<p>Saved league data, lineups, and waiver options for your weekly decisions.</p>
+<p id="ownerStatus" role="status" aria-live="polite">Checking access…</p>
+<section id="ownerContent" hidden>
+<div class="desk-controls"><label>Saved snapshot<select id="snapshotSelect"></select></label><button type="button" id="refreshSnapshots">Refresh</button><button type="button" id="olderSnapshots" hidden>Load older snapshots</button><button type="button" id="downloadSnapshot" disabled>Download JSON</button></div>
+<p id="snapshotSummary"></p>
+<div class="desk-controls"><label>Team<select id="teamSelect"></select></label><label>Data<select id="datasetSelect"><option value="roster">Roster &amp; lineup</option><option value="available">Available players</option><option value="scoring">Scoring &amp; lineup settings</option></select></label><label>Find a player<input id="playerSearch" type="search" placeholder="Player name"></label></div>
+<div id="ownerData" class="desk-data" aria-live="polite"></div>
+<details><summary>Snapshot JSON</summary><pre id="snapshotJson"></pre></details>
+</section>
+</main>
+</body></html>
