@@ -423,7 +423,7 @@ if(!siteUiSource.includes('renderWeekBoard') || !siteUiSource.includes('data/cur
   throw new Error('site-ui.js must render the week board from current-season.json.');
 }
 const weekBoardSource = readFileSync(new URL('js/week-board.js', root), 'utf8');
-if(!weekBoardSource.includes("state === 'scheduled' ? 'Scores open at kickoff'") || !weekBoardSource.includes('PF/G') || !weekBoardSource.includes("const score = scheduled ? '\\u2014'")){
+if(!weekBoardSource.includes("state === 'scheduled' ? 'ESPN projected points'") || !weekBoardSource.includes('PF/G') || !weekBoardSource.includes("const score = scheduled ? pointsLine(side?.projectedScore)")){
   throw new Error('Scheduled matchup cards must show real season context and avoid fake 0-0 scores.');
 }
 if(html.includes('<span>Trade deadline</span><span>TBA</span>')){

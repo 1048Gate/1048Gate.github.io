@@ -55,14 +55,14 @@
      manager beneath, score at the right. The margin rides with the leading side. */
   function sideHtml(side, className, escapeHtml, margin, state, standing){
     const scheduled = state === 'scheduled';
-    const score = scheduled ? '\u2014' : side?.score == null ? '\u2014' : pointsLine(side.score);
+    const score = scheduled ? pointsLine(side?.projectedScore) : side?.score == null ? '\u2014' : pointsLine(side.score);
     const team = side?.team || 'Team';
     const owner = side?.owner || '';
     const played = standing ? Number(standing.wins || 0) + Number(standing.losses || 0) + Number(standing.ties || 0) : 0;
     const ppg = played && Number.isFinite(Number(standing?.pointsFor)) ? Number(standing.pointsFor) / played : null;
     const context = scheduled && standing ? `${recordLine(standing)}${ppg == null ? '' : ` · ${pointsLine(ppg)} PF/G`}` : '';
     return `<div class="${className}">
-      <span class="week-card-name"><strong title="${escapeHtml(team)}">${escapeHtml(team)}</strong><span class="week-card-owner"${owner ? ` title="${escapeHtml(owner)}"` : ''}>${escapeHtml(owner)}</span>${context ? `<span class="week-card-context">${escapeHtml(context)}</span>` : ''}</span>
+      <span class="week-card-name"><button type="button" class="week-team-link" data-team-owner="${escapeHtml(owner)}" title="View ${escapeHtml(team)} projections and history">${escapeHtml(team)}</button><span class="week-card-owner"${owner ? ` title="${escapeHtml(owner)}"` : ''}>${escapeHtml(owner)}</span>${context ? `<span class="week-card-context">${escapeHtml(context)}</span>` : ''}</span>
       <span class="week-card-score"><b>${escapeHtml(score)}</b>${margin ? `<span class="week-card-margin">${escapeHtml(margin)}</span>` : ''}</span>
     </div>`;
   }
@@ -79,14 +79,14 @@
   function matchupCardHtml(game, escapeHtml, standings = []){
     const esc = escapeHtml || (value => String(value ?? ''));
     const state = normalizedState(game?.state);
-    const leader = leaderSide(game);
-    const margin = marginCopy(game);
+    const leader = state === 'scheduled' ? null : leaderSide(game);
+    const margin = state === 'scheduled' ? '' : marginCopy(game);
     const standingFor = side => standings.find(team =>
       (side?.teamId && String(team.teamId) === String(side.teamId)) ||
       (side?.owner && team.owner === side.owner)
     );
     /* A lead attaches to the leading side; scheduled games carry season context instead. */
-    const statusNote = state === 'scheduled' ? 'Scores open at kickoff' : margin && !leader ? margin : '';
+    const statusNote = state === 'scheduled' ? 'ESPN projected points' : margin && !leader ? margin : '';
     return `<article class="week-game week-card is-${esc(state)}" data-state="${esc(state)}"${leader ? ` data-leader="${leader}"` : ''}>
       <header class="week-card-status">
         <span class="week-card-badge">${statusLabel(state)}</span>${statusNote ? `

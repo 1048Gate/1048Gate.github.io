@@ -165,13 +165,15 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       },
       "home": {
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       }
     },
     {
@@ -185,13 +187,15 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       },
       "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       }
     },
     {
@@ -205,13 +209,15 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       }
     },
     {
@@ -225,13 +231,15 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       }
     },
     {
@@ -245,13 +253,15 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       }
     },
     {
@@ -265,14 +275,79 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 0
+        "score": 0,
+        "projectedScore": null
       }
     }
-  ]
+  ],
+  "teamProjections": [
+    {
+      "teamId": 1,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 3,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 4,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 5,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 6,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 7,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 8,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 9,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 11,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 13,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 14,
+      "projectedScore": null,
+      "complete": false
+    },
+    {
+      "teamId": 15,
+      "projectedScore": null,
+      "complete": false
+    }
+  ],
+  "projectionsFetchedAt": "2026-10-07T03:39:42.008387+00:00"
 }

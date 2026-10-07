@@ -59,4 +59,13 @@ assert.match(indexHtml, /week-standings-rank/);
 assert.match(indexHtml, /class="is-playoff-line"/);
 assert.match(indexHtml, /Swipe standings/);
 assert.doesNotMatch(readFileSync(new URL('../js/home-layout.js', import.meta.url), 'utf8'), /createElement\('script'\)/);
+const projectedHtml = board.matchupCardHtml({state:'scheduled',away:{team:'A',owner:'<owner>',score:0,projectedScore:123.45},home:{team:'B',score:0,projectedScore:0}},esc);
+assert.match(projectedHtml,/ESPN projected points/);
+assert.match(projectedHtml,/>123.5</);
+assert.match(projectedHtml,/>0</);
+assert.doesNotMatch(projectedHtml,/Ahead by|Won by|data-leader/);
+assert.match(projectedHtml,/data-team-owner="&lt;owner&gt;"/);
+assert.match(board.matchupCardHtml({...live,away:{...live.away,projectedScore:999}},esc),/>91.5</);
+assert.doesNotMatch(board.matchupCardHtml({...live,away:{...live.away,projectedScore:999}},esc),/>999</);
+
 console.log('This Week board: six cards, live/final/upcoming states, margins, and standings snapshot checks passed.');

@@ -212,7 +212,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/player-projections.json
           git add index.html data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/streaks.json data/newspaper_editions data/homepage-week.json
           if git diff --cached --quiet; then
             echo "Current-season board and derived data unchanged — nothing to commit."

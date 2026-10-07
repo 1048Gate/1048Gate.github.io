@@ -857,3 +857,10 @@ html body .desk-standings-hint{display:none;}
 @media (max-width:760px){
   html body .desk-standings.is-expanded .desk-standings-hint{display:inline;margin-right:auto;font-size:11px !important;color:var(--muted-text) !important;}
 }
+
+html body #weekBoard .week-team-link{display:block;width:100%;padding:0;border:0;background:none;color:var(--link-color, #165d96);font:inherit;font-size:13px;text-align:left;text-decoration:underline;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+html body #weekBoard .week-team-link:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+html body #weekBoard .is-leading .week-team-link{font-weight:700}
+html[data-theme="dark"] body #weekBoard .week-team-link{color:#8dc4ef}
+.team-projection-section{margin:16px 0;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.team-projection-section h3{margin:0 0 8px}.team-projection-section p{font-size:12px;margin:8px 0}
