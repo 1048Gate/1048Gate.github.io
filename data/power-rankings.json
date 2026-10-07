@@ -6,155 +6,529 @@
     "season": 2026,
     "throughWeek": 5,
     "gamesPlayed": 4,
-    "weight": 0.285,
+    "weight": 0.189,
+    "scheduleWeight": 0.285,
     "factors": {
-      "record": 0.45,
-      "pointsFor": 0.4,
-      "pointsAgainstSchedule": 0.15
+      "pointsFor": 1
     }
+  },
+  "scoring": {
+    "model": "normal-weekly-scores",
+    "regularSeasonWeeks": 14,
+    "leagueMean": 119.97,
+    "sigma": 26.5,
+    "tau": 6.39,
+    "reliabilityWeight": 0.1887,
+    "posteriorSd": 5.756,
+    "preseasonCorrelation": 0.563,
+    "pointsPerRatingPoint": 0.3491,
+    "inputs": {
+      "completedWeeksUsed": 4,
+      "pooledWithinSd": 28.9,
+      "historicalGameSd": 24.18,
+      "historicalGameCount": 80,
+      "talentSeasons": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "yearToYearCorrelation": 0.377,
+      "yearToYearPairs": 90
+    }
+  },
+  "schedule": {
+    "method": "circle-method round robin fitted to known weeks",
+    "knownWeeks": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "fixedTeam": "JD Daley",
+    "remaining": [
+      {
+        "week": 5,
+        "source": "espn",
+        "games": [
+          [
+            "JD Daley",
+            "Jared Hall"
+          ],
+          [
+            "Brian Heino",
+            "Collin Krum"
+          ],
+          [
+            "James Brochu",
+            "Trevor Hash"
+          ],
+          [
+            "Vincent Cannarozzi",
+            "Thomas Speer"
+          ],
+          [
+            "German Haro",
+            "Bryan Hunt"
+          ],
+          [
+            "Kyle Fowler",
+            "George Travis"
+          ]
+        ]
+      },
+      {
+        "week": 6,
+        "source": "inferred",
+        "games": [
+          [
+            "JD Daley",
+            "Brian Heino"
+          ],
+          [
+            "Bryan Hunt",
+            "George Travis"
+          ],
+          [
+            "Thomas Speer",
+            "Kyle Fowler"
+          ],
+          [
+            "Trevor Hash",
+            "German Haro"
+          ],
+          [
+            "Collin Krum",
+            "Vincent Cannarozzi"
+          ],
+          [
+            "Jared Hall",
+            "James Brochu"
+          ]
+        ]
+      },
+      {
+        "week": 7,
+        "source": "inferred",
+        "games": [
+          [
+            "JD Daley",
+            "James Brochu"
+          ],
+          [
+            "Bryan Hunt",
+            "Thomas Speer"
+          ],
+          [
+            "Trevor Hash",
+            "George Travis"
+          ],
+          [
+            "Collin Krum",
+            "Kyle Fowler"
+          ],
+          [
+            "Jared Hall",
+            "German Haro"
+          ],
+          [
+            "Brian Heino",
+            "Vincent Cannarozzi"
+          ]
+        ]
+      },
+      {
+        "week": 8,
+        "source": "inferred",
+        "games": [
+          [
+            "JD Daley",
+            "Vincent Cannarozzi"
+          ],
+          [
+            "Bryan Hunt",
+            "Collin Krum"
+          ],
+          [
+            "Thomas Speer",
+            "Trevor Hash"
+          ],
+          [
+            "Jared Hall",
+            "George Travis"
+          ],
+          [
+            "Brian Heino",
+            "Kyle Fowler"
+          ],
+          [
+            "James Brochu",
+            "German Haro"
+          ]
+        ]
+      },
+      {
+        "week": 9,
+        "source": "inferred",
+        "games": [
+          [
+            "JD Daley",
+            "German Haro"
+          ],
+          [
+            "Bryan Hunt",
+            "Brian Heino"
+          ],
+          [
+            "Thomas Speer",
+            "Jared Hall"
+          ],
+          [
+            "Trevor Hash",
+            "Collin Krum"
+          ],
+          [
+            "James Brochu",
+            "George Travis"
+          ],
+          [
+            "Vincent Cannarozzi",
+            "Kyle Fowler"
+          ]
+        ]
+      },
+      {
+        "week": 10,
+        "source": "inferred",
+        "games": [
+          [
+            "JD Daley",
+            "Kyle Fowler"
+          ],
+          [
+            "Bryan Hunt",
+            "Vincent Cannarozzi"
+          ],
+          [
+            "Thomas Speer",
+            "James Brochu"
+          ],
+          [
+            "Trevor Hash",
+            "Brian Heino"
+          ],
+          [
+            "Collin Krum",
+            "Jared Hall"
+          ],
+          [
+            "German Haro",
+            "George Travis"
+          ]
+        ]
+      },
+      {
+        "week": 11,
+        "source": "inferred",
+        "games": [
+          [
+            "JD Daley",
+            "George Travis"
+          ],
+          [
+            "Bryan Hunt",
+            "Kyle Fowler"
+          ],
+          [
+            "Thomas Speer",
+            "German Haro"
+          ],
+          [
+            "Trevor Hash",
+            "Vincent Cannarozzi"
+          ],
+          [
+            "Collin Krum",
+            "James Brochu"
+          ],
+          [
+            "Jared Hall",
+            "Brian Heino"
+          ]
+        ]
+      },
+      {
+        "week": 12,
+        "source": "inferred",
+        "games": [
+          [
+            "JD Daley",
+            "Bryan Hunt"
+          ],
+          [
+            "Thomas Speer",
+            "George Travis"
+          ],
+          [
+            "Trevor Hash",
+            "Kyle Fowler"
+          ],
+          [
+            "Collin Krum",
+            "German Haro"
+          ],
+          [
+            "Jared Hall",
+            "Vincent Cannarozzi"
+          ],
+          [
+            "Brian Heino",
+            "James Brochu"
+          ]
+        ]
+      },
+      {
+        "week": 13,
+        "source": "inferred",
+        "games": [
+          [
+            "JD Daley",
+            "Thomas Speer"
+          ],
+          [
+            "Bryan Hunt",
+            "Trevor Hash"
+          ],
+          [
+            "Collin Krum",
+            "George Travis"
+          ],
+          [
+            "Jared Hall",
+            "Kyle Fowler"
+          ],
+          [
+            "Brian Heino",
+            "German Haro"
+          ],
+          [
+            "James Brochu",
+            "Vincent Cannarozzi"
+          ]
+        ]
+      },
+      {
+        "week": 14,
+        "source": "inferred",
+        "games": [
+          [
+            "JD Daley",
+            "Trevor Hash"
+          ],
+          [
+            "Bryan Hunt",
+            "Jared Hall"
+          ],
+          [
+            "Thomas Speer",
+            "Collin Krum"
+          ],
+          [
+            "Brian Heino",
+            "George Travis"
+          ],
+          [
+            "James Brochu",
+            "Kyle Fowler"
+          ],
+          [
+            "Vincent Cannarozzi",
+            "German Haro"
+          ]
+        ]
+      }
+    ]
   },
   "ratings": [
     {
       "name": "Thomas Speer",
       "rating": 63.5,
       "preseasonRating": 68.2,
-      "currentRating": 51.6,
+      "projectedPoints": 126.58,
+      "currentRating": 44.4,
+      "inSeasonPoints": 119.89,
       "wins": 2,
       "losses": 2,
       "ties": 0,
       "record": "2-2",
+      "pointsFor": 478.2,
       "pointsForPerGame": 119.55,
       "pointsAgainstPerGame": 119.24
     },
     {
       "name": "Bryan Hunt",
-      "rating": 58.5,
+      "rating": 57.2,
       "preseasonRating": 50.7,
-      "currentRating": 78.1,
+      "projectedPoints": 124.36,
+      "currentRating": 52.3,
+      "inSeasonPoints": 122.64,
       "wins": 3,
       "losses": 1,
       "ties": 0,
       "record": "3-1",
+      "pointsFor": 536.42,
       "pointsForPerGame": 134.11,
       "pointsAgainstPerGame": 138.27
     },
     {
       "name": "George Travis",
-      "rating": 54.6,
+      "rating": 54.1,
       "preseasonRating": 44.9,
-      "currentRating": 78.9,
+      "projectedPoints": 123.28,
+      "currentRating": 53.9,
+      "inSeasonPoints": 123.22,
       "wins": 4,
       "losses": 0,
       "ties": 0,
       "record": "4-0",
+      "pointsFor": 548.64,
       "pointsForPerGame": 137.16,
       "pointsAgainstPerGame": 81.59
     },
     {
-      "name": "James Brochu",
-      "rating": 50.3,
-      "preseasonRating": 45.7,
-      "currentRating": 61.8,
-      "wins": 3,
-      "losses": 1,
-      "ties": 0,
-      "record": "3-1",
-      "pointsForPerGame": 124.04,
-      "pointsAgainstPerGame": 99.32
-    },
-    {
       "name": "Trevor Hash",
-      "rating": 48.8,
+      "rating": 52.2,
       "preseasonRating": 37.2,
-      "currentRating": 78.2,
+      "projectedPoints": 122.62,
+      "currentRating": 58.2,
+      "inSeasonPoints": 124.73,
       "wins": 3,
       "losses": 1,
       "ties": 0,
       "record": "3-1",
+      "pointsFor": 580.78,
       "pointsForPerGame": 145.2,
       "pointsAgainstPerGame": 101.56
     },
     {
-      "name": "Collin Krum",
-      "rating": 46.3,
-      "preseasonRating": 50,
-      "currentRating": 37,
-      "wins": 2,
-      "losses": 2,
+      "name": "James Brochu",
+      "rating": 47.7,
+      "preseasonRating": 45.7,
+      "projectedPoints": 121.06,
+      "currentRating": 46.8,
+      "inSeasonPoints": 120.74,
+      "wins": 3,
+      "losses": 1,
       "ties": 0,
-      "record": "2-2",
-      "pointsForPerGame": 104.78,
-      "pointsAgainstPerGame": 103.67
-    },
-    {
-      "name": "Brian Heino",
-      "rating": 44.2,
-      "preseasonRating": 52.4,
-      "currentRating": 23.5,
-      "wins": 1,
-      "losses": 3,
-      "ties": 0,
-      "record": "1-3",
-      "pointsForPerGame": 92.08,
-      "pointsAgainstPerGame": 136.34
+      "record": "3-1",
+      "pointsFor": 496.14,
+      "pointsForPerGame": 124.04,
+      "pointsAgainstPerGame": 99.32
     },
     {
       "name": "Jared Hall",
-      "rating": 42.1,
+      "rating": 44.3,
       "preseasonRating": 44.7,
-      "currentRating": 35.4,
+      "projectedPoints": 119.85,
+      "currentRating": 44.2,
+      "inSeasonPoints": 119.82,
       "wins": 0,
       "losses": 4,
       "ties": 0,
       "record": "0-4",
+      "pointsFor": 476.64,
       "pointsForPerGame": 119.16,
       "pointsAgainstPerGame": 148.51
     },
     {
-      "name": "JD Daley",
-      "rating": 40.9,
-      "preseasonRating": 45.9,
-      "currentRating": 28.5,
-      "wins": 0,
-      "losses": 4,
-      "ties": 0,
-      "record": "0-4",
-      "pointsForPerGame": 110.09,
-      "pointsAgainstPerGame": 148.13
-    },
-    {
-      "name": "Vincent Cannarozzi",
-      "rating": 40.1,
-      "preseasonRating": 37.2,
-      "currentRating": 47.4,
+      "name": "Collin Krum",
+      "rating": 40.7,
+      "preseasonRating": 50,
+      "projectedPoints": 118.62,
+      "currentRating": 36.4,
+      "inSeasonPoints": 117.11,
       "wins": 2,
       "losses": 2,
       "ties": 0,
       "record": "2-2",
+      "pointsFor": 419.1,
+      "pointsForPerGame": 104.78,
+      "pointsAgainstPerGame": 103.67
+    },
+    {
+      "name": "JD Daley",
+      "rating": 40.3,
+      "preseasonRating": 45.9,
+      "projectedPoints": 118.46,
+      "currentRating": 39.3,
+      "inSeasonPoints": 118.11,
+      "wins": 0,
+      "losses": 4,
+      "ties": 0,
+      "record": "0-4",
+      "pointsFor": 440.36,
+      "pointsForPerGame": 110.09,
+      "pointsAgainstPerGame": 148.13
+    },
+    {
+      "name": "Brian Heino",
+      "rating": 35.9,
+      "preseasonRating": 52.4,
+      "projectedPoints": 116.92,
+      "currentRating": 29.5,
+      "inSeasonPoints": 114.71,
+      "wins": 1,
+      "losses": 3,
+      "ties": 0,
+      "record": "1-3",
+      "pointsFor": 368.32,
+      "pointsForPerGame": 92.08,
+      "pointsAgainstPerGame": 136.34
+    },
+    {
+      "name": "Vincent Cannarozzi",
+      "rating": 34.8,
+      "preseasonRating": 37.2,
+      "projectedPoints": 116.55,
+      "currentRating": 40.9,
+      "inSeasonPoints": 118.66,
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "record": "2-2",
+      "pointsFor": 452.08,
       "pointsForPerGame": 113.02,
       "pointsAgainstPerGame": 122.12
     },
     {
       "name": "German Haro",
-      "rating": 36.1,
+      "rating": 33,
       "preseasonRating": 31.2,
-      "currentRating": 48.5,
+      "projectedPoints": 115.91,
+      "currentRating": 43.9,
+      "inSeasonPoints": 119.72,
       "wins": 2,
       "losses": 2,
       "ties": 0,
       "record": "2-2",
+      "pointsFor": 474.5,
       "pointsForPerGame": 118.63,
       "pointsAgainstPerGame": 108.57
     },
     {
       "name": "Kyle Fowler",
-      "rating": 35.6,
+      "rating": 31.7,
       "preseasonRating": 27.4,
-      "currentRating": 56.3,
+      "projectedPoints": 115.46,
+      "currentRating": 45.6,
+      "inSeasonPoints": 120.33,
       "wins": 2,
       "losses": 2,
       "ties": 0,
       "record": "2-2",
+      "pointsFor": 487.54,
       "pointsForPerGame": 121.89,
       "pointsAgainstPerGame": 132.39
     }

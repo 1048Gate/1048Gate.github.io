@@ -1,12 +1,157 @@
 // Playoff probability projector for the current season.
-// Runs a Monte Carlo over data/power-rankings.json: random 14-game schedules (2026 regular season),
-// logistic game win probabilities from rating gaps, six-team bracket with
-// first-round byes for the top two seeds.
+// Runs a Monte Carlo over data/power-rankings.json (written by scripts/build-futures.mjs):
+//   * each club's weekly score is Normal(strength, sigma), where strength is the
+//     club's projected points per week (2026 PF/G regressed toward the league
+//     mean, blended with the preseason rating) plus a per-season draw of
+//     posteriorSd for how unsure we still are about that rate;
+//   * remaining 2026 regular-season games (14 total) follow the real schedule:
+//     posted ESPN weeks, then the league's circle-method rotation, falling back
+//     to random round-robin weeks only when the rotation can't be confirmed;
+//   * seeding is wins, then total points for (the league tiebreaker);
+//   * six-team bracket, fixed: 3 v 6 and 4 v 5, then 1 v the 4/5 winner and
+//     2 v the 3/6 winner (as in the 2023-2025 brackets in data/playoffs.json).
 (function(){
-  const SIMULATIONS = 4000;
+  const SIMULATIONS = 10000;
   const GAMES_PER_SEASON = 14; // 2026 regular season (confirmed by the commissioner)
   const PLAYOFF_TEAMS = 6;
-  const RATING_SCALE = 100;
+  const DEFAULT_SIGMA = 26.5; // points; used only if the data file predates the scoring block
+
+  // Seeded generator so the board reads the same on every load of the same data.
+  function mulberry32(seed){
+    let a = seed >>> 0;
+    return function(){
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function normalSource(random){
+    let spare = null;
+    return function(){
+      if(spare !== null){ const value = spare; spare = null; return value; }
+      let u = 0;
+      while(u === 0) u = random();
+      const radius = Math.sqrt(-2 * Math.log(u));
+      const angle = 2 * Math.PI * random();
+      spare = radius * Math.sin(angle);
+      return radius * Math.cos(angle);
+    };
+  }
+
+  function shuffled(values, random){
+    const copy = [...values];
+    for(let index = copy.length - 1; index > 0; index--){
+      const swapIndex = Math.floor(random() * (index + 1));
+      [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+    }
+    return copy;
+  }
+
+  function randomRounds(teamCount, random){
+    const rotation = shuffled(Array.from({length:teamCount}, (_, index) => index), random);
+    const rounds = [];
+    for(let round = 0; round < teamCount - 1; round++){
+      const matchups = [];
+      for(let index = 0; index < teamCount / 2; index++){
+        matchups.push([rotation[index], rotation[teamCount - 1 - index]]);
+      }
+      rounds.push(matchups);
+      rotation.splice(1, 0, rotation.pop());
+    }
+    return shuffled(rounds, random);
+  }
+
+  // Remaining regular-season games. `weeks` holds one entry per remaining week:
+  // an array of [teamIndex, teamIndex] pairs from the schedule, or null when the
+  // week is unknown (filled from a random round robin, the previous behavior).
+  function buildSchedule(teamCount, weeks, remainingWeeks, random){
+    const slots = Array.from({length:remainingWeeks}, (_, index) => weeks?.[index] || null);
+    const filler = slots.some(week => !week) ? randomRounds(teamCount, random) : [];
+    let next = 0;
+    return slots.map(week => week || filler[next++ % filler.length]).flat();
+  }
+
+  function simulate(teams, options = {}){
+    const n = teams.length;
+    const gamesPlayed = Number(options.gamesPlayed) || 0;
+    const sigma = Number(options.sigma) || DEFAULT_SIGMA;
+    const posteriorSd = Number(options.posteriorSd) || 0;
+    const simulations = Number(options.simulations) || SIMULATIONS;
+    const random = mulberry32(Number(options.seed) || 1048);
+    const normal = normalSource(random);
+    const made = teams.map(() => 0);
+    const bye = teams.map(() => 0);
+    const title = teams.map(() => 0);
+    const remainingWeeks = Math.max(0, GAMES_PER_SEASON - gamesPlayed);
+    for(let sim = 0; sim < simulations; sim++){
+      const strength = teams.map(team => team.points + posteriorSd * normal());
+      const score = i => strength[i] + sigma * normal();
+      const wins = teams.map(team => team.wins + 0.5 * team.ties);
+      const pointsFor = teams.map(team => team.pointsFor || 0);
+      const play = (i, j) => {
+        const a = score(i), b = score(j);
+        pointsFor[i] += a; pointsFor[j] += b;
+        return a >= b ? i : j;
+      };
+      for(const [home, away] of buildSchedule(n, options.weeks, remainingWeeks, random)){
+        wins[play(home, away)]++;
+      }
+      const tiebreak = teams.map(() => random());
+      const order = teams.map((_, i) => i).sort((a, b) => wins[b] - wins[a] || pointsFor[b] - pointsFor[a] || tiebreak[a] - tiebreak[b]);
+      const field = order.slice(0, PLAYOFF_TEAMS);
+      field.forEach(i => made[i]++);
+      bye[field[0]]++; bye[field[1]]++;
+      const game = (i, j) => score(i) >= score(j) ? i : j;
+      const qf36 = game(field[2], field[5]);
+      const qf45 = game(field[3], field[4]);
+      const sf1 = game(field[0], qf45);
+      const sf2 = game(field[1], qf36);
+      title[game(sf1, sf2)]++;
+    }
+    return {made, bye, title, simulations};
+  }
+
+  // Convert a power-rankings.json payload into simulation inputs.
+  function prepare(payload){
+    const rated = (payload?.ratings || []).filter(t => Number.isFinite(Number(t.rating)));
+    const scoring = payload?.scoring || {};
+    const meanRating = rated.reduce((sum, t) => sum + Number(t.rating), 0) / (rated.length || 1);
+    const leagueMean = Number(scoring.leagueMean) || 120;
+    const perRatingPoint = Number(scoring.pointsPerRatingPoint) || 0.35;
+    const teams = rated.map(t => ({
+      name:String(t.name),
+      points:Number.isFinite(Number(t.projectedPoints)) ? Number(t.projectedPoints) : leagueMean + (Number(t.rating) - meanRating) * perRatingPoint,
+      wins:Number(t.wins)||0,
+      ties:Number(t.ties)||0,
+      pointsFor:Number(t.pointsFor)||0
+    }));
+    const gamesPlayed = Number(payload?.currentSeason?.gamesPlayed) || 0;
+    const index = new Map(teams.map((t, i) => [t.name, i]));
+    const remaining = Array.isArray(payload?.schedule?.remaining) ? payload.schedule.remaining : [];
+    const weeks = Array.from({length:Math.max(0, GAMES_PER_SEASON - gamesPlayed)}, (_, offset) => {
+      const entry = remaining.find(w => Number(w.week) === gamesPlayed + 1 + offset);
+      const pairs = Array.isArray(entry?.games) ? entry.games.map(pair => [index.get(String(pair[0])), index.get(String(pair[1]))]) : null;
+      return pairs && pairs.length === teams.length / 2 && pairs.every(pair => Number.isInteger(pair[0]) && Number.isInteger(pair[1])) ? pairs : null;
+    });
+    const unknownWeeks = weeks.filter(week => !week).length;
+    return {
+      teams,
+      options:{
+        gamesPlayed,
+        sigma:Number(scoring.sigma) || DEFAULT_SIGMA,
+        posteriorSd:Number(scoring.posteriorSd) || 0,
+        weeks,
+        seed:(Number(payload?.generatedForSeason) || 0) * 1000 + gamesPlayed * 17 + 1048
+      },
+      unknownWeeks
+    };
+  }
+
+  const model = {SIMULATIONS, GAMES_PER_SEASON, PLAYOFF_TEAMS, mulberry32, buildSchedule, simulate, prepare};
+  if(typeof module === 'object' && module && module.exports) module.exports = model;
+  if(typeof document === 'undefined') return;
 
   const toolbar = document.querySelector('#playoffs .playoff-toolbar');
   if(!toolbar) return;
@@ -23,13 +168,13 @@
       const response = await fetch('data/power-rankings.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`power-rankings.json returned HTTP ${response.status}`);
       const payload = await response.json();
-      const teams = (payload.ratings || []).filter(t => Number.isFinite(Number(t.rating)));
-      if(teams.length < 4) throw new Error('Not enough rated teams to project.');
+      const prepared = prepare(payload);
+      if(prepared.teams.length < 4) throw new Error('Not enough rated teams to project.');
       render(
-        teams.map(t => ({name:String(t.name), rating:Number(t.rating), wins:Number(t.wins)||0, ties:Number(t.ties)||0})),
+        prepared,
         Number(payload.generatedForSeason) || '',
         String(payload.basis || 'career'),
-        Number(payload.currentSeason?.gamesPlayed) || 0
+        prepared.options.gamesPlayed
       );
     }catch(error){
       console.warn('Title projection unavailable:', error);
@@ -39,62 +184,9 @@
 
   host.addEventListener('click', event => { if(event.target.closest('[data-title-odds-retry]')) load(); });
 
-  function pWin(a, b){
-    return 1 / (1 + Math.pow(10, -(a.rating - b.rating) / RATING_SCALE));
-  }
-
-  function shuffled(values){
-    const copy = [...values];
-    for(let index = copy.length - 1; index > 0; index--){
-      const swapIndex = Math.floor(Math.random() * (index + 1));
-      [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
-    }
-    return copy;
-  }
-
-  function buildSchedule(teamCount){
-    const rotation = shuffled(Array.from({length:teamCount}, (_, index) => index));
-    const rounds = [];
-    for(let round = 0; round < teamCount - 1; round++){
-      const matchups = [];
-      for(let index = 0; index < teamCount / 2; index++){
-        matchups.push([rotation[index], rotation[teamCount - 1 - index]]);
-      }
-      rounds.push(matchups);
-      rotation.splice(1, 0, rotation.pop());
-    }
-    const rematchRounds = shuffled(rounds.map((_, index) => index))
-      .slice(0, GAMES_PER_SEASON - (teamCount - 1));
-    return [...rounds, ...rematchRounds.map(index => rounds[index])].flat();
-  }
-
-  function simulate(teams, gamesPlayed = 0){
-    const made = teams.map(() => 0);
-    const bye = teams.map(() => 0);
-    const title = teams.map(() => 0);
-    const n = teams.length;
-    const play = (i, j) => Math.random() < pWin(teams[i], teams[j]) ? i : j;
-    for(let sim = 0; sim < SIMULATIONS; sim++){
-      const wins = teams.map(team => team.wins + 0.5 * team.ties);
-      const remainingGames = Math.max(0, GAMES_PER_SEASON - gamesPlayed) * n / 2;
-      for(const [home, away] of buildSchedule(n).slice(0, remainingGames)){
-        wins[play(home, away)]++;
-      }
-      const order = teams.map((_, i) => i).sort((a, b) => wins[b] - wins[a] || (Math.random() - 0.5));
-      const field = order.slice(0, PLAYOFF_TEAMS);
-      field.forEach(i => made[i]++);
-      bye[field[0]]++; bye[field[1]]++;
-      const qf1 = play(field[2], field[5]);
-      const qf2 = play(field[3], field[4]);
-      const sf1 = play(field[0], qf1);
-      const sf2 = play(field[1], qf2);
-      title[play(sf1, sf2)]++;
-    }
-    return {made, bye, title};
-  }
-
-  function render(teams, seasonNumber, basis, gamesPlayed){
-    const {made, bye, title} = simulate(teams, gamesPlayed);
+  function render(prepared, seasonNumber, basis, gamesPlayed){
+    const {teams, unknownWeeks} = prepared;
+    const {made, bye, title} = simulate(teams, prepared.options);
     const pct = value => `${Math.round(value * 100)}%`;
     const rows = teams
       .map((t, i) => ({name:t.name, madePct:made[i]/SIMULATIONS, byePct:bye[i]/SIMULATIONS, titlePct:title[i]/SIMULATIONS}))
@@ -105,11 +197,12 @@
     const postDraft = basis === 'post-draft';
     const kicker = weekly ? `SZN ${seasonNumber} · THROUGH WEEK ${gamesPlayed}` : postDraft ? `SZN ${seasonNumber} POST-DRAFT BOARD` : `SZN ${seasonNumber} PRE-DRAFT BOARD`;
     const sub = weekly
-      ? `${SIMULATIONS.toLocaleString('en-US')} simulations · current record, scoring, schedule strength, roster and history`
+      ? `${SIMULATIONS.toLocaleString('en-US')} simulations · current record, scoring, league schedule, roster and history`
       : postDraft ? `${SIMULATIONS.toLocaleString('en-US')} simulated seasons · 2026 roster ranks blended with career form`
       : `${SIMULATIONS.toLocaleString('en-US')} simulated seasons · career power ratings, not 2026 rosters`;
+    const scheduleNote = unknownWeeks ? `the league schedule where it is known and random pairings for ${unknownWeeks} unconfirmed week${unknownWeeks === 1 ? '' : 's'}` : 'the league schedule';
     const note = weekly
-      ? `Updated after completed weeks. Simulations begin with each club's real 2026 record, then project the remaining ${Math.max(0,GAMES_PER_SEASON-gamesPlayed)} regular-season games from the weekly rating blend. Points against is treated as a small schedule-strength adjustment, not fantasy defense. Top six make the bracket; top two get first-round byes.`
+      ? `Updated after completed weeks. Simulations begin with each club's real 2026 record and points for, then play the remaining ${Math.max(0,GAMES_PER_SEASON-gamesPlayed)} regular-season games on ${scheduleNote}. Weekly scores are drawn around each club's scoring rate: 2026 points per game, pulled toward the league average while the sample is small, blended with roster and history. Ties in the standings go to points for. Top six make the bracket; top two get first-round byes.`
       : postDraft ? `Post-draft projection. These percentages blend ESPN PPR ranks from the Szn 10 draft with career power ratings and a random ${GAMES_PER_SEASON}-game schedule. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.`
       : `Pre-draft projection only. These percentages come from career power ratings and a random ${GAMES_PER_SEASON}-game schedule — not keepers, the 2026 draft, or current rosters. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.`;
     host.innerHTML = `<div class="history-section-head"><div><span>${kicker}</span><h3>Playoff Probability Board</h3></div><small>${sub}</small></div><div class="title-odds-grid">${rows.map(r => `
