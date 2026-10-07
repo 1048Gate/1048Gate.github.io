@@ -124,4 +124,12 @@ oddsModel.prepare(rankingsData).teams.forEach((team, index) => {
   assert.equal(recomputed.title[index], projected.get(team.name).title, `Browser simulation must reproduce the stored projection for ${team.name}.`);
 });
 
+// AI-desk footnote: identical on the homepage board (static HTML) and the Playoffs tab.
+const homepageHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const siteUiSource = readFileSync(new URL('../js/site-ui.js', import.meta.url), 'utf8');
+assert.match(oddsModel.AI_FOOTNOTE, /^\* Computer-generated .* 10,000-run season simulation\./);
+assert.ok(homepageHtml.includes(`data-futures-footnote>${oddsModel.AI_FOOTNOTE}</p>`), 'Homepage odds board must carry the same AI-desk footnote as the Playoffs tab.');
+assert.ok(siteUiSource.includes('Odds<span class="odds-asterisk" aria-hidden="true">*</span>'), 'Homepage price column must carry the footnote asterisk.');
+assert.ok(browserSource.includes('title-odds-footnote') && browserSource.includes('Playoff Probability Board<span class="odds-asterisk"'), 'Playoffs tab must carry the asterisk and footnote.');
+
 console.log('Futures checks passed: weekly results blend, PF-only in-season ratings, evidence weight, schedule inference, PF tiebreak seeding, simulation-priced futures board, and incomplete-board fallback.');
