@@ -44,6 +44,8 @@
     console.warn('Unable to load site season settings; keeping the HTML fallback labels.', error);
     document.querySelector('[data-futures-status]')?.replaceChildren(document.createTextNode('Unavailable · Try refreshing'));
     const futures=document.querySelector('[data-futures]');
+    document.querySelector('[data-futures-footnote]')?.setAttribute('hidden','');
+    document.querySelector('[data-futures-method-details]')?.setAttribute('hidden','');
     if(futures) futures.innerHTML='<div class="futures-empty state-error"><strong>Championship odds could not load.</strong><span>Check your connection, then refresh the page.</span></div>';
   }
 })();
@@ -53,6 +55,10 @@ function renderFutures(config){
   if(!target) return;
   const status=document.querySelector('[data-futures-status]');
   const futures = Array.isArray(config.futures) ? config.futures : [];
+  document.querySelector('[data-futures-footnote]')?.toggleAttribute('hidden', !futures.length);
+  document.querySelector('[data-futures-method-details]')?.toggleAttribute('hidden', !futures.length);
+  const methodText = document.querySelector('[data-futures-method-text]');
+  if(methodText && config.futuresMethod?.text) methodText.textContent = config.futuresMethod.text;
   if(!futures.length){
     target.innerHTML = '<div class="futures-empty"><strong>No odds posted yet.</strong><span>Championship lines will appear when the board is ready.</span></div>';
     if(status) status.textContent='Available after draft board';
@@ -69,7 +75,7 @@ function renderFutures(config){
   const preview = 6;
   target.classList.toggle('is-collapsed', futures.length > preview);
   target.classList.add('futures-table-host');
-  target.innerHTML = `<div class="desk-scroll"><table class="desk-table futures-table"><thead><tr><th class="num">Rk</th><th>Manager</th><th class="num">Odds</th><th class="num" title="Implied probability from the American price, before removing the office margin">Impl.</th><th class="futures-case-head">Office note</th></tr></thead><tbody>${futures.map((entry, index) => `
+  target.innerHTML = `<div class="desk-scroll"><table class="desk-table futures-table"><thead><tr><th class="num">Rk</th><th>Manager</th><th class="num">Odds<span class="odds-asterisk" aria-hidden="true">*</span></th><th class="num" title="Implied probability from the American price, before removing the office margin">Impl.</th><th class="futures-case-head">Office note</th></tr></thead><tbody>${futures.map((entry, index) => `
     <tr class="futures-row${index === 0 ? ' is-favorite' : ''}"><td class="num">${index + 1}</td><td class="desk-strong">${escapeHtml(entry.name || '')}</td><td class="num futures-odds">${escapeHtml(entry.odds || '')}</td><td class="num">${implied(entry.odds)}</td><td class="futures-case">${escapeHtml(entry.case || '')}</td></tr>`).join('')}</tbody></table></div>`;
   if(status) status.textContent=`${futures.length} clubs priced`;
   const method=document.querySelector('[data-futures-method]');

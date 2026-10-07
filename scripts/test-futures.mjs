@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
-import {blendRating, currentSeasonRatings, inferRoundRobin, scoreBlend, scoringParameters} from './futures-model.mjs';
+import {LONG_SHOT_CAP, blendRating, methodShares, oddsMethodNote, currentSeasonRatings, formatAmericanOdds, inferRoundRobin, priceFromProbability, scoreBlend, scoringParameters} from './futures-model.mjs';
 
 const owners = Array.from({length:12}, (_, index) => `Manager ${index + 1}`);
 const standings = owners.map((owner, index) => ({
@@ -93,4 +93,79 @@ assert.equal(total(midseason.made), 6);
 assert.equal(total(midseason.bye), 2);
 assert.equal(total(midseason.title), 1);
 
-console.log('Futures checks passed: weekly results blend, PF-only in-season ratings, evidence weight, schedule inference, PF tiebreak seeding, and incomplete-board fallback.');
+// Futures pricing rule: title% x 1.05, American odds, ladder rounding, +5000 cap.
+assert.equal(priceFromProbability(0.187), 400);
+assert.equal(priceFromProbability(0.148), 550);
+assert.equal(priceFromProbability(0.055), 1600);
+assert.equal(priceFromProbability(0.022), 4250);
+assert.equal(priceFromProbability(0.001), LONG_SHOT_CAP);
+assert.equal(priceFromProbability(0), LONG_SHOT_CAP);
+assert.equal(priceFromProbability(0.6), -170);
+assert.equal(formatAmericanOdds(-170), '-170');
+assert.equal(formatAmericanOdds(400), '+400');
+for(let p = 0.005; p < 0.9; p += 0.005){
+  const shorter = priceFromProbability(p + 0.005), longer = priceFromProbability(p);
+  const implied = price => price > 0 ? 100 / (price + 100) : -price / (100 - price);
+  assert.ok(implied(shorter) >= implied(longer), `Prices must shorten as title probability rises (p=${p.toFixed(3)}).`);
+}
+
+// Checked-in board: priced from the stored simulation, in Playoffs-tab order.
+const siteData = JSON.parse(readFileSync(new URL('../data/site.json', import.meta.url), 'utf8'));
+const rankingsData = JSON.parse(readFileSync(new URL('../data/power-rankings.json', import.meta.url), 'utf8'));
+const projection = rankingsData.projection;
+assert.ok(projection && projection.teams.length === 12, 'power-rankings.json must carry the simulated projection.');
+const projected = new Map(projection.teams.map(row => [row.name, row]));
+const sumOf = key => projection.teams.reduce((sum, row) => sum + row[key], 0);
+assert.ok(Math.abs(sumOf('title') - 1) < 1e-9 && Math.abs(sumOf('bye') - 2) < 1e-9 && Math.abs(sumOf('playoff') - 6) < 1e-9);
+assert.deepEqual(siteData.futures.map(row => row.name), [...projection.teams].sort((a, b) => b.title - a.title || b.playoff - a.playoff).map(row => row.name).slice(0, siteData.futures.length), 'Futures board order must follow simulated title odds.');
+siteData.futures.forEach(row => assert.equal(row.odds, formatAmericanOdds(priceFromProbability(projected.get(row.name).title)), `${row.name} price must come from the simulation.`));
+const recomputed = oddsModel.probabilities(oddsModel.prepare({...rankingsData, projection: undefined}), {});
+oddsModel.prepare(rankingsData).teams.forEach((team, index) => {
+  assert.equal(recomputed.title[index], projected.get(team.name).title, `Browser simulation must reproduce the stored projection for ${team.name}.`);
+});
+
+// AI-desk footnote: identical on the homepage board (static HTML) and the Playoffs tab.
+const homepageHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const siteUiSource = readFileSync(new URL('../js/site-ui.js', import.meta.url), 'utf8');
+assert.match(oddsModel.AI_FOOTNOTE, /^\* Computer-generated .* 10,000-run season simulation\./);
+assert.ok(homepageHtml.includes(`data-futures-footnote>${oddsModel.AI_FOOTNOTE}</p>`), 'Homepage odds board must carry the same AI-desk footnote as the Playoffs tab.');
+assert.ok(siteUiSource.includes('Odds<span class="odds-asterisk" aria-hidden="true">*</span>'), 'Homepage price column must carry the footnote asterisk.');
+assert.ok(browserSource.includes('title-odds-footnote') && browserSource.includes('Playoff Probability Board<span class="odds-asterisk"'), 'Playoffs tab must carry the asterisk and footnote.');
+
+// Method note: plain-language explanation filled from build output.
+const sampleNote = oddsMethodNote({gamesPlayed: 4, scoringWeight: 0.1887, rosterWeight: 0.55, simulations: 10000, houseEdge: 0.05}, 'home');
+assert.match(sampleNote, /After Week 4, preseason carries 81% of each rating and 2026 scoring 19%\./);
+assert.match(sampleNote, /45% career form .* \+ 55% post-draft roster/);
+assert.match(sampleNote, /simulated 10,000 times on the real schedule; standings ties go to points for; six-team bracket, top two seeds get byes\. Prices include a 5% house edge\.$/);
+assert.match(oddsMethodNote({gamesPlayed: 0, scoringWeight: 0, rosterWeight: 0.55, simulations: 10000, houseEdge: 0.05}), /100% preseason/);
+assert.match(oddsMethodNote({gamesPlayed: 3, scoringWeight: 0.15, simulations: 10000, houseEdge: 0.05, randomWeeks: 2}, 'playoffs'), /random pairings for 2 unconfirmed weeks.*Home's futures prices add a 5% house edge\.$/);
+const liveShares = methodShares(rankingsData.currentSeason?.gamesPlayed || 0, rankingsData.scoring.reliabilityWeight);
+const splitText = rankingsData.currentSeason
+  ? `After Week ${rankingsData.currentSeason.gamesPlayed}, preseason carries ${liveShares.preseason}% of each rating and 2026 scoring ${liveShares.scoring}%.`
+  : 'ratings are 100% preseason';
+assert.ok(siteData.futuresMethod?.text.includes(splitText), 'Homepage method note must quote the current blend weight.');
+assert.ok(rankingsData.method?.text.includes(splitText), 'Playoffs method note must quote the current blend weight.');
+assert.equal(liveShares.scoring, Math.round(rankingsData.currentSeason.weight * 100), 'Quoted 2026 share must match the blend weight.');
+assert.ok(siteData.futuresMethod.text.includes(`${projection.simulations.toLocaleString('en-US')} times`));
+const w = rankingsData.scoring.reliabilityWeight;
+rankingsData.ratings.forEach(row => assert.ok(Math.abs((1 - w) * row.preseasonPoints + w * row.pointsForPerGame - row.projectedPoints) < 0.02, `${row.name}: blend must equal (1-w)*preseason + w*2026 points.`));
+assert.ok(homepageHtml.includes('data-futures-method-details') && homepageHtml.includes('data-futures-method-text') && siteUiSource.includes('config.futuresMethod?.text'), 'Homepage must render the method note from site.json.');
+
+// Render the Playoffs tab against the checked-in data with a minimal DOM stub.
+const rendered = {host: null};
+const domStub = {
+  querySelector: selector => selector === '#playoffs .playoff-toolbar' ? {insertAdjacentElement: (_, element) => { rendered.host = element; }} : null,
+  createElement: () => ({classList: {remove(){}}, addEventListener(){}, innerHTML: ''})
+};
+const domSandbox = {document: domStub, window: {gateShared: {escapeHtml: value => String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;')}}, fetch: async () => ({ok: true, json: async () => rankingsData}), console};
+vm.createContext(domSandbox);
+vm.runInContext(browserSource, domSandbox);
+await new Promise(resolve => setTimeout(resolve, 50));
+const tabHtml = rendered.host?.innerHTML || '';
+assert.ok(tabHtml.includes('data-odds-method') && tabHtml.includes(rankingsData.method.text.replace(/&/g, '&amp;')), 'Playoffs tab must render the method note.');
+assert.ok(tabHtml.includes(splitText), 'Playoffs tab note must show the current split.');
+const firstRow = rankingsData.ratings[0];
+assert.ok(tabHtml.includes(`Pts/wk · Pre ${firstRow.preseasonPoints.toFixed(1)}`), 'Cards must show preseason and 2026 points per week.');
+assert.ok(tabHtml.includes(oddsModel.AI_FOOTNOTE), 'Playoffs tab must keep the AI-desk footnote.');
+
+console.log('Futures checks passed: weekly results blend, PF-only in-season ratings, evidence weight, schedule inference, PF tiebreak seeding, simulation-priced futures board, method note, and incomplete-board fallback.');

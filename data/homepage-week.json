@@ -308,74 +308,56 @@
   },
   "championship_odds": {
     "favorite": {
-      "name": "Thomas Speer",
-      "odds": "+300",
-      "case": "2-2 · 119.55 PF/G through 4. Draft note: Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."
+      "name": "George Travis",
+      "odds": "+400",
+      "case": "4-0 · 137.16 PF/G through 4. Draft note: CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."
     },
     "board": [
       {
-        "name": "Thomas Speer",
-        "odds": "+300",
-        "case": "2-2 · 119.55 PF/G through 4. Draft note: Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four.",
-        "draftCase": "Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."
-      },
-      {
-        "name": "Bryan Hunt",
-        "odds": "+500",
-        "case": "3-1 · 134.11 PF/G through 4. Draft note: Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé.",
-        "draftCase": "Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé."
-      },
-      {
         "name": "George Travis",
-        "odds": "+650",
+        "odds": "+400",
         "case": "4-0 · 137.16 PF/G through 4. Draft note: CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan.",
         "draftCase": "CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."
       },
       {
+        "name": "Bryan Hunt",
+        "odds": "+475",
+        "case": "3-1 · 134.11 PF/G through 4. Draft note: Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé.",
+        "draftCase": "Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé."
+      },
+      {
         "name": "Trevor Hash",
-        "odds": "+750",
+        "odds": "+550",
         "case": "3-1 · 145.19 PF/G through 4. Draft note: Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up.",
         "draftCase": "Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up."
       },
       {
+        "name": "Thomas Speer",
+        "odds": "+550",
+        "case": "2-2 · 119.55 PF/G through 4. Draft note: Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four.",
+        "draftCase": "Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."
+      },
+      {
         "name": "James Brochu",
-        "odds": "+1050",
+        "odds": "+700",
         "case": "3-1 · 124.03 PF/G through 4. Draft note: Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix.",
         "draftCase": "Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix."
       },
       {
-        "name": "Jared Hall",
-        "odds": "+1450",
-        "case": "0-4 · 119.16 PF/G through 4. Draft note: Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset.",
-        "draftCase": "Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset."
-      },
-      {
         "name": "Collin Krum",
-        "odds": "+2000",
+        "odds": "+1600",
         "case": "2-2 · 104.78 PF/G through 4. Draft note: Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip.",
         "draftCase": "Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip."
       },
       {
-        "name": "JD Daley",
-        "odds": "+2050",
-        "case": "0-4 · 110.09 PF/G through 4. Draft note: Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version.",
-        "draftCase": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
-      },
-      {
-        "name": "Brian Heino",
-        "odds": "+2500",
-        "case": "1-3 · 92.08 PF/G through 4. Draft note: Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window.",
-        "draftCase": "Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window."
-      },
-      {
         "name": "Vincent Cannarozzi",
-        "odds": "+2500",
+        "odds": "+2300",
         "case": "2-2 · 113.02 PF/G through 4. Draft note: JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit.",
         "draftCase": "JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit."
       },
       {
         "name": "German Haro",
-        "odds": "+2500",
+        "odds": "+2400",
         "case": "2-2 · 118.63 PF/G through 4. Draft note: Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence.",
         "draftCase": "Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence."
       },
@@ -384,6 +366,24 @@
         "odds": "+2500",
         "case": "2-2 · 121.89 PF/G through 4. Draft note: AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin.",
         "draftCase": "AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin."
+      },
+      {
+        "name": "Jared Hall",
+        "odds": "+4250",
+        "case": "0-4 · 119.16 PF/G through 4. Draft note: Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset.",
+        "draftCase": "Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset."
+      },
+      {
+        "name": "Brian Heino",
+        "odds": "+4250",
+        "case": "1-3 · 92.08 PF/G through 4. Draft note: Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window.",
+        "draftCase": "Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window."
+      },
+      {
+        "name": "JD Daley",
+        "odds": "+5000",
+        "case": "0-4 · 110.09 PF/G through 4. Draft note: Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version.",
+        "draftCase": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
       }
     ]
   },
@@ -412,7 +412,7 @@
     {
       "id": "odds",
       "label": "Odds board",
-      "title": "Thomas Speer +300",
+      "title": "George Travis +400",
       "detail": "Enters Week 5 as the league-office favorite. Full board below.",
       "scrollTo": "championshipOdds"
     },
@@ -434,7 +434,7 @@
   "freshness": {
     "week_fetched_at": "2026-10-07T01:02:13.009148+00:00",
     "edition_published_at": "2026-10-06T15:12:48.235799Z",
-    "payload_built_at": "2026-10-07T01:02:13.403Z",
+    "payload_built_at": "2026-10-07T01:10:31.370Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

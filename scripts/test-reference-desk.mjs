@@ -51,8 +51,9 @@ assert.ok(notes.some(note => /235\.64/.test(note)));
 assert.ok(!notes.some(note => /undefined/.test(note)));
 
 const odds = desk.oddsNote(site, table, board);
-assert.match(odds, /Thomas Speer/);
-assert.match(odds, /\+300/);
+// The favorite comes from the checked-in board (priced from the season simulation).
+assert.ok(odds.includes(site.futures[0].name), 'Odds note must name the board favorite.');
+assert.ok(odds.includes(site.futures[0].odds), 'Odds note must quote the favorite price.');
 assert.ok(!/current championship favorite/i.test(odds));
 
 assert.deepEqual(desk.transactionRows([]), []);
