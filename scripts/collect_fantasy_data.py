@@ -138,8 +138,10 @@ def main():
                       for entry in (team.get('roster') or {}).get('entries') or []]
         roster_ids = [pid for pid in roster_ids if pid is not None]
         if roster_ids:
-            details = request_espn(args.season,league_id,['kona_player_info'],week,{'players':{
-                'filterIds':{'value':roster_ids}, 'limit':len(roster_ids)}})
+            details = request_espn(args.season,league_id,['kona_playercard'],week,{'players':{
+                'filterIds':{'value':roster_ids},
+                'filterStatsForTopScoringPeriodIds':{
+                    'value':week, 'additionalValue':[f'00{args.season}',f'10{args.season}']}}})
             by_id = {entry['player']['id']:entry['player'] for entry in details.get('players') or [] if entry.get('player')}
             for team in league.get('teams') or []:
                 for entry in (team.get('roster') or {}).get('entries') or []:

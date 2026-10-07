@@ -62,6 +62,13 @@ class FantasyDataTests(unittest.TestCase):
                 self.assertEqual(main(),0)
                 filters = espn.call_args_list[1].args[4]['players']
                 self.assertEqual(set(filters), {'filterStatus', 'limit', 'sortPercOwned'})
+                detail_request = espn.call_args_list[2].args
+                self.assertEqual(detail_request[2], ['kona_playercard'])
+                detail_filters = detail_request[4]['players']
+                self.assertNotIn('limit', detail_filters)
+                self.assertEqual(detail_filters['filterIds']['value'], [1])
+                self.assertEqual(detail_filters['filterStatsForTopScoringPeriodIds'],
+                                 {'value':5, 'additionalValue':['002026','102026']})
                 self.assertIn('teams',database.call_args_list[1].args[2]['payload'])
                 public=json.loads(output.read_text())
                 self.assertNotIn('teams',public)
