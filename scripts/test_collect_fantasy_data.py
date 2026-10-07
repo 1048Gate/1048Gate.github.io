@@ -1,10 +1,12 @@
 import json
+import io
+import urllib.error
 import unittest
 from unittest.mock import patch
 from tempfile import TemporaryDirectory
 from pathlib import Path
 from collect_fantasy_data import main
-from collect_fantasy_data import normalize, player_row
+from collect_fantasy_data import normalize, player_row, request_espn
 
 
 def player(pid=1,points=12.5):
@@ -55,9 +57,11 @@ class FantasyDataTests(unittest.TestCase):
             output=Path(folder)/'projections.json'
             with patch.dict('os.environ',{'ESPN_S2':'cookie','ESPN_SWID':'cookie','SUPABASE_URL':'https://example.test','SUPABASE_SERVICE_ROLE_KEY':'service'}), \
                  patch('sys.argv',['collector','--week','5','--public-output',str(output)]), \
-                 patch('collect_fantasy_data.request_espn',side_effect=[league,pool,{'players':[]}]), \
+                 patch('collect_fantasy_data.request_espn',side_effect=[league,pool,{'players':[]}]) as espn, \
                  patch('collect_fantasy_data.supabase_request',side_effect=[[],None]) as database:
                 self.assertEqual(main(),0)
+                filters = espn.call_args_list[1].args[4]['players']
+                self.assertEqual(set(filters), {'filterStatus', 'limit', 'sortPercOwned'})
                 self.assertIn('teams',database.call_args_list[1].args[2]['payload'])
                 public=json.loads(output.read_text())
                 self.assertNotIn('teams',public)
@@ -74,6 +78,46 @@ class FantasyDataTests(unittest.TestCase):
                 self.assertEqual(output.read_text(),'previous')
     def test_nonfinite_projection_is_missing(self):
         self.assertIsNone(player_row({'player':player(points=float('nan'))},2026,5)['projected_points'])
+
+
+class ESPNRequestTests(unittest.TestCase):
+    def test_forbidden_is_safe_and_not_retried(self):
+        error = urllib.error.HTTPError('https://private.test', 403, 'secret-cookie', {}, io.BytesIO(b'private body'))
+        with patch.dict('os.environ', {'ESPN_S2':'secret-cookie', 'ESPN_SWID':'secret-id'}), \
+             patch('collect_fantasy_data.urllib.request.urlopen', side_effect=error) as fetch, \
+             patch('collect_fantasy_data.time.sleep') as sleep:
+            with self.assertRaisesRegex(RuntimeError, 'ESPN kona_player_info: HTTP 403') as caught:
+                request_espn(2026, 1237285, ['kona_player_info'], 5)
+            self.assertNotIn('secret', str(caught.exception))
+            self.assertNotIn('private', str(caught.exception))
+            self.assertEqual(fetch.call_count, 1)
+            sleep.assert_not_called()
+
+    def test_transient_server_error_retries_then_succeeds(self):
+        error = urllib.error.HTTPError('https://private.test', 503, 'private', {}, io.BytesIO())
+        with patch.dict('os.environ', {'ESPN_S2':'cookie', 'ESPN_SWID':'cookie'}), \
+             patch('collect_fantasy_data.urllib.request.urlopen', side_effect=[error, io.BytesIO(b'{"teams": []}')]) as fetch, \
+             patch('collect_fantasy_data.time.sleep') as sleep:
+            self.assertEqual(request_espn(2026, 1237285, ['mRoster'], 5), {'teams': []})
+            self.assertEqual(fetch.call_count, 2)
+            sleep.assert_called_once_with(1)
+
+    def test_network_failure_is_bounded_and_safe(self):
+        with patch.dict('os.environ', {'ESPN_S2':'cookie', 'ESPN_SWID':'cookie'}), \
+             patch('collect_fantasy_data.urllib.request.urlopen', side_effect=urllib.error.URLError('secret-cookie')) as fetch, \
+             patch('collect_fantasy_data.time.sleep') as sleep:
+            with self.assertRaisesRegex(RuntimeError, 'ESPN mRoster: network connection failed') as caught:
+                request_espn(2026, 1237285, ['mRoster'], 5)
+            self.assertNotIn('secret', str(caught.exception))
+            self.assertEqual(fetch.call_count, 3)
+            self.assertEqual(sleep.call_count, 2)
+
+    def test_invalid_json_is_safe_and_not_retried(self):
+        with patch.dict('os.environ', {'ESPN_S2':'cookie', 'ESPN_SWID':'cookie'}), \
+             patch('collect_fantasy_data.urllib.request.urlopen', return_value=io.BytesIO(b'private body')) as fetch:
+            with self.assertRaisesRegex(RuntimeError, 'invalid JSON response'):
+                request_espn(2026, 1237285, ['mRoster'], 5)
+            self.assertEqual(fetch.call_count, 1)
 
 
 if __name__=='__main__':unittest.main()

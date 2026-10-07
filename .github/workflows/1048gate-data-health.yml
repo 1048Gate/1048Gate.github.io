@@ -145,6 +145,7 @@ jobs:
           fi
           python3 scripts/publish_current_season.py --season "$SEASON" "${WEEK_ARGS[@]}"
       - name: Collect public projections and private owner snapshots
+        id: fantasy_collect
         continue-on-error: true
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
@@ -154,6 +155,12 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           python3 scripts/collect_fantasy_data.py --season "$(python3 -c 'import json; print(json.load(open("data/current-season.json"))["season"])')" --week "$(python3 -c 'import json; print(json.load(open("data/current-season.json"))["week"])')"
+      - name: Report owner snapshot collection failure
+        if: steps.fantasy_collect.outcome == 'failure'
+        run: |
+          echo "::warning::ESPN owner snapshot collection failed. See the collector step for the request and HTTP status. Existing saved data was retained."
+          echo "### Owner snapshot collection failed" >> "$GITHUB_STEP_SUMMARY"
+          echo "No new owner snapshot was saved. Check the collector step above for the ESPN request and HTTP status; score updates continue independently." >> "$GITHUB_STEP_SUMMARY"
       - name: Refresh completed scores and weekly ratings
         run: |
           python3 scripts/update_matchup_leaderboards.py
