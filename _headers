@@ -5,3 +5,7 @@
 
 /js/*
   Cache-Control: public, max-age=31536000, immutable
+
+/owner/*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow
