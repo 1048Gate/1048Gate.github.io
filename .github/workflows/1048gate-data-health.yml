@@ -220,6 +220,11 @@ jobs:
             git commit -m "Refresh current-season board and derived data"
             git push
           fi
+      - name: Fail the run when owner snapshot collection failed
+        if: always() && steps.fantasy_collect.outcome == 'failure'
+        run: |
+          echo "::error::Owner snapshot collection failed. See the collector log. Score updates were allowed to finish before reporting this failure."
+          exit 1
 
   fetch-trade-history:
     name: Build trade-history recovery audit

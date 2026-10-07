@@ -28,4 +28,9 @@ assert.match(newspaperStep, /github\.event\.schedule == '20 12 \* \* 2'/);
 assert.doesNotMatch(newspaperStep, /repository_dispatch/);
 assert.doesNotMatch(newspaperStep, /7,37/);
 
+const collectorFailureStep = workflow.match(/- name: Fail the run when owner snapshot collection failed[\s\S]*?(?=\n  fetch-trade-history:)/)?.[0] || '';
+assert.match(collectorFailureStep, /always\(\) && steps\.fantasy_collect\.outcome == 'failure'/);
+assert.match(collectorFailureStep, /exit 1/);
+assert.ok(workflow.indexOf('- name: Commit updated board and derived data') < workflow.indexOf('- name: Fail the run when owner snapshot collection failed'));
+
 console.log('Data-health workflow checks passed: rollover finalizes the outgoing paper before the public board advances, while routine live refreshes stay score-only.');
