@@ -65,10 +65,33 @@ try{
   let served = 0;
   for(const path of artifactFiles){
     if(path === '_headers') continue;
-    const response = await request(path === 'index.html' ? '/' : `/${path}`);
+    const canonicalPath = path === 'index.html' ? '/' : path.endsWith('/index.html') ? `/${path.slice(0, -'index.html'.length)}` : `/${path}`;
+    if(path.endsWith('/index.html')){
+      const redirect = await request(`/${path}?check=nested`);
+      assert.ok([307, 308].includes(redirect.status), `${path} must redirect to its directory URL`);
+      const location = new URL(redirect.headers.get('location'), origin);
+      assert.equal(location.pathname, canonicalPath);
+      assert.equal(location.search, '?check=nested', 'Nested page redirects must preserve query parameters');
+      const followed = await request(`/${path}?check=nested`, {redirect:'follow'});
+      assert.equal(followed.status, 200, `${path} redirect must resolve to a served page`);
+      assert.equal(new URL(followed.url).pathname, canonicalPath);
+      assert.deepEqual(Buffer.from(await followed.arrayBuffer()), await readFile(new URL(path, dist)));
+      assert.equal((await request(canonicalPath, {method:'HEAD'})).status, 200);
+    }
+    const response = await request(canonicalPath);
     assert.equal(response.status, 200, `${path} must be served`);
     const bytes = Buffer.from(await response.arrayBuffer());
     assert.deepEqual(bytes, await readFile(new URL(path, dist)), `${path} content changed in transit`);
+    if(path.endsWith('.html')){
+      assert.match(response.headers.get('content-type'), /text\/html/, path);
+      for(const match of bytes.toString().matchAll(/(?:href|src)="\/?((?:images|css|js)\/[^"?#]+)(?:[?#][^"]*)?"/g)){
+        assert.ok(artifactFiles.includes(match[1]), `${path} references a missing asset: ${match[1]}`);
+      }
+    }
+    if(canonicalPath.startsWith('/owner/')){
+      assert.match(response.headers.get('cache-control'), /no-store/, 'Owner page must not be cached');
+      assert.match(response.headers.get('x-robots-tag'), /noindex/, 'Owner page must not be indexed');
+    }
     if(path.endsWith('.json')){
       assert.match(response.headers.get('content-type'), /application\/json/, path);
       JSON.parse(bytes.toString());
