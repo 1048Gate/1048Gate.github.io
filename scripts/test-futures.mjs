@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
-import {blendRating, currentSeasonRatings, inferRoundRobin, scoreBlend, scoringParameters} from './futures-model.mjs';
+import {LONG_SHOT_CAP, blendRating, currentSeasonRatings, formatAmericanOdds, inferRoundRobin, priceFromProbability, scoreBlend, scoringParameters} from './futures-model.mjs';
 
 const owners = Array.from({length:12}, (_, index) => `Manager ${index + 1}`);
 const standings = owners.map((owner, index) => ({
@@ -93,4 +93,35 @@ assert.equal(total(midseason.made), 6);
 assert.equal(total(midseason.bye), 2);
 assert.equal(total(midseason.title), 1);
 
-console.log('Futures checks passed: weekly results blend, PF-only in-season ratings, evidence weight, schedule inference, PF tiebreak seeding, and incomplete-board fallback.');
+// Futures pricing rule: title% x 1.05, American odds, ladder rounding, +5000 cap.
+assert.equal(priceFromProbability(0.187), 400);
+assert.equal(priceFromProbability(0.148), 550);
+assert.equal(priceFromProbability(0.055), 1600);
+assert.equal(priceFromProbability(0.022), 4250);
+assert.equal(priceFromProbability(0.001), LONG_SHOT_CAP);
+assert.equal(priceFromProbability(0), LONG_SHOT_CAP);
+assert.equal(priceFromProbability(0.6), -170);
+assert.equal(formatAmericanOdds(-170), '-170');
+assert.equal(formatAmericanOdds(400), '+400');
+for(let p = 0.005; p < 0.9; p += 0.005){
+  const shorter = priceFromProbability(p + 0.005), longer = priceFromProbability(p);
+  const implied = price => price > 0 ? 100 / (price + 100) : -price / (100 - price);
+  assert.ok(implied(shorter) >= implied(longer), `Prices must shorten as title probability rises (p=${p.toFixed(3)}).`);
+}
+
+// Checked-in board: priced from the stored simulation, in Playoffs-tab order.
+const siteData = JSON.parse(readFileSync(new URL('../data/site.json', import.meta.url), 'utf8'));
+const rankingsData = JSON.parse(readFileSync(new URL('../data/power-rankings.json', import.meta.url), 'utf8'));
+const projection = rankingsData.projection;
+assert.ok(projection && projection.teams.length === 12, 'power-rankings.json must carry the simulated projection.');
+const projected = new Map(projection.teams.map(row => [row.name, row]));
+const sumOf = key => projection.teams.reduce((sum, row) => sum + row[key], 0);
+assert.ok(Math.abs(sumOf('title') - 1) < 1e-9 && Math.abs(sumOf('bye') - 2) < 1e-9 && Math.abs(sumOf('playoff') - 6) < 1e-9);
+assert.deepEqual(siteData.futures.map(row => row.name), [...projection.teams].sort((a, b) => b.title - a.title || b.playoff - a.playoff).map(row => row.name).slice(0, siteData.futures.length), 'Futures board order must follow simulated title odds.');
+siteData.futures.forEach(row => assert.equal(row.odds, formatAmericanOdds(priceFromProbability(projected.get(row.name).title)), `${row.name} price must come from the simulation.`));
+const recomputed = oddsModel.probabilities(oddsModel.prepare({...rankingsData, projection: undefined}), {});
+oddsModel.prepare(rankingsData).teams.forEach((team, index) => {
+  assert.equal(recomputed.title[index], projected.get(team.name).title, `Browser simulation must reproduce the stored projection for ${team.name}.`);
+});
+
+console.log('Futures checks passed: weekly results blend, PF-only in-season ratings, evidence weight, schedule inference, PF tiebreak seeding, simulation-priced futures board, and incomplete-board fallback.');

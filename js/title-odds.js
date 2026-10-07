@@ -149,7 +149,36 @@
     };
   }
 
-  const model = {SIMULATIONS, GAMES_PER_SEASON, PLAYOFF_TEAMS, mulberry32, buildSchedule, simulate, prepare};
+  // scripts/build-futures.mjs runs simulate() once with these exact inputs and
+  // stores the result as payload.projection, which also prices the homepage
+  // futures board. Use it when it covers every rated club so both boards show
+  // identical numbers; otherwise simulate here.
+  function storedProjection(payload, teams){
+    const stored = payload?.projection;
+    const rows = Array.isArray(stored?.teams) ? stored.teams : [];
+    const byName = new Map(rows.map(row => [String(row.name), row]));
+    const valid = teams.length && Number(stored?.simulations) > 0 && teams.every(team => {
+      const row = byName.get(team.name);
+      return row && ['playoff', 'bye', 'title'].every(key => Number.isFinite(Number(row[key])));
+    });
+    if(!valid) return null;
+    return {
+      simulations: Number(stored.simulations),
+      made: teams.map(team => Number(byName.get(team.name).playoff)),
+      bye: teams.map(team => Number(byName.get(team.name).bye)),
+      title: teams.map(team => Number(byName.get(team.name).title))
+    };
+  }
+
+  function probabilities(prepared, payload){
+    const stored = storedProjection(payload, prepared.teams);
+    if(stored) return stored;
+    const result = simulate(prepared.teams, prepared.options);
+    const share = count => count / result.simulations;
+    return {simulations: result.simulations, made: result.made.map(share), bye: result.bye.map(share), title: result.title.map(share)};
+  }
+
+  const model = {SIMULATIONS, GAMES_PER_SEASON, PLAYOFF_TEAMS, mulberry32, buildSchedule, simulate, prepare, storedProjection, probabilities};
   if(typeof module === 'object' && module && module.exports) module.exports = model;
   if(typeof document === 'undefined') return;
 
@@ -172,6 +201,7 @@
       if(prepared.teams.length < 4) throw new Error('Not enough rated teams to project.');
       render(
         prepared,
+        probabilities(prepared, payload),
         Number(payload.generatedForSeason) || '',
         String(payload.basis || 'career'),
         prepared.options.gamesPlayed
@@ -184,12 +214,13 @@
 
   host.addEventListener('click', event => { if(event.target.closest('[data-title-odds-retry]')) load(); });
 
-  function render(prepared, seasonNumber, basis, gamesPlayed){
+  function render(prepared, odds, seasonNumber, basis, gamesPlayed){
     const {teams, unknownWeeks} = prepared;
-    const {made, bye, title} = simulate(teams, prepared.options);
+    const {made, bye, title} = odds;
+    const runs = odds.simulations;
     const pct = value => `${Math.round(value * 100)}%`;
     const rows = teams
-      .map((t, i) => ({name:t.name, madePct:made[i]/SIMULATIONS, byePct:bye[i]/SIMULATIONS, titlePct:title[i]/SIMULATIONS}))
+      .map((t, i) => ({name:t.name, madePct:made[i], byePct:bye[i], titlePct:title[i]}))
       .sort((a, b) => b.titlePct - a.titlePct || b.madePct - a.madePct);
     const maxTitle = Math.max(...rows.map(r => r.titlePct)) || 1;
     const escapeHtml = window.gateShared?.escapeHtml || (value => String(value ?? ''));
@@ -197,14 +228,14 @@
     const postDraft = basis === 'post-draft';
     const kicker = weekly ? `SZN ${seasonNumber} · THROUGH WEEK ${gamesPlayed}` : postDraft ? `SZN ${seasonNumber} POST-DRAFT BOARD` : `SZN ${seasonNumber} PRE-DRAFT BOARD`;
     const sub = weekly
-      ? `${SIMULATIONS.toLocaleString('en-US')} simulations · current record, scoring, league schedule, roster and history`
-      : postDraft ? `${SIMULATIONS.toLocaleString('en-US')} simulated seasons · 2026 roster ranks blended with career form`
-      : `${SIMULATIONS.toLocaleString('en-US')} simulated seasons · career power ratings, not 2026 rosters`;
+      ? `${runs.toLocaleString('en-US')} simulations · current record, scoring, league schedule, roster and history`
+      : postDraft ? `${runs.toLocaleString('en-US')} simulated seasons · 2026 roster ranks blended with career form`
+      : `${runs.toLocaleString('en-US')} simulated seasons · career power ratings, not 2026 rosters`;
     const scheduleNote = unknownWeeks ? `the league schedule where it is known and random pairings for ${unknownWeeks} unconfirmed week${unknownWeeks === 1 ? '' : 's'}` : 'the league schedule';
     const note = weekly
-      ? `Updated after completed weeks. Simulations begin with each club's real 2026 record and points for, then play the remaining ${Math.max(0,GAMES_PER_SEASON-gamesPlayed)} regular-season games on ${scheduleNote}. Weekly scores are drawn around each club's scoring rate: 2026 points per game, pulled toward the league average while the sample is small, blended with roster and history. Ties in the standings go to points for. Top six make the bracket; top two get first-round byes.`
-      : postDraft ? `Post-draft projection. These percentages blend ESPN PPR ranks from the Szn 10 draft with career power ratings and a random ${GAMES_PER_SEASON}-game schedule. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.`
-      : `Pre-draft projection only. These percentages come from career power ratings and a random ${GAMES_PER_SEASON}-game schedule — not keepers, the 2026 draft, or current rosters. Top six make the bracket; top two get first-round byes. They are not the same as the league-office futures on Home.`;
+      ? `Updated after completed weeks. Simulations begin with each club's real 2026 record and points for, then play the remaining ${Math.max(0,GAMES_PER_SEASON-gamesPlayed)} regular-season games on ${scheduleNote}. Weekly scores are drawn around each club's scoring rate: 2026 points per game, pulled toward the league average while the sample is small, blended with roster and history. Ties in the standings go to points for. Top six make the bracket; top two get first-round byes. The league-office futures on Home are priced from these title odds.`
+      : postDraft ? `Post-draft projection. These percentages blend ESPN PPR ranks from the Szn 10 draft with career power ratings and a random ${GAMES_PER_SEASON}-game schedule. Top six make the bracket; top two get first-round byes. The league-office futures on Home are priced from these title odds.`
+      : `Pre-draft projection only. These percentages come from career power ratings and a random ${GAMES_PER_SEASON}-game schedule — not keepers, the 2026 draft, or current rosters. Top six make the bracket; top two get first-round byes. The league-office futures on Home are priced from these title odds.`;
     host.innerHTML = `<div class="history-section-head"><div><span>${kicker}</span><h3>Playoff Probability Board</h3></div><small>${sub}</small></div><div class="title-odds-grid">${rows.map(r => `
       <div class="title-odds-card${r.titlePct === maxTitle ? ' is-favorite' : ''}">
         <div class="title-odds-name"><strong>${escapeHtml(r.name)}</strong>${r.titlePct === maxTitle ? '<em>Favorite</em>' : ''}</div>

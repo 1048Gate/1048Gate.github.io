@@ -19,10 +19,14 @@
 // Roster value uses ESPN PPR ranks from data/draft-ranks.json: best 1QB/2RB/2WR/1TE/1FLEX
 // plus a discounted bench, DST, and kicker.
 //
-// Odds conversion: implied probability p_i ∝ rating^K, K tuned so the
-// favorite lands near 24%, then rendered as American odds rounded to $50.
+// Odds conversion: title probabilities come from the Playoffs tab's seeded
+// season + playoff simulation (js/title-odds.js), run once here and stored in
+// power-rankings.json `projection`. Price = American odds of title% x 1.05
+// office margin, rounded to a ladder, capped at +5000
+// (futures-model.mjs priceFromProbability).
 import {existsSync, readFileSync, writeFileSync} from 'node:fs';
-import {REGULAR_SEASON_WEEKS, currentSeasonRatings, inferRoundRobin, scoreBlend, scoringParameters} from './futures-model.mjs';
+import vm from 'node:vm';
+import {LONG_SHOT_CAP, OFFICE_OVERROUND, REGULAR_SEASON_WEEKS, currentSeasonRatings, formatAmericanOdds, inferRoundRobin, priceFromProbability, scoreBlend, scoringParameters} from './futures-model.mjs';
 
 const root = new URL('..', import.meta.url);
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
@@ -33,6 +37,13 @@ const parseRecord = record => {
   const parts = String(record ?? '').split('-');
   return [(Number(parts[0]) || 0), (Number(parts[1]) || 0), (Number(parts[2]) || 0)];
 };
+
+function loadTitleOddsModel(){
+  const sandbox = {module: {exports: {}}};
+  vm.createContext(sandbox);
+  vm.runInContext(readFileSync(new URL('js/title-odds.js', root), 'utf8'), sandbox, {filename: 'js/title-odds.js'});
+  return sandbox.module.exports;
+}
 
 const seasonsData = read('data/seasons.json').seasons || [];
 const playoffsData = read('data/playoffs.json').seasons || [];
@@ -290,56 +301,10 @@ for(let week = gamesPlayed + 1; week <= REGULAR_SEASON_WEEKS; week++){
   else remainingWeeks.push({week, source: 'random', games: null});
 }
 
-let lo = 1, hi = 14, K = 6;
-const probFor = k => {
-  const exps = ratings.map(r => Math.pow(r.rating / 100, k));
-  const sum = exps.reduce((a, b) => a + b, 0);
-  return exps.map(e => e / sum);
-};
-for(let iter = 0; iter < 40; iter++){
-  K = (lo + hi) / 2;
-  const top = probFor(K)[0];
-  if(top > 0.24) hi = K; else lo = K;
-}
-const probs = probFor(K);
-
-const americanOdds = p => {
-  const raw = p >= 0.5 ? -(100 * p) / (1 - p) : (100 * (1 - p)) / p;
-  const rounded = Math.round(raw / 50) * 50;
-  return Math.round(Math.min(Math.max(rounded, -400), 2500));
-};
-
 const preseasonBasis = rosterRatings ? 'post-draft' : 'career';
 const basis = currentSeason ? 'weekly-results-blend' : preseasonBasis;
-console.log(currentSeason
-  ? `Rating model — 2026 PF/G regressed with w=${blend.weight.toFixed(3)} (SIGMA ${scoring.sigma}, TAU ${scoring.tau.toFixed(2)}, ${currentSeason.games} game(s)); preseason keeps ${((1 - blend.weight) * 100).toFixed(1)}% · league mean ${scoring.leagueMean.toFixed(2)} · rho ${scoring.preseasonCorrelation.toFixed(3)}\n`
-  : rosterRatings ? 'Rating model — 45% career form / 55% 2026 roster ranks\n' : 'Rating model — last 3 seasons weighted .5/.3/.2\n');
-console.log('Manager               Rating  Base   Current  Pts/wk  Odds');
-ratings.forEach((r, i) => {
-  const current = r.currentRating == null ? '      —' : r.currentRating.toFixed(1).padStart(7);
-  console.log(
-    `${r.name.padEnd(21)} ${r.rating.toFixed(1).padStart(6)}  ${r.preseasonRating.toFixed(1).padStart(5)}  ${current}  ${r.projectedPoints.toFixed(1).padStart(6)}  +${americanOdds(probs[i])}`
-  );
-});
-console.log(`\nExponent K=${K.toFixed(2)} (favorite implied ${(probs[0] * 100).toFixed(1)}%) · basis ${basis}`);
 
-const previous = new Map((config.futures || []).map(f => [clean(f.name), f]));
-config.futures = ratings.map((r, i) => ({
-  name: r.name,
-  odds: `+${americanOdds(probs[i])}`,
-  case: r.current
-    ? `${r.current.wins}-${r.current.losses}${r.current.ties ? `-${r.current.ties}` : ''} · ${r.current.pfpg.toFixed(2)} PF/G through ${currentSeason.games}. Draft note: ${previous.get(r.name)?.draftCase || previous.get(r.name)?.case || ''}`
-    : previous.get(r.name)?.draftCase || previous.get(r.name)?.case || '',
-  ...(r.current ? {draftCase: previous.get(r.name)?.draftCase || previous.get(r.name)?.case || ''} : {})
-}));
-
-const unmatched = [...previous.keys()].filter(name => !ratings.some(r => r.name === name));
-if(unmatched.length) console.warn('\nKept at end (not matched by model):', unmatched.join(', '));
-
-writeFileSync(new URL('data/site.json', root), JSON.stringify(config, null, 2) + '\n');
-console.log(`\nWrote ${config.futures.length} futures entries to data/site.json`);
-
-writeFileSync(new URL('data/power-rankings.json', root), JSON.stringify({
+const powerRankings = {
   schemaVersion: 1,
   generatedForSeason: config.seasonNumber,
   basis,
@@ -396,5 +361,60 @@ writeFileSync(new URL('data/power-rankings.json', root), JSON.stringify({
       pointsAgainstPerGame: Math.round(r.current.papg * 100) / 100
     } : {})
   }))
-}, null, 2) + '\n');
+};
+
+
+// Run the Playoffs tab's own simulation (js/title-odds.js: same inputs, seed
+// and run count) once here, so the Playoffs tab and the homepage futures board
+// read the same title probabilities.
+const titleOddsModel = loadTitleOddsModel();
+const prepared = titleOddsModel.prepare(powerRankings);
+const simulation = titleOddsModel.simulate(prepared.teams, prepared.options);
+const projectionByName = new Map(prepared.teams.map((team, index) => [team.name, {
+  playoff: simulation.made[index] / simulation.simulations,
+  bye: simulation.bye[index] / simulation.simulations,
+  title: simulation.title[index] / simulation.simulations
+}]));
+powerRankings.projection = {
+  method: 'seeded season + playoff simulation (js/title-odds.js)',
+  simulations: simulation.simulations,
+  seed: prepared.options.seed,
+  teams: prepared.teams.map(team => ({name: team.name, ...projectionByName.get(team.name)}))
+};
+const titleOf = name => projectionByName.get(name)?.title ?? 0;
+const priceOf = name => formatAmericanOdds(priceFromProbability(titleOf(name)));
+// Same order as the Playoffs tab: title %, then playoff %, then rating.
+const board = [...ratings].sort((a, b) => titleOf(b.name) - titleOf(a.name)
+  || (projectionByName.get(b.name)?.playoff ?? 0) - (projectionByName.get(a.name)?.playoff ?? 0)
+  || b.rating - a.rating);
+
+console.log(currentSeason
+  ? `Rating model — 2026 PF/G regressed with w=${blend.weight.toFixed(3)} (SIGMA ${scoring.sigma}, TAU ${scoring.tau.toFixed(2)}, ${currentSeason.games} game(s)); preseason keeps ${((1 - blend.weight) * 100).toFixed(1)}% · league mean ${scoring.leagueMean.toFixed(2)} · rho ${scoring.preseasonCorrelation.toFixed(3)}\n`
+  : rosterRatings ? 'Rating model — 45% career form / 55% 2026 roster ranks\n' : 'Rating model — last 3 seasons weighted .5/.3/.2\n');
+console.log('Manager               Rating  Base   Current  Pts/wk  Title%  Odds');
+board.forEach(r => {
+  const current = r.currentRating == null ? '      —' : r.currentRating.toFixed(1).padStart(7);
+  console.log(
+    `${r.name.padEnd(21)} ${r.rating.toFixed(1).padStart(6)}  ${r.preseasonRating.toFixed(1).padStart(5)}  ${current}  ${r.projectedPoints.toFixed(1).padStart(6)}  ${(titleOf(r.name) * 100).toFixed(1).padStart(6)}  ${priceOf(r.name)}`
+  );
+});
+console.log(`\nPrices: ${simulation.simulations.toLocaleString('en-US')} seeded simulations (seed ${prepared.options.seed}) · title % x ${OFFICE_OVERROUND} office margin · ladder rounding · cap +${LONG_SHOT_CAP} · basis ${basis}`);
+
+const previous = new Map((config.futures || []).map(f => [clean(f.name), f]));
+config.futures = board.map(r => ({
+  name: r.name,
+  odds: priceOf(r.name),
+  case: r.current
+    ? `${r.current.wins}-${r.current.losses}${r.current.ties ? `-${r.current.ties}` : ''} · ${r.current.pfpg.toFixed(2)} PF/G through ${currentSeason.games}. Draft note: ${previous.get(r.name)?.draftCase || previous.get(r.name)?.case || ''}`
+    : previous.get(r.name)?.draftCase || previous.get(r.name)?.case || '',
+  ...(r.current ? {draftCase: previous.get(r.name)?.draftCase || previous.get(r.name)?.case || ''} : {})
+}));
+
+const unmatched = [...previous.keys()].filter(name => !ratings.some(r => r.name === name));
+if(unmatched.length) console.warn('\nKept at end (not matched by model):', unmatched.join(', '));
+
+writeFileSync(new URL('data/site.json', root), JSON.stringify(config, null, 2) + '\n');
+console.log(`\nWrote ${config.futures.length} futures entries to data/site.json`);
+
+writeFileSync(new URL('data/power-rankings.json', root), JSON.stringify(powerRankings, null, 2) + '\n');
 console.log(`Wrote ${ratings.length} power ratings to data/power-rankings.json`);

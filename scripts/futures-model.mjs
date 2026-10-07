@@ -294,3 +294,39 @@ export function inferRoundRobin(teams, knownWeeks, totalWeeks = REGULAR_SEASON_W
   if(fits.some(fit => signature(fit) !== first)) return null;
   return {fixedTeam: fits[0].fixed, fits: fits.length, schedule: fits[0].schedule};
 }
+
+// ---------------------------------------------------------------------------
+// League-office futures pricing from simulated title probability.
+//
+// Rule (documented on the board as "Implied % includes the office margin"):
+//   1. Start from the title probability p of the seeded season + playoff
+//      simulation (the same numbers the Playoffs tab shows).
+//   2. Add a proportional office margin: q = p * OFFICE_OVERROUND (1.05), so
+//      every club's implied % is about 5% above its fair share and the board
+//      sums to roughly 105% before rounding, like a book.
+//   3. Convert q to an American price and round to the nearest ladder step:
+//      favorites (q >= 50%) to 10; +100..+500 by 25; +500..+1000 by 50;
+//      +1000..+2500 by 100; +2500..+5000 by 250.
+//   4. Cap long shots at +5000 (1.96% implied). A club the simulation gives
+//      less than ~1.9% is shown at the cap, so the cap adds a little extra
+//      margin at the bottom of the board.
+// ---------------------------------------------------------------------------
+export const OFFICE_OVERROUND = 1.05;
+export const LONG_SHOT_CAP = 5000;
+
+export function priceFromProbability(probability, {overround = OFFICE_OVERROUND, cap = LONG_SHOT_CAP} = {}){
+  const p = Number.isFinite(probability) ? Math.max(probability, 0) : 0;
+  const floor = 100 / (cap + 100);
+  const q = Math.min(Math.max(p * overround, floor), 0.99);
+  if(q >= 0.5){
+    const raw = (100 * q) / (1 - q);
+    return -Math.max(100, Math.round(raw / 10) * 10);
+  }
+  const raw = (100 * (1 - q)) / q;
+  const step = raw < 500 ? 25 : raw < 1000 ? 50 : raw < 2500 ? 100 : 250;
+  return Math.min(Math.max(Math.round(raw / step) * step, 100), cap);
+}
+
+export function formatAmericanOdds(price){
+  return price > 0 ? `+${price}` : String(price);
+}
