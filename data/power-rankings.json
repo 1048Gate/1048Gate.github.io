@@ -532,5 +532,84 @@
       "pointsForPerGame": 121.89,
       "pointsAgainstPerGame": 132.39
     }
-  ]
+  ],
+  "projection": {
+    "method": "seeded season + playoff simulation (js/title-odds.js)",
+    "simulations": 10000,
+    "seed": 11116,
+    "teams": [
+      {
+        "name": "Thomas Speer",
+        "playoff": 0.6964,
+        "bye": 0.2114,
+        "title": 0.1481
+      },
+      {
+        "name": "Bryan Hunt",
+        "playoff": 0.8277,
+        "bye": 0.3665,
+        "title": 0.1648
+      },
+      {
+        "name": "George Travis",
+        "playoff": 0.9118,
+        "bye": 0.5424,
+        "title": 0.1873
+      },
+      {
+        "name": "Trevor Hash",
+        "playoff": 0.8117,
+        "bye": 0.3444,
+        "title": 0.1514
+      },
+      {
+        "name": "James Brochu",
+        "playoff": 0.7466,
+        "bye": 0.259,
+        "title": 0.1192
+      },
+      {
+        "name": "Jared Hall",
+        "playoff": 0.1651,
+        "bye": 0.0121,
+        "title": 0.0221
+      },
+      {
+        "name": "Collin Krum",
+        "playoff": 0.4185,
+        "bye": 0.0701,
+        "title": 0.0551
+      },
+      {
+        "name": "JD Daley",
+        "playoff": 0.1175,
+        "bye": 0.0075,
+        "title": 0.0148
+      },
+      {
+        "name": "Brian Heino",
+        "playoff": 0.1904,
+        "bye": 0.0157,
+        "title": 0.0219
+      },
+      {
+        "name": "Vincent Cannarozzi",
+        "playoff": 0.3873,
+        "bye": 0.0608,
+        "title": 0.0401
+      },
+      {
+        "name": "German Haro",
+        "playoff": 0.3644,
+        "bye": 0.0554,
+        "title": 0.0387
+      },
+      {
+        "name": "Kyle Fowler",
+        "playoff": 0.3626,
+        "bye": 0.0547,
+        "title": 0.0365
+      }
+    ]
+  }
 }
