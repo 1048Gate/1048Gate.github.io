@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-07T21:48:59.433949+00:00",
+  "fetchedAt": "2026-10-08T04:11:53.921491+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 slate from ESPN.",
   "standings": [
@@ -188,14 +188,14 @@
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 0,
-        "projectedScore": 84.55
+        "projectedScore": 103.12
       },
       "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
         "score": 0,
-        "projectedScore": 100.48
+        "projectedScore": 107.16
       }
     },
     {
@@ -276,7 +276,7 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 0,
-        "projectedScore": 112.37
+        "projectedScore": 109.86
       },
       "home": {
         "teamId": 1,
@@ -300,7 +300,7 @@
     },
     {
       "teamId": 4,
-      "projectedScore": 112.37,
+      "projectedScore": 109.86,
       "complete": true
     },
     {
@@ -310,7 +310,7 @@
     },
     {
       "teamId": 6,
-      "projectedScore": 84.55,
+      "projectedScore": 103.12,
       "complete": true
     },
     {
@@ -335,7 +335,7 @@
     },
     {
       "teamId": 13,
-      "projectedScore": 100.48,
+      "projectedScore": 107.16,
       "complete": true
     },
     {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-07T21:49:01.235737+00:00"
+  "projectionsFetchedAt": "2026-10-08T04:11:54.792905+00:00"
 }
