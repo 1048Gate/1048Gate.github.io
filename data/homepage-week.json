@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "scheduled",
-  "last_updated": "2026-10-08T16:12:01.128789+00:00",
+  "last_updated": "2026-10-08T16:42:10.000578+00:00",
   "note": "Week 5 slate from ESPN.",
   "matchups": [
     {
@@ -115,7 +115,7 @@
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 0,
-        "projectedScore": 110.18
+        "projectedScore": 118.28
       }
     },
     {
@@ -130,7 +130,7 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 0,
-        "projectedScore": 112.37
+        "projectedScore": 109.86
       },
       "home": {
         "teamId": 1,
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-08T16:12:01.128789+00:00",
+    "week_fetched_at": "2026-10-08T16:42:10.000578+00:00",
     "edition_published_at": "2026-10-06T15:12:48.235799Z",
-    "payload_built_at": "2026-10-08T16:12:04.550Z",
+    "payload_built_at": "2026-10-08T16:42:14.484Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
