@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "scheduled",
-  "last_updated": "2026-10-08T17:12:00.213498+00:00",
+  "last_updated": "2026-10-08T17:41:56.710138+00:00",
   "note": "Week 5 slate from ESPN.",
   "matchups": [
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-08T17:12:00.213498+00:00",
+    "week_fetched_at": "2026-10-08T17:41:56.710138+00:00",
     "edition_published_at": "2026-10-06T15:12:48.235799Z",
-    "payload_built_at": "2026-10-08T17:12:04.606Z",
+    "payload_built_at": "2026-10-08T17:42:01.131Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
