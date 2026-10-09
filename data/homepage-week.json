@@ -4,14 +4,14 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "status": "scheduled",
-  "last_updated": "2026-10-09T00:11:51.884668+00:00",
-  "note": "Week 5 slate from ESPN.",
+  "status": "live",
+  "last_updated": "2026-10-09T01:11:46.329514+00:00",
+  "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
       "id": 25,
       "week": 5,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -26,14 +26,14 @@
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
-        "score": 0,
+        "score": 8,
         "projectedScore": 123.23
       }
     },
     {
       "id": 26,
       "week": 5,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -41,7 +41,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 0,
+        "score": 4.9,
         "projectedScore": 103.1
       },
       "home": {
@@ -77,7 +77,7 @@
     {
       "id": 28,
       "week": 5,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -92,14 +92,14 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 0,
+        "score": 2.2,
         "projectedScore": 140.12
       }
     },
     {
       "id": 29,
       "week": 5,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -107,21 +107,21 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 0,
+        "score": 1,
         "projectedScore": 112.78
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 0,
+        "score": 5.5,
         "projectedScore": 118.31
       }
     },
     {
       "id": 30,
       "week": 5,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -129,14 +129,14 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 0,
+        "score": 8.6,
         "projectedScore": 112.38
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 0,
+        "score": 13.9,
         "projectedScore": 131.07
       }
     }
@@ -289,21 +289,21 @@
   ],
   "featured_story": {
     "season": 2026,
-    "week": 4,
-    "headline": "James Brochu sets the Week 4 pace as the table takes shape",
-    "standfirst": "Madison Beer Garden (George Travis) leads the verified table after Week 4; Team Hash (Trevor Hash) survived the week's closest finish by 8.24.",
-    "path": "data/newspaper_editions/2026/week_04.json",
-    "source_status": "verified_final",
+    "week": 5,
+    "headline": "George Travis sets the Week 5 pace as the table takes shape",
+    "standfirst": "Week 5 is live; Madison Beer Garden (George Travis) leads the completed-results table while the current matchup board continues to move.",
+    "path": "data/newspaper_editions/2026/week_05.json",
+    "source_status": "verified_live",
     "validation_status": "valid",
-    "status": "final",
-    "generated_at": "2026-10-06T15:12:48.235799Z",
+    "status": "live",
+    "generated_at": "2026-10-09T01:11:50.068615Z",
     "table_leader": {
       "rank": 1,
       "team": "Madison Beer Garden",
       "owner": "George Travis",
       "record": "4-0",
       "pointsFor": "548.64",
-      "tag": "Highest scoring"
+      "tag": "Table leader"
     },
     "pressure": {
       "team": "Team Hash",
@@ -402,9 +402,9 @@
   "league_pulse": [
     {
       "id": "matchup",
-      "label": "On deck",
-      "title": "6 matchups posted",
-      "detail": "Week 5 is ready on the league board.",
+      "label": "Game watch",
+      "title": "McConkey Tonk Badonkadonk / Your Reigning Champ",
+      "detail": "2.2 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -430,9 +430,9 @@
     },
     {
       "id": "record",
-      "label": "Record book",
-      "title": "Collin Krum · 235.6",
-      "detail": "Highest single-team week · 2022.",
+      "label": "Record watch",
+      "title": "George Travis · 13.9",
+      "detail": "221.7 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-09T00:11:51.884668+00:00",
-    "edition_published_at": "2026-10-06T15:12:48.235799Z",
-    "payload_built_at": "2026-10-09T00:11:55.939Z",
+    "week_fetched_at": "2026-10-09T01:11:46.329514+00:00",
+    "edition_published_at": "2026-10-09T01:11:50.068615Z",
+    "payload_built_at": "2026-10-09T01:11:50.121Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
