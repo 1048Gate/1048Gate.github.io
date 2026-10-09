@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-09T03:11:58.614663+00:00",
+  "last_updated": "2026-10-09T03:41:47.714483+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -41,7 +41,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 26.1,
+        "score": 28,
         "projectedScore": 103.1
       },
       "home": {
@@ -92,7 +92,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 15.8,
+        "score": 14.64,
         "projectedScore": 140.12
       }
     },
@@ -129,14 +129,14 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 29.5,
+        "score": 31.5,
         "projectedScore": 112.38
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 19,
+        "score": 19.2,
         "projectedScore": 131.07
       }
     }
@@ -431,8 +431,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Kyle Fowler · 29.5",
-      "detail": "206.1 shy of the 235.6 all-time mark",
+      "title": "Kyle Fowler · 31.5",
+      "detail": "204.1 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-09T03:11:58.614663+00:00",
+    "week_fetched_at": "2026-10-09T03:41:47.714483+00:00",
     "edition_published_at": "2026-10-09T01:11:50.068615Z",
-    "payload_built_at": "2026-10-09T03:12:04.473Z",
+    "payload_built_at": "2026-10-09T03:41:53.037Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
