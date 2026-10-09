@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-09T21:41:16.554999+00:00",
+  "fetchedAt": "2026-10-09T22:11:41.445643+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -166,14 +166,14 @@
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
         "score": 0,
-        "projectedScore": 116.56
+        "projectedScore": 116.54
       },
       "home": {
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
         "score": -2,
-        "projectedScore": 123.25
+        "projectedScore": 122.65
       }
     },
     {
@@ -188,14 +188,14 @@
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 28,
-        "projectedScore": 106.43
+        "projectedScore": 106.46
       },
       "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
         "score": 0,
-        "projectedScore": 130.99
+        "projectedScore": 130.51
       }
     },
     {
@@ -210,14 +210,14 @@
         "team": "Jigalos Jims",
         "owner": "James Brochu",
         "score": 2.9,
-        "projectedScore": 123.98
+        "projectedScore": 124.01
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
         "score": 0,
-        "projectedScore": 136.34
+        "projectedScore": 136.38
       }
     },
     {
@@ -232,14 +232,14 @@
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
         "score": 0,
-        "projectedScore": 118.42
+        "projectedScore": 105.79
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 14.64,
-        "projectedScore": 140.12
+        "projectedScore": 140.13
       }
     },
     {
@@ -261,7 +261,7 @@
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 17.2,
-        "projectedScore": 109.88
+        "projectedScore": 110.47
       }
     },
     {
@@ -276,66 +276,66 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 31.5,
-        "projectedScore": 112.38
+        "projectedScore": 113.02
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
         "score": 19.2,
-        "projectedScore": 131.07
+        "projectedScore": 131.11
       }
     }
   ],
   "teamProjections": [
     {
       "teamId": 1,
-      "projectedScore": 131.07,
+      "projectedScore": 131.11,
       "complete": true
     },
     {
       "teamId": 3,
-      "projectedScore": 123.25,
+      "projectedScore": 122.65,
       "complete": true
     },
     {
       "teamId": 4,
-      "projectedScore": 112.38,
+      "projectedScore": 113.02,
       "complete": true
     },
     {
       "teamId": 5,
-      "projectedScore": 109.88,
+      "projectedScore": 110.47,
       "complete": true
     },
     {
       "teamId": 6,
-      "projectedScore": 106.43,
+      "projectedScore": 106.46,
       "complete": true
     },
     {
       "teamId": 7,
-      "projectedScore": 118.42,
+      "projectedScore": 105.79,
       "complete": true
     },
     {
       "teamId": 8,
-      "projectedScore": 123.98,
+      "projectedScore": 124.01,
       "complete": true
     },
     {
       "teamId": 9,
-      "projectedScore": 116.56,
+      "projectedScore": 116.54,
       "complete": true
     },
     {
       "teamId": 11,
-      "projectedScore": 140.12,
+      "projectedScore": 140.13,
       "complete": true
     },
     {
       "teamId": 13,
-      "projectedScore": 130.99,
+      "projectedScore": 130.51,
       "complete": true
     },
     {
@@ -345,9 +345,9 @@
     },
     {
       "teamId": 15,
-      "projectedScore": 136.34,
+      "projectedScore": 136.38,
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-09T21:41:17.437057+00:00"
+  "projectionsFetchedAt": "2026-10-09T22:11:42.740342+00:00"
 }
