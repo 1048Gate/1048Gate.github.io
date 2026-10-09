@@ -5,13 +5,13 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-09T02:41:44.498071+00:00",
+  "last_updated": "2026-10-09T03:11:58.614663+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
       "id": 25,
       "week": 5,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -26,7 +26,7 @@
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
-        "score": 0,
+        "score": -2,
         "projectedScore": 123.23
       }
     },
@@ -41,7 +41,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 10.3,
+        "score": 26.1,
         "projectedScore": 103.1
       },
       "home": {
@@ -92,7 +92,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 4.64,
+        "score": 15.8,
         "projectedScore": 140.12
       }
     },
@@ -114,7 +114,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 16,
+        "score": 17.2,
         "projectedScore": 118.31
       }
     },
@@ -129,14 +129,14 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 25.7,
+        "score": 29.5,
         "projectedScore": 112.38
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 18.6,
+        "score": 19,
         "projectedScore": 131.07
       }
     }
@@ -403,8 +403,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "Jigalos Jims / Team Hash",
-      "detail": "2.9 points apart · Live",
+      "title": "Ja'Marr-a-Lago / Shough This Season",
+      "detail": "2 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -431,8 +431,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Kyle Fowler · 25.7",
-      "detail": "209.9 shy of the 235.6 all-time mark",
+      "title": "Kyle Fowler · 29.5",
+      "detail": "206.1 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-09T02:41:44.498071+00:00",
+    "week_fetched_at": "2026-10-09T03:11:58.614663+00:00",
     "edition_published_at": "2026-10-09T01:11:50.068615Z",
-    "payload_built_at": "2026-10-09T02:41:49.031Z",
+    "payload_built_at": "2026-10-09T03:12:04.473Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

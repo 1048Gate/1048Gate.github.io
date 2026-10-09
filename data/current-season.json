@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-09T02:41:44.498071+00:00",
+  "fetchedAt": "2026-10-09T03:11:58.614663+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -157,7 +157,7 @@
     {
       "id": 25,
       "week": 5,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -172,7 +172,7 @@
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
-        "score": 0,
+        "score": -2,
         "projectedScore": 123.23
       }
     },
@@ -187,7 +187,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 10.3,
+        "score": 26.1,
         "projectedScore": 103.1
       },
       "home": {
@@ -238,7 +238,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 4.64,
+        "score": 15.8,
         "projectedScore": 140.12
       }
     },
@@ -260,7 +260,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 16,
+        "score": 17.2,
         "projectedScore": 118.31
       }
     },
@@ -275,14 +275,14 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 25.7,
+        "score": 29.5,
         "projectedScore": 112.38
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 18.6,
+        "score": 19,
         "projectedScore": 131.07
       }
     }
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-09T02:41:45.787144+00:00"
+  "projectionsFetchedAt": "2026-10-09T03:11:59.557789+00:00"
 }
