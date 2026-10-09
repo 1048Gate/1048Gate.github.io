@@ -23,6 +23,10 @@ const newspaperStep = workflow.match(/- name: Generate weekly newspaper[\s\S]*?(
 assert.ok(newspaperStep, 'newspaper step should exist');
 assert.ok(workflow.indexOf('- name: Refresh completed scores and weekly ratings') < workflow.indexOf('- name: Generate weekly newspaper'));
 assert.match(newspaperStep, /github\.event_name == 'workflow_dispatch'/);
+assert.match(newspaperStep, /steps\.newspaper_due\.outputs\.due == 'true'/);
+assert.match(newspaperStep, /continue-on-error: true/);
+assert.match(workflow, /ALLOW_PENDING_WEEKLY_EDITION: 'true'/);
+assert.match(workflow, /- name: Check whether live newspaper needs its first publication/);
 assert.match(newspaperStep, /github\.event\.schedule == '15 8 \* \* \*'/);
 assert.match(newspaperStep, /github\.event\.schedule == '20 12 \* \* 2'/);
 assert.doesNotMatch(newspaperStep, /repository_dispatch/);

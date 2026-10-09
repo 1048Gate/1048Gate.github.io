@@ -165,13 +165,31 @@ jobs:
         run: |
           python3 scripts/update_matchup_leaderboards.py
           npm run futures
+      # Start the first verified live issue once scoring begins, including Thursday night.
+      # Only run when the edition is absent; never rewrite it every half-hour.
+      - name: Check whether live newspaper needs its first publication
+        id: newspaper_due
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          board = json.loads(Path('data/current-season.json').read_text())
+          index = json.loads(Path('data/newspaper_editions/index.json').read_text())
+          matchups = board.get('matchups', [])
+          started = any((str(g.get('state', '')).lower() == 'final' and str(g.get('winner', '')).upper() in ('HOME', 'AWAY', 'TIE')) or any(isinstance((g.get(side) or {}).get('score'), (int, float)) and (g.get(side) or {}).get('score') > 0 for side in ('home', 'away')) for g in matchups)
+          status = 'verified_final' if matchups and all(str(g.get('state', '')).lower() == 'final' and str(g.get('winner', '')).upper() in ('HOME', 'AWAY', 'TIE') for g in matchups) else 'verified_live'
+          found = any(e.get('season') == board.get('season') and e.get('week') == board.get('week') and e.get('validation_status') == 'valid' and e.get('source_status') == status and Path(e.get('path', '')).is_file() for e in index.get('editions', []))
+          print(f'due={str(started and not found).lower()}')
+          PY
       # Score refreshes run frequently during NFL windows. Do not regenerate the
       # newspaper on those half-hour refreshes: it creates editorial churn from
       # partial games and makes the score pipeline slower. The paper gets one
       # daily lifecycle pass, the Tuesday finalization pass, or an explicit
       # manual newspaper run.
       - name: Generate weekly newspaper from the verified board
+        continue-on-error: true
         if: >-
+          steps.newspaper_due.outputs.due == 'true' ||
           github.event_name == 'workflow_dispatch' ||
           (github.event_name == 'schedule' && (
             github.event.schedule == '15 8 * * *' ||
@@ -207,6 +225,9 @@ jobs:
           node scripts/build-homepage-week.mjs
           node scripts/build-static-week-board.mjs
       - name: Validate site checks still pass
+        env:
+          # Editorial publication can lag scoring without blocking fresh scores.
+          ALLOW_PENDING_WEEKLY_EDITION: 'true'
         run: npm run check
       - name: Commit updated board and derived data when they change
         run: |

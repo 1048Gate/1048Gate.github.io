@@ -166,7 +166,11 @@ if(currentWeekStarted){
     entry.validation_status === 'valid'
   );
   if(!expectedWeekly || !existsSync(new URL(expectedWeekly.path, root))){
-    throw new Error(`Started Week ${currentSeason.week} must have a published ${expectedWeeklyStatus} weekly edition.`);
+    if(process.env.ALLOW_PENDING_WEEKLY_EDITION === 'true'){
+      expectedWeekly = null; // Routine scoring is allowed to precede editorial publication.
+    }else{
+      throw new Error(`Started Week ${currentSeason.week} must have a published ${expectedWeeklyStatus} weekly edition.`);
+    }
   }
 }else{
   const premature = weeklyIndex.editions.find(entry =>
