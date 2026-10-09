@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-09T17:41:16.837781+00:00",
+  "fetchedAt": "2026-10-09T18:11:17.766232+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -173,7 +173,7 @@
         "team": "Shough This Season",
         "owner": "Jared Hall",
         "score": -2,
-        "projectedScore": 123.23
+        "projectedScore": 123.25
       }
     },
     {
@@ -195,7 +195,7 @@
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
         "score": 0,
-        "projectedScore": 130.91
+        "projectedScore": 130.99
       }
     },
     {
@@ -210,14 +210,14 @@
         "team": "Jigalos Jims",
         "owner": "James Brochu",
         "score": 2.9,
-        "projectedScore": 123.99
+        "projectedScore": 123.98
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
         "score": 0,
-        "projectedScore": 136.37
+        "projectedScore": 136.34
       }
     },
     {
@@ -232,7 +232,7 @@
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
         "score": 0,
-        "projectedScore": 118.39
+        "projectedScore": 118.42
       },
       "home": {
         "teamId": 11,
@@ -261,7 +261,7 @@
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 17.2,
-        "projectedScore": 118.31
+        "projectedScore": 109.88
       }
     },
     {
@@ -295,7 +295,7 @@
     },
     {
       "teamId": 3,
-      "projectedScore": 123.23,
+      "projectedScore": 123.25,
       "complete": true
     },
     {
@@ -305,7 +305,7 @@
     },
     {
       "teamId": 5,
-      "projectedScore": 118.31,
+      "projectedScore": 109.88,
       "complete": true
     },
     {
@@ -315,12 +315,12 @@
     },
     {
       "teamId": 7,
-      "projectedScore": 118.39,
+      "projectedScore": 118.42,
       "complete": true
     },
     {
       "teamId": 8,
-      "projectedScore": 123.99,
+      "projectedScore": 123.98,
       "complete": true
     },
     {
@@ -335,7 +335,7 @@
     },
     {
       "teamId": 13,
-      "projectedScore": 130.91,
+      "projectedScore": 130.99,
       "complete": true
     },
     {
@@ -345,9 +345,9 @@
     },
     {
       "teamId": 15,
-      "projectedScore": 136.37,
+      "projectedScore": 136.34,
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-09T17:41:17.739844+00:00"
+  "projectionsFetchedAt": "2026-10-09T18:11:18.809023+00:00"
 }
