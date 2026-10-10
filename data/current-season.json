@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-10T22:11:25.549953+00:00",
+  "fetchedAt": "2026-10-10T22:41:27.073282+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -261,7 +261,7 @@
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 17.2,
-        "projectedScore": 110.46
+        "projectedScore": 122.85
       }
     },
     {
@@ -305,7 +305,7 @@
     },
     {
       "teamId": 5,
-      "projectedScore": 110.46,
+      "projectedScore": 122.85,
       "complete": true
     },
     {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-10T22:11:26.447887+00:00"
+  "projectionsFetchedAt": "2026-10-10T22:41:27.883981+00:00"
 }
