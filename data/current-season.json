@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-10T18:12:07.367038+00:00",
+  "fetchedAt": "2026-10-10T18:42:06.441649+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -166,14 +166,14 @@
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
         "score": 0,
-        "projectedScore": 116.55
+        "projectedScore": 116.57
       },
       "home": {
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
         "score": -2,
-        "projectedScore": 122.66
+        "projectedScore": 122.65
       }
     },
     {
@@ -239,7 +239,7 @@
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 14.64,
-        "projectedScore": 140.13
+        "projectedScore": 140.24
       }
     },
     {
@@ -295,7 +295,7 @@
     },
     {
       "teamId": 3,
-      "projectedScore": 122.66,
+      "projectedScore": 122.65,
       "complete": true
     },
     {
@@ -325,12 +325,12 @@
     },
     {
       "teamId": 9,
-      "projectedScore": 116.55,
+      "projectedScore": 116.57,
       "complete": true
     },
     {
       "teamId": 11,
-      "projectedScore": 140.13,
+      "projectedScore": 140.24,
       "complete": true
     },
     {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-10T18:12:08.672679+00:00"
+  "projectionsFetchedAt": "2026-10-10T18:42:07.965843+00:00"
 }
