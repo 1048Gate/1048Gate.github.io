@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-10T16:42:06.347189+00:00",
+  "fetchedAt": "2026-10-10T17:12:09.209344+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -232,7 +232,7 @@
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
         "score": 0,
-        "projectedScore": 105.85
+        "projectedScore": 116.78
       },
       "home": {
         "teamId": 11,
@@ -315,7 +315,7 @@
     },
     {
       "teamId": 7,
-      "projectedScore": 105.85,
+      "projectedScore": 116.78,
       "complete": true
     },
     {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-10T16:42:08.406528+00:00"
+  "projectionsFetchedAt": "2026-10-10T17:12:11.014563+00:00"
 }
