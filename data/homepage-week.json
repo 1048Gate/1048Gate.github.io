@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-10T23:41:19.270237+00:00",
+  "last_updated": "2026-10-11T00:11:23.216503+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -20,14 +20,14 @@
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
         "score": 0,
-        "projectedScore": 116.57
+        "projectedScore": 116.58
       },
       "home": {
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
         "score": -2,
-        "projectedScore": 122.65
+        "projectedScore": 122.66
       }
     },
     {
@@ -42,14 +42,14 @@
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 28,
-        "projectedScore": 106.46
+        "projectedScore": 106.45
       },
       "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
         "score": 0,
-        "projectedScore": 130.49
+        "projectedScore": 130.52
       }
     },
     {
@@ -71,7 +71,7 @@
         "team": "Team Hash",
         "owner": "Trevor Hash",
         "score": 0,
-        "projectedScore": 136.39
+        "projectedScore": 136.4
       }
     },
     {
@@ -93,7 +93,7 @@
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 14.64,
-        "projectedScore": 140.24
+        "projectedScore": 140.21
       }
     },
     {
@@ -108,14 +108,14 @@
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
         "score": 7,
-        "projectedScore": 112.78
+        "projectedScore": 112.79
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 17.2,
-        "projectedScore": 122.85
+        "projectedScore": 122.86
       }
     },
     {
@@ -137,7 +137,7 @@
         "team": "Madison Beer Garden",
         "owner": "George Travis",
         "score": 19.2,
-        "projectedScore": 131.11
+        "projectedScore": 130.99
       }
     }
   ],
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-10T23:41:19.270237+00:00",
+    "week_fetched_at": "2026-10-11T00:11:23.216503+00:00",
     "edition_published_at": "2026-10-09T01:11:50.068615Z",
-    "payload_built_at": "2026-10-10T23:41:23.931Z",
+    "payload_built_at": "2026-10-11T00:11:27.222Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
