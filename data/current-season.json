@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T17:11:55.638598+00:00",
+  "fetchedAt": "2026-10-11T17:41:55.122099+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,14 +165,14 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 6.8,
+        "score": 32.8,
         "projectedScore": 116.96
       },
       "home": {
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
-        "score": 2.4,
+        "score": 9.4,
         "projectedScore": 122.81
       }
     },
@@ -187,14 +187,14 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 59.1,
+        "score": 58.7,
         "projectedScore": 107.04
       },
       "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 17.06,
+        "score": 20.86,
         "projectedScore": 129.25
       }
     },
@@ -209,14 +209,14 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 22,
+        "score": 40.04,
         "projectedScore": 123.96
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 19.74,
+        "score": 42,
         "projectedScore": 136.39
       }
     },
@@ -231,14 +231,14 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 36.14,
+        "score": 36.84,
         "projectedScore": 120.49
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 35.24,
+        "score": 41.24,
         "projectedScore": 140.66
       }
     },
@@ -253,14 +253,14 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 14,
+        "score": 40.7,
         "projectedScore": 115.88
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 22.1,
+        "score": 38.9,
         "projectedScore": 122.78
       }
     },
@@ -275,7 +275,7 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 59.42,
+        "score": 61.14,
         "projectedScore": 113.04
       },
       "home": {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T17:11:56.597058+00:00"
+  "projectionsFetchedAt": "2026-10-11T17:41:56.304560+00:00"
 }
