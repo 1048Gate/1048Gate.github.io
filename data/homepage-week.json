@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-11T23:11:42.459946+00:00",
+  "last_updated": "2026-10-11T23:41:43.032927+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -26,7 +26,7 @@
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
-        "score": 92.18,
+        "score": 102.38,
         "projectedScore": 122.84
       }
     },
@@ -85,14 +85,14 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 122.14,
+        "score": 132.84,
         "projectedScore": 120.38
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 94.72,
+        "score": 103.92,
         "projectedScore": 140.6
       }
     },
@@ -136,7 +136,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 132.38,
+        "score": 137.46,
         "projectedScore": 130.77
       }
     }
@@ -404,7 +404,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "You Just Made the List! / Madison Beer Garden",
-      "detail": "18.02 points apart · Live",
+      "detail": "23.10 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-11T23:11:42.459946+00:00",
+    "week_fetched_at": "2026-10-11T23:41:43.032927+00:00",
     "edition_published_at": "2026-10-09T01:11:50.068615Z",
-    "payload_built_at": "2026-10-11T23:11:47.942Z",
+    "payload_built_at": "2026-10-11T23:41:47.858Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

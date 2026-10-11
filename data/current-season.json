@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T23:11:42.459946+00:00",
+  "fetchedAt": "2026-10-11T23:41:43.032927+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -172,7 +172,7 @@
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
-        "score": 92.18,
+        "score": 102.38,
         "projectedScore": 122.84
       }
     },
@@ -231,14 +231,14 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 122.14,
+        "score": 132.84,
         "projectedScore": 120.38
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 94.72,
+        "score": 103.92,
         "projectedScore": 140.6
       }
     },
@@ -282,7 +282,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 132.38,
+        "score": 137.46,
         "projectedScore": 130.77
       }
     }
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T23:11:44.065376+00:00"
+  "projectionsFetchedAt": "2026-10-11T23:41:44.503567+00:00"
 }
