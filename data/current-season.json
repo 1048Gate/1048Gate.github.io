@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T15:11:54.352644+00:00",
+  "fetchedAt": "2026-10-11T15:41:53.464270+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -173,7 +173,7 @@
         "team": "Shough This Season",
         "owner": "Jared Hall",
         "score": -2,
-        "projectedScore": 122.69
+        "projectedScore": 122.66
       }
     },
     {
@@ -187,7 +187,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 39.08,
+        "score": 39.36,
         "projectedScore": 106.45
       },
       "home": {
@@ -231,14 +231,14 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 13.06,
+        "score": 15.3,
         "projectedScore": 120.49
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 18.14,
+        "score": 21.34,
         "projectedScore": 140.66
       }
     },
@@ -295,7 +295,7 @@
     },
     {
       "teamId": 3,
-      "projectedScore": 122.69,
+      "projectedScore": 122.66,
       "complete": true
     },
     {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T15:11:55.664216+00:00"
+  "projectionsFetchedAt": "2026-10-11T15:41:54.642749+00:00"
 }
