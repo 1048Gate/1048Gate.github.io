@@ -46,8 +46,8 @@
     snapshot = data.payload;
     $('snapshotSummary').textContent = `${snapshot.season} · Week ${snapshot.week} · Saved ${stamp(snapshot.fetched_at)} · ${(snapshot.teams || []).length} teams · ${(snapshot.available_players || []).length} available players`;
     $('teamSelect').replaceChildren(...(snapshot.teams || []).map(team => new Option(team.name,team.id)));
-    // Default to the ESPN team id recorded for Collin in the checked-in league archive.
-    if((snapshot.teams || []).some(team => String(team.id) === '10')) $('teamSelect').value = '10';
+    // Default to Collin's ESPN team id (13; his league locker number is 10).
+    if((snapshot.teams || []).some(team => String(team.id) === '13')) $('teamSelect').value = '13';
     $('snapshotJson').textContent = JSON.stringify(snapshot,null,2); $('downloadSnapshot').disabled = false; render();
   }
   function render(){

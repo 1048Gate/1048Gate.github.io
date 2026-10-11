@@ -14,8 +14,8 @@ const live = {
   home:{team:'Jigalos Jims', owner:'James Brochu', score:98.98}
 };
 assert.equal(board.leaderSide(live), 'home');
-assert.equal(board.marginCopy(live), 'Ahead by 7.5');
-assert.equal(board.marginCopy({state:'final', away:{score:192.56}, home:{score:158.3}}), 'Won by 34.3');
+assert.equal(board.marginCopy(live), 'Ahead by 7.52');
+assert.equal(board.marginCopy({state:'final', away:{score:192.56}, home:{score:158.3}}), 'Won by 34.26');
 assert.equal(board.statusLabel('live'), 'Live');
 assert.equal(board.statusLabel('scheduled'), 'Upcoming');
 assert.equal(board.marginCopy({state:'scheduled', away:{score:0}, home:{score:0}}), '');
@@ -23,7 +23,7 @@ assert.equal(board.marginCopy({state:'live', away:{score:10}, home:{score:10}}),
 
 const liveHtml = board.matchupCardHtml(live, esc);
 assert.match(liveHtml, /week-card is-live/);
-assert.match(liveHtml, /Ahead by 7.5/);
+assert.match(liveHtml, /Ahead by 7\.52/);
 
 const finalHtml = board.matchupCardHtml({
   state:'final',
@@ -32,7 +32,7 @@ const finalHtml = board.matchupCardHtml({
 }, esc);
 assert.match(finalHtml, /week-card is-final/);
 assert.match(finalHtml, />Final</);
-assert.match(finalHtml, /Won by 34.3/);
+assert.match(finalHtml, /Won by 34\.26/);
 
 const upcomingHtml = board.matchupCardHtml({
   state:'scheduled',
@@ -61,11 +61,11 @@ assert.match(indexHtml, /Swipe standings/);
 assert.doesNotMatch(readFileSync(new URL('../js/home-layout.js', import.meta.url), 'utf8'), /createElement\('script'\)/);
 const projectedHtml = board.matchupCardHtml({state:'scheduled',away:{team:'A',owner:'<owner>',score:0,projectedScore:123.45},home:{team:'B',score:0,projectedScore:0}},esc);
 assert.match(projectedHtml,/ESPN projected points/);
-assert.match(projectedHtml,/>123.5</);
-assert.match(projectedHtml,/>0</);
+assert.match(projectedHtml,/>123\.45</);
+assert.match(projectedHtml,/>0\.00</);
 assert.doesNotMatch(projectedHtml,/Ahead by|Won by|data-leader/);
 assert.match(projectedHtml,/data-team-owner="&lt;owner&gt;"/);
-assert.match(board.matchupCardHtml({...live,away:{...live.away,projectedScore:999}},esc),/>91.5</);
-assert.doesNotMatch(board.matchupCardHtml({...live,away:{...live.away,projectedScore:999}},esc),/>999</);
+assert.match(board.matchupCardHtml({...live,away:{...live.away,projectedScore:999}},esc),/>91\.46</);
+assert.doesNotMatch(board.matchupCardHtml({...live,away:{...live.away,projectedScore:999}},esc),/>999\.00</);
 
 console.log('This Week board: six cards, live/final/upcoming states, margins, and standings snapshot checks passed.');

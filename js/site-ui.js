@@ -153,11 +153,9 @@ function recordLine(team){
   return ties ? `${wins}-${losses}-${ties}` : `${wins}-${losses}`;
 }
 
+// Scores share one formatter (two decimals, ESPN scoring precision) with js/week-board.js.
 function pointsLine(value){
-  if(value == null || value === '') return '\u2014';
-  const number = Number(value);
-  if(!Number.isFinite(number)) return '\u2014';
-  return Number.isInteger(number) ? String(number) : number.toFixed(1).replace(/\.0$/, '');
+  return window.gateWeekBoard.pointsLine(value);
 }
 
 function gameSide(side, className, escapeHtml){

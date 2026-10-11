@@ -39,12 +39,12 @@ const cards=pulse.buildCards({config,board:{week:2,standings,matchups},archive})
 assert.deepEqual(Array.from(cards,card=>card.id),['matchup','playoff','transactions','odds','record','streak']);
 assert.equal(cards.find(card=>card.id==='odds').title,'Favorite Manager +300');
 assert.match(cards.find(card=>card.id==='playoff').title,/Manager 6 holds No\. 6/);
-assert.match(cards.find(card=>card.id==='matchup').detail,/0\.5 points apart · Live/);
-assert.match(cards.find(card=>card.id==='record').detail,/130\.6 shy of the 235\.6 all-time mark/);
+assert.match(cards.find(card=>card.id==='matchup').detail,/0\.50 points apart · Live/);
+assert.match(cards.find(card=>card.id==='record').detail,/130\.64 shy of the 235\.64 all-time mark/);
 assert.equal(cards.find(card=>card.id==='streak').title,'6 teams opened 1–0');
 const scheduled=matchups.map(game=>({...game,state:'scheduled',away:{...game.away,score:0},home:{...game.home,score:0}}));
 const beforeKickoff=pulse.buildCards({config,board:{week:2,standings,matchups:scheduled},archive});
-assert.equal(beforeKickoff.find(card=>card.id==='record').title,'Record Holder · 235.6');
+assert.equal(beforeKickoff.find(card=>card.id==='record').title,'Record Holder · 235.64');
 const incompleteArchive=pulse.buildCards({config,board:{week:3,standings:standings.map(row=>({...row,wins:row.wins*2,losses:row.losses*2})),matchups:scheduled},archive});
 assert.equal(incompleteArchive.find(card=>card.id==='streak').title,'Recent form pending');
 
@@ -56,7 +56,7 @@ assert.match(movement.title,/↑3 to No\. 1/);
 
 const offseason=pulse.buildCards({config:{...config,phase:'Offseason'},board:{week:2,standings,matchups},archive});
 assert.deepEqual(Array.from(offseason,card=>card.id),['draft','transactions','odds','record','streak']);
-assert.equal(offseason.find(card=>card.id==='record').title,'Record Holder · 235.6');
+assert.equal(offseason.find(card=>card.id==='record').title,'Record Holder · 235.64');
 assert.ok(!offseason.some(card=>['playoff','matchup'].includes(card.id)));
 
 const archiveFailure=pulse.buildCards({config,board:{week:2,standings,matchups},archive:{}});

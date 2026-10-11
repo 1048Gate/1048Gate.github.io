@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
-import {LONG_SHOT_CAP, blendRating, methodShares, oddsMethodNote, currentSeasonRatings, formatAmericanOdds, inferRoundRobin, priceFromProbability, scoreBlend, scoringParameters} from './futures-model.mjs';
+import {LONG_SHOT_CAP, blendRating, methodShares, oddsMethodNote, currentSeasonRatings, formatAmericanOdds, inferRoundRobin, priceBoard, priceFromProbability, scoreBlend, scoringParameters} from './futures-model.mjs';
 
 const owners = Array.from({length:12}, (_, index) => `Manager ${index + 1}`);
 const standings = owners.map((owner, index) => ({
@@ -109,6 +109,25 @@ for(let p = 0.005; p < 0.9; p += 0.005){
   assert.ok(implied(shorter) >= implied(longer), `Prices must shorten as title probability rises (p=${p.toFixed(3)}).`);
 }
 
+// Board pricing: different title odds never share a price; equal odds stay equal; the cap holds.
+const impliedOf = price => price > 0 ? 100 / (price + 100) : -price / (100 - price);
+assert.deepEqual(priceBoard([0.148, 0.146]), [550, 600], 'A ladder tie moves the lower club to the next longer step.');
+assert.deepEqual(priceBoard([0.022, 0.0215, 0.001]), [4250, 4500, 5000], 'A tie near the cap still nudges longer while room remains.');
+assert.deepEqual(priceBoard([0.0012, 0.001, 0.0005]), [4500, 4750, 5000], 'At the cap, clubs above are nudged shorter instead.');
+assert.deepEqual(priceBoard([0.05, 0.05]), [priceFromProbability(0.05), priceFromProbability(0.05)], 'Identical title odds keep identical prices.');
+assert.deepEqual(priceBoard([0.146, 0.148]), [600, 550], 'Prices come back in input order.');
+assert.deepEqual(priceBoard([0.001, 0.0005]), [4750, 5000], 'Two long shots below the cap still get distinct prices.');
+for(let trial = 0; trial < 200; trial += 1){
+  const raw = Array.from({length:12}, (_, i) => Math.abs(Math.sin(trial * 13 + i * 7)) ** 3);
+  const total = raw.reduce((a, b) => a + b, 0);
+  const probs = raw.map(v => v / total);
+  const prices = priceBoard(probs);
+  assert.ok(prices.every(price => price <= LONG_SHOT_CAP), 'The +5000 cap must hold.');
+  probs.forEach((p, i) => probs.forEach((q, j) => {
+    if(p > q) assert.ok(impliedOf(prices[i]) > impliedOf(prices[j]), `Higher title odds must price strictly shorter (trial ${trial}).`);
+  }));
+}
+
 // Checked-in board: priced from the stored simulation, in Playoffs-tab order.
 const siteData = JSON.parse(readFileSync(new URL('../data/site.json', import.meta.url), 'utf8'));
 const rankingsData = JSON.parse(readFileSync(new URL('../data/power-rankings.json', import.meta.url), 'utf8'));
@@ -118,7 +137,15 @@ const projected = new Map(projection.teams.map(row => [row.name, row]));
 const sumOf = key => projection.teams.reduce((sum, row) => sum + row[key], 0);
 assert.ok(Math.abs(sumOf('title') - 1) < 1e-9 && Math.abs(sumOf('bye') - 2) < 1e-9 && Math.abs(sumOf('playoff') - 6) < 1e-9);
 assert.deepEqual(siteData.futures.map(row => row.name), [...projection.teams].sort((a, b) => b.title - a.title || b.playoff - a.playoff).map(row => row.name).slice(0, siteData.futures.length), 'Futures board order must follow simulated title odds.');
-siteData.futures.forEach(row => assert.equal(row.odds, formatAmericanOdds(priceFromProbability(projected.get(row.name).title)), `${row.name} price must come from the simulation.`));
+const boardTeams = [...projection.teams];
+const simulatedPrices = new Map(priceBoard(boardTeams.map(row => row.title)).map((price, index) => [boardTeams[index].name, formatAmericanOdds(price)]));
+siteData.futures.forEach(row => assert.equal(row.odds, simulatedPrices.get(row.name), `${row.name} price must come from the simulation.`));
+const boardOdds = siteData.futures.map(row => row.odds);
+siteData.futures.forEach((row, index) => {
+  const other = siteData.futures.findIndex((peer, peerIndex) => peerIndex !== index && peer.odds === row.odds);
+  if(other >= 0) assert.equal(projected.get(row.name).title, projected.get(siteData.futures[other].name).title, `${row.name} shares ${row.odds} with a club whose title odds differ.`);
+});
+assert.ok(boardOdds.length === siteData.futures.length);
 const recomputed = oddsModel.probabilities(oddsModel.prepare({...rankingsData, projection: undefined}), {});
 oddsModel.prepare(rankingsData).teams.forEach((team, index) => {
   assert.equal(recomputed.title[index], projected.get(team.name).title, `Browser simulation must reproduce the stored projection for ${team.name}.`);
@@ -168,4 +195,4 @@ const firstRow = rankingsData.ratings[0];
 assert.ok(tabHtml.includes(`Pts/wk · Pre ${firstRow.preseasonPoints.toFixed(1)}`), 'Cards must show preseason and 2026 points per week.');
 assert.ok(tabHtml.includes(oddsModel.AI_FOOTNOTE), 'Playoffs tab must keep the AI-desk footnote.');
 
-console.log('Futures checks passed: weekly results blend, PF-only in-season ratings, evidence weight, schedule inference, PF tiebreak seeding, simulation-priced futures board, method note, and incomplete-board fallback.');
+console.log('Futures checks passed: weekly results blend, PF-only in-season ratings, evidence weight, schedule inference, PF tiebreak seeding, simulation-priced futures board, no shared prices across different title odds, method note, and incomplete-board fallback.');

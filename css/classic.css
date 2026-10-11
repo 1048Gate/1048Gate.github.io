@@ -124,6 +124,8 @@ html body a:hover{color:var(--link-hover) !important;}
 .btn:hover,.edition-action:hover{background:var(--btn-hover) !important;}
 .btn-primary,.edition-action-primary{background:var(--accent) !important;border-color:var(--accent) !important;color:#fff !important;}
 .btn-primary *{color:#fff !important;}
+/* Primary hover stays navy so the white label keeps its contrast (the generic .btn:hover gray made it unreadable). */
+.btn-primary:hover,.edition-action-primary:hover{background:var(--accent-2) !important;border-color:var(--accent-2) !important;}
 input,select,textarea{
   font:13px Helvetica,Arial,sans-serif !important;color:var(--text) !important;
   background:var(--page) !important;border:1px solid var(--rule-dark) !important;

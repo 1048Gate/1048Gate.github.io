@@ -6,7 +6,7 @@
     if(value == null || value === '') return '\u2014';
     const number = Number(value);
     if(!Number.isFinite(number)) return '\u2014';
-    return Number.isInteger(number) ? String(number) : number.toFixed(1).replace(/\.0$/, '');
+    return number.toFixed(2);
   }
 
   function recordLine(team){

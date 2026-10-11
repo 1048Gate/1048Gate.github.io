@@ -59,13 +59,30 @@ ${standingsHtml}
     </section>`;
 }
 
+// The no-JS League Pulse odds card mirrors the odds card in data/homepage-week.json,
+// using the same markup as js/league-pulse.js, so raw HTML never shows an old favorite.
+export function renderStaticOddsCard(homepage){
+  const card = (Array.isArray(homepage?.league_pulse) ? homepage.league_pulse : []).find(item => item?.id === 'odds');
+  if(!card?.title) return null;
+  const target = card.scrollTo || 'championshipOdds';
+  return `<article class="league-pulse-card" data-pulse-card="odds" role="listitem"><span>${escapeHtml(card.label || 'Odds board')}</span><strong>${escapeHtml(card.title)}</strong><p>${escapeHtml(card.detail || '')}</p><button type="button" data-scroll-to="${escapeHtml(target)}">Open <span aria-hidden="true">→</span></button></article>`;
+}
+
+export const STATIC_ODDS_CARD_PATTERN = /<article class="league-pulse-card[^"]*" data-pulse-card="odds"[^>]*>[\s\S]*?<\/article>/;
+
 export function writeStaticWeekBoard(){
   const board = JSON.parse(readFileSync(new URL('data/current-season.json', root), 'utf8'));
+  const homepage = JSON.parse(readFileSync(new URL('data/homepage-week.json', root), 'utf8'));
   const indexPath = new URL('index.html', root);
   const html = readFileSync(indexPath, 'utf8');
   const sectionPattern = /<section class="home-section week-board"[^>]*>[\s\S]*?<\/section>/;
   if(!sectionPattern.test(html)) throw new Error('Could not find the static #weekBoard section in index.html.');
-  const updated = html.replace(sectionPattern, renderStaticWeekBoard(board));
+  let updated = html.replace(sectionPattern, renderStaticWeekBoard(board));
+  const oddsCard = renderStaticOddsCard(homepage);
+  if(oddsCard){
+    if(!STATIC_ODDS_CARD_PATTERN.test(updated)) throw new Error('Could not find the static League Pulse odds card in index.html.');
+    updated = updated.replace(STATIC_ODDS_CARD_PATTERN, () => oddsCard);
+  }
   writeFileSync(indexPath, updated);
   return board;
 }
