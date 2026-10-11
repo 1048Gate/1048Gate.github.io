@@ -4,7 +4,7 @@
   const number=value=>{
     const parsed=Number(value);
     if(!Number.isFinite(parsed)) return '—';
-    return Number.isInteger(parsed)?String(parsed):parsed.toFixed(1).replace(/\.0$/,'');
+    return parsed.toFixed(2);
   };
   const record=team=>{
     const wins=Number(team?.wins||0),losses=Number(team?.losses||0),ties=Number(team?.ties||0);

@@ -26,7 +26,7 @@
 // (futures-model.mjs priceFromProbability).
 import {existsSync, readFileSync, writeFileSync} from 'node:fs';
 import vm from 'node:vm';
-import {LONG_SHOT_CAP, OFFICE_OVERROUND, REGULAR_SEASON_WEEKS, currentSeasonRatings, formatAmericanOdds, inferRoundRobin, methodShares, oddsMethodNote, priceFromProbability, scoreBlend, scoringParameters} from './futures-model.mjs';
+import {LONG_SHOT_CAP, OFFICE_OVERROUND, REGULAR_SEASON_WEEKS, currentSeasonRatings, formatAmericanOdds, inferRoundRobin, methodShares, oddsMethodNote, priceBoard, priceFromProbability, scoreBlend, scoringParameters} from './futures-model.mjs';
 
 const root = new URL('..', import.meta.url);
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
@@ -406,7 +406,9 @@ powerRankings.method = {...methodFields, text: oddsMethodNote(methodInputs, 'pla
 config.futuresMethod = {...methodFields, text: oddsMethodNote(methodInputs, 'home')};
 
 const titleOf = name => projectionByName.get(name)?.title ?? 0;
-const priceOf = name => formatAmericanOdds(priceFromProbability(titleOf(name)));
+const boardNames = [...projectionByName.keys()];
+const boardPrices = new Map(priceBoard(boardNames.map(titleOf)).map((price, index) => [boardNames[index], price]));
+const priceOf = name => formatAmericanOdds(boardPrices.get(name) ?? priceFromProbability(titleOf(name)));
 // Same order as the Playoffs tab: title %, then playoff %, then rating.
 const board = [...ratings].sort((a, b) => titleOf(b.name) - titleOf(a.name)
   || (projectionByName.get(b.name)?.playoff ?? 0) - (projectionByName.get(a.name)?.playoff ?? 0)

@@ -1,7 +1,7 @@
 (function(){
   let profilePromise=null;
   const {escapeHtml:esc}=window.gateShared;
-  const num=v=>Number(v||0).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:2});
+  const num=v=>Number(v||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
   const rec=(w,l,t)=>t?`${w}-${l}-${t}`:`${w}-${l}`;
   function host(){
     let node=document.getElementById('managerProfileExtras');

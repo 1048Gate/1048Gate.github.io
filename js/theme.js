@@ -25,7 +25,7 @@
 
   function updateBrowserChrome(theme){
     const meta = document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.setAttribute('content', theme === 'dark' ? '#070b0c' : '#f4f0e8');
+    if(meta) meta.setAttribute('content', theme === 'dark' ? '#161616' : '#f7f4ef');
   }
 
   function applyTheme(theme, persist){

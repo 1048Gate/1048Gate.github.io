@@ -9,7 +9,7 @@
   const REGULAR_SEASON_GAMES = 14; // 2026 regular season (confirmed by the commissioner)
   const clean = value => String(value ?? '').trim().replace(/\s+/g, ' ');
   const num = value => { const n = Number(value); return Number.isFinite(n) ? n : null; };
-  const fixed = (value, digits = 1) => { const n = num(value); return n == null ? '—' : n.toFixed(digits); };
+  const fixed = (value, digits = 2) => { const n = num(value); return n == null ? '—' : n.toFixed(digits); };
   const signed = (value, digits = 1) => { const n = num(value); if(n == null) return '—'; const s = Math.abs(n).toFixed(digits); return n > 0 ? `+${s}` : n < 0 ? `−${s}` : s; };
   const ordinal = n => { const v = n % 100; return `${n}${(v >= 11 && v <= 13) ? 'th' : ({1:'st',2:'nd',3:'rd'})[n % 10] || 'th'}`; };
   const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
@@ -144,7 +144,7 @@
     if(done){
       const span = `Thru ${plural(done, 'week')}`;
       blocks.push({title:'Points for', span, rows:top(table, row => num(row.pointsFor), v => fixed(v))});
-      blocks.push({title:'Point differential', span, rows:top(table, row => num(row.pointsFor) != null && num(row.pointsAgainst) != null ? row.pointsFor - row.pointsAgainst : null, v => signed(v))});
+      blocks.push({title:'Point differential', span, rows:top(table, row => num(row.pointsFor) != null && num(row.pointsAgainst) != null ? row.pointsFor - row.pointsAgainst : null, v => signed(v, 2))});
       blocks.push({title:'Points against', span:`${span} · most`, rows:top(table, row => num(row.pointsAgainst), v => fixed(v))});
     }
     const scores = seasonScores(archive, seasonYear);
@@ -292,7 +292,7 @@
     const rows = standingsRows(table);
     const ties = rows.some(row => row.t);
     const F = ' desk-col-full', C = ' desk-col-compact';
-    const body = rows.map(row => `<tr${row.cut ? ' class="is-playoff-line"' : ''}><td class="num">${row.rank}</td><td class="desk-strong">${esc(row.owner)}</td><td class="desk-team${F}">${esc(row.team)}</td><td class="num${C}">${esc(record({wins:row.w, losses:row.l, ties:row.t}))}</td><td class="num${F}">${row.w}</td><td class="num${F}">${row.l}</td>${ties ? `<td class="num${F}">${row.t}</td>` : ''}<td class="num${F}">${row.pct}</td><td class="num">${fixed(row.pf)}</td><td class="num${F}">${fixed(row.pa)}</td><td class="num${F}">${signed(row.diff)}</td><td class="num${F}">${fixed(row.ppg)}</td><td class="num">${row.gb == null ? '—' : row.gb.toFixed(1)}</td><td class="num${F}">${row.gr}</td></tr>`).join('');
+    const body = rows.map(row => `<tr${row.cut ? ' class="is-playoff-line"' : ''}><td class="num">${row.rank}</td><td class="desk-strong">${esc(row.owner)}</td><td class="desk-team${F}">${esc(row.team)}</td><td class="num${C}">${esc(record({wins:row.w, losses:row.l, ties:row.t}))}</td><td class="num${F}">${row.w}</td><td class="num${F}">${row.l}</td>${ties ? `<td class="num${F}">${row.t}</td>` : ''}<td class="num${F}">${row.pct}</td><td class="num">${fixed(row.pf)}</td><td class="num${F}">${fixed(row.pa)}</td><td class="num${F}">${signed(row.diff, 2)}</td><td class="num${F}">${fixed(row.ppg)}</td><td class="num">${row.gb == null ? '—' : row.gb.toFixed(1)}</td><td class="num${F}">${row.gr}</td></tr>`).join('');
     const expanded = standingsExpanded;
     setHtml('standings', `<div class="desk-standings${expanded ? ' is-expanded' : ''}"><div class="desk-standings-tools"><span class="desk-standings-hint" aria-hidden="true">Swipe for all columns →</span><button type="button" class="desk-link desk-standings-toggle" data-standings-toggle aria-controls="deskStandingsTable" aria-expanded="${expanded}">${expanded ? 'Compact standings' : 'Full standings'}</button></div><div class="desk-scroll" id="deskStandingsTable"><table class="desk-table desk-standings-table"><thead><tr><th class="num">Rk</th><th>Manager</th><th class="desk-team${F}">Team</th><th class="num${C}">W-L</th><th class="num${F}">W</th><th class="num${F}">L</th>${ties ? `<th class="num${F}">T</th>` : ''}<th class="num${F}">Pct</th><th class="num">PF</th><th class="num${F}">PA</th><th class="num${F}">Diff</th><th class="num${F}">PF/G</th><th class="num">GB</th><th class="num${F}" title="Regular-season games remaining (${REGULAR_SEASON_GAMES}-game schedule)">GR</th></tr></thead><tbody>${body}</tbody></table></div></div><p class="desk-foot">Ties in record break on total points for (Rules §5). Rule under No. ${PLAYOFF_SLOTS} marks the playoff line. PF/G uses completed games only. GB = games behind No. 1. GR = games remaining of the ${REGULAR_SEASON_GAMES}-game regular season.</p>`);
     home?.classList.add('has-desk-standings');
@@ -318,7 +318,7 @@
     const race = playoffRace(table);
     if(!race){ setHtml('playoff', unavailable('Playoff race unavailable from the current snapshot.')); setNote('playoff', ''); return; }
     setNote('playoff', race.note);
-    const body = race.rows.map(row => `<tr class="${row.inField ? 'is-in' : 'is-out'}${row.seed === PLAYOFF_SLOTS ? ' is-playoff-line' : ''}"><td class="num">${row.seed}</td><td class="desk-strong">${esc(row.owner)}</td><td class="num">${esc(row.record)}</td><td class="num">${fixed(row.pf)}</td><td class="num">${row.gamesVsCut === 0 ? '0.0' : signed(row.gamesVsCut)}</td><td class="num">${row.seed === PLAYOFF_SLOTS ? '—' : signed(row.pfVsSixth)}</td><td class="num">${row.gr}</td></tr>`).join('');
+    const body = race.rows.map(row => `<tr class="${row.inField ? 'is-in' : 'is-out'}${row.seed === PLAYOFF_SLOTS ? ' is-playoff-line' : ''}"><td class="num">${row.seed}</td><td class="desk-strong">${esc(row.owner)}</td><td class="num">${esc(row.record)}</td><td class="num">${fixed(row.pf)}</td><td class="num">${row.gamesVsCut === 0 ? '0.0' : signed(row.gamesVsCut)}</td><td class="num">${row.seed === PLAYOFF_SLOTS ? '—' : signed(row.pfVsSixth, 2)}</td><td class="num">${row.gr}</td></tr>`).join('');
     setHtml('playoff', `<div class="desk-scroll"><table class="desk-table desk-race"><thead><tr><th class="num">Seed</th><th>Manager</th><th class="num">Rec</th><th class="num">PF</th><th class="num" title="Seeds 1–6: games ahead of No. 7. Seeds 7–12: games behind No. 6.">G vs cut</th><th class="num" title="Total points for relative to No. 6, the seeding tiebreaker">PF vs No. 6</th><th class="num" title="Regular-season games remaining (${REGULAR_SEASON_GAMES}-game schedule)">Games left</th></tr></thead><tbody>${body}</tbody></table></div><p class="desk-foot">Six teams qualify (Rules §5). “G vs cut” is games ahead of No. 7 for seeds 1–6 and games behind No. 6 for seeds 7–12. “Games left” counts the ${REGULAR_SEASON_GAMES}-game regular season. No projections here; the simulation board lives under Playoffs.</p>`);
   }
 

@@ -1,6 +1,6 @@
 (function(){
   const {escapeHtml:esc}=window.gateShared;
-  const score=v=>v===null||v===undefined||v===''?'—':Number(v).toLocaleString(undefined,{maximumFractionDigits:2});
+  const score=v=>v===null||v===undefined||v===''?'—':Number(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
 
   let section=document.getElementById('playoffs');
   if(!section){

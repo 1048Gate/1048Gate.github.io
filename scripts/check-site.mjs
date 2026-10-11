@@ -267,6 +267,9 @@ if(redirectedTo !== 'https://1048gate.com/?view=weekly#newspaper'){
 redirectedTo = '';
 runInNewContext(hostRedirectSource, {window:{location:{hostname:'1048gate.com', pathname:'/', search:'', hash:'#home', replace:value => {redirectedTo = value}}}}, {filename:'js/host-redirect.js'});
 if(redirectedTo) throw new Error('The primary 1048gate.com hostname must never redirect itself.');
+if(!html.includes('<meta name="theme-color" content="#f7f4ef">')){
+  throw new Error('The static theme-color must match the light default page background.');
+}
 if(!html.includes('js/theme.js') || !html.includes('css/theme.css') || !html.includes('data-theme-toggle')){
   throw new Error('The system-aware light/dark theme assets or toggle are missing.');
 }
@@ -275,7 +278,7 @@ if(!themeSource.includes("storedTheme() || 'light'") || !themeSource.includes('1
   throw new Error('Theme selection must default to light and remember a manual choice.');
 }
 const themeStore = new Map();
-const themeMeta = {content:'#070b0c', setAttribute(name, value){if(name === 'content') this.content = value}};
+const themeMeta = {content:'#f7f4ef', setAttribute(name, value){if(name === 'content') this.content = value}};
 const themeButton = {attributes:{}, setAttribute(name, value){this.attributes[name] = value}, addEventListener(name, callback){if(name === 'click') this.click = callback}};
 const themeDocument = {
   documentElement:{dataset:{}, style:{}},
@@ -294,11 +297,11 @@ runInNewContext(themeSource, {
   localStorage:{getItem:key => themeStore.get(key) || null, setItem:(key, value) => themeStore.set(key, value)},
   CustomEvent:class {constructor(type, init){this.type = type; this.detail = init?.detail}}
 }, {filename:'js/theme.js'});
-if(themeDocument.documentElement.dataset.theme !== 'light' || themeMeta.content !== '#f4f0e8'){
+if(themeDocument.documentElement.dataset.theme !== 'light' || themeMeta.content !== '#f7f4ef'){
   throw new Error('A first visit must render the light theme before the page loads.');
 }
 themeButton.click();
-if(themeDocument.documentElement.dataset.theme !== 'dark' || themeStore.get('1048-gate-theme') !== 'dark' || themeButton.attributes['aria-label'] !== 'Switch to light mode'){
+if(themeDocument.documentElement.dataset.theme !== 'dark' || themeStore.get('1048-gate-theme') !== 'dark' || themeMeta.content !== '#161616' || themeButton.attributes['aria-label'] !== 'Switch to light mode'){
   throw new Error('The theme toggle must switch modes, update its accessible label, and remember the choice.');
 }
 if(!html.includes('rel="apple-touch-icon"') || !html.includes('images/apple-touch-icon.png')){

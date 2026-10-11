@@ -310,6 +310,8 @@ export function inferRoundRobin(teams, knownWeeks, totalWeeks = REGULAR_SEASON_W
 //   4. Cap long shots at +5000 (1.96% implied). A club the simulation gives
 //      less than ~1.9% is shown at the cap, so the cap adds a little extra
 //      margin at the bottom of the board.
+//   5. On the board, clubs with different title odds never share a price:
+//      see priceBoard() below.
 // ---------------------------------------------------------------------------
 export const OFFICE_OVERROUND = 1.05;
 export const LONG_SHOT_CAP = 5000;
@@ -325,6 +327,43 @@ export function priceFromProbability(probability, {overround = OFFICE_OVERROUND,
   const raw = (100 * (1 - q)) / q;
   const step = raw < 500 ? 25 : raw < 1000 ? 50 : raw < 2500 ? 100 : 250;
   return Math.min(Math.max(Math.round(raw / step) * step, 100), cap);
+}
+
+// Every price the rounding rule above can produce, shortest to longest.
+const PRICE_LADDER = (() => {
+  const ladder = [];
+  for(let price = -9900; price <= -110; price += 10) ladder.push(price);
+  for(let price = 100; price <= 500; price += 25) ladder.push(price);
+  for(let price = 550; price <= 1000; price += 50) ladder.push(price);
+  for(let price = 1100; price <= 2500; price += 100) ladder.push(price);
+  for(let price = 2750; price <= LONG_SHOT_CAP; price += 250) ladder.push(price);
+  return ladder;
+})();
+const ladderIndex = price => PRICE_LADDER.indexOf(price === -100 ? 100 : price);
+
+// Board pricing: ladder rounding can give two clubs with different title odds the
+// same price. Walking the board in title-odds order, a club with lower odds than
+// the club above it is nudged to the next longer ladder step; if that would pass
+// the cap, clubs above are nudged shorter instead. Equal title odds keep equal
+// prices. Returns prices in the input order.
+export function priceBoard(probabilities, options = {}){
+  const cap = options.cap ?? LONG_SHOT_CAP;
+  const prices = probabilities.map(p => priceFromProbability(p, options));
+  const order = probabilities.map((p, index) => index).sort((a, b) => (probabilities[b] || 0) - (probabilities[a] || 0));
+  const capIndex = ladderIndex(Math.min(cap, LONG_SHOT_CAP));
+  for(let k = 1; k < order.length; k += 1){
+    const above = order[k - 1], here = order[k];
+    if((probabilities[here] || 0) === (probabilities[above] || 0)) continue;
+    const step = ladderIndex(prices[above]) + 1;
+    if(ladderIndex(prices[here]) < step) prices[here] = PRICE_LADDER[Math.min(step, capIndex)];
+  }
+  for(let k = order.length - 2; k >= 0; k -= 1){
+    const here = order[k], below = order[k + 1];
+    if((probabilities[here] || 0) === (probabilities[below] || 0)) continue;
+    const step = ladderIndex(prices[below]) - 1;
+    if(ladderIndex(prices[here]) > step) prices[here] = PRICE_LADDER[Math.max(step, 0)];
+  }
+  return prices;
 }
 
 export function formatAmericanOdds(price){
