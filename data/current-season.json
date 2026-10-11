@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T15:56:41.151266+00:00",
+  "fetchedAt": "2026-10-11T16:11:53.740649+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -187,7 +187,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 40.16,
+        "score": 40.88,
         "projectedScore": 106.45
       },
       "home": {
@@ -231,7 +231,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 16.18,
+        "score": 14.3,
         "projectedScore": 120.49
       },
       "home": {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T15:56:42.148916+00:00"
+  "projectionsFetchedAt": "2026-10-11T16:11:55.070091+00:00"
 }
