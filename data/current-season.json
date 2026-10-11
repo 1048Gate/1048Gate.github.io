@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T12:41:53.857726+00:00",
+  "fetchedAt": "2026-10-11T13:11:55.884045+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -166,7 +166,7 @@
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
         "score": 0,
-        "projectedScore": 116.58
+        "projectedScore": 116.59
       },
       "home": {
         "teamId": 3,
@@ -239,7 +239,7 @@
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 14.64,
-        "projectedScore": 140.21
+        "projectedScore": 140.66
       }
     },
     {
@@ -254,14 +254,14 @@
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
         "score": 7,
-        "projectedScore": 112.79
+        "projectedScore": 115.88
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 17.2,
-        "projectedScore": 122.86
+        "projectedScore": 122.79
       }
     },
     {
@@ -305,7 +305,7 @@
     },
     {
       "teamId": 5,
-      "projectedScore": 122.86,
+      "projectedScore": 122.79,
       "complete": true
     },
     {
@@ -325,12 +325,12 @@
     },
     {
       "teamId": 9,
-      "projectedScore": 116.58,
+      "projectedScore": 116.59,
       "complete": true
     },
     {
       "teamId": 11,
-      "projectedScore": 140.21,
+      "projectedScore": 140.66,
       "complete": true
     },
     {
@@ -340,7 +340,7 @@
     },
     {
       "teamId": 14,
-      "projectedScore": 112.79,
+      "projectedScore": 115.88,
       "complete": true
     },
     {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T12:41:54.781868+00:00"
+  "projectionsFetchedAt": "2026-10-11T13:11:57.594746+00:00"
 }
