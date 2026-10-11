@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T23:41:43.032927+00:00",
+  "fetchedAt": "2026-10-11T23:57:36.264969+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -282,7 +282,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 137.46,
+        "score": 137.26,
         "projectedScore": 130.77
       }
     }
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T23:41:44.503567+00:00"
+  "projectionsFetchedAt": "2026-10-11T23:57:37.277151+00:00"
 }

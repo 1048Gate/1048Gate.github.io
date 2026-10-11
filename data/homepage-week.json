@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-11T23:41:43.032927+00:00",
+  "last_updated": "2026-10-11T23:57:36.264969+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -136,7 +136,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 137.46,
+        "score": 137.26,
         "projectedScore": 130.77
       }
     }
@@ -404,7 +404,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "You Just Made the List! / Madison Beer Garden",
-      "detail": "23.10 points apart · Live",
+      "detail": "22.90 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-11T23:41:43.032927+00:00",
+    "week_fetched_at": "2026-10-11T23:57:36.264969+00:00",
     "edition_published_at": "2026-10-09T01:11:50.068615Z",
-    "payload_built_at": "2026-10-11T23:41:47.858Z",
+    "payload_built_at": "2026-10-11T23:57:39.799Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
