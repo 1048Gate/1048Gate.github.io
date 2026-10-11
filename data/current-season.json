@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T14:11:54.525582+00:00",
+  "fetchedAt": "2026-10-11T14:41:56.528576+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 10,
+        "score": 8,
         "projectedScore": 116.59
       },
       "home": {
@@ -187,7 +187,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 28.84,
+        "score": 30.6,
         "projectedScore": 106.45
       },
       "home": {
@@ -231,7 +231,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 9.48,
+        "score": 9.92,
         "projectedScore": 116.78
       },
       "home": {
@@ -282,7 +282,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 35.8,
+        "score": 38.9,
         "projectedScore": 130.99
       }
     }
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T14:11:55.280445+00:00"
+  "projectionsFetchedAt": "2026-10-11T14:41:57.867605+00:00"
 }
