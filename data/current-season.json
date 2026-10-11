@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T13:11:55.884045+00:00",
+  "fetchedAt": "2026-10-11T13:41:55.337401+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 0,
+        "score": 10,
         "projectedScore": 116.59
       },
       "home": {
@@ -231,7 +231,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 0,
+        "score": 0.48,
         "projectedScore": 116.78
       },
       "home": {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T13:11:57.594746+00:00"
+  "projectionsFetchedAt": "2026-10-11T13:41:56.535261+00:00"
 }
