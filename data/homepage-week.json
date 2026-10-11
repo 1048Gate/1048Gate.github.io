@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-11T14:41:56.528576+00:00",
+  "last_updated": "2026-10-11T14:55:05.027368+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,7 +19,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 8,
+        "score": 4,
         "projectedScore": 116.59
       },
       "home": {
@@ -27,7 +27,7 @@
         "team": "Shough This Season",
         "owner": "Jared Hall",
         "score": -2,
-        "projectedScore": 122.66
+        "projectedScore": 122.69
       }
     },
     {
@@ -41,7 +41,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 30.6,
+        "score": 39.08,
         "projectedScore": 106.45
       },
       "home": {
@@ -85,14 +85,14 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 9.92,
-        "projectedScore": 116.78
+        "score": 12.12,
+        "projectedScore": 120.49
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 16.24,
+        "score": 18.54,
         "projectedScore": 140.66
       }
     },
@@ -107,7 +107,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 7,
+        "score": 9.8,
         "projectedScore": 115.88
       },
       "home": {
@@ -129,14 +129,14 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 31.5,
+        "score": 44.7,
         "projectedScore": 113.02
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 38.9,
+        "score": 41.5,
         "projectedScore": 130.99
       }
     }
@@ -431,8 +431,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "George Travis · 38.9",
-      "detail": "196.7 shy of the 235.6 all-time mark",
+      "title": "Kyle Fowler · 44.7",
+      "detail": "190.9 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-11T14:41:56.528576+00:00",
+    "week_fetched_at": "2026-10-11T14:55:05.027368+00:00",
     "edition_published_at": "2026-10-09T01:11:50.068615Z",
-    "payload_built_at": "2026-10-11T14:42:00.482Z",
+    "payload_built_at": "2026-10-11T14:55:09.298Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

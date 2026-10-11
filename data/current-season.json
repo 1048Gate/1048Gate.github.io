@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T14:41:56.528576+00:00",
+  "fetchedAt": "2026-10-11T14:55:05.027368+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 8,
+        "score": 4,
         "projectedScore": 116.59
       },
       "home": {
@@ -173,7 +173,7 @@
         "team": "Shough This Season",
         "owner": "Jared Hall",
         "score": -2,
-        "projectedScore": 122.66
+        "projectedScore": 122.69
       }
     },
     {
@@ -187,7 +187,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 30.6,
+        "score": 39.08,
         "projectedScore": 106.45
       },
       "home": {
@@ -231,14 +231,14 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 9.92,
-        "projectedScore": 116.78
+        "score": 12.12,
+        "projectedScore": 120.49
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 16.24,
+        "score": 18.54,
         "projectedScore": 140.66
       }
     },
@@ -253,7 +253,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 7,
+        "score": 9.8,
         "projectedScore": 115.88
       },
       "home": {
@@ -275,14 +275,14 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 31.5,
+        "score": 44.7,
         "projectedScore": 113.02
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 38.9,
+        "score": 41.5,
         "projectedScore": 130.99
       }
     }
@@ -295,7 +295,7 @@
     },
     {
       "teamId": 3,
-      "projectedScore": 122.66,
+      "projectedScore": 122.69,
       "complete": true
     },
     {
@@ -315,7 +315,7 @@
     },
     {
       "teamId": 7,
-      "projectedScore": 116.78,
+      "projectedScore": 120.49,
       "complete": true
     },
     {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T14:41:57.867605+00:00"
+  "projectionsFetchedAt": "2026-10-11T14:55:06.114285+00:00"
 }
