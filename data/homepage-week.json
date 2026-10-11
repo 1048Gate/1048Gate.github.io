@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-11T13:41:55.337401+00:00",
+  "last_updated": "2026-10-11T14:11:54.525582+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -41,14 +41,14 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 28,
+        "score": 28.84,
         "projectedScore": 106.45
       },
       "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 0,
+        "score": 1,
         "projectedScore": 130.52
       }
     },
@@ -85,14 +85,14 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 0.48,
+        "score": 9.48,
         "projectedScore": 116.78
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 14.64,
+        "score": 16.24,
         "projectedScore": 140.66
       }
     },
@@ -136,7 +136,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 19.2,
+        "score": 35.8,
         "projectedScore": 130.99
       }
     }
@@ -431,8 +431,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Kyle Fowler · 31.5",
-      "detail": "204.1 shy of the 235.6 all-time mark",
+      "title": "George Travis · 35.8",
+      "detail": "199.8 shy of the 235.6 all-time mark",
       "view": "intel"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-11T13:41:55.337401+00:00",
+    "week_fetched_at": "2026-10-11T14:11:54.525582+00:00",
     "edition_published_at": "2026-10-09T01:11:50.068615Z",
-    "payload_built_at": "2026-10-11T13:41:59.730Z",
+    "payload_built_at": "2026-10-11T14:11:57.353Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
