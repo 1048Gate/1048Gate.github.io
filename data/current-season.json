@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-11T22:41:43.318695+00:00",
+  "fetchedAt": "2026-10-11T23:11:42.459946+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -172,7 +172,7 @@
         "teamId": 3,
         "team": "Shough This Season",
         "owner": "Jared Hall",
-        "score": 91.22,
+        "score": 92.18,
         "projectedScore": 122.84
       }
     },
@@ -216,7 +216,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 173.16,
+        "score": 183.36,
         "projectedScore": 136.38
       }
     },
@@ -231,14 +231,14 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 116.74,
+        "score": 122.14,
         "projectedScore": 120.38
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 85.22,
+        "score": 94.72,
         "projectedScore": 140.6
       }
     },
@@ -253,14 +253,14 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 89.9,
+        "score": 94.9,
         "projectedScore": 115.89
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 118.78,
+        "score": 122.44,
         "projectedScore": 122.83
       }
     },
@@ -275,14 +275,14 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 111.46,
+        "score": 114.36,
         "projectedScore": 113.03
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 119.3,
+        "score": 132.38,
         "projectedScore": 130.77
       }
     }
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-11T22:41:45.154546+00:00"
+  "projectionsFetchedAt": "2026-10-11T23:11:44.065376+00:00"
 }
