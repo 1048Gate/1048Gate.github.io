@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-12T00:11:46.936664+00:00",
+  "fetchedAt": "2026-10-12T00:41:43.684173+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 67.4,
+        "score": 70.8,
         "projectedScore": 117.02
       },
       "home": {
@@ -194,7 +194,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 71.56,
+        "score": 71.96,
         "projectedScore": 129.32
       }
     },
@@ -216,7 +216,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 183.36,
+        "score": 186.36,
         "projectedScore": 136.38
       }
     },
@@ -253,7 +253,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 94.9,
+        "score": 97.7,
         "projectedScore": 115.89
       },
       "home": {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-12T00:11:48.243046+00:00"
+  "projectionsFetchedAt": "2026-10-12T00:41:45.445405+00:00"
 }
