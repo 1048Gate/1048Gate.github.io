@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-12T01:11:42.316864+00:00",
+  "fetchedAt": "2026-10-12T01:41:44.188875+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 72.4,
+        "score": 76.3,
         "projectedScore": 117.02
       },
       "home": {
@@ -194,7 +194,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 74.26,
+        "score": 79.26,
         "projectedScore": 129.32
       }
     },
@@ -216,7 +216,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 186.36,
+        "score": 191.36,
         "projectedScore": 136.38
       }
     },
@@ -231,7 +231,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 132.84,
+        "score": 142.64,
         "projectedScore": 120.38
       },
       "home": {
@@ -253,14 +253,14 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 100.4,
+        "score": 100.6,
         "projectedScore": 115.89
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 123.44,
+        "score": 124.94,
         "projectedScore": 122.83
       }
     },
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-12T01:11:43.244318+00:00"
+  "projectionsFetchedAt": "2026-10-12T01:41:45.417457+00:00"
 }
