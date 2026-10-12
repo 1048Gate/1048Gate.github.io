@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-12T01:41:44.188875+00:00",
+  "fetchedAt": "2026-10-12T02:11:43.581610+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -194,7 +194,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 79.26,
+        "score": 84.56,
         "projectedScore": 129.32
       }
     },
@@ -216,7 +216,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 191.36,
+        "score": 196.36,
         "projectedScore": 136.38
       }
     },
@@ -231,7 +231,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 142.64,
+        "score": 144.94,
         "projectedScore": 120.38
       },
       "home": {
@@ -260,7 +260,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 124.94,
+        "score": 127.94,
         "projectedScore": 122.83
       }
     },
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-12T01:41:45.417457+00:00"
+  "projectionsFetchedAt": "2026-10-12T02:11:44.551869+00:00"
 }
