@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-12T02:41:52.538429+00:00",
+  "last_updated": "2026-10-12T03:11:42.829042+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -48,7 +48,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 92.56,
+        "score": 100.76,
         "projectedScore": 129.32
       }
     },
@@ -85,7 +85,7 @@
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 146.44,
+        "score": 148.04,
         "projectedScore": 120.38
       },
       "home": {
@@ -107,14 +107,14 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 110.1,
+        "score": 110.7,
         "projectedScore": 115.89
       },
       "home": {
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 128.84,
+        "score": 136.04,
         "projectedScore": 122.83
       }
     },
@@ -404,7 +404,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "The Buwhops / Breezin’ with Bijan",
-      "detail": "10.34 points apart · Live",
+      "detail": "2.14 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-12T02:41:52.538429+00:00",
+    "week_fetched_at": "2026-10-12T03:11:42.829042+00:00",
     "edition_published_at": "2026-10-09T01:11:50.068615Z",
-    "payload_built_at": "2026-10-12T02:41:59.252Z",
+    "payload_built_at": "2026-10-12T03:11:46.591Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
