@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 5,
   "phase": "Week 5",
-  "fetchedAt": "2026-10-13T00:11:55.471829+00:00",
+  "fetchedAt": "2026-10-13T00:41:56.002397+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,7 +165,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 82,
+        "score": 83.68,
         "projectedScore": 117.02
       },
       "home": {
@@ -238,7 +238,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 103.92,
+        "score": 110.32,
         "projectedScore": 140.6
       }
     },
@@ -253,7 +253,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 116.9,
+        "score": 121.8,
         "projectedScore": 115.89
       },
       "home": {
@@ -282,7 +282,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 137.26,
+        "score": 139.66,
         "projectedScore": 130.77
       }
     }
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-13T00:11:56.523781+00:00"
+  "projectionsFetchedAt": "2026-10-13T00:41:57.781303+00:00"
 }
