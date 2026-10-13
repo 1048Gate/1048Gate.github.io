@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-13T02:41:17.526768+00:00",
+  "last_updated": "2026-10-13T03:10:44.247826+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,7 +19,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 92.92,
+        "score": 106.88,
         "projectedScore": 117.02
       },
       "home": {
@@ -48,7 +48,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 107.76,
+        "score": 110.46,
         "projectedScore": 129.32
       }
     },
@@ -92,7 +92,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 131.32,
+        "score": 134.42,
         "projectedScore": 140.6
       }
     },
@@ -107,7 +107,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 131.1,
+        "score": 134.6,
         "projectedScore": 115.89
       },
       "home": {
@@ -129,14 +129,14 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 124.06,
+        "score": 131.56,
         "projectedScore": 113.03
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 144.26,
+        "score": 145.76,
         "projectedScore": 130.77
       }
     }
@@ -403,8 +403,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "The Buwhops / Breezin’ with Bijan",
-      "detail": "4.86 points apart · Live",
+      "title": "Ice Has Me Running Back / Howya Been's",
+      "detail": "1.44 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-13T02:41:17.526768+00:00",
+    "week_fetched_at": "2026-10-13T03:10:44.247826+00:00",
     "edition_published_at": "2026-10-12T17:54:41.198232Z",
-    "payload_built_at": "2026-10-13T02:41:22.135Z",
+    "payload_built_at": "2026-10-13T03:10:47.406Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
