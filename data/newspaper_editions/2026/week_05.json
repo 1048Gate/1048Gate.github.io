@@ -4,8 +4,8 @@
   "season": 2026,
   "edition_year": 2026,
   "week": 5,
-  "generated_at": "2026-10-12T17:54:41.198232Z",
-  "source_status": "verified_live",
+  "generated_at": "2026-10-13T14:05:23.076898Z",
+  "source_status": "verified_final",
   "validation_status": "valid",
   "editorial_policy": {
     "max_primary_features_per_manager": 2,
@@ -16,27 +16,27 @@
     "locator": "season=2026;week=5",
     "description": "Published ESPN board snapshot"
   },
-  "status": "live",
+  "status": "final",
   "headline": "Trevor Hash sets the Week 5 pace as the table takes shape",
-  "standfirst": "Week 5 is live; Madison Beer Garden (George Travis) leads the completed-results table while the current matchup board continues to move.",
+  "standfirst": "Madison Beer Garden (George Travis) leads the verified table after Week 5; Ice Has Me Running Back (German Haro) survived the week's closest finish by 3.66.",
   "lead": {
     "title": "Inside Week 5: the high score, the table lead, and the closest call",
-    "body": "Madison Beer Garden (George Travis) is first in the completed-results table at 4-0 with 548.64 points for. On the live Week 5 board, Team Hash (Trevor Hash) currently has the high score at 197.36, while Ja'Marr-a-Lago (JD Daley) is at 82.00. Those live scores can still change.",
+    "body": "Team Hash (Trevor Hash) set the Week 5 scoring pace at 197.36, while Madison Beer Garden (George Travis) moved to 5-0 with 705.50 points for. The closest result was decided by 3.66 points.",
     "sourceIds": [
       "current-season",
       "power-rankings"
     ]
   },
   "matchup": {
-    "awayTeam": "The Buwhops",
-    "awayOwner": "Brian Heino",
-    "awayScore": 102.9,
-    "homeTeam": "Breezin’ with Bijan",
-    "homeOwner": "Collin Krum",
-    "homeScore": 106.16,
-    "whyItMatters": "The closest live game currently has a 3.26-point margin, making it the tightest matchup on the Week 5 board right now.",
+    "awayTeam": "Ice Has Me Running Back",
+    "awayOwner": "German Haro",
+    "awayScore": 139.7,
+    "homeTeam": "Howya Been's",
+    "homeOwner": "Bryan Hunt",
+    "homeScore": 136.04,
+    "whyItMatters": "The closest game on the final board finished with a 3.66-point margin, making it the tightest result of Week 5.",
     "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
-    "edge": "Live edge: Breezin’ with Bijan (Collin Krum) by 3.26 points.",
+    "edge": "Verified result: Ice Has Me Running Back (German Haro) by 3.66 points.",
     "sourceIds": [
       "current-season"
     ]
@@ -46,106 +46,106 @@
       "rank": 1,
       "team": "Madison Beer Garden",
       "owner": "George Travis",
-      "record": "4-0",
-      "pointsFor": "548.64",
-      "tag": "Table leader"
+      "record": "5-0",
+      "pointsFor": "705.50",
+      "tag": "Highest scoring"
     },
     {
       "rank": 2,
       "team": "Team Hash",
       "owner": "Trevor Hash",
-      "record": "3-1",
-      "pointsFor": "580.78",
-      "tag": "Current table"
+      "record": "4-1",
+      "pointsFor": "778.14",
+      "tag": "Early signal"
     },
     {
       "rank": 3,
       "team": "Howya Been's",
       "owner": "Bryan Hunt",
-      "record": "3-1",
-      "pointsFor": "536.42",
-      "tag": "Current table"
+      "record": "3-2",
+      "pointsFor": "672.46",
+      "tag": "Early signal"
     },
     {
       "rank": 4,
-      "team": "Jigalos Jims",
-      "owner": "James Brochu",
-      "record": "3-1",
-      "pointsFor": "496.14",
-      "tag": "Current table"
+      "team": "Ice Has Me Running Back",
+      "owner": "German Haro",
+      "record": "3-2",
+      "pointsFor": "614.20",
+      "tag": "Early signal"
     },
     {
       "rank": 5,
-      "team": "You Just Made the List!",
-      "owner": "Kyle Fowler",
-      "record": "2-2",
-      "pointsFor": "487.54",
-      "tag": "Current table"
+      "team": "Jigalos Jims",
+      "owner": "James Brochu",
+      "record": "3-2",
+      "pointsFor": "600.14",
+      "tag": "Early signal"
     },
     {
       "rank": 6,
-      "team": "Your Reigning Champ",
-      "owner": "Thomas Speer",
-      "record": "2-2",
-      "pointsFor": "478.20",
-      "tag": "Current table"
+      "team": "McConkey Tonk Badonkadonk",
+      "owner": "Vincent Cannarozzi",
+      "record": "3-2",
+      "pointsFor": "600.12",
+      "tag": "Early signal"
     },
     {
       "rank": 7,
-      "team": "Ice Has Me Running Back",
-      "owner": "German Haro",
-      "record": "2-2",
-      "pointsFor": "474.50",
-      "tag": "Current table"
+      "team": "Breezin’ with Bijan",
+      "owner": "Collin Krum",
+      "record": "3-2",
+      "pointsFor": "536.26",
+      "tag": "Early signal"
     },
     {
       "rank": 8,
-      "team": "McConkey Tonk Badonkadonk",
-      "owner": "Vincent Cannarozzi",
-      "record": "2-2",
-      "pointsFor": "452.08",
-      "tag": "Current table"
+      "team": "You Just Made the List!",
+      "owner": "Kyle Fowler",
+      "record": "2-3",
+      "pointsFor": "624.00",
+      "tag": "Early signal"
     },
     {
       "rank": 9,
-      "team": "Breezin’ with Bijan",
-      "owner": "Collin Krum",
-      "record": "2-2",
-      "pointsFor": "419.10",
-      "tag": "Current table"
+      "team": "Your Reigning Champ",
+      "owner": "Thomas Speer",
+      "record": "2-3",
+      "pointsFor": "619.82",
+      "tag": "Early signal"
     },
     {
       "rank": 10,
-      "team": "The Buwhops",
-      "owner": "Brian Heino",
-      "record": "1-3",
-      "pointsFor": "368.32",
-      "tag": "Current table"
+      "team": "Ja'Marr-a-Lago",
+      "owner": "JD Daley",
+      "record": "1-4",
+      "pointsFor": "554.86",
+      "tag": "Early signal"
     },
     {
       "rank": 11,
-      "team": "Shough This Season",
-      "owner": "Jared Hall",
-      "record": "0-4",
-      "pointsFor": "476.64",
-      "tag": "Current table"
+      "team": "The Buwhops",
+      "owner": "Brian Heino",
+      "record": "1-4",
+      "pointsFor": "471.22",
+      "tag": "Early signal"
     },
     {
       "rank": 12,
-      "team": "Ja'Marr-a-Lago",
-      "owner": "JD Daley",
-      "record": "0-4",
-      "pointsFor": "440.36",
-      "tag": "Current table"
+      "team": "Your Get Right Game",
+      "owner": "Jared Hall",
+      "record": "0-5",
+      "pointsFor": "579.02",
+      "tag": "Early signal"
     }
   ],
   "pressure": {
     "team": "Team Hash",
     "owner": "Trevor Hash",
-    "record": "3-1",
+    "record": "4-1",
     "label": "EARLY READ",
     "title": "Team Hash keeps the leaders honest",
-    "body": "Team Hash (Trevor Hash) sits 3-1 with 580.78 points for, the clearest early chase line behind the top spot.",
+    "body": "Team Hash (Trevor Hash) sits 4-1 with 778.14 points for, the clearest early chase line behind the top spot.",
     "sourceIds": [
       "current-season",
       "seasons"
@@ -153,14 +153,14 @@
   },
   "surprise": {
     "title": "Biggest surprise: the scoring range is already loud",
-    "body": "The gap between Team Hash (Trevor Hash) at 197.36 and Ja'Marr-a-Lago (JD Daley) at 82.00 is 115.36 points. That is the current live spread, not a final Week 5 result.",
+    "body": "The gap between Team Hash (Trevor Hash) at 197.36 and Your Get Right Game (Jared Hall) at 102.38 is 94.98 points. That scoring range is Week 5's sharpest completed result.",
     "sourceIds": [
       "current-season"
     ]
   },
   "recordWatch": {
     "title": "Record to watch: the first benchmark is on the board",
-    "body": "The live Week 5 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+    "body": "Week 5's results did not break the checked-in highest-score, blowout, or closest-game marks.",
     "sourceIds": [
       "current-season",
       "matchups"
@@ -168,14 +168,14 @@
   },
   "archiveComparison": {
     "title": "From the archive: early leaders need patience",
-    "body": "Week 5 is still underway in Szn 10. The archive keeps completed results separate from the live board, so no unfinished score is treated as a final historical result.",
+    "body": "Week 5 is now part of the verified Szn 10 record, but the archive does not turn an opening table into a final ranking. Keep the benchmark; wait for the pattern.",
     "linkLabel": "Open the newspaper archive",
     "sourceIds": [
       "seasons",
       "newspaper"
     ]
   },
-  "editorial_note": "Week 5 live edition generated from the verified board. Scores and live edges may change until the slate is final.",
+  "editorial_note": "Week 5 edition generated from the verified final board.",
   "results": [
     {
       "winnerTeam": "Team Hash",
@@ -185,7 +185,17 @@
       "loserOwner": "James Brochu",
       "loserScore": 104.0,
       "margin": 93.36,
-      "state": "live"
+      "state": "final"
+    },
+    {
+      "winnerTeam": "Madison Beer Garden",
+      "winnerOwner": "George Travis",
+      "winnerScore": 156.86,
+      "loserTeam": "You Just Made the List!",
+      "loserOwner": "Kyle Fowler",
+      "loserScore": 136.46,
+      "margin": 20.4,
+      "state": "final"
     },
     {
       "winnerTeam": "McConkey Tonk Badonkadonk",
@@ -193,146 +203,136 @@
       "winnerScore": 148.04,
       "loserTeam": "Your Reigning Champ",
       "loserOwner": "Thomas Speer",
-      "loserScore": 103.92,
-      "margin": 44.12,
-      "state": "live"
+      "loserScore": 141.62,
+      "margin": 6.42,
+      "state": "final"
     },
     {
-      "winnerTeam": "Madison Beer Garden",
-      "winnerOwner": "George Travis",
-      "winnerScore": 137.26,
-      "loserTeam": "You Just Made the List!",
-      "loserOwner": "Kyle Fowler",
-      "loserScore": 114.36,
-      "margin": 22.9,
-      "state": "live"
-    },
-    {
-      "winnerTeam": "Howya Been's",
-      "winnerOwner": "Bryan Hunt",
-      "winnerScore": 136.04,
-      "loserTeam": "Ice Has Me Running Back",
-      "loserOwner": "German Haro",
-      "loserScore": 115.9,
-      "margin": 20.14,
-      "state": "live"
+      "winnerTeam": "Ice Has Me Running Back",
+      "winnerOwner": "German Haro",
+      "winnerScore": 139.7,
+      "loserTeam": "Howya Been's",
+      "loserOwner": "Bryan Hunt",
+      "loserScore": 136.04,
+      "margin": 3.66,
+      "state": "final"
     },
     {
       "winnerTeam": "Breezin’ with Bijan",
       "winnerOwner": "Collin Krum",
-      "winnerScore": 106.16,
+      "winnerScore": 117.16,
       "loserTeam": "The Buwhops",
       "loserOwner": "Brian Heino",
       "loserScore": 102.9,
-      "margin": 3.26,
-      "state": "live"
+      "margin": 14.26,
+      "state": "final"
     },
     {
-      "winnerTeam": "Shough This Season",
-      "winnerOwner": "Jared Hall",
-      "winnerScore": 102.38,
-      "loserTeam": "Ja'Marr-a-Lago",
-      "loserOwner": "JD Daley",
-      "loserScore": 82.0,
-      "margin": 20.38,
-      "state": "live"
+      "winnerTeam": "Ja'Marr-a-Lago",
+      "winnerOwner": "JD Daley",
+      "winnerScore": 114.5,
+      "loserTeam": "Your Get Right Game",
+      "loserOwner": "Jared Hall",
+      "loserScore": 102.38,
+      "margin": 12.12,
+      "state": "final"
     }
   ],
   "powerTable": [
     {
       "owner": "Trevor Hash",
       "team": "Team Hash",
-      "rating": "58.2",
-      "record": "3-1",
-      "why": "145.19 PF/G",
+      "rating": "68.5",
+      "record": "4-1",
+      "why": "155.63 PF/G",
       "rank": 1
     },
     {
       "owner": "George Travis",
       "team": "Madison Beer Garden",
-      "rating": "53.9",
-      "record": "4-0",
-      "why": "137.16 PF/G",
+      "rating": "58.0",
+      "record": "5-0",
+      "why": "141.10 PF/G",
       "rank": 2
     },
     {
       "owner": "Bryan Hunt",
       "team": "Howya Been's",
-      "rating": "52.3",
-      "record": "3-1",
-      "why": "134.11 PF/G",
+      "rating": "53.2",
+      "record": "3-2",
+      "why": "134.49 PF/G",
       "rank": 3
-    },
-    {
-      "owner": "James Brochu",
-      "team": "Jigalos Jims",
-      "rating": "46.8",
-      "record": "3-1",
-      "why": "124.03 PF/G",
-      "rank": 4
     },
     {
       "owner": "Kyle Fowler",
       "team": "You Just Made the List!",
-      "rating": "45.6",
-      "record": "2-2",
-      "why": "121.89 PF/G",
-      "rank": 5
+      "rating": "46.2",
+      "record": "2-3",
+      "why": "124.80 PF/G",
+      "rank": 4
     },
     {
       "owner": "Thomas Speer",
       "team": "Your Reigning Champ",
-      "rating": "44.4",
-      "record": "2-2",
-      "why": "119.55 PF/G",
-      "rank": 6
-    },
-    {
-      "owner": "Jared Hall",
-      "team": "Shough This Season",
-      "rating": "44.2",
-      "record": "0-4",
-      "why": "119.16 PF/G",
-      "rank": 7
+      "rating": "45.6",
+      "record": "2-3",
+      "why": "123.96 PF/G",
+      "rank": 5
     },
     {
       "owner": "German Haro",
       "team": "Ice Has Me Running Back",
-      "rating": "43.9",
-      "record": "2-2",
-      "why": "118.62 PF/G",
-      "rank": 8
+      "rating": "44.8",
+      "record": "3-2",
+      "why": "122.84 PF/G",
+      "rank": 6
+    },
+    {
+      "owner": "James Brochu",
+      "team": "Jigalos Jims",
+      "rating": "42.8",
+      "record": "3-2",
+      "why": "120.03 PF/G",
+      "rank": 7
     },
     {
       "owner": "Vincent Cannarozzi",
       "team": "McConkey Tonk Badonkadonk",
-      "rating": "40.9",
-      "record": "2-2",
-      "why": "113.02 PF/G",
+      "rating": "42.8",
+      "record": "3-2",
+      "why": "120.02 PF/G",
+      "rank": 8
+    },
+    {
+      "owner": "Jared Hall",
+      "team": "Your Get Right Game",
+      "rating": "39.7",
+      "record": "0-5",
+      "why": "115.80 PF/G",
       "rank": 9
     },
     {
       "owner": "JD Daley",
       "team": "Ja'Marr-a-Lago",
-      "rating": "39.3",
-      "record": "0-4",
-      "why": "110.09 PF/G",
+      "rating": "36.2",
+      "record": "1-4",
+      "why": "110.97 PF/G",
       "rank": 10
     },
     {
       "owner": "Collin Krum",
       "team": "Breezin’ with Bijan",
-      "rating": "36.4",
-      "record": "2-2",
-      "why": "104.78 PF/G",
+      "rating": "33.5",
+      "record": "3-2",
+      "why": "107.25 PF/G",
       "rank": 11
     },
     {
       "owner": "Brian Heino",
       "team": "The Buwhops",
-      "rating": "29.5",
-      "record": "1-3",
-      "why": "92.08 PF/G",
+      "rating": "24.1",
+      "record": "1-4",
+      "why": "94.24 PF/G",
       "rank": 12
     }
   ],
@@ -352,57 +352,57 @@
   ],
   "rivalryFile": {
     "title": "Brian Heino vs. Collin Krum",
-    "body": "The series stands 6-5-0 through 11 meetings. Collin Krum leads series scoring 1422.60–1310.18. Collin Krum currently leads 106.16–102.90."
+    "body": "The series stands 6-5-0 through 11 meetings. Collin Krum leads series scoring 1422.60–1310.18. Collin Krum took the latest meeting 117.16–102.90."
   },
   "nextSlate": [],
   "stories": [
     {
       "story_type": "matchup_recap",
-      "title": "Week 5: Live league board",
-      "body": "Jared Hall leads JD Daley 102.38–82.00. Collin Krum leads Brian Heino 106.16–102.90. Trevor Hash leads James Brochu 197.36–104.00. Vincent Cannarozzi leads Thomas Speer 148.04–103.92. Bryan Hunt leads German Haro 136.04–115.90. George Travis leads Kyle Fowler 137.26–114.36.",
+      "title": "Week 5: The league board",
+      "body": "JD Daley beat Jared Hall 114.50–102.38. Collin Krum beat Brian Heino 117.16–102.90. Trevor Hash beat James Brochu 197.36–104.00. Vincent Cannarozzi beat Thomas Speer 148.04–141.62. German Haro beat Bryan Hunt 139.70–136.04. George Travis beat Kyle Fowler 156.86–136.46.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=5;matchups",
-        "description": "Live ESPN matchup board"
+        "description": "Final ESPN matchup board"
       }
     },
     {
       "story_type": "biggest_win",
-      "title": "Trevor Hash holds the widest live edge",
-      "body": "Trevor Hash currently leads James Brochu 197.36–104.00, a live margin of 93.36 points.",
+      "title": "Trevor Hash authors the week's biggest win",
+      "body": "Trevor Hash beat James Brochu 197.36–104.00, a margin of 93.36 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=5;matchups",
-        "description": "Live ESPN matchup board"
+        "description": "Final ESPN matchup board"
       },
       "primary_owner": "Trevor Hash"
     },
     {
       "story_type": "closest_game",
-      "title": "Collin Krum has the narrowest live edge",
-      "body": "The tightest live matchup stands 106.16–102.90, with Collin Krum ahead of Brian Heino by 3.26 points.",
+      "title": "German Haro holds on in the closest finish",
+      "body": "The week's tightest matchup finished 139.70–136.04, with German Haro ahead of Bryan Hunt by 3.66 points.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=5;matchups",
-        "description": "Live ESPN matchup board"
+        "description": "Final ESPN matchup board"
       },
-      "primary_owner": "Collin Krum"
+      "primary_owner": "German Haro"
     },
     {
       "story_type": "scoring_leaders",
-      "title": "Trevor Hash sets the current Week 5 pace",
-      "body": "Trevor Hash currently has the league-high 197.36. JD Daley is at the current board-low 82.00; both scores can still move.",
+      "title": "Trevor Hash sets the Week 5 scoring pace",
+      "body": "Trevor Hash posted the league-high 197.36. Jared Hall finished with the week's low score at 102.38.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=5;matchups",
-        "description": "Live ESPN matchup board"
+        "description": "Final ESPN matchup board"
       },
       "primary_owner": "Trevor Hash"
     },
     {
       "story_type": "standings",
-      "title": "George Travis leads the completed-results table",
-      "body": "During live Week 5, George Travis is listed first at 4-0 with 548.64 points for from completed results.",
+      "title": "George Travis sits atop the verified table",
+      "body": "After Week 5, George Travis is listed first at 5-0 with 705.50 points for.",
       "source": {
         "dataset": "data/current-season.json",
         "locator": "season=2026;week=5;standings",
@@ -411,9 +411,20 @@
       "primary_owner": "George Travis"
     },
     {
+      "story_type": "preseason_order_watch",
+      "title": "Early read: German Haro leans on the preseason order",
+      "body": "German Haro won in Week 5 with 139.70 points after entering the season with a 31.2 post-draft rating. The full 1–12 ranking appears on the league board.",
+      "source": {
+        "dataset": "data/current-season.json + data/power-rankings.json",
+        "locator": "week=5;ratings",
+        "description": "Weekly results compared with checked-in post-draft ratings"
+      },
+      "primary_owner": "German Haro"
+    },
+    {
       "story_type": "record_watch",
-      "title": "Live record watch",
-      "body": "The live Week 5 board has not yet exceeded the checked-in highest-score, blowout, or closest-game marks. No final record claim is made while games are underway.",
+      "title": "The record book stays intact",
+      "body": "Week 5's results did not break the checked-in highest-score, blowout, or closest-game marks.",
       "source": {
         "dataset": "data/current-season.json + data/matchups.json",
         "locator": "week=5;records",
@@ -423,12 +434,13 @@
     {
       "story_type": "rivalry",
       "title": "Rivalry file: Brian Heino and Collin Krum",
-      "body": "The series stands 6-5-0 through 11 meetings. Collin Krum leads series scoring 1422.60–1310.18. Collin Krum currently leads 106.16–102.90.",
+      "body": "The series stands 6-5-0 through 11 meetings. Collin Krum leads series scoring 1422.60–1310.18. Collin Krum took the latest meeting 117.16–102.90.",
       "source": {
         "dataset": "data/matchups.json",
         "locator": "pair=Brian Heino|Collin Krum",
         "description": "All-time head-to-head archive"
       }
     }
-  ]
+  ],
+  "writing_mode": "openai_verified_rewrite"
 }
