@@ -5,7 +5,7 @@
   "week": 5,
   "phase": "Week 5",
   "status": "live",
-  "last_updated": "2026-10-13T01:11:17.198481+00:00",
+  "last_updated": "2026-10-13T01:41:26.735578+00:00",
   "note": "Week 5 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,7 +19,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 86.22,
+        "score": 84.5,
         "projectedScore": 117.02
       },
       "home": {
@@ -107,7 +107,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 129.9,
+        "score": 130.1,
         "projectedScore": 115.89
       },
       "home": {
@@ -129,14 +129,14 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 121.76,
+        "score": 124.06,
         "projectedScore": 113.03
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 140.06,
+        "score": 142.36,
         "projectedScore": 130.77
       }
     }
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-13T01:11:17.198481+00:00",
+    "week_fetched_at": "2026-10-13T01:41:26.735578+00:00",
     "edition_published_at": "2026-10-12T17:54:41.198232Z",
-    "payload_built_at": "2026-10-13T01:11:21.205Z",
+    "payload_built_at": "2026-10-13T01:41:35.494Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
