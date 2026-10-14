@@ -53,7 +53,7 @@
     const editions = Array.isArray(index?.editions) ? index.editions : [];
     return editions
       .filter(entry => entry && entry.mode !== 'historical' && Number.isInteger(entry.season) && Number.isInteger(entry.week))
-      .filter(entry => entry.validation_status === 'valid' && ['verified_live','verified_final'].includes(entry.source_status))
+      .filter(entry => entry.validation_status === 'valid' && entry.source_status === 'verified_final')
       .slice()
       .sort((left, right) => (right.season - left.season) || (right.week - left.week));
   }

@@ -10,6 +10,7 @@ on:
       - Data health and current-season fetch
       - Import current-season transactions
       - Refresh championship futures
+      - Publish completed weekly newspaper
     types: [completed]
     branches: [main]
 

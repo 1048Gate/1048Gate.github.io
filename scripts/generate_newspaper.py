@@ -537,10 +537,10 @@ def validate_edition(edition: dict[str, Any], *, publish: bool = True) -> None:
     if not isinstance(edition, dict) or not isinstance(edition.get("stories"), list) or not edition["stories"]:
         raise ValueError("Edition contains no stories.")
     if publish and (
-        edition.get("source_status") not in {"verified_live", "verified_final"}
+        edition.get("source_status") != "verified_final"
         or edition.get("validation_status") != "valid"
     ):
-        raise ValueError("Only verified live or final editions may be published.")
+        raise ValueError("Only verified final editions may be published.")
     for story in edition["stories"]:
         if not all(isinstance(story.get(key), str) and story[key].strip() for key in ("story_type", "title", "body")) or not story.get("source"):
             raise ValueError("Every story requires a type, title, body, and source trace.")
@@ -886,6 +886,8 @@ def main(argv: list[str] | None = None) -> int:
         if replacing and previous_status == "verified_final" and not args.regenerate and not args.allow_incomplete and not args.stdout:
             print(f"SKIP {SKIP_DUPLICATE}: {path.relative_to(ROOT)} already contains a verified final edition.")
             return 0
+        if not args.allow_incomplete and not args.stdout and not inspect_week(board, args.season, week)["final"]:
+            raise GenerationSkip(SKIP_INCOMPLETE, "Publication requires a completed week; the prior final edition is retained.")
         edition = generate_edition(board, args.season, week, allow_incomplete=args.allow_incomplete, root=ROOT)
         writing = args.writing
         if edition.get("source_status") == "verified_live" and writing == "auto" and not args.regenerate:
@@ -895,7 +897,7 @@ def main(argv: list[str] | None = None) -> int:
             writing,
             require_verified=args.regenerate or writing in {"openai", "grok"},
         )
-        validate_edition(edition, publish=not args.allow_incomplete)
+        validate_edition(edition, publish=not (args.allow_incomplete or args.stdout))
         if args.allow_incomplete or args.stdout:
             print(json.dumps(edition, indent=2, ensure_ascii=False))
             return 0

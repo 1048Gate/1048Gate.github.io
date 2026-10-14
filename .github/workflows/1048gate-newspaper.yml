@@ -1,0 +1,136 @@
+name: Publish completed weekly newspaper
+
+on:
+  schedule:
+    # 7 AM Eastern: EDT = 11 UTC, EST = 12 UTC. The gate accepts one slot.
+    - cron: '0 11 * * 2'
+    - cron: '0 12 * * 2'
+  workflow_dispatch:
+    inputs:
+      season:
+        description: ESPN season year
+        default: '2026'
+        required: true
+      newspaper_week:
+        description: Completed week override (blank = latest completed ESPN week)
+        default: ''
+        required: false
+      newspaper_regenerate:
+        description: Replace a final edition only after a verified AI rewrite
+        default: false
+        type: boolean
+      newspaper_allow_incomplete:
+        description: Print an unpublished preview; never commit it
+        default: false
+        type: boolean
+
+# Serialize writes with score refreshes, but share no failure dependencies.
+concurrency:
+  group: data-health-current-season
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publication-window:
+    runs-on: ubuntu-latest
+    outputs:
+      due: ${{ steps.window.outputs.due }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Select Eastern Tuesday publication slot
+        id: window
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          if [ "$EVENT_NAME" = workflow_dispatch ]; then
+            echo 'due=true' >> "$GITHUB_OUTPUT"
+          else
+            python3 scripts/newspaper_publication.py --schedule "$SCHEDULE" >> "$GITHUB_OUTPUT"
+          fi
+
+  publish-newspaper:
+    needs: publication-window
+    if: needs.publication-window.outputs.due == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Score refreshes may have committed while this run was queued.
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Fetch completed week for editorial only
+        id: source
+        env:
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          SEASON: ${{ inputs.season || '2026' }}
+          WEEK_OVERRIDE: ${{ inputs.newspaper_week }}
+        run: |
+          CANDIDATE="$(mktemp)"
+          python3 scripts/publish_current_season.py --season "$SEASON" --output "$CANDIDATE" --no-sync-site-phase
+          WEEK="$WEEK_OVERRIDE"
+          if [ -z "$WEEK" ]; then
+            WEEK="$(python3 scripts/newspaper_publication.py --board "$CANDIDATE")"
+          fi
+          # Force-fetch the outgoing week even after ESPN has rolled forward.
+          python3 scripts/publish_current_season.py --season "$SEASON" --week "$WEEK" --output data/current-season.json --no-sync-site-phase
+          rm -f "$CANDIDATE"
+          echo "week=$WEEK" >> "$GITHUB_OUTPUT"
+          python3 scripts/update_matchup_leaderboards.py
+          npm run futures
+      - name: Generate final edition or unpublished manual preview
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5.6-luna
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
+          SEASON: ${{ inputs.season || '2026' }}
+          PAPER_WEEK: ${{ steps.source.outputs.week }}
+          PREVIEW: ${{ inputs.newspaper_allow_incomplete }}
+          REGENERATE: ${{ inputs.newspaper_regenerate }}
+        run: |
+          PAPER_ARGS=(--season "$SEASON" --week "$PAPER_WEEK" --writing auto)
+          if [ "$PREVIEW" = true ]; then PAPER_ARGS+=(--allow-incomplete); fi
+          if [ "$REGENERATE" = true ]; then PAPER_ARGS+=(--regenerate); fi
+          python3 scripts/generate_newspaper.py "${PAPER_ARGS[@]}"
+          # An incomplete source must fail this editorial run, leaving main intact.
+          if [ "$PREVIEW" != true ]; then
+            python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path('data/newspaper_editions') / os.environ['SEASON'] / f"week_{int(os.environ['PAPER_WEEK']):02d}.json"
+          edition = json.loads(path.read_text())
+          assert edition['source_status'] == 'verified_final' and edition['validation_status'] == 'valid'
+          PY
+          fi
+      - name: Restore public scoreboard and derived ratings
+        run: |
+          git restore data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/streaks.json
+      - name: Rebuild and validate public payload
+        run: |
+          node scripts/build-homepage-week.mjs
+          npm run check
+      - name: Commit only the final newspaper and homepage feature
+        if: inputs.newspaper_allow_incomplete != true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/newspaper_editions data/homepage-week.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish completed weekly newspaper"
+            git push origin HEAD:main
+          fi
