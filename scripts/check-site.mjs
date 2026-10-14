@@ -147,53 +147,16 @@ if(!visualSystem.includes('html[data-theme="light"] .section-status.is-live')){
   throw new Error('Light-theme live status must use the accessible contrast override.');
 }
 const weeklyIndex = JSON.parse(readFileSync(new URL('data/newspaper_editions/index.json', root), 'utf8'));
-const finalWinners = new Set(['HOME','AWAY','TIE']);
-const currentWeekFinal = currentSeason.matchups.every(game => String(game.state || '').toLowerCase() === 'final' && finalWinners.has(String(game.winner || '').toUpperCase()));
-const currentWeekStarted = currentSeason.matchups.some(game => {
-  const state = String(game.state || '').toLowerCase();
-  const winner = String(game.winner || '').toUpperCase();
-  const scores = [game.away?.score, game.home?.score].map(Number);
-  return (state === 'final' && finalWinners.has(winner)) || scores.some(score => Number.isFinite(score) && score > 0);
-});
-let expectedWeekly = null;
-let expectedWeeklyStatus = null;
-if(currentWeekStarted){
-  expectedWeeklyStatus = currentWeekFinal ? 'verified_final' : 'verified_live';
-  expectedWeekly = weeklyIndex.editions.find(entry =>
-    entry.season === currentSeason.season &&
-    entry.week === currentSeason.week &&
-    entry.source_status === expectedWeeklyStatus &&
-    entry.validation_status === 'valid'
-  );
-  if(!expectedWeekly || !existsSync(new URL(expectedWeekly.path, root))){
-    if(process.env.ALLOW_PENDING_WEEKLY_EDITION === 'true'){
-      expectedWeekly = null; // Routine scoring is allowed to precede editorial publication.
-    }else{
-      throw new Error(`Started Week ${currentSeason.week} must have a published ${expectedWeeklyStatus} weekly edition.`);
-    }
-  }
-}else{
-  const premature = weeklyIndex.editions.find(entry =>
-    entry.season === currentSeason.season &&
-    entry.week === currentSeason.week &&
-    entry.validation_status === 'valid' &&
-    ['verified_live','verified_final'].includes(entry.source_status)
-  );
-  if(premature){
-    throw new Error(`Week ${currentSeason.week} has no fantasy scoring yet and must not replace the prior newspaper.`);
-  }
-  if(currentSeason.week > 1){
-    expectedWeeklyStatus = 'verified_final';
-    expectedWeekly = weeklyIndex.editions.find(entry =>
-      entry.season === currentSeason.season &&
-      entry.week === currentSeason.week - 1 &&
-      entry.source_status === expectedWeeklyStatus &&
-      entry.validation_status === 'valid'
-    );
-    if(!expectedWeekly || !existsSync(new URL(expectedWeekly.path, root))){
-      throw new Error(`Pre-week Week ${currentSeason.week} must retain the verified final Week ${currentSeason.week - 1} edition.`);
-    }
-  }
+// Editorial is independent of scoring. Retain the latest completed edition
+// throughout the next slate, including live play and a failed publication.
+const expectedWeeklyStatus = 'verified_final';
+const expectedWeekly = weeklyIndex.editions
+  .filter(entry => entry.season === currentSeason.season &&
+    entry.week <= currentSeason.week && entry.source_status === 'verified_final' &&
+    entry.validation_status === 'valid')
+  .sort((a, b) => b.week - a.week)[0] || null;
+if(expectedWeekly && !existsSync(new URL(expectedWeekly.path, root))){
+  throw new Error('Published final newspaper file is missing.');
 }
 if(expectedWeekly){
   const currentEdition = JSON.parse(readFileSync(new URL(expectedWeekly.path, root), 'utf8'));

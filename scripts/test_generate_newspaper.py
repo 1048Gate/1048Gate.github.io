@@ -66,7 +66,9 @@ class NewspaperTests(unittest.TestCase):
         value=board(); value["matchups"][0].update(state="live",winner="UNDECIDED")
         result=self.make(value)
         self.assertEqual((result["source_status"],result["validation_status"],result["status"]),("verified_live","valid","live"))
-        paper.validate_edition(result)
+        with self.assertRaisesRegex(ValueError,"Only verified final"):
+            paper.validate_edition(result)
+        paper.validate_edition(result, publish=False)
         widest=next(s for s in result["stories"] if s["story_type"]=="biggest_win")
         self.assertIn("live", widest["title"].lower())
         self.assertNotIn(" beat ", widest["body"].lower())
@@ -97,7 +99,7 @@ class NewspaperTests(unittest.TestCase):
         with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions):
             output=io.StringIO()
             with redirect_stdout(output):code=paper.main(["--season","2026","--writing","deterministic"])
-        self.assertEqual(code,0); self.assertIn("SKIP week_not_started",output.getvalue())
+        self.assertEqual(code,0); self.assertIn("SKIP data_incomplete",output.getvalue())
         self.assertFalse((editions/"2026/week_02.json").exists())
         self.assertEqual([entry["week"] for entry in paper.read_json(editions/"index.json")["editions"]],[1])
 
@@ -140,7 +142,7 @@ class NewspaperTests(unittest.TestCase):
         self.assertEqual([e["week"] for e in result["editions"]],[2,1]); self.assertEqual(len(result["editions"]),2)
     def test_existing_valid(self):
         path=self.root/"edition.json"; paper.write_json(path,self.make()); self.assertTrue(paper.existing_valid_edition(path))
-        live=board(); live["matchups"][0].update(state="live",winner="UNDECIDED"); paper.write_json(path,self.make(live)); self.assertTrue(paper.existing_valid_edition(path))
+        live=board(); live["matchups"][0].update(state="live",winner="UNDECIDED"); paper.write_json(path,self.make(live)); self.assertFalse(paper.existing_valid_edition(path))
         path.write_text("{}"); self.assertFalse(paper.existing_valid_edition(path))
     def test_historical_preserved(self):
         path=self.root/"data/newspaper_editions/historical_archive.json"; path.parent.mkdir(exist_ok=True); path.write_text('{"sentinel":true}\n'); before=path.read_bytes()
@@ -229,36 +231,32 @@ class NewspaperTests(unittest.TestCase):
             output=io.StringIO()
             with redirect_stdout(output):code=paper.main(["--season","2026","--week","1","--writing","openai","--regenerate"])
         self.assertEqual(code,0); self.assertIn("Replaced",output.getvalue()); self.assertEqual(paper.read_json(existing)["writing_mode"],"openai_verified_rewrite")
-    def test_main_live_refresh_writes_verified_live_without_ai(self):
-        value=board(); value["matchups"][0].update(state="live",winner="UNDECIDED"); current=self.root/"current.json"; paper.write_json(current,value)
-        editions=self.root/"data/newspaper_editions"
-        with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions),patch.object(paper,"apply_ai_stories",side_effect=lambda edition,writing,**kw: edition) as rewrite:
-            output=io.StringIO()
-            with redirect_stdout(output):code=paper.main(["--season","2026","--writing","auto"])
-        self.assertEqual(code,0); self.assertIn("Published",output.getvalue())
-        saved=paper.read_json(editions/"2026/week_01.json")
-        self.assertEqual(saved["source_status"],"verified_live")
-        self.assertEqual(rewrite.call_args.args[1],"deterministic")
-        self.assertEqual(paper.read_json(editions/"index.json")["editions"][0]["source_status"],"verified_live")
-
-    def test_live_snapshot_refreshes_and_then_finalizes(self):
+    def test_live_publication_preserves_final_without_ai(self):
         live=board(); live["matchups"][0].update(state="live",winner="UNDECIDED")
-        current=self.root/"current.json"; paper.write_json(current,live); editions=self.root/"data/newspaper_editions"
+        current=self.root/"current.json"; paper.write_json(current,live)
+        editions=self.root/"data/newspaper_editions"
+        previous=editions/"2026/week_01.json"
+        paper.write_json(previous,self.make())
+        before=previous.read_bytes()
+        with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions),patch.object(paper,"apply_ai_stories") as rewrite:
+            output=io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(paper.main(["--season","2026","--writing","auto","--regenerate"]),0)
+            rewrite.assert_not_called()
+        self.assertIn("completed week",output.getvalue())
+        self.assertEqual(before,previous.read_bytes())
+
+    def test_live_week_is_not_created_but_final_week_publishes(self):
+        live=board(); live["matchups"][0].update(state="live",winner="UNDECIDED")
+        current=self.root/"current.json"; paper.write_json(current,live)
+        editions=self.root/"data/newspaper_editions"
         with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions):
-            first=io.StringIO()
-            with redirect_stdout(first): self.assertEqual(paper.main(["--season","2026","--writing","deterministic"]),0)
-            live["matchups"][0]["away"]["score"] += 7; paper.write_json(current,live)
-            second=io.StringIO()
-            with redirect_stdout(second): self.assertEqual(paper.main(["--season","2026","--writing","deterministic"]),0)
-            self.assertIn("Refreshed",second.getvalue())
-            refreshed=paper.read_json(editions/"2026/week_01.json")
-            recap=next(story for story in refreshed["stories"] if story["story_type"]=="matchup_recap")
-            self.assertIn(f'{live["matchups"][0]["away"]["score"]:.2f}',recap["body"])
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(paper.main(["--season","2026"]),0)
+            self.assertFalse((editions/"index.json").exists())
             paper.write_json(current,board())
-            final=io.StringIO()
-            with redirect_stdout(final): self.assertEqual(paper.main(["--season","2026","--writing","deterministic"]),0)
-        self.assertIn("Finalized",final.getvalue())
-        saved=paper.read_json(editions/"2026/week_01.json")
-        self.assertEqual((saved["source_status"],saved["validation_status"],saved["status"]),("verified_final","valid","final"))
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(paper.main(["--season","2026"]),0)
+        self.assertEqual(paper.read_json(editions/"2026/week_01.json")["source_status"],"verified_final")
 
 if __name__ == "__main__": unittest.main()

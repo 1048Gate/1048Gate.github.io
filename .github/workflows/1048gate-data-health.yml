@@ -2,14 +2,10 @@ name: Data health and current-season fetch
 
 on:
   schedule:
-    # Daily morning catch-up (~4:15 AM ET). Newspaper generation runs after
-    # the board publish, keeps the prior final issue until real scoring starts,
-    # refreshes a verified live issue in-game, and finalizes it when the slate ends.
+    # Daily score-only morning catch-up. Editorial has its own weekly workflow.
     - cron: '15 8 * * *'
     # Every 30 minutes Thursday–Monday so Week slates update during the NFL window.
     - cron: '7,37 * * * 0,1,4,5,6'
-    # Tuesday morning (~8:20 AM ET) after Monday night should be final.
-    - cron: '20 12 * * 2'
   workflow_dispatch:
     inputs:
       season:
@@ -29,20 +25,6 @@ on:
         description: ESPN season year for the trade-history audit
         required: false
         default: '2025'
-      newspaper_week:
-        description: Newspaper week override (blank = use current-season week)
-        required: false
-        default: ''
-      newspaper_allow_incomplete:
-        description: Testing only — print an unpublished preview instead of updating the live issue
-        required: false
-        type: boolean
-        default: false
-      newspaper_regenerate:
-        description: Replace an existing edition only after a verified AI rewrite
-        required: false
-        type: boolean
-        default: false
   repository_dispatch:
     types: [current-season-refresh]
 
@@ -86,49 +68,6 @@ jobs:
       - name: Test ESPN normalizers, publisher, and newspaper lifecycle
         run: |
           python3 -m unittest scripts/test_fetch_current.py scripts/test_publish_current_season.py scripts/test_update_matchup_leaderboards.py scripts/test_generate_newspaper.py
-      - name: Finalize outgoing newspaper before week rollover
-        env:
-          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
-          ESPN_S2: ${{ secrets.ESPN_S2 }}
-          ESPN_SWID: ${{ secrets.ESPN_SWID }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: gpt-5.6-luna
-          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
-        run: |
-          SEASON="${{ inputs.season }}"
-          if [ -z "$SEASON" ]; then
-            SEASON=2026
-          fi
-          SAVED_WEEK="$(python3 -c 'import json; print(int(json.load(open("data/current-season.json"))["week"]))')"
-          CANDIDATE="$(mktemp)"
-          python3 scripts/publish_current_season.py --season "$SEASON" --output "$CANDIDATE" --no-sync-site-phase
-          DETECTED_WEEK="$(python3 -c 'import json,sys; print(int(json.load(open(sys.argv[1]))["week"]))' "$CANDIDATE")"
-          rm -f "$CANDIDATE"
-
-          if [ "$DETECTED_WEEK" -le "$SAVED_WEEK" ]; then
-            echo "No week rollover detected (saved Week $SAVED_WEEK, ESPN Week $DETECTED_WEEK)."
-            exit 0
-          fi
-
-          EXISTING_STATUS="$(python3 -c 'import json,sys; data=json.load(open("data/newspaper_editions/index.json")); season=int(sys.argv[1]); week=int(sys.argv[2]); entry=next((item for item in data.get("editions", []) if item.get("season")==season and item.get("week")==week and item.get("validation_status")=="valid"), {}); print(entry.get("source_status", ""))' "$SEASON" "$SAVED_WEEK")"
-          if [ "$EXISTING_STATUS" = "verified_final" ]; then
-            echo "Week $SAVED_WEEK newspaper is already verified final; rollover may proceed."
-            exit 0
-          fi
-
-          echo "ESPN advanced to Week $DETECTED_WEEK while Week $SAVED_WEEK newspaper is ${EXISTING_STATUS:-missing}; finalizing the outgoing week first."
-          python3 scripts/publish_current_season.py --season "$SEASON" --week "$SAVED_WEEK"
-          python3 scripts/update_matchup_leaderboards.py
-          npm run futures
-          python3 scripts/generate_newspaper.py --season "$SEASON" --week "$SAVED_WEEK" --writing auto
-
-          FINAL_STATUS="$(python3 -c 'import json,sys; data=json.load(open("data/newspaper_editions/index.json")); season=int(sys.argv[1]); week=int(sys.argv[2]); entry=next((item for item in data.get("editions", []) if item.get("season")==season and item.get("week")==week and item.get("validation_status")=="valid"), {}); print(entry.get("source_status", ""))' "$SEASON" "$SAVED_WEEK")"
-          if [ "$FINAL_STATUS" != "verified_final" ]; then
-            echo "Outgoing Week $SAVED_WEEK did not finalize (status=${FINAL_STATUS:-missing}); refusing to advance the public board to Week $DETECTED_WEEK." >&2
-            exit 1
-          fi
-          echo "Finalized Week $SAVED_WEEK newspaper; Week $DETECTED_WEEK rollover may proceed."
       - name: Publish standings and scoreboard into data/current-season.json
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
@@ -165,75 +104,17 @@ jobs:
         run: |
           python3 scripts/update_matchup_leaderboards.py
           npm run futures
-      # Start the first verified live issue once scoring begins, including Thursday night.
-      # Only run when the edition is absent; never rewrite it every half-hour.
-      - name: Check whether live newspaper needs its first publication
-        id: newspaper_due
-        run: |
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
-          import json
-          from pathlib import Path
-          board = json.loads(Path('data/current-season.json').read_text())
-          index = json.loads(Path('data/newspaper_editions/index.json').read_text())
-          matchups = board.get('matchups', [])
-          started = any((str(g.get('state', '')).lower() == 'final' and str(g.get('winner', '')).upper() in ('HOME', 'AWAY', 'TIE')) or any(isinstance((g.get(side) or {}).get('score'), (int, float)) and (g.get(side) or {}).get('score') > 0 for side in ('home', 'away')) for g in matchups)
-          status = 'verified_final' if matchups and all(str(g.get('state', '')).lower() == 'final' and str(g.get('winner', '')).upper() in ('HOME', 'AWAY', 'TIE') for g in matchups) else 'verified_live'
-          found = any(e.get('season') == board.get('season') and e.get('week') == board.get('week') and e.get('validation_status') == 'valid' and e.get('source_status') == status and Path(e.get('path', '')).is_file() for e in index.get('editions', []))
-          print(f'due={str(started and not found).lower()}')
-          PY
-      # Score refreshes run frequently during NFL windows. Do not regenerate the
-      # newspaper on those half-hour refreshes: it creates editorial churn from
-      # partial games and makes the score pipeline slower. The paper gets one
-      # daily lifecycle pass, the Tuesday finalization pass, or an explicit
-      # manual newspaper run.
-      - name: Generate weekly newspaper from the verified board
-        continue-on-error: true
-        if: >-
-          steps.newspaper_due.outputs.due == 'true' ||
-          github.event_name == 'workflow_dispatch' ||
-          (github.event_name == 'schedule' && (
-            github.event.schedule == '15 8 * * *' ||
-            github.event.schedule == '20 12 * * 2'
-          ))
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: gpt-5.6-luna
-          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
-        run: |
-          SEASON="${{ inputs.season }}"
-          if [ -z "$SEASON" ]; then
-            SEASON=2026
-          fi
-          PAPER_ARGS=(--season "$SEASON" --writing auto)
-          if [ -n "${{ inputs.newspaper_week }}" ]; then
-            PAPER_ARGS+=(--week "${{ inputs.newspaper_week }}")
-          elif [ -n "${{ inputs.week }}" ]; then
-            PAPER_ARGS+=(--week "${{ inputs.week }}")
-          fi
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.newspaper_allow_incomplete }}" = "true" ]; then
-            PAPER_ARGS+=(--allow-incomplete)
-            echo "Manual incomplete override is enabled for this run only."
-          fi
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.newspaper_regenerate }}" = "true" ]; then
-            PAPER_ARGS+=(--regenerate)
-            echo "Verified-AI regeneration is enabled for this run only."
-          fi
-          python3 scripts/generate_newspaper.py "${PAPER_ARGS[@]}"
       - name: Rebuild the homepage week payload
         run: |
           node scripts/build-homepage-week.mjs
           node scripts/build-static-week-board.mjs
       - name: Validate site checks still pass
-        env:
-          # Editorial publication can lag scoring without blocking fresh scores.
-          ALLOW_PENDING_WEEKLY_EDITION: 'true'
         run: npm run check
       - name: Commit updated board and derived data when they change
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/streaks.json data/newspaper_editions data/homepage-week.json
+          git add index.html data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/streaks.json data/homepage-week.json
           if git diff --cached --quiet; then
             echo "Current-season board and derived data unchanged — nothing to commit."
           else

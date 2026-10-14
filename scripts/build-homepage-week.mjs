@@ -18,7 +18,9 @@ export function statusFor(config = {}, board = {}){
 }
 
 export function featuredStory(index, week){
-  const editions = Array.isArray(index?.editions) ? index.editions : [];
+  const editions = (Array.isArray(index?.editions) ? index.editions : [])
+    .filter(item => item.source_status === 'verified_final' && item.validation_status === 'valid')
+    .sort((a, b) => (b.season - a.season) || (b.week - a.week));
   const entry = editions.find(item => item.season === week.season && item.week === week.week) || editions[0] || null;
   if(!entry?.path) return null;
   const edition = loadJson(entry.path);

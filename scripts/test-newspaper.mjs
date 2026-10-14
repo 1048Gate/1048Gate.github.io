@@ -220,6 +220,6 @@ assert.deepEqual(context.window.gateNewspaper.weeklyEntries({editions:[
   {season:2026,week:2,path:'preview.json',validation_status:'preview',source_status:'incomplete_override'},
   {season:2025,week:14,path:'week-14.json',validation_status:'valid',source_status:'verified_final'},
   {season:2024,week:8,path:'live.json',validation_status:'valid',source_status:'verified_live'}
-]}).map(entry => entry.path), ['week-1.json','week-14.json','live.json']);
+]}).map(entry => entry.path), ['week-1.json','week-14.json']);
 
 console.log('Newspaper checks passed: archive, weekly picker, sources, PDF export, download controls, and HTML escaping.');
