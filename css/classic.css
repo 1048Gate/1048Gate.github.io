@@ -402,6 +402,11 @@ td.num,th.num,td[data-align="right"]{text-align:right;}
 /* ---- 12. Newspaper keeps a serif, still flat ---- */
 .edition-content,.edition-content *:not(svg){font-family:Georgia,"Times New Roman",serif !important;}
 .edition-content{padding:12px 14px !important;}
+/* Match the tan paper used by the PDF export, including inset story panels. */
+html:not([data-theme="dark"]) .edition-content{
+  --page:#f3ead9;
+  background:var(--page) !important;
+}
 .story-title{font-size:16px !important;}
 .story-lead .story-title{font-size:20px !important;}
 
