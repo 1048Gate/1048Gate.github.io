@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-15T22:11:18.924656+00:00",
+  "fetchedAt": "2026-10-15T22:41:10.474272+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 slate from ESPN.",
   "standings": [
@@ -166,7 +166,7 @@
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 0,
-        "projectedScore": 83.64
+        "projectedScore": 115.72
       },
       "home": {
         "teamId": 9,
@@ -310,7 +310,7 @@
     },
     {
       "teamId": 6,
-      "projectedScore": 83.64,
+      "projectedScore": 115.72,
       "complete": true
     },
     {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-15T22:11:20.105492+00:00"
+  "projectionsFetchedAt": "2026-10-15T22:41:11.459083+00:00"
 }
