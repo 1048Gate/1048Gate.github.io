@@ -5,7 +5,7 @@
   "week": 6,
   "phase": "Week 6",
   "status": "scheduled",
-  "last_updated": "2026-10-15T21:47:30.111665+00:00",
+  "last_updated": "2026-10-15T22:11:18.924656+00:00",
   "note": "Week 6 slate from ESPN.",
   "matchups": [
     {
@@ -115,7 +115,7 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 0,
-        "projectedScore": 104.57
+        "projectedScore": 115.75
       }
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-15T21:47:30.111665+00:00",
+    "week_fetched_at": "2026-10-15T22:11:18.924656+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-15T21:47:33.320Z",
+    "payload_built_at": "2026-10-15T22:11:24.073Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
