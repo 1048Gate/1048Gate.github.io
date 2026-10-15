@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-15T08:41:20.872612+00:00",
+  "fetchedAt": "2026-10-15T09:11:21.487347+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 slate from ESPN.",
   "standings": [
@@ -232,7 +232,7 @@
         "team": "Team Hash",
         "owner": "Trevor Hash",
         "score": 0,
-        "projectedScore": 113.96
+        "projectedScore": 119.83
       },
       "home": {
         "teamId": 14,
@@ -345,9 +345,9 @@
     },
     {
       "teamId": 15,
-      "projectedScore": 113.96,
+      "projectedScore": 119.83,
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-15T08:41:22.423303+00:00"
+  "projectionsFetchedAt": "2026-10-15T09:11:22.361005+00:00"
 }
