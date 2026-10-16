@@ -26,5 +26,19 @@
     "commit": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
     "path": "skills/frontend-design",
     "ref": "HEAD"
+  },
+  {
+    "name": "code-review",
+    "repository": "https://github.com/mattpocock/skills",
+    "commit": "49dd158d1076134a641b33efb035946536778336",
+    "path": "skills/engineering/code-review",
+    "ref": "main"
+  },
+  {
+    "name": "diagnosing-bugs",
+    "repository": "https://github.com/mattpocock/skills",
+    "commit": "49dd158d1076134a641b33efb035946536778336",
+    "path": "skills/engineering/diagnosing-bugs",
+    "ref": "main"
   }
 ]
