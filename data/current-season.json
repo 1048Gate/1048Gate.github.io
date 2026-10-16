@@ -4,9 +4,9 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-16T00:11:11.647843+00:00",
+  "fetchedAt": "2026-10-16T01:11:18.607794+00:00",
   "source": "ESPN league endpoint",
-  "note": "Week 6 slate from ESPN.",
+  "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
     {
       "locker": 1,
@@ -201,7 +201,7 @@
     {
       "id": 33,
       "week": 6,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -209,21 +209,21 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 0,
+        "score": 9.5,
         "projectedScore": 118.89
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 0,
+        "score": 10,
         "projectedScore": 117.7
       }
     },
     {
       "id": 34,
       "week": 6,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -238,14 +238,14 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 0,
+        "score": 6,
         "projectedScore": 136.2
       }
     },
     {
       "id": 35,
       "week": 6,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -253,7 +253,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 0,
+        "score": 3.5,
         "projectedScore": 118.58
       },
       "home": {
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-16T00:11:13.026657+00:00"
+  "projectionsFetchedAt": "2026-10-16T01:11:19.625293+00:00"
 }
