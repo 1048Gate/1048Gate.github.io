@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-16T10:41:16.910365+00:00",
+  "fetchedAt": "2026-10-16T11:11:11.236079+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-16T10:41:17.838325+00:00"
+  "projectionsFetchedAt": "2026-10-16T11:11:12.888213+00:00"
 }
