@@ -5,7 +5,7 @@
   "week": 6,
   "phase": "Week 6",
   "status": "live",
-  "last_updated": "2026-10-16T02:41:14.735827+00:00",
+  "last_updated": "2026-10-16T03:11:15.144718+00:00",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -63,14 +63,14 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 12.1,
+        "score": 13.6,
         "projectedScore": 118.89
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 20.4,
+        "score": 30.7,
         "projectedScore": 117.7
       }
     },
@@ -92,7 +92,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 4,
+        "score": 6,
         "projectedScore": 136.2
       }
     },
@@ -107,7 +107,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 3.5,
+        "score": 6.4,
         "projectedScore": 118.58
       },
       "home": {
@@ -403,8 +403,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "Your Reigning Champ / You Just Made the List!",
-      "detail": "3.50 points apart · Live",
+      "title": "Team Hash / Ice Has Me Running Back",
+      "detail": "6.00 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -431,8 +431,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Vincent Cannarozzi · 20.40",
-      "detail": "215.24 shy of the 235.64 all-time mark",
+      "title": "Vincent Cannarozzi · 30.70",
+      "detail": "204.94 shy of the 235.64 all-time mark",
       "view": "intel"
     },
     {
@@ -444,9 +444,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-16T02:41:14.735827+00:00",
+    "week_fetched_at": "2026-10-16T03:11:15.144718+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-16T02:41:19.137Z",
+    "payload_built_at": "2026-10-16T03:11:18.806Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
