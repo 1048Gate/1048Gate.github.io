@@ -19,7 +19,13 @@ assert.equal(live.matchups.length, 6);
 assert.equal(live.standings.length, 12);
 assert.ok(live.featured_story?.headline);
 assert.ok(live.featured_story.week <= week.week);
-if(statusFor(site, week) !== 'scheduled') assert.equal(live.featured_story.week, week.week);
+// The Tuesday-final newspaper lifecycle deliberately keeps the prior verified edition
+// featured while a new week's matchups are live or final.
+const currentEditionPublished = index.editions.some(entry =>
+  entry.season === week.season && entry.week === week.week &&
+  entry.source_status === 'verified_final' && entry.validation_status === 'valid'
+);
+if(currentEditionPublished) assert.equal(live.featured_story.week, week.week);
 assert.ok(live.championship_odds?.favorite?.odds);
 assert.ok(live.league_pulse.length >= 5);
 assert.deepEqual(live.freshness.sources[0], 'data/current-season.json');
