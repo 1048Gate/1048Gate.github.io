@@ -61,6 +61,10 @@ export function buildHomepageWeek({site, week, index, archive, pulseApi, builtAt
     note: week.note || '',
     matchups: week.matchups,
     standings: week.standings,
+    ...(typeof week.projectionsStale === 'boolean' ? {
+      projectionsStale: week.projectionsStale === true,
+      projectionsFetchedAt: week.projectionsFetchedAt
+    } : {}),
     featured_story: story,
     championship_odds: {
       favorite: favorite ? {name:favorite.name, odds:favorite.odds, case:favorite.case || ''} : null,

@@ -7,8 +7,9 @@
     if(!team) return '<p>Current-week team projections are unavailable.</p>';
     const stamp = new Date(board.projectionsFetchedAt);
     const updated = Number.isNaN(stamp.getTime()) ? '' : stamp.toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-    const stale = !Number.isNaN(stamp.getTime()) && Date.now() - stamp.getTime() > 24*3600*1000;
-    return `<h3>Week ${esc(board.week)} · Team projection</h3><p><strong>${points(team.projectedScore)} projected points</strong>${team.complete ? '' : ' · Incomplete lineup or missing player projections'}</p><p>${esc(standing.team)} · ESPN league scoring${updated ? ` · Updated ${esc(updated)} ET` : ''}${stale ? ' · Saved snapshot is over 24 hours old' : ''}</p><p>Total based on current starters. Projections are estimates; matchup cards show actual scores once games go live.</p>`;
+    const stale = board.projectionsStale === true;
+    const old = !Number.isNaN(stamp.getTime()) && Date.now() - stamp.getTime() > 24*3600*1000;
+    return `<h3>Week ${esc(board.week)} · Team projection</h3><p><strong>${points(team.projectedScore)} projected points</strong>${team.complete ? '' : ' · Incomplete lineup or missing player projections'}</p><p>${esc(standing.team)} · ESPN league scoring${updated ? ` · Updated ${esc(updated)} ET` : ''}${stale ? ' · Stale projection snapshot · Refresh unavailable' : ''}${old ? ' · Saved snapshot is over 24 hours old' : ''}</p><p>Total based on current starters. Projections are estimates; matchup cards show actual scores once games go live.</p>`;
   }
   window.gateTeamProjections = Object.freeze({teamHtml});
   document.addEventListener('click',event => {

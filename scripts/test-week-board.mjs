@@ -65,6 +65,8 @@ assert.match(projectedHtml,/>123\.45</);
 assert.match(projectedHtml,/>0\.00</);
 assert.doesNotMatch(projectedHtml,/Ahead by|Won by|data-leader/);
 assert.match(projectedHtml,/data-team-owner="&lt;owner&gt;"/);
+assert.match(board.matchupCardHtml({state:'scheduled',away:{projectedScore:0},home:{projectedScore:100}},esc,[],{projectionsStale:true}),/Saved ESPN projections · stale/);
+assert.doesNotMatch(board.matchupCardHtml(live,esc,[],{projectionsStale:true}),/Saved ESPN projections/);
 assert.match(board.matchupCardHtml({...live,away:{...live.away,projectedScore:999}},esc),/>91\.46</);
 assert.doesNotMatch(board.matchupCardHtml({...live,away:{...live.away,projectedScore:999}},esc),/>999\.00</);
 

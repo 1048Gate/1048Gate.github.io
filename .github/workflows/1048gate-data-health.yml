@@ -52,11 +52,15 @@ jobs:
   publish-current-season:
     name: Publish current-season.json from ESPN
     runs-on: ubuntu-latest
+    outputs:
+      private_collection: ${{ steps.fantasy_collect.outcome }}
     permissions:
       contents: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          ref: main
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -69,6 +73,7 @@ jobs:
         run: |
           python3 -m unittest scripts/test_fetch_current.py scripts/test_publish_current_season.py scripts/test_update_matchup_leaderboards.py scripts/test_generate_newspaper.py
       - name: Publish standings and scoreboard into data/current-season.json
+        id: score_source
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
           ESPN_S2: ${{ secrets.ESPN_S2 }}
@@ -85,6 +90,8 @@ jobs:
           python3 scripts/publish_current_season.py --season "$SEASON" "${WEEK_ARGS[@]}"
       - name: Collect public projections and private owner snapshots
         id: fantasy_collect
+        # Keep one collector call. Its outcome is reported independently and
+        # cannot authorize public publication or bypass score validation.
         continue-on-error: true
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
@@ -95,7 +102,7 @@ jobs:
         run: |
           python3 scripts/collect_fantasy_data.py --season "$(python3 -c 'import json; print(json.load(open("data/current-season.json"))["season"])')" --week "$(python3 -c 'import json; print(json.load(open("data/current-season.json"))["week"])')"
       - name: Report owner snapshot collection failure
-        if: steps.fantasy_collect.outcome == 'failure'
+        if: ${{ always() && steps.fantasy_collect.outcome == 'failure' }}
         run: |
           echo "::warning::ESPN owner snapshot collection failed. See the collector step for the request and HTTP status. Existing saved data was retained."
           echo "### Owner snapshot collection failed" >> "$GITHUB_STEP_SUMMARY"
@@ -109,7 +116,11 @@ jobs:
           node scripts/build-homepage-week.mjs
           node scripts/build-static-week-board.mjs
       - name: Validate site checks still pass
-        run: npm run check
+        env:
+          SEASON: ${{ inputs.season || '2026' }}
+        run: |
+          python3 scripts/publish_current_season.py --validate-only --season "$SEASON"
+          npm run check
       - name: Commit updated board and derived data when they change
         run: |
           git config user.name "github-actions[bot]"
@@ -121,10 +132,18 @@ jobs:
             git commit -m "Refresh current-season board and derived data"
             git push
           fi
-      - name: Fail the run when owner snapshot collection failed
-        if: always() && steps.fantasy_collect.outcome == 'failure'
+
+  private-collection-status:
+    name: Report private collection failure
+    needs: publish-current-season
+    if: ${{ always() && !cancelled() && needs.publish-current-season.outputs.private_collection == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Keep private collection failure visible without failing the public publisher
         run: |
-          echo "::error::Owner snapshot collection failed. See the collector log. Score updates were allowed to finish before reporting this failure."
+          echo "::error::Owner snapshot collection failed. Check the collector log. Public publication is evaluated independently."
+          echo "### Private collection failed" >> "$GITHUB_STEP_SUMMARY"
+          echo "The last saved private snapshot was retained. See the public publisher job for score publication status." >> "$GITHUB_STEP_SUMMARY"
           exit 1
 
   fetch-trade-history:

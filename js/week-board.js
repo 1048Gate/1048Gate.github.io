@@ -76,7 +76,7 @@
     return `${verb} ${pointsLine(margin)}`;
   }
 
-  function matchupCardHtml(game, escapeHtml, standings = []){
+  function matchupCardHtml(game, escapeHtml, standings = [], projections = {}){
     const esc = escapeHtml || (value => String(value ?? ''));
     const state = normalizedState(game?.state);
     const leader = state === 'scheduled' ? null : leaderSide(game);
@@ -86,7 +86,7 @@
       (side?.owner && team.owner === side.owner)
     );
     /* A lead attaches to the leading side; scheduled games carry season context instead. */
-    const statusNote = state === 'scheduled' ? 'ESPN projected points' : margin && !leader ? margin : '';
+    const statusNote = state === 'scheduled' ? (projections.projectionsStale ? 'Saved ESPN projections · stale' : 'ESPN projected points') : margin && !leader ? margin : '';
     return `<article class="week-game week-card is-${esc(state)}" data-state="${esc(state)}"${leader ? ` data-leader="${leader}"` : ''}>
       <header class="week-card-status">
         <span class="week-card-badge">${statusLabel(state)}</span>${statusNote ? `

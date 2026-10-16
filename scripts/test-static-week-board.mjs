@@ -13,6 +13,10 @@ assert.ok(html.includes(rendered), 'index.html static week board must match data
 const rollover = renderStaticWeekBoard({...board, week:3, phase:'Week 3'});
 assert.match(rollover, /data-week="3"/);
 assert.match(rollover, /aria-label="Week 3 matchups and standings"/);
+const savedProjections = structuredClone(board);
+savedProjections.projectionsStale = true;
+savedProjections.matchups.forEach(game => {game.state='scheduled';});
+assert.match(renderStaticWeekBoard(savedProjections), /Saved ESPN projections · stale/);
 assert.throws(() => renderStaticWeekBoard({...board, matchups:board.matchups.slice(0, 5)}), /requires 6 matchups and 12 standings rows/);
 
 const homepage = JSON.parse(readFileSync(new URL('../data/homepage-week.json', import.meta.url), 'utf8'));

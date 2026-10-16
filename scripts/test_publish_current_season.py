@@ -101,6 +101,8 @@ class PublishCurrentSeasonTests(unittest.TestCase):
 
     def test_playoff_metadata_reaches_published_board(self):
         scoreboard = copy.deepcopy(self.scoreboard)
+        for game in scoreboard["games"]:
+            game["matchup_period"] = game["scoring_period"] = 15
         scoreboard["games"][0]["is_playoff"] = True
         scoreboard["games"][0]["matchup_type"] = "LOSERS_CONSOLATION_LADDER"
         roster = {row["teamId"]: row for row in self.roster_seed["standings"]}
