@@ -12,6 +12,8 @@ Available packages:
 - `vercel-react-best-practices`: React/Next.js performance guidance, when applicable.
 - `web-design-guidelines`: UI and accessibility review.
 - `frontend-design`: UI design work when requested.
+- `diagnosing-bugs`: reproduce and investigate bugs with a testable feedback loop.
+- `code-review`: review diffs against repository standards and the requested specification.
 
 Skill availability does not authorize redesigns, production writes, deployments,
 or changes outside the user's task. This site uses plain HTML/CSS/JavaScript;
