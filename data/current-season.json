@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-16T01:41:12.987263+00:00",
+  "fetchedAt": "2026-10-16T02:41:14.735827+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -209,14 +209,14 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 9.5,
+        "score": 12.1,
         "projectedScore": 118.89
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 11.1,
+        "score": 20.4,
         "projectedScore": 117.7
       }
     },
@@ -349,5 +349,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-16T01:41:13.962841+00:00"
+  "projectionsFetchedAt": "2026-10-16T02:41:15.912958+00:00"
 }
