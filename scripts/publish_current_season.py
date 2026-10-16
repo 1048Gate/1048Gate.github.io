@@ -216,10 +216,13 @@ def build_board(
         winner = str(game.get("winner") or "").upper()
         status = str(game.get("status") or "").upper()
         status_is_final = status == "FINAL" or status.endswith("_FINAL")
+        status_is_live = status in {'LIVE', 'STATUS_LIVE', 'IN_PROGRESS', 'STATUS_IN_PROGRESS', 'HALFTIME', 'STATUS_HALFTIME'}
         scores = (away.get("score"), home.get("score"))
         has_points = any(score not in (None, 0) for score in scores)
         if winner in {"HOME", "AWAY", "TIE"} or status_is_final:
             state = "final"
+        elif status_is_live:
+            state = "live"
         elif has_points or winner == "UNDECIDED":
             state = "live" if has_points else "scheduled"
         else:
@@ -282,7 +285,7 @@ def sync_site_phase(site_path: Path, phase: str, week: int) -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--season", type=int, default=int(os.getenv("ESPN_SEASON", DEFAULT_SEASON)))
+    parser.add_argument("--season", type=int)
     parser.add_argument("--week", type=int, help="Force matchup week; default detects from ESPN")
     parser.add_argument("--league-id", type=int, default=int(os.getenv("ESPN_LEAGUE_ID", DEFAULT_LEAGUE_ID)))
     parser.add_argument("--season-number", type=int, default=10)
@@ -298,10 +301,13 @@ def main() -> int:
     if args.validate_only:
         board = json.loads(args.output.read_text(encoding='utf-8'))
         validate_board(board)
-        if board['season'] != args.season or (args.week is not None and board['week'] != args.week):
+        if (args.season is not None and board['season'] != args.season) or (args.week is not None and board['week'] != args.week):
             raise RuntimeError('Invalid public board: requested season/week mismatch')
         print('Public score board validated.')
         return 0
+
+    if args.season is None:
+        args.season = int(os.getenv('ESPN_SEASON', DEFAULT_SEASON))
 
     if not os.getenv("ESPN_S2") or not os.getenv("ESPN_SWID"):
         print("ESPN_S2 and ESPN_SWID must be set for this private league.", file=sys.stderr)

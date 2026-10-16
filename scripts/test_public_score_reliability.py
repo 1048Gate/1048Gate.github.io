@@ -127,13 +127,17 @@ class PublicScoreReliabilityTests(unittest.TestCase):
             self.assertEqual(result['projectionsFetchedAt'], self.previous['projectionsFetchedAt'])
 
     def test_invalid_source_never_overwrites_previous_public_file(self):
-        for invalid in ('duplicate', 'missing_record', 'wrong_week', 'nonfinite', 'wrong_season'):
+        for invalid in ('duplicate', 'missing_record', 'wrong_week', 'nonfinite', 'wrong_season', 'missing_live_score'):
             standings, scoreboard = copy.deepcopy(self.standings), copy.deepcopy(self.scoreboard)
             if invalid == 'duplicate': standings['teams'][1]['team_id'] = 1
             if invalid == 'missing_record': standings['teams'][0]['wins'] = None
             if invalid == 'wrong_week': scoreboard['games'][0]['matchup_period'] = 3
             if invalid == 'nonfinite': scoreboard['games'][0]['home']['score'] = float('nan')
             if invalid == 'wrong_season': scoreboard['season'] = 2025
+            if invalid == 'missing_live_score':
+                scoreboard['games'][0].update(status='STATUS_IN_PROGRESS', winner='UNDECIDED')
+                scoreboard['games'][0]['home']['score'] = None
+                scoreboard['games'][0]['away']['score'] = 0
             with self.subTest(invalid=invalid), tempfile.TemporaryDirectory() as folder:
                 output = Path(folder) / 'board.json'
                 original = json.dumps(self.previous)
@@ -146,6 +150,21 @@ class PublicScoreReliabilityTests(unittest.TestCase):
                      self.assertRaises(RuntimeError):
                     publisher.main()
                 self.assertEqual(output.read_text(), original)
+
+    def test_validation_accepts_nondefault_season_but_rejects_explicit_mismatch(self):
+        board = copy.deepcopy(self.board)
+        board['season'] = 2027
+        with tempfile.TemporaryDirectory() as folder:
+            output = Path(folder) / 'board.json'
+            output.write_text(json.dumps(board))
+            for season_args in ([], ['--season','2027']):
+                with patch.object(sys, 'argv', ['publisher','--validate-only','--output',str(output),*season_args]), \
+                     patch.object(publisher, 'fetch_json') as fetch:
+                    self.assertEqual(publisher.main(), 0)
+                    fetch.assert_not_called()
+            with patch.object(sys, 'argv', ['publisher','--validate-only','--output',str(output),'--season','2026']), \
+                 self.assertRaisesRegex(RuntimeError, 'requested season/week mismatch'):
+                publisher.main()
 
 
 if __name__ == '__main__':

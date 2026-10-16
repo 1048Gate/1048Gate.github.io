@@ -59,14 +59,21 @@ live/final cards show actual scores. Team-name buttons open the manager profile'
 team total above its history.
 
 No raw ESPN response, account email, credential, or private snapshot is written
-to disk or uploaded as an Actions artifact. Private save failure retains the
-previous public board. No weekly projection is substituted with an actual score
+to disk or uploaded as an Actions artifact. Score refreshes retain valid aggregate
+projections only for the same season, week and team set, with the original
+projection timestamp and a stale label until collection succeeds. Private save
+failure leaves those retained totals intact. No weekly projection is substituted with an actual score
 or season total.
 
 The collector is a nonblocking step: an ESPN projection failure cannot prevent
 the existing score/newspaper pipeline from proceeding. Read its step logs to
-confirm both outputs after an authenticated production run. A final step marks
-the workflow failed if collection failed, after score updates finish. Missing totals are never fabricated.
+confirm both outputs after an authenticated production run. A separate private
+collection status job marks the workflow failed if collection failed. Cloudflare
+and Pages inspect the public publisher's result from that exact run attempt,
+so a private failure cannot block independently validated public scores. A failed
+or skipped public publisher never authorizes publication; deployment checks still
+run before release. Missing totals are never fabricated. No extra collector
+invocation or scheduled run is added.
 
 ## Verification
 
