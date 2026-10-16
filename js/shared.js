@@ -2,11 +2,11 @@
   const MEMBER_ROLE_OVERRIDES = Object.freeze({'10': 'Admin'});
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>'\"]/g, character => ({
-    '&': '&',
-    '<': '<',
-    '>': '>',
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
     "'": '&#39;',
-    '"': '"'
+    '"': '&quot;'
   }[character]));
 
   function parseRecord(record){
