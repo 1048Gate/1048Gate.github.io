@@ -24,6 +24,8 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
+      - name: Install Node dependencies for validation
+        run: npm ci
       - name: Recompute odds from season data
         run: npm run futures
       - name: Validate site checks still pass

@@ -35,3 +35,43 @@ for(const name of ['pages','cloudflare']){
 }
 assert.equal((scores.match(/python3 scripts\/collect_fantasy_data.py/g) || []).length, 1);
 console.log('Data-health checks passed: score publishing and Tuesday final editorial are independent.');
+
+// Validate dependency setup per job: an install in a different job cannot help
+// a clean runner. Keep this inventory open to new workflows that run checks.
+const {readdirSync}=await import('node:fs');
+for(const file of readdirSync(new URL('../.github/workflows/',import.meta.url)).filter(name=>/\.ya?ml$/.test(name))){
+  const jobs=read(`.github/workflows/${file}`).split(/^jobs:\s*$/m)[1] || '';
+  for(const match of jobs.matchAll(/^  ([\w-]+):\s*\n([\s\S]*?)(?=^  [\w-]+:|$(?![\s\S]))/gm)){
+    const [,job,source]=match;
+    const steps=source.split(/^      - /m).slice(1);
+    const check=steps.findIndex(step=>/\bnpm run check\b/.test(step));
+    if(check<0)continue;
+    const label=`${file}:${job}`;
+    assert.doesNotMatch(steps[check],/continue-on-error:\s*true/,`${label}: validation must fail closed`);
+    if(file==='1048gate-import-transactions.yml')assert.doesNotMatch(steps[check],/^\s*if:/m,`${label}: precheck must not be skipped`);
+    const install=steps.findIndex(step=>/run:\s*npm ci\s*$/m.test(step));
+    assert.ok(install>=0&&install<check,`${label}: npm ci must precede site checks in the same job`);
+    assert.doesNotMatch(steps[install],/continue-on-error:\s*true/,`${label}: dependency installation must fail closed`);
+    const installGuard=steps[install].match(/^\s*if:\s*(.+)$/m)?.[1];
+    const checkGuard=steps[check].match(/^\s*if:\s*(.+)$/m)?.[1];
+    if(installGuard)assert.equal(installGuard,checkGuard,`${label}: install must run whenever checks run`);
+    const setup=steps.findIndex(step=>/uses: actions\/setup-node@/.test(step));
+    assert.ok(setup>=0&&setup<install,`${label}: set up Node before installation`);
+    assert.match(steps[setup],/node-version: 22\b/,`${label}: use the working data-health Node version`);
+  }
+}
+
+for(const [file,job,work] of [
+  ['1048gate-newspaper.yml','publish-newspaper','Fetch completed week for editorial only'],
+  ['futures.yml','refresh','Recompute odds from season data'],
+  ['1048gate-import-transactions.yml','import-transactions','Fetch ESPN player-card transactions']
+]){
+  const source=read(`.github/workflows/${file}`).split(`  ${job}:`)[1];
+  assert.ok(source.indexOf('run: npm ci')<source.indexOf(`- name: ${work}`),`${file}: install before collection/generation`);
+}
+const transactions=read('.github/workflows/1048gate-import-transactions.yml');
+const precheck=transactions.indexOf('run: npm run check');
+assert.ok(precheck>=0&&precheck<transactions.indexOf('- name: Fetch ESPN'), 'Transaction precheck must finish before collection or database import');
+assert.equal((transactions.match(/npm run check/g)||[]).length,1,'Do not leave a misleading post-import precheck');
+assert.doesNotMatch(transactions.slice(precheck),/if:.*always\(\)|continue-on-error:\s*true/,'Do not bypass transaction precheck failures');
+console.log('Workflow dependency checks passed: same-job locked installs and pre-import validation.');
