@@ -871,3 +871,39 @@ html body #weekBoard .is-leading .week-team-link{font-weight:700}
 html[data-theme="dark"] body #weekBoard .week-team-link{color:#8dc4ef}
 .team-projection-section{margin:16px 0;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .team-projection-section h3{margin:0 0 8px}.team-projection-section p{font-size:12px;margin:8px 0}
+
+/* Newspaper reading and the phone's in-page section index. */
+html body .mobile-section-jump{display:none !important;}
+html body .edition-archive-status,html body .section-description{margin:4px 0 12px;color:var(--muted-text) !important;font-size:13px;}
+html body #newspaper .edition-content{
+  --page:#f3ead9;--text:#171819;--muted-text:#435153;--rule:#b9ae9a;
+  --cream:var(--text);--muted:var(--muted-text);
+  background:#f3ead9 !important;color:var(--text) !important;
+}
+html body #newspaper .edition-content :is(p,li,strong,h2,h3,h4){overflow-wrap:break-word;}
+html body #newspaper :is(.weekly-table li,.weekly-board li,.weekly-slate li,.weekly-matchup-score){min-width:0;}
+html body #newspaper :is(.weekly-table li,.weekly-board li,.weekly-slate li,.weekly-matchup-score)>*{min-width:0;}
+html body #newspaper .edition-tab{min-height:32px;}
+/* Newspaper has a primary destination; the Office tabs duplicate that navigation. */
+html body #office:has(> #newspaper:not([hidden])) > :is(.section-title,[data-office-nav]){display:none !important;}
+html body :is(.mobile-section-jump select,.mobile-section-jump button,.edition-tab,.week-team-link,.desk-link):focus-visible{
+  outline:2px solid var(--link) !important;outline-offset:3px;
+}
+@media(max-width:900px){
+  html body #newspaper .edition-content :is(.story-body,.weekly-lead p,.weekly-matchup p,.weekly-editorial-grid p){font-size:15px;line-height:1.65;}
+}
+@media(max-width:760px){
+  html body .mobile-section-jump{display:flex !important;align-items:center;gap:8px;min-width:0;margin-top:6px;}
+  html body .mobile-section-jump label{font-weight:700;white-space:nowrap;}
+  html body .mobile-section-jump select{flex:1;min-width:0;min-height:44px !important;background:var(--page) !important;color:var(--text) !important;border:1px solid var(--rule-dark);padding:6px;font:inherit;}
+  html body .mobile-section-jump button{min-width:44px;min-height:44px;padding:6px 10px;border:1px solid var(--rule-dark);background:var(--btn-bg) !important;color:var(--link) !important;font:inherit;cursor:pointer;}
+  html body #newspaper :is(.edition-tab,.edition-action,.weekly-edition-picker select,.toggle-sources){min-height:44px !important;white-space:normal;}
+  html body #newspaper .edition-content :is(.story-body,.weekly-lead p,.weekly-matchup p,.weekly-editorial-grid p){font-size:16px;line-height:1.65;}
+  html body #newspaper .edition-header p,html body #newspaper .weekly-editorial-header p{font-size:15px;line-height:1.6;}
+  html body #newspaper :is(.story-source,.edition-footer small,.edition-meta,.edition-status,.weekly-editorial-meta){font-size:11px;line-height:1.5;}
+  html body #newspaper .weekly-editorial :is(h3,h4){line-height:1.25 !important;}
+  html body #newspaper .weekly-editorial h4{font-size:17px !important;}
+  html body #weekBoard .week-team-link{min-height:44px;white-space:normal;overflow-wrap:anywhere;}
+  html body .desk-table .desk-link{display:inline-flex !important;align-items:center;min-height:24px;}
+  html body .desk-scroll{max-width:100%;min-width:0;}
+}

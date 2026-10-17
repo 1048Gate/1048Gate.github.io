@@ -9,18 +9,17 @@
     historical: {
       path: HISTORICAL_PATH,
       label: 'League History',
-      route: 'newspaper',
+      route: 'newspaper?edition=historical',
       status: 'verified all-season archive'
     },
     weekly: {
       path: WEEKLY_INDEX_PATH,
-      label: '2026 Weekly Edition',
-      route: 'weekly',
-      status: 'verified 2026 weekly edition'
+      label: 'Weekly newspaper',
+      route: 'newspaper',
+      status: 'verified weekly edition'
     }
   });
 
-  let currentEditionKey = null;
   let weeklyIndex = null;
   let loadSequence = 0;
   let returnFocus = null;
@@ -108,7 +107,7 @@
       <div class="edition-empty" role="status">
         <span class="edition-kicker">1048 Gate Weekly Press</span>
         <h2>No weekly edition has been published yet</h2>
-        <p>The 2026 newspaper can publish a verified live issue while games are underway, then locks that same week as a final recap after the slate ends. The league-history archive is separate from current coverage.</p>
+        <p>Weekly editions publish Tuesdays at 7 AM Eastern. The league history archive remains available in the archive tab.</p>
       </div>`;
   }
 
@@ -153,10 +152,10 @@
       : `${data.league_name || '1048 Gate'} \u2014 ${data.season} Week ${data.week} Edition`;
     const notice = historical
       ? 'One verified championship recap from every completed league season.'
-      : (data.source_status === 'verified_live' ? 'Live weekly edition built from the current 2026 league board.' : 'Verified weekly recap built from the finalized 2026 league board.');
+      : (data.source_status === 'verified_live' ? `Live weekly edition built from the ${data.season} league board.` : `Verified weekly recap built from the finalized ${data.season} league board.`);
     const status = historical
       ? editionConfig.historical.status
-      : (data.source_status === 'verified_live' ? 'live 2026 weekly edition' : data.source_status === 'verified_final' ? 'verified 2026 weekly edition' : editionConfig.weekly.status);
+      : (data.source_status === 'verified_live' ? `live ${data.season} weekly edition` : data.source_status === 'verified_final' ? `verified ${data.season} weekly edition` : editionConfig.weekly.status);
 
     const coveredWeeklyTypes = new Set(['matchup_recap','closest_game','scoring_leaders','standings','record_watch','rivalry','power_rankings','preseason_order_watch','next_week']);
     const visibleStories = historical ? data.stories : data.stories.filter(story => !coveredWeeklyTypes.has(story.story_type));
@@ -211,6 +210,8 @@
       const active = tab.dataset.edition === editionKey;
       tab.classList.toggle('active', active);
       tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+      if(active)document.getElementById('editionContent')?.setAttribute('aria-labelledby',tab.id);
     });
     const picker = document.getElementById('weeklyEditionPicker');
     if(picker) picker.hidden = editionKey !== 'weekly';
@@ -227,9 +228,9 @@
       return;
     }
     select.disabled = false;
-    select.innerHTML = entries.map(entry => {
+    select.innerHTML = entries.map((entry,index) => {
       const selected = entry.path === selectedPath ? ' selected' : '';
-      return `<option value="${esc(entry.path)}"${selected}>${esc(entry.season)} \u00b7 Week ${String(entry.week).padStart(2, '0')}</option>`;
+      return `<option value="${esc(entry.path)}"${selected}>${index===0?'Latest':'Archive'} · ${esc(entry.season)} \u00b7 Week ${String(entry.week).padStart(2, '0')}</option>`;
     }).join('');
   }
 
@@ -271,6 +272,12 @@
     if(!container) return;
 
     setActiveTab(editionKey);
+    setExportAvailability(null);
+    closeSources();
+    const sourcesToggle=document.getElementById('editionSourcesToggle');
+    if(sourcesToggle)sourcesToggle.hidden=true;
+    const archiveStatus=document.getElementById('editionArchiveStatus');
+    if(archiveStatus)archiveStatus.textContent='';
     container.innerHTML = `<div class="edition-loading"><span>Loading ${esc(config.label)}\u2026</span></div>`;
 
     try {
@@ -282,18 +289,19 @@
           ? entries.find(entry => entry.path === requestedPath)
           : latestWeeklyEntry(index);
         fillWeeklySelect(index, selected?.path);
+        if(requestedPath&&!selected)throw new Error('That archived edition is not available. Choose another edition.');
         if(!selected){
           container.innerHTML = renderEmptyWeekly();
           const toggle = document.getElementById('editionSourcesToggle');
           if(toggle) toggle.hidden = true;
           setExportAvailability(null);
           closeSources();
-          currentEditionKey = 'weekly';
           return;
         }
         const data = validateEdition(await fetchJson(selected.path), 'weekly');
         if(sequence !== loadSequence) return;
-        currentEditionKey = 'weekly';
+        if(data.season!==selected.season||data.week!==selected.week)throw new Error('Edition does not match the selected season and week.');
+        if(archiveStatus)archiveStatus.textContent=`${selected.path===entries[0]?.path?'Latest published edition':'Archived weekly edition'} · ${data.season} · Week ${data.week}`;
         container.innerHTML = renderEditionMarkup(data, 'weekly');
         setExportAvailability(data);
         renderSourceList(data);
@@ -302,7 +310,7 @@
 
       const data = validateEdition(await fetchJson(config.path), editionKey);
       if(sequence !== loadSequence) return;
-      currentEditionKey = editionKey;
+      if(archiveStatus)archiveStatus.textContent='League history archive · Completed seasons';
       container.innerHTML = renderEditionMarkup(data, editionKey);
       setExportAvailability(null);
       renderSourceList(data);
@@ -373,16 +381,22 @@
     returnFocus = null;
   }
 
-  function routeForEdition(editionKey){
+  function routeForEdition(editionKey,path){
+    if(editionKey==='weekly'&&path)return `weekly?edition=${encodeURIComponent(path)}`;
     return editionConfig[editionKey]?.route || 'newspaper';
   }
 
   function editionForRoute(){
-    return window.location.hash === '#weekly' ? 'weekly' : 'historical';
+    return new URLSearchParams(window.location.hash.split('?')[1]||'').get('edition')==='historical'?'historical':'weekly';
+  }
+
+  function pathForRoute(){
+    const value=new URLSearchParams(window.location.hash.split('?')[1]||'').get('edition');
+    return value&&value!=='historical'?value:undefined;
   }
 
   function selectEdition(editionKey, {updateHistory = true, path} = {}){
-    const route = routeForEdition(editionKey);
+    const route = routeForEdition(editionKey,path);
     if(updateHistory && window.location.hash !== `#${route}`){
       history.pushState({view:'newspaper', edition:editionKey}, '', `#${route}`);
     }
@@ -394,9 +408,17 @@
     const tab = event.target.closest('.edition-tab[data-edition]');
     if(tab) selectEdition(tab.dataset.edition);
   });
+  document.getElementById('editionTabs')?.addEventListener('keydown',event=>{
+    const tabs=[...document.querySelectorAll('#editionTabs .edition-tab')];
+    const index=tabs.indexOf(event.target);
+    if(index<0||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+    event.preventDefault();
+    const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+    tabs[next].focus();selectEdition(tabs[next].dataset.edition);
+  });
   document.getElementById('weeklyEditionSelect')?.addEventListener('change', event => {
     const path = event.target.value;
-    if(path) loadEdition('weekly', path);
+    if(path) selectEdition('weekly', {path});
   });
   async function runExport(button, work, successMessage){
     const status = document.getElementById('editionExportStatus');
@@ -435,13 +457,13 @@
   document.addEventListener('gate:viewchange', event => {
     if(event.detail?.name === 'newspaper'){
       const requestedEdition = editionForRoute();
-      if(currentEditionKey !== requestedEdition) loadEdition(requestedEdition);
+      loadEdition(requestedEdition,pathForRoute());
     }else{
       closeSources();
     }
   });
-  if(window.location.hash === '#newspaper' || window.location.hash === '#weekly'){
-    loadEdition(editionForRoute());
+  if(['#newspaper','#weekly'].includes(window.location.hash.split('?')[0])){
+    loadEdition(editionForRoute(),pathForRoute());
   }
 
   window.gateNewspaper = Object.freeze({

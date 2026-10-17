@@ -136,6 +136,20 @@
         <a href="#deskHistory">6 Historical Notes</a>
         <a href="#championshipOdds">7 Championship Odds</a>
       </nav>
+      <form class="mobile-section-jump" id="homeJumpForm" aria-label="Jump to homepage section">
+        <label for="homeJumpTarget">Jump to</label>
+        <select id="homeJumpTarget" name="section">
+          <option value="weekBoard">Scores</option>
+          <option value="deskStandings">Standings</option>
+          <option value="deskLeaders">League leaders</option>
+          <option value="deskPlayoff">Playoff Race</option>
+          <option value="deskTransactions">Recent transactions</option>
+          <option value="deskHistory">Historical notes</option>
+          <option value="championshipOdds">Odds</option>
+          <option value="newspaper">Weekly newspaper</option>
+        </select>
+        <button type="submit">Go</button>
+      </form>
     </div>
 
     <section class="home-band home-band-now" aria-labelledby="homeNowTitle">
@@ -411,7 +425,7 @@
   </section>
 
 <section class="view" id="wire">
-    <div class="section-title"><span class="section-kicker">The league wire</span><h2>Wire</h2><span class="see-all">Transactions and trades</span></div>
+    <div class="section-title"><span class="section-kicker">The league wire</span><h2>Wire</h2><span class="see-all">Transactions &amp; trade discussions</span></div>
     <nav class="ia-subnav" data-wire-nav role="tablist" aria-label="Wire sections">
       <button type="button" class="active" data-wire-tab="transactions" data-view="transactions" role="tab" aria-selected="true">Archive</button>
       <button type="button" data-wire-tab="trades" role="tab" aria-selected="false">Trades</button>
@@ -661,6 +675,7 @@
 
   <section class="view" id="intel">
     <div class="section-title"><span class="section-kicker">League Intelligence Engine</span><h2>The book, computed</h2><span class="see-all" id="intelMeta">885 games · 85 scored trades</span></div>
+    <p class="section-description">The Book: League statistics &amp; records.</p>
     <nav class="history-subnav" id="intelNav" role="tablist" aria-label="Intelligence sections">
       <button type="button" class="active" data-intel-slice="wire" role="tab" aria-selected="true">Wire</button>
       <button type="button" data-intel-slice="rivalries" role="tab" aria-selected="false">Rivalries</button>
@@ -702,22 +717,23 @@
       <h2>Newspaper Editions</h2>
     </div>
     <div id="editionTabs" class="edition-tabs" role="tablist" aria-label="Newspaper editions">
-      <button type="button" class="edition-tab active" data-edition="historical" role="tab" aria-selected="true">Historical</button>
-      <button type="button" class="edition-tab" data-edition="weekly" role="tab" aria-selected="false">Weekly</button>
+      <button type="button" id="weeklyEditionTab" class="edition-tab active" data-edition="weekly" role="tab" aria-controls="editionContent" aria-selected="true" tabindex="0">Weekly newspaper</button>
+      <button type="button" id="historicalEditionTab" class="edition-tab" data-edition="historical" role="tab" aria-controls="editionContent" aria-selected="false" tabindex="-1">League history archive</button>
     </div>
     <div id="weeklyEditionPicker" class="weekly-edition-picker" hidden>
-      <label for="weeklyEditionSelect">Weekly edition</label>
+      <label for="weeklyEditionSelect">Weekly editions &amp; archive</label>
       <select id="weeklyEditionSelect" aria-label="Choose a weekly newspaper edition" disabled>
         <option value="">No weekly editions</option>
       </select>
     </div>
+    <p id="editionArchiveStatus" class="edition-archive-status" role="status"></p>
     <div id="weeklyEditionActions" class="edition-actions" hidden>
       <button type="button" id="editionPdfDownload" class="edition-action">Download PDF</button>
       <button type="button" id="editionImageDownload" class="edition-action">Save Page Images</button>
       <button type="button" id="editionShare" class="edition-action edition-action-primary">Share Summary</button>
       <span id="editionExportStatus" class="edition-export-status" role="status" aria-live="polite"></span>
     </div>
-    <div id="editionContent" class="edition-content" data-panel="editorial" aria-live="polite">
+    <div id="editionContent" class="edition-content" data-panel="editorial" role="tabpanel" aria-labelledby="weeklyEditionTab" aria-live="polite">
       <div class="edition-loading"><span>Open an edition to load the newspaper.</span></div>
     </div>
     <button type="button" id="editionSourcesToggle" class="toggle-sources" aria-controls="editionSourcesDrawer" aria-expanded="false" hidden>View Sources</button>
