@@ -12,7 +12,14 @@ runInNewContext(readFileSync(new URL('../js/freshness.js',import.meta.url),'utf8
 const freshness=context.window.gateFreshness;
 const board={season:2026,week:2,fetchedAt:'2026-09-21T15:06:30Z',matchups:Array.from({length:6},()=>({})),standings:Array.from({length:12},()=>({}))};
 assert.equal(freshness.validWeek(board),true);
+assert.equal(freshness.validWeek(board,{season:2025}),false);
+assert.equal(freshness.validWeek(board,{week:3}),false);
+assert.equal(freshness.validWeek(board,{season:2026,week:2}),true);
+assert.equal(freshness.validWeek({...board,matchups:board.matchups.map(game=>({...game,week:3}))}),false);
+assert.equal(freshness.validWeek({...board,week:26}),false);
 assert.equal(freshness.saveWeek(board,storage),true);
+assert.equal(freshness.readWeek({season:2025},storage),null);
+assert.equal(freshness.readWeek({season:2026,week:3},storage),null);
 assert.equal(freshness.clockLabel(board.fetchedAt).endsWith(' ET'), true);
 assert.match(freshness.dateTimeLabel(board.fetchedAt),/Sep 21, 2026 at 11:06 AM ET/);
 assert.match(freshness.relativeFrom(board.fetchedAt, Date.parse('2026-09-21T15:35:00Z')), /min ago/);

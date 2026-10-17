@@ -55,11 +55,13 @@
 
   let supabase = null;
   let loaded = false;
-  let loading = false;
+  let archiveRequest = 0;
+  let seasonsReady = null;
   let page = 1;
   let activeCategory = readCategoryFromHash();
   let searchTimer = null;
   let summaryCounts = null;
+  let summaryKey = null;
   let currentArchive = null;
 
   const controls = {
@@ -104,10 +106,12 @@
     };
   }
 
-  async function fetchArchive(category = activeCategory, requestedPage = page, requestedPageSize = PAGE_SIZE){
-    const {data, error} = await supabase.rpc('get_transaction_archive', rpcArgs(category, requestedPage, requestedPageSize));
+  async function fetchArchive(args){
+    if(args.p_season_year!==null&&(!Number.isInteger(args.p_season_year)||args.p_season_year<2019))throw new Error('Select a valid transaction season.');
+    const {data, error} = await supabase.rpc('get_transaction_archive', args);
     if(error) throw error;
-    return data || {page:requestedPage, page_size:requestedPageSize, total_count:0, items:[]};
+    if(data?.items?.some(row=>!Number.isInteger(row.season_year)||(args.p_season_year!==null&&row.season_year!==args.p_season_year)))throw new Error('Transaction response season mismatch.');
+    return data || {page:args.p_page, page_size:args.p_page_size, total_count:0, items:[]};
   }
 
   async function populateSeasons(){
@@ -122,10 +126,10 @@
     controls.season.innerHTML = '<option value="all">All seasons</option>' + years.map(year => `<option value="${year}">${year}</option>`).join('');
   }
 
-  async function loadSummary(){
+  async function loadSummary(args){
     const categories = ['all','FREEAGENT','WAIVER','TRADE_ACCEPT'];
-    const entries = await Promise.all(categories.map(async category => [category, await fetchArchive(category, 1, 1)]));
-    summaryCounts = Object.fromEntries(entries.map(([category, payload]) => [category, Number(payload.total_count || 0)]));
+    const entries = await Promise.all(categories.map(async category => [category, await fetchArchive({...args,p_category:category,p_page:1,p_page_size:1})]));
+    return Object.fromEntries(entries.map(([category, payload]) => [category, Number(payload.total_count || 0)]));
   }
 
   function renderSummary(){
@@ -223,23 +227,31 @@
   }
 
   async function loadArchive({refreshSummary = false} = {}){
-    if(loading) return;
-    loading = true;
+    const request=++archiveRequest;
     setControlsDisabled(true);
     setSync('is-loading', loaded ? 'Updating archive…' : 'Loading archive…');
-    if(!loaded) setFeedState('Loading transaction archive…', 'Connecting to the league database.');
+    setFeedState('Loading transaction archive…', 'Connecting to the league database.');
     try{
       supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
       if(!supabase) throw new Error('The league database connection is unavailable.');
+      if(!seasonsReady)seasonsReady=populateSeasons().catch(error=>{seasonsReady=null;throw error;});
+      await seasonsReady;
+      if(request!==archiveRequest)return;
+      const args=rpcArgs();
       if(!loaded){
-        await populateSeasons();
         refreshSummary = true;
       }
-      if(refreshSummary || !summaryCounts){
-        await loadSummary();
-        renderSummary();
+      let nextSummary=summaryCounts;
+      const nextSummaryKey=JSON.stringify([args.p_season_year,args.p_search]);
+      if(refreshSummary || !summaryCounts || summaryKey!==nextSummaryKey){
+        nextSummary=await loadSummary(args);
       }
-      currentArchive = await fetchArchive();
+      const nextArchive=await fetchArchive(args);
+      if(request!==archiveRequest)return;
+      summaryCounts=nextSummary;
+      summaryKey=nextSummaryKey;
+      renderSummary();
+      currentArchive = nextArchive;
       loaded = true;
       render();
       const now = new Date().toISOString();
@@ -247,12 +259,12 @@
       const clock = window.gateFreshness?.clockLabel(now) || '';
       setSync('is-live', clock ? `Updated ${rel} \u00b7 ${clock}` : `Updated ${rel}`);
     }catch(error){
+      if(request!==archiveRequest)return;
       console.error('Unable to load transaction archive:', error);
       setSync('is-error', 'Sync unavailable');
       setFeedState('Transaction history is unavailable.', error.message || 'Check your connection, then try again.', 'Retry');
     }finally{
-      loading = false;
-      setControlsDisabled(false);
+      if(request===archiveRequest)setControlsDisabled(false);
     }
   }
 

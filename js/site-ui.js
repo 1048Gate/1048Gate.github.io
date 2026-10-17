@@ -191,6 +191,8 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
   const boardNode=document.getElementById('weekBoard');
   if(boardNode){
     boardNode.dataset.weekSource=saved?'saved':'fresh';
+    boardNode.dataset.weekSeason=String(payload.season);
+    boardNode.dataset.week=String(payload.week);
     if(payload.fetchedAt || payload.last_updated) boardNode.dataset.weekFetchedAt=payload.fetchedAt || payload.last_updated;
   }
   const weekBoard = window.gateWeekBoard;
@@ -220,14 +222,12 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
   document.dispatchEvent(new CustomEvent('gate:home-board-ready', {detail:payload}));
 }
 
-async function loadHomepageWeek(){
+async function loadHomepageWeek(expected = {}){
   try{
     const home = await fetch('data/homepage-week.json', {cache:'no-store'});
     if(!home.ok) return null;
     const payload = await home.json();
-    if(!window.gateFreshness?.validWeek(payload) || !Array.isArray(payload.league_pulse)) return null;
-    window.gateHomepageWeek = payload;
-    document.dispatchEvent(new CustomEvent('gate:homepage-week-ready', {detail:payload}));
+    if(!window.gateFreshness?.validWeek(payload, expected) || !Array.isArray(payload.league_pulse)) return null;
     return payload;
   }catch(error){
     console.warn('Homepage week payload unavailable; using current-season.json.', error);
@@ -235,22 +235,43 @@ async function loadHomepageWeek(){
   }
 }
 
+let weekBoardRequest=0;
 async function renderWeekBoard(){
   if(!document.querySelector('[data-week-matchups]') && !document.querySelector('[data-week-standings]')) return;
+  const request=++weekBoardRequest;
+  const config=window.gateSiteConfig;
+  const phaseWeek=/^Week (\d+)$/i.exec(config?.phase||'');
+  const expected={season:config?.seasonYear,...(phaseWeek?{week:Number(phaseWeek[1])}:{})};
   try{
-    let payload = await loadHomepageWeek();
+    let payload = await loadHomepageWeek(expected);
     if(!payload){
       const response = await fetch('data/current-season.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`current-season.json returned HTTP ${response.status}`);
       payload=await response.json();
-      if(!window.gateFreshness?.validWeek(payload)) throw new Error('current-season.json is incomplete');
+      if(!window.gateFreshness?.validWeek(payload,expected)) throw new Error('current-season.json is incomplete or belongs to another season/week');
     }
+    if(request!==weekBoardRequest||window.gateSiteConfig!==config)return;
+    window.gateHomepageWeek=Array.isArray(payload.league_pulse)?payload:null;
+    if(window.gateHomepageWeek)document.dispatchEvent(new CustomEvent('gate:homepage-week-ready',{detail:payload}));
     renderWeekBoardFrom(payload);
     window.gateFreshness.saveWeek(payload);
   }catch(error){
+    if(request!==weekBoardRequest||window.gateSiteConfig!==config)return;
     const board=document.getElementById('weekBoard');
-    const cached=window.gateFreshness?.readWeek({season:board?.dataset.weekSeason,week:board?.dataset.week});
+    const cached=window.gateFreshness?.readWeek({season:expected.season??board?.dataset.weekSeason,week:expected.week??board?.dataset.week});
     if(cached) renderWeekBoardFrom(cached,{saved:true});
+    else if(board&&((expected.season!=null&&Number(board.dataset.weekSeason)!==expected.season)||(expected.week!=null&&Number(board.dataset.week)!==expected.week))){
+      window.gateHomeBoard=null;window.gateHomepageWeek=null;
+      window.stopWeekFreshnessMonitor?.();
+      const stamp=board.querySelector('[data-week-stamp]');
+      if(stamp)stamp.textContent='Scores unavailable';
+      const games=document.querySelector('[data-week-matchups]');
+      const standings=document.querySelector('[data-week-standings]');
+      if(games)games.textContent='Scores for the selected season and week are temporarily unavailable.';
+      if(standings)standings.replaceChildren();
+      document.querySelectorAll('[data-week-heading], #weekBoard h2').forEach(el=>{el.textContent=expected.week?`Week ${expected.week}`:'This week'});
+      board.dataset.weekSource='unavailable';
+    }
     else{
       const stamp=board?.querySelector('[data-week-stamp]');
       window.gateFreshness?.setTimestamp(stamp,{iso:board?.dataset.weekFetchedAt,saved:true});
