@@ -220,14 +220,12 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
   document.dispatchEvent(new CustomEvent('gate:home-board-ready', {detail:payload}));
 }
 
-async function loadHomepageWeek(){
+async function loadHomepageWeek(expected = {}){
   try{
     const home = await fetch('data/homepage-week.json', {cache:'no-store'});
     if(!home.ok) return null;
     const payload = await home.json();
-    if(!window.gateFreshness?.validWeek(payload) || !Array.isArray(payload.league_pulse)) return null;
-    window.gateHomepageWeek = payload;
-    document.dispatchEvent(new CustomEvent('gate:homepage-week-ready', {detail:payload}));
+    if(!window.gateFreshness?.validWeek(payload, expected) || !Array.isArray(payload.league_pulse)) return null;
     return payload;
   }catch(error){
     console.warn('Homepage week payload unavailable; using current-season.json.', error);
@@ -235,21 +233,30 @@ async function loadHomepageWeek(){
   }
 }
 
+let weekBoardRequest=0;
 async function renderWeekBoard(){
   if(!document.querySelector('[data-week-matchups]') && !document.querySelector('[data-week-standings]')) return;
+  const request=++weekBoardRequest;
+  const config=window.gateSiteConfig;
+  const phaseWeek=/^Week (\d+)$/i.exec(config?.phase||'');
+  const expected={season:config?.seasonYear,...(phaseWeek?{week:Number(phaseWeek[1])}:{})};
   try{
-    let payload = await loadHomepageWeek();
+    let payload = await loadHomepageWeek(expected);
     if(!payload){
       const response = await fetch('data/current-season.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`current-season.json returned HTTP ${response.status}`);
       payload=await response.json();
-      if(!window.gateFreshness?.validWeek(payload)) throw new Error('current-season.json is incomplete');
+      if(!window.gateFreshness?.validWeek(payload,expected)) throw new Error('current-season.json is incomplete or belongs to another season/week');
     }
+    if(request!==weekBoardRequest||window.gateSiteConfig!==config)return;
+    window.gateHomepageWeek=Array.isArray(payload.league_pulse)?payload:null;
+    if(window.gateHomepageWeek)document.dispatchEvent(new CustomEvent('gate:homepage-week-ready',{detail:payload}));
     renderWeekBoardFrom(payload);
     window.gateFreshness.saveWeek(payload);
   }catch(error){
+    if(request!==weekBoardRequest||window.gateSiteConfig!==config)return;
     const board=document.getElementById('weekBoard');
-    const cached=window.gateFreshness?.readWeek({season:board?.dataset.weekSeason,week:board?.dataset.week});
+    const cached=window.gateFreshness?.readWeek({season:expected.season??board?.dataset.weekSeason,week:expected.week??board?.dataset.week});
     if(cached) renderWeekBoardFrom(cached,{saved:true});
     else{
       const stamp=board?.querySelector('[data-week-stamp]');

@@ -11,7 +11,7 @@
   const num=v=>Number(v||0).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:2});
   const people={'kyle fowler':'Kyle Fowler','ronnie coiro':'Ronnie Coiro','german joshua haro':'German Haro','german haro':'German Haro','tommy speer':'Thomas Speer'};
   const person=v=>people[String(v??'').trim().toLowerCase()]||String(v??'');
-  let loaded=false,indexData=null,mode='career',activeYear=null,yearData=null;
+  let loaded=false,indexData=null,mode='career',activeYear=null,yearData=null,yearRequest=0,yearStatus='';
   function activate(){shell.querySelectorAll('[data-history-tab]').forEach(x=>x.classList.toggle('active',x===btn));shell.querySelectorAll('[data-history-panel]').forEach(x=>x.classList.toggle('active',x===panel));ensureLoaded()}
   btn.addEventListener('click',activate);
   async function ensureLoaded(){if(loaded)return;loaded=true;panel.innerHTML='<div class="panel history-content-panel player-archive-panel"><div class="history-loading">Loading player archive…</div></div>';try{const r=await fetch('data/players/index.json',{cache:'no-store'});if(!r.ok)throw new Error(`players index returned HTTP ${r.status}`);indexData=await r.json();activeYear=indexData.years?.[0];build();await loadYear(activeYear)}catch(error){console.error('Unable to load player archive:',error);panel.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Player archive could not be loaded.</div></div>'}}
@@ -21,6 +21,25 @@
     panel.querySelector('.player-pos').addEventListener('change',draw);panel.querySelector('.player-search').addEventListener('input',draw);draw();
   }
   function setMode(next){mode=next;panel.querySelectorAll('[data-player-mode]').forEach(x=>x.classList.toggle('active',x.dataset.playerMode===mode));panel.querySelector('.player-year-nav').classList.toggle('is-hidden',mode!=='season');draw()}
-  async function loadYear(year){activeYear=Number(year);panel.querySelectorAll('[data-player-year]').forEach(x=>x.classList.toggle('active',Number(x.dataset.playerYear)===activeYear));try{const r=await fetch(`data/players/${activeYear}.json`,{cache:'no-store'});if(!r.ok)throw new Error(`players/${activeYear}.json returned HTTP ${r.status}`);yearData=await r.json();if(mode==='season')draw()}catch(error){console.error('Unable to load player season:',error)}}
-  function draw(){const tbody=panel.querySelector('tbody'),thead=panel.querySelector('thead'),empty=panel.querySelector('.player-empty');if(!tbody||!thead)return;const pos=panel.querySelector('.player-pos')?.value||'',q=(panel.querySelector('.player-search')?.value||'').trim().toLowerCase();if(mode==='career'){thead.innerHTML='<tr><th>Player</th><th>Pos</th><th>Seasons</th><th>Points</th><th>Weeks</th><th>Starts</th><th>Best Week</th></tr>';const rows=(indexData?.careers||[]).filter(p=>(!pos||p[2]===pos)&&(!q||p[1].toLowerCase().includes(q)));tbody.innerHTML=rows.map(p=>`<tr><td class="player-name"><strong>${esc(p[1])}</strong></td><td><span class="player-pos-tag">${esc(p[2])}</span></td><td>${p[3]}</td><td class="player-points">${num(p[4])}</td><td>${p[5]}</td><td>${p[6]}</td><td><strong>${num(p[7])}</strong><small>${p[8]} W${p[9]}</small></td></tr>`).join('');empty.hidden=rows.length>0}else{thead.innerHTML='<tr><th>Rank</th><th>Player</th><th>Pos</th><th>Points</th><th>Weeks</th><th>Starts</th><th>Best</th><th>Primary Fantasy Team</th></tr>';const rows=(yearData?.players||[]).filter(p=>(!pos||p[2]===pos)&&(!q||`${p[1]} ${p[8]} ${person(p[9])}`.toLowerCase().includes(q)));tbody.innerHTML=rows.map((p,i)=>`<tr><td class="player-rank">#${i+1}</td><td class="player-name"><strong>${esc(p[1])}</strong></td><td><span class="player-pos-tag">${esc(p[2])}</span></td><td class="player-points">${num(p[3])}</td><td>${p[4]}</td><td>${p[5]}</td><td><strong>${num(p[6])}</strong><small>W${p[7]}</small></td><td><strong>${esc(p[8])}</strong><small>${esc(person(p[9]))}</small></td></tr>`).join('');empty.hidden=rows.length>0}}
+  async function loadYear(year){
+    const requestedYear=Number(year),request=++yearRequest;
+    activeYear=requestedYear;yearData=null;yearStatus=`Loading ${requestedYear} player history…`;
+    panel.querySelectorAll('[data-player-year]').forEach(x=>x.classList.toggle('active',Number(x.dataset.playerYear)===activeYear));
+    if(mode==='season')draw();
+    try{
+      if(!Number.isInteger(requestedYear)||!indexData.years.includes(requestedYear))throw new Error('Unavailable player year');
+      const r=await fetch(`data/players/${requestedYear}.json`,{cache:'no-store'});
+      if(!r.ok)throw new Error(`players/${requestedYear}.json returned HTTP ${r.status}`);
+      const data=await r.json();
+      if(data.year!==requestedYear||!Array.isArray(data.players))throw new Error('Player archive year mismatch');
+      if(request!==yearRequest)return;
+      yearData=data;yearStatus='';
+    }catch(error){
+      if(request!==yearRequest)return;
+      yearStatus=`${requestedYear} player history is unavailable. Select the year again to retry.`;
+      console.error('Unable to load player season:',error);
+    }
+    if(mode==='season')draw();
+  }
+  function draw(){const tbody=panel.querySelector('tbody'),thead=panel.querySelector('thead'),empty=panel.querySelector('.player-empty');if(!tbody||!thead)return;const pos=panel.querySelector('.player-pos')?.value||'',q=(panel.querySelector('.player-search')?.value||'').trim().toLowerCase();if(mode==='career'){thead.innerHTML='<tr><th>Player</th><th>Pos</th><th>Seasons</th><th>Points</th><th>Weeks</th><th>Starts</th><th>Best Week</th></tr>';const rows=(indexData?.careers||[]).filter(p=>(!pos||p[2]===pos)&&(!q||p[1].toLowerCase().includes(q)));tbody.innerHTML=rows.map(p=>`<tr><td class="player-name"><strong>${esc(p[1])}</strong></td><td><span class="player-pos-tag">${esc(p[2])}</span></td><td>${p[3]}</td><td class="player-points">${num(p[4])}</td><td>${p[5]}</td><td>${p[6]}</td><td><strong>${num(p[7])}</strong><small>${p[8]} W${p[9]}</small></td></tr>`).join('');empty.hidden=rows.length>0}else{thead.innerHTML='<tr><th>Rank</th><th>Player</th><th>Pos</th><th>Points</th><th>Weeks</th><th>Starts</th><th>Best</th><th>Primary Fantasy Team</th></tr>';empty.textContent=yearStatus||'No players match that filter.';const rows=(yearData?.year===activeYear?yearData.players:[]).filter(p=>(!pos||p[2]===pos)&&(!q||`${p[1]} ${p[8]} ${person(p[9])}`.toLowerCase().includes(q)));tbody.innerHTML=rows.map((p,i)=>`<tr><td class="player-rank">#${i+1}</td><td class="player-name"><strong>${esc(p[1])}</strong></td><td><span class="player-pos-tag">${esc(p[2])}</span></td><td class="player-points">${num(p[3])}</td><td>${p[4]}</td><td>${p[5]}</td><td><strong>${num(p[6])}</strong><small>W${p[7]}</small></td><td><strong>${esc(p[8])}</strong><small>${esc(person(p[9]))}</small></td></tr>`).join('');empty.hidden=rows.length>0}}
 })();

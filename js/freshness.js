@@ -5,7 +5,7 @@
   const LIVE_WARNING_MINUTES = 45;
   const LIVE_CRITICAL_MINUTES = 90;
 
-  function validWeek(payload){
+  function validWeek(payload, expected = {}){
     const season=payload?.season;
     const week=payload?.week;
     return !!payload
@@ -13,8 +13,12 @@
       && season > 0
       && Number.isInteger(week)
       && week > 0
+      && week <= 25
+      && (expected.season == null || season === expected.season)
+      && (expected.week == null || week === expected.week)
       && Array.isArray(payload.matchups)
       && payload.matchups.length === 6
+      && payload.matchups.every(game=>game.week == null || game.week === week)
       && Array.isArray(payload.standings)
       && payload.standings.length === 12;
   }

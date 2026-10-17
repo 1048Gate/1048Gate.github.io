@@ -150,7 +150,7 @@
     const route=item?.item_type==='ADD'?`added to ${clean(item.to_team_name||row.team_name||'a roster')}`
       :item?.item_type==='DROP'?`dropped by ${clean(item.from_team_name||row.team_name||'a roster')}`
       :item?.item_type==='TRADE'?`${clean(item.from_team_name||'One team')} → ${clean(item.to_team_name||'another team')}`:'';
-    return {id:'transactions',label:'Latest move',title:`${clean(row.team_name||'League activity')} · ${type}`,detail:player?`${player}${route?` · ${route}`:''}`:'Open the verified transaction for full details.',view:'transactions'};
+    return {id:'transactions',label:`Latest move${Number.isInteger(row.season_year)?` · ${row.season_year}`:''}`,title:`${clean(row.team_name||'League activity')} · ${type}`,detail:player?`${player}${route?` · ${route}`:''}`:'Open the verified transaction for full details.',view:'transactions'};
   }
 
   const api=Object.freeze({buildCards,transactionCard,isOffseason,refresh});
@@ -158,7 +158,7 @@
   if(typeof document === 'undefined') return;
 
   const esc=value=>(window.gateShared?.escapeHtml||((text)=>String(text??'')))(value);
-  let archive=null,archiveRequested=false,transactionRequested=false,latestTransaction=null;
+  let archive=null,archiveRequested=false,transactionSeason=null,transactionRequest=0,latestTransaction=null;
 
   function cardHtml(card,index){
     const action=card.view
@@ -170,7 +170,7 @@
   function render(cards,{saved=false}={}){
     const host=document.querySelector('[data-league-pulse]');
     if(!host||!cards.length) return;
-    if(latestTransaction) cards=cards.map(card=>card.id==='transactions'?transactionCard(latestTransaction):card);
+    if(latestTransaction?.season_year===window.gateSiteConfig?.seasonYear) cards=cards.map(card=>card.id==='transactions'?transactionCard(latestTransaction):card);
     /* Prebuilt payloads may carry older odds copy; rebuild that card from site.json when it is loaded. */
     if(window.gateSiteConfig) cards=cards.map(card=>card.id==='odds'?(oddsCard(window.gateSiteConfig)||card):card);
     host.innerHTML=cards.map(cardHtml).join('');
@@ -192,6 +192,7 @@
 
   function cardsFromPayload(){
     const ready=window.gateHomepageWeek;
+    if(ready?.season!==window.gateSiteConfig?.seasonYear||ready?.week!==window.gateHomeBoard?.week)return null;
     return Array.isArray(ready?.league_pulse)&&ready.league_pulse.length?ready.league_pulse:null;
   }
 
@@ -206,23 +207,33 @@
     const board=window.gateHomeBoard;
     if(!config||!board) return;
     await loadArchive();
+    if(window.gateSiteConfig!==config||window.gateHomeBoard!==board)return;
     render(buildCards({config,board,archive:archive||{}}),{saved});
   }
 
   async function refreshTransaction(){
-    if(transactionRequested) return;
+    const season=window.gateSiteConfig?.seasonYear;
+    if(season===transactionSeason) return;
+    const request=++transactionRequest;
+    transactionSeason=null;latestTransaction=null;
+    const existing=document.querySelector('[data-pulse-card="transactions"]');
+    if(existing)existing.outerHTML=cardHtml(transactionFallback());
+    if(!Number.isInteger(season)||season<2019) return;
+    transactionSeason=season;
     const supabase=window.gateSupabase||await(window.gateSupabaseReady||Promise.resolve(null));
-    if(!supabase) return;
-    transactionRequested=true;
+    if(request!==transactionRequest) return;
+    if(!supabase){transactionSeason=null;return;}
     try{
-      const {data,error}=await supabase.rpc('get_transaction_archive',{p_page:1,p_page_size:1,p_season_year:Number(window.gateSiteConfig?.seasonYear)||null,p_category:'all',p_search:null,p_sort:'newest'});
+      const {data,error}=await supabase.rpc('get_transaction_archive',{p_page:1,p_page_size:1,p_season_year:season,p_category:'all',p_search:null,p_sort:'newest'});
+      if(request!==transactionRequest||window.gateSiteConfig?.seasonYear!==season) return;
       if(error) throw error;
       const row=Array.isArray(data?.items)?data.items[0]:null;
       if(!row) return;
+      if(row.season_year!==season)throw new Error('Transaction season mismatch');
       latestTransaction=row;
       const card=document.querySelector('[data-pulse-card="transactions"]');
       if(card) card.outerHTML=cardHtml(transactionCard(row));
-    }catch(error){console.warn('League Pulse could not refresh the latest transaction.',error);}
+    }catch(error){if(request===transactionRequest){transactionSeason=null;console.warn('League Pulse could not refresh the latest transaction.',error);}}
   }
 
   function scrollPulse(direction){
@@ -238,6 +249,7 @@
   });
   ['gate:site-ready','gate:home-board-ready','gate:homepage-week-ready'].forEach(name=>document.addEventListener(name,refresh));
   window.addEventListener('gate-supabase-ready',refreshTransaction);
+  document.addEventListener('gate:site-ready',refreshTransaction);
   if(window.gateSupabase) refreshTransaction();
   refresh();
 })();

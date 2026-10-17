@@ -125,6 +125,10 @@ def related_transaction_id(tx: dict[str, Any]) -> str | None:
 
 
 def normalize_transactions(payload: dict[str, Any], season: int, league_id: int) -> dict[str, Any]:
+    if payload.get('seasonId', season) != season or payload.get('id', league_id) != league_id:
+        raise ValueError('Transaction source season or league mismatch')
+    if not isinstance(payload.get('transactions'), list):
+        raise ValueError('Transaction source is missing its transactions array')
     teams = team_names(payload)
     players = player_names(payload)
     transactions: list[dict[str, Any]] = []
@@ -205,6 +209,8 @@ def normalize_transactions(payload: dict[str, Any], season: int, league_id: int)
         "league_id": league_id,
         "season": season,
         "source": "ESPN mTransactions2",
+        # mTransactions2 does not prove whole-season coverage. Never infer completeness.
+        "snapshot_complete": False,
         "transaction_count": len(transactions),
         "item_count": len(items),
         "transactions": transactions,

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Upsert normalized ESPN transactions into Supabase archive tables.
+"""Atomically import normalized ESPN transactions into Supabase archive tables.
 
 Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY. Uses the service role so
 RLS-blocked browser roles are never used for writes. Upserts on
@@ -20,7 +20,6 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE_PATH = ROOT / "data" / "site.json"
-BATCH = 200
 
 
 def supabase_request(method: str, path: str, payload: Any | None = None, prefer: str | None = None) -> Any:
@@ -46,35 +45,60 @@ def supabase_request(method: str, path: str, payload: Any | None = None, prefer:
         raise RuntimeError(f"Supabase {method} {path} failed HTTP {exc.code}: {detail}") from exc
 
 
-def chunked(rows: list[dict[str, Any]], size: int = BATCH):
-    for index in range(0, len(rows), size):
-        yield rows[index:index + size]
+def prepare_import(data: dict[str, Any], *, authoritative: bool = False, allow_empty: bool = False) -> dict[str, Any]:
+    """Fail closed before any write; completeness is an explicit operator assertion."""
+    from datetime import datetime
+    if not isinstance(data, dict) or type(data.get('season')) is not int or data['season'] < 2019:
+        raise ValueError('Invalid transaction season')
+    if data.get('league_id') != 1237285 or data.get('source') != 'ESPN mTransactions2':
+        raise ValueError('Unexpected transaction source or league')
+    stamp = datetime.fromisoformat(str(data.get('fetched_at', '')).replace('Z', '+00:00'))
+    if stamp.tzinfo is None:
+        raise ValueError('Import timestamp must include a timezone')
+    transactions, items = data.get('transactions'), data.get('items')
+    if not isinstance(transactions, list) or not isinstance(items, list):
+        raise ValueError('Input must contain transactions/items arrays')
+    if data.get('transaction_count') != len(transactions) or data.get('item_count') != len(items):
+        raise ValueError('Import counts do not match the snapshot')
+    parents, children = {}, {}
+    for row in transactions:
+        if not isinstance(row, dict):
+            raise ValueError('Invalid transaction row')
+        key = row.get('espn_transaction_id')
+        if row.get('season_year') != data['season'] or not isinstance(key, str) or not key.strip():
+            raise ValueError('Invalid transaction identity')
+        if not isinstance(row.get('raw_data'), dict) or row['raw_data'].get('id') != key:
+            raise ValueError('Missing imported transaction provenance')
+        if type(row.get('item_count')) is not int or row['item_count'] < 0:
+            raise ValueError('Invalid transaction item count')
+        if key in parents and parents[key] != row:
+            raise ValueError('Conflicting duplicate transaction')
+        parents[key] = row
+    for row in items:
+        if not isinstance(row, dict):
+            raise ValueError('Invalid transaction item')
+        key = (row.get('espn_transaction_id'), row.get('item_index'))
+        if row.get('season_year') != data['season'] or key[0] not in parents or type(key[1]) is not int or key[1] < 0:
+            raise ValueError('Invalid transaction item identity')
+        if key in children and children[key] != row:
+            raise ValueError('Conflicting duplicate transaction item')
+        children[key] = row
+    for key, row in parents.items():
+        if sorted(index for parent, index in children if parent == key) != list(range(row['item_count'])):
+            raise ValueError('Incomplete transaction items')
+    if authoritative and data.get('snapshot_complete') is not True:
+        raise ValueError('Authoritative reconciliation requires a certified complete snapshot')
+    if authoritative and not parents and not allow_empty:
+        raise ValueError('Empty authoritative snapshots require --allow-empty-snapshot')
+    kept = {key: row for key, row in parents.items() if str(row.get('transaction_type', '')).upper() != 'DRAFT'}
+    kept_items = [row for (parent, _), row in children.items() if parent in kept]
+    return {**data, 'transactions': list(kept.values()), 'items': kept_items,
+            'transaction_count': len(kept), 'item_count': len(kept_items), 'snapshot_complete': authoritative}
 
 
-def upsert_transactions(rows: list[dict[str, Any]]) -> int:
-    count = 0
-    for batch in chunked(rows):
-        supabase_request(
-            "POST",
-            "league_transactions?on_conflict=season_year,espn_transaction_id",
-            batch,
-            prefer="resolution=merge-duplicates,return=minimal",
-        )
-        count += len(batch)
-    return count
-
-
-def upsert_items(rows: list[dict[str, Any]]) -> int:
-    count = 0
-    for batch in chunked(rows):
-        supabase_request(
-            "POST",
-            "league_transaction_items?on_conflict=season_year,espn_transaction_id,item_index",
-            batch,
-            prefer="resolution=merge-duplicates,return=minimal",
-        )
-        count += len(batch)
-    return count
+def import_snapshot(data: dict[str, Any], *, authoritative: bool = False, allow_empty: bool = False) -> Any:
+    prepared = prepare_import(data, authoritative=authoritative, allow_empty=allow_empty)
+    return supabase_request('POST', 'rpc/import_transaction_snapshot', {'p_snapshot': prepared})
 
 
 def bump_transaction_range(season: int) -> bool:
@@ -99,6 +123,8 @@ def main() -> int:
     parser.add_argument("--input", type=Path, required=True, help="Normalized JSON from fetch_transactions.py")
     parser.add_argument("--bump-site-range", action="store_true", default=True)
     parser.add_argument("--no-bump-site-range", action="store_false", dest="bump_site_range")
+    parser.add_argument('--authoritative-complete', action='store_true', help='Reconcile a certified complete season snapshot atomically')
+    parser.add_argument('--allow-empty-snapshot', action='store_true', help='Explicitly authorize a certified empty season snapshot')
     args = parser.parse_args()
 
     if not os.getenv("SUPABASE_URL") or not os.getenv("SUPABASE_SERVICE_ROLE_KEY"):
@@ -106,17 +132,12 @@ def main() -> int:
         return 2
 
     data = json.loads(args.input.read_text(encoding="utf-8"))
-    transactions = [row for row in (data.get("transactions") or []) if str(row.get("transaction_type") or "").upper() != "DRAFT"]
-    draft_ids = {row.get("espn_transaction_id") for row in (data.get("transactions") or []) if str(row.get("transaction_type") or "").upper() == "DRAFT"}
-    items = [row for row in (data.get("items") or []) if row.get("espn_transaction_id") not in draft_ids]
-    if not isinstance(transactions, list) or not isinstance(items, list):
-        print("Input JSON missing transactions/items arrays.", file=sys.stderr)
+    try:
+        result = import_snapshot(data, authoritative=args.authoritative_complete, allow_empty=args.allow_empty_snapshot)
+    except (ValueError, RuntimeError) as exc:
+        print(str(exc), file=sys.stderr)
         return 1
-
-    # Insert parents before children.
-    tx_count = upsert_transactions(transactions)
-    item_count = upsert_items(items)
-    print(f"Upserted {tx_count} transactions and {item_count} items")
+    print(f"Imported transaction snapshot: {result}")
 
     season = int(data.get("season") or 0)
     if args.bump_site_range and season:
