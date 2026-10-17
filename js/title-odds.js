@@ -193,14 +193,14 @@
   const host = document.createElement('div');
   host.className = 'panel title-odds-panel';
   host.id = 'titleOdds';
-  host.innerHTML = '<div class="history-loading">Simulating seasons…</div>';
+  host.innerHTML = '<div class="history-loading">Open Playoffs to load probabilities.</div>';
   toolbar.insertAdjacentElement('afterend', host);
 
   async function load(){
     host.classList.remove('hidden');
     host.innerHTML = '<div class="history-loading">Loading playoff probability board…</div>';
     try{
-      const response = await fetch('data/power-rankings.json', {cache:'no-store'});
+      const response = await (window.gateData?.fetch || fetch)('data/power-rankings.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`power-rankings.json returned HTTP ${response.status}`);
       const payload = await response.json();
       const prepared = prepare(payload);
@@ -254,5 +254,8 @@
       </div>`).join('')}</div><p class="title-odds-note">${note}</p>${methodText ? `<details class="title-odds-note title-odds-method" data-odds-method><summary>How the odds are set</summary><p>${escapeHtml(methodText)}</p></details>` : ''}<p class="title-odds-note title-odds-footnote">${AI_FOOTNOTE}</p>`;
   }
 
-  load();
+  let opened=false;
+  function ensureLoaded(){if(opened)return;opened=true;load();}
+  document.addEventListener('gate:history-tab',event=>{if(event.detail?.tab==='playoffs')ensureLoaded();});
+  if(document.getElementById('history')?.classList.contains('active')&&document.querySelector('[data-history-panel="playoffs"]')?.classList.contains('active'))ensureLoaded();
 })();

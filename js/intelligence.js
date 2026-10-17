@@ -350,7 +350,7 @@
     setStatus('is-loading', 'Loading · Connecting to the league archive…');
     body.innerHTML = '<div class="panel"><div class="history-loading">Computing the book…</div></div>';
     try {
-      const response = await fetch("data/intelligence.json", {cache: "no-store"});
+      const response = await (window.gateData?.fetch || fetch)("data/intelligence.json", {cache: "no-store"});
       if (!response.ok) throw new Error(`intelligence.json returned HTTP ${response.status}`);
       intel = await response.json();
       const people = intel.rivalries?.participants || [];

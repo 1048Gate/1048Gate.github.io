@@ -250,7 +250,7 @@
   }
 
   async function fetchJson(path){
-    const response = await fetch(path, {cache:'no-store'});
+    const response = await (window.gateData?.fetch || fetch)(path, {cache:'no-store'});
     if(!response.ok) throw new Error(`edition file returned HTTP ${response.status}`);
     return response.json();
   }
@@ -336,7 +336,10 @@
       }
       const data=validateEdition(await fetchJson(selected.path),'weekly');
       target.innerHTML=`<div class="weekly-feature-card"><div class="weekly-feature-copy"><span class="weekly-kicker">SZN ${esc(data.season-2016)} · WEEK ${esc(data.week)} · ${esc(data.status==='live'?'LIVE':'FINAL')}</span><h3>${esc(data.headline||'The Weekly Edition')}</h3><p>${esc(data.standfirst||'')}</p><button type="button" class="btn btn-primary" data-weekly-open>Read the edition</button></div><div class="weekly-feature-facts"><div><span>TABLE LEADER</span><strong>${esc(data.tableNotes?.[0]?.team||'—')}</strong><small>${esc(data.tableNotes?.[0]?.record||'')} · ${esc(data.tableNotes?.[0]?.pointsFor||'')} PF</small></div><div><span>UNDER PRESSURE</span><strong>${esc(data.pressure?.owner||'—')}</strong><small>${esc(data.pressure?.record||'')} · ${esc(data.pressure?.team||'')}</small></div><div><span>RECORD WATCH</span><strong>${esc(data.recordWatch?.title||'Archive benchmark')}</strong><small>Source-backed editorial note</small></div></div></div>`;
-      if(status) window.gateFreshness?.setTimestamp(status,{iso:data.updated_at||data.generated_at,source:data.status==='live'?'Live edition':'Final edition'});
+      if(status){
+        const published=window.gateFreshness?.dateTimeLabel(selected.published_at);
+        status.textContent=published?`Weekly edition published ${published}`:'Weekly edition · Publication time unavailable';
+      }
       window.gateHomeEdition = data;
       document.dispatchEvent(new CustomEvent('gate:home-edition-ready', {detail:data}));
       target.querySelector('[data-weekly-open]')?.addEventListener('click',()=>{

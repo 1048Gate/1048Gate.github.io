@@ -43,7 +43,7 @@
     if(narrativesLoaded) return narrativesLoaded;
     narrativesLoaded = (async () => {
       try{
-        const response = await fetch('data/champion-notes.json', {cache:'no-store'});
+        const response = await (window.gateData?.fetch || fetch)('data/champion-notes.json', {cache:'no-store'});
         if(!response.ok) throw new Error(`champion-notes.json returned HTTP ${response.status}`);
         Object.assign(narratives, (await response.json()).notes || {});
       }catch(error){
@@ -94,7 +94,7 @@
   async function loadChampionsFallback(){
     await loadNarratives();
     try{
-      const response = await fetch('data/seasons.json', {cache:'no-store'});
+      const response = await (window.gateData?.fetch || fetch)('data/seasons.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`seasons.json returned HTTP ${response.status}`);
       const payload = await response.json();
       const seasons = Array.isArray(payload.seasons) ? payload.seasons : [];
@@ -142,7 +142,7 @@
     const history = document.getElementById('history');
     if(!history) return;
     try{
-      const response = await fetch('data/seasons.json', {cache:'no-store'});
+      const response = await (window.gateData?.fetch || fetch)('data/seasons.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`seasons.json returned HTTP ${response.status}`);
       const payload = await response.json();
       const shame = (payload.seasons || []).map(season => {
@@ -207,7 +207,12 @@
   }
 
   window.refreshLeagueContent = loadHistory;
-  loadHistory();
+  let started=false;
+  function ensureHistory(){
+    if(started)return;started=true;loadHistory();
+  }
+  document.addEventListener('gate:history-tab',event=>{if(['champions','shame','seasons'].includes(event.detail?.tab))ensureHistory();});
+  if(document.getElementById('history')?.classList.contains('active')&&['champions','shame','seasons'].includes(document.getElementById('history').dataset.historyTab))ensureHistory();
   if(supabase){
     supabase.channel('1048-league-content')
       .on('postgres_changes', {event:'*', schema:'public', table:'league_champions'}, loadHistory)

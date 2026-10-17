@@ -10,7 +10,7 @@
     node=document.createElement('div');node.id='managerProfileExtras';node.className='manager-profile-extras';summary.insertAdjacentElement('afterend',node);return node;
   }
   function loadProfiles(){
-    if(!profilePromise)profilePromise=fetch('data/manager-profiles.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(`manager-profiles.json returned HTTP ${r.status}`);return r.json()});
+    if(!profilePromise)profilePromise=(window.gateData?.fetch || fetch)('data/manager-profiles.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(`manager-profiles.json returned HTTP ${r.status}`);return r.json()});
     return profilePromise;
   }
   function gameCard(label,g,tone){

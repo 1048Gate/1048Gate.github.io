@@ -1,6 +1,6 @@
 (async function(){
   try{
-    const response = await fetch('data/site.json', {cache:'no-store'});
+    const response = await (window.gateData?.fetch || fetch)('data/site.json', {cache:'no-store'});
     if(!response.ok) throw new Error(`site.json returned HTTP ${response.status}`);
     const config = await response.json();
     if(!Number.isInteger(config.seasonYear) || !Number.isInteger(config.seasonNumber)){
@@ -100,9 +100,9 @@ async function renderLiveStats(){
   const set=(selector,value)=>document.querySelectorAll(selector).forEach(el=>{el.textContent=value});
   try{
     const [seasonRes,matchupRes,memberRes]=await Promise.all([
-      fetch('data/seasons.json',{cache:'no-store'}),
-      fetch('data/matchups.json',{cache:'no-store'}),
-      fetch('data/members.json',{cache:'no-store'})
+      (window.gateData?.fetch || fetch)('data/seasons.json',{cache:'no-store'}),
+      (window.gateData?.fetch || fetch)('data/matchups.json',{cache:'no-store'}),
+      (window.gateData?.fetch || fetch)('data/members.json',{cache:'no-store'})
     ]);
     const seasons=seasonRes.ok?(await seasonRes.json()).seasons||[]:[];
     const matchups=matchupRes.ok?await matchupRes.json():{};
@@ -224,10 +224,10 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
 
 async function loadHomepageWeek(expected = {}){
   try{
-    const home = await fetch('data/homepage-week.json', {cache:'no-store'});
+    const home = await (window.gateData?.fetch || fetch)('data/homepage-week.json', {cache:'no-store'});
     if(!home.ok) return null;
     const payload = await home.json();
-    if(!window.gateFreshness?.validWeek(payload, expected) || !Array.isArray(payload.league_pulse)) return null;
+    if(!window.gateFreshness?.validScoreboard(payload, expected) || !Array.isArray(payload.league_pulse)) return null;
     return payload;
   }catch(error){
     console.warn('Homepage week payload unavailable; using current-season.json.', error);
@@ -236,30 +236,56 @@ async function loadHomepageWeek(expected = {}){
 }
 
 let weekBoardRequest=0;
-async function renderWeekBoard(){
+let lastScoreAttempt=0;
+let scoreInFlight=null;
+let lastScoreScope='';
+const SCORE_REFRESH_INTERVAL=60000;
+const scoreScope=config=>`${config?.seasonYear}:${config?.phase}`;
+function scoreStatus(message,detail=''){const status=document.getElementById('scoreRefreshStatus');if(status){status.textContent=message;status.title=detail;}}
+async function renderWeekBoard({refresh=false}={}){
   if(!document.querySelector('[data-week-matchups]') && !document.querySelector('[data-week-standings]')) return;
   const request=++weekBoardRequest;
+  lastScoreAttempt=Date.now();
   const config=window.gateSiteConfig;
+  const scope=scoreScope(config);
   const phaseWeek=/^Week (\d+)$/i.exec(config?.phase||'');
   const expected={season:config?.seasonYear,...(phaseWeek?{week:Number(phaseWeek[1])}:{})};
   try{
-    let payload = await loadHomepageWeek(expected);
+    let payload = refresh?null:await loadHomepageWeek(expected);
     if(!payload){
-      const response = await fetch('data/current-season.json', {cache:'no-store'});
+      const response = await (window.gateData?.fetch || fetch)('data/current-season.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`current-season.json returned HTTP ${response.status}`);
       payload=await response.json();
-      if(!window.gateFreshness?.validWeek(payload,expected)) throw new Error('current-season.json is incomplete or belongs to another season/week');
+      if(!window.gateFreshness?.validScoreboard(payload,expected)) throw new Error('current-season.json is incomplete or belongs to another season/week');
     }
-    if(request!==weekBoardRequest||window.gateSiteConfig!==config)return;
+    if(request!==weekBoardRequest||window.gateSiteConfig!==config||scoreScope(window.gateSiteConfig)!==scope)return false;
+    const previous=window.gateHomeBoard;
+    const previousValid=window.gateFreshness.validScoreboard(previous,expected);
+    const incomingTime=Date.parse(window.gateFreshness.sourceTime(payload));
+    const previousTime=previousValid?Date.parse(window.gateFreshness.sourceTime(previous)):0;
+    if(incomingTime<previousTime)throw new Error('Published snapshot is older than the displayed scores.');
+    if(previousValid&&previous.projectionsFetchedAt&&payload.projectionsFetchedAt&&Date.parse(payload.projectionsFetchedAt)<Date.parse(previous.projectionsFetchedAt))throw new Error('Published projections are older than the displayed snapshot.');
+    const retrieved=new Date().toISOString();
+    const checked=window.gateFreshness.clockLabel(retrieved);
+    if(previousValid&&incomingTime===previousTime&&JSON.stringify(payload)===JSON.stringify(previous)){
+      scoreStatus(`No newer snapshot · Checked ${checked}`);
+      return true;
+    }
     window.gateHomepageWeek=Array.isArray(payload.league_pulse)?payload:null;
     if(window.gateHomepageWeek)document.dispatchEvent(new CustomEvent('gate:homepage-week-ready',{detail:payload}));
     renderWeekBoardFrom(payload);
     window.gateFreshness.saveWeek(payload);
+    scoreStatus(`File retrieved ${checked} · Publish time unavailable`,`Retrieved ${window.gateFreshness.dateTimeLabel(retrieved)}. The file supplies source collection time, not publication time.`);
+    return true;
   }catch(error){
-    if(request!==weekBoardRequest||window.gateSiteConfig!==config)return;
+    if(request!==weekBoardRequest||window.gateSiteConfig!==config||scoreScope(window.gateSiteConfig)!==scope)return false;
     const board=document.getElementById('weekBoard');
+    if(window.gateFreshness?.validScoreboard(window.gateHomeBoard,expected)){
+      scoreStatus('Refresh unavailable · Keeping the last valid scores.');
+      return false;
+    }
     const cached=window.gateFreshness?.readWeek({season:expected.season??board?.dataset.weekSeason,week:expected.week??board?.dataset.week});
-    if(cached) renderWeekBoardFrom(cached,{saved:true});
+    if(cached&&window.gateFreshness.validScoreboard(cached,expected)) renderWeekBoardFrom(cached,{saved:true});
     else if(board&&((expected.season!=null&&Number(board.dataset.weekSeason)!==expected.season)||(expected.week!=null&&Number(board.dataset.week)!==expected.week))){
       window.gateHomeBoard=null;window.gateHomepageWeek=null;
       window.stopWeekFreshnessMonitor?.();
@@ -277,9 +303,38 @@ async function renderWeekBoard(){
       window.gateFreshness?.setTimestamp(stamp,{iso:board?.dataset.weekFetchedAt,saved:true});
       if(board) board.dataset.weekSource='saved';
     }
+    scoreStatus('Refresh unavailable · Showing the saved snapshot. Try again shortly.');
     console.warn('Unable to refresh the ESPN week board; showing the last saved snapshot.', error);
+    return false;
   }
 }
+
+function refreshScores(){
+  if(document.visibilityState==='hidden')return Promise.resolve(false);
+  const config=window.gateSiteConfig;
+  if(!Number.isInteger(config?.seasonYear)){scoreStatus('Season settings unavailable · Reload to try again.');return Promise.resolve(false);}
+  const scope=scoreScope(config);
+  if(scoreInFlight?.config===config&&scoreInFlight.scope===scope)return scoreInFlight.promise;
+  if(scope===lastScoreScope&&Date.now()-lastScoreAttempt<SCORE_REFRESH_INTERVAL){
+    scoreStatus('Published scores checked recently · Try again in a minute.');return Promise.resolve(false);
+  }
+  if(scoreInFlight)window.gateData?.invalidate('data/current-season.json');
+  lastScoreScope=scope;
+  const operation={config,scope,promise:null};
+  const button=document.getElementById('refreshScores');
+  if(button)button.disabled=true;
+  scoreStatus('Checking published scores…');
+  scoreInFlight=operation;
+  operation.promise=renderWeekBoard({refresh:true}).finally(()=>{
+    if(scoreInFlight===operation){scoreInFlight=null;if(button)button.disabled=false;}
+  });
+  return operation.promise;
+}
+window.gateScoreRefresh=Object.freeze({refresh:refreshScores,minimumInterval:SCORE_REFRESH_INTERVAL});
+document.getElementById('refreshScores')?.addEventListener('click',refreshScores);
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&document.getElementById('home')?.classList.contains('active')&&Date.now()-lastScoreAttempt>=SCORE_REFRESH_INTERVAL)refreshScores();
+});
 
 function hideCommissionerBoard(){
   const board = document.getElementById('commissionerBoard');

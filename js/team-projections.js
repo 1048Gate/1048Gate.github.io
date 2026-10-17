@@ -29,10 +29,11 @@
     }
     node.innerHTML = '<p>Loading current-week projections…</p>';
     try{
-      const response = await fetch('data/current-season.json',{cache:'no-store'});
+      const response = await (window.gateData?.fetch || fetch)('data/current-season.json',{cache:'no-store'});
       if(!response.ok)throw new Error('Board unavailable');
       const board = await response.json();
       if(current !== generation || document.getElementById('memberModalName')?.textContent !== name)return;
+      if(window.gateFreshness&&!window.gateFreshness.validScoreboard(board,{season:window.gateSiteConfig?.seasonYear,week:window.gateHomeBoard?.week}))throw new Error('Projection snapshot does not match the current board');
       node.innerHTML = teamHtml(board,name);
     }catch{
       if(current === generation)node.innerHTML='<p>Current-week projections are temporarily unavailable.</p>';

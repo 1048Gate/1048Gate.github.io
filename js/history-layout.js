@@ -26,6 +26,10 @@
     shell.querySelectorAll('[data-history-tab]').forEach(b=>{const active=b.dataset.historyTab===tab;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))});
     shell.querySelectorAll('[data-history-panel]').forEach(p=>p.classList.toggle('active',p.dataset.historyPanel===tab));
     history.dataset.historyTab=tab;
+    if(history.classList.contains('active'))Promise.resolve().then(()=>{
+      ensureHistoryTab(tab);
+      document.dispatchEvent(new CustomEvent('gate:history-tab',{detail:{tab}}));
+    });
     if(history.classList.contains('active')){
       if(tab==='playoffs'){
         if(window.location.hash!=='#playoffs') window.history.replaceState({view:'playoffs'}, '', '#playoffs');
@@ -62,7 +66,7 @@
     setStatus('is-loading','Loading archive map…');
     overviewHost.innerHTML='<div class="panel history-content-panel archive-overview-panel"><div class="history-loading">Building the archive map…</div></div>';
     try{
-      const response=await fetch('data/seasons.json',{cache:'no-store'});
+      const response=await (window.gateData?.fetch || fetch)('data/seasons.json',{cache:'no-store'});
       if(!response.ok)throw new Error(`seasons.json returned HTTP ${response.status}`);
       const seasons=((await response.json()).seasons||[]).filter(s=>Array.isArray(s)&&s.length>=5).sort((a,b)=>b[0]-a[0]);
       if(!seasons.length)throw new Error('No archived seasons found');
@@ -75,7 +79,7 @@
       overviewHost.innerHTML=`<div class="panel history-content-panel archive-overview-panel archive-index"><div class="archive-overview-head"><div><span>ARCHIVE EXPLORER</span><h3>Champions and seasons, ${yearsSpan}</h3></div><div class="archive-overview-metric"><span>COMPLETE SEASONS</span><strong>${seasons.length}</strong><small>Most titles: ${esc(titleLeader[0])} · ${titleLeader[1]}</small></div></div><div class="desk-scroll"><table class="desk-table archive-index-table"><thead><tr><th>Year</th><th>Champion</th><th class="archive-index-team">Team</th><th class="num" title="Champion's regular-season record">Rec</th><th class="num" title="Champion's regular-season finish">Seed</th><th class="num" title="Champion's regular-season points for">PF</th><th>Runner-up</th></tr></thead><tbody>${rows}</tbody></table></div><p class="desk-foot archive-index-links">Year opens the season vault. Also: <button type="button" class="desk-link" data-archive-tab="champions">Champions</button> · <button type="button" class="desk-link" data-archive-tab="matchups">Head-to-head</button> · <button type="button" class="desk-link" data-archive-tab="records">Record book</button> · <button type="button" class="desk-link" data-archive-view="transactions">Transaction archive</button></p></div>`;
       overviewHost.addEventListener('click',event=>{
         const seasonButton=event.target.closest('[data-archive-season]');
-        if(seasonButton){activate('seasons');setTimeout(()=>shell.querySelector(`[data-season-year="${seasonButton.dataset.archiveSeason}"]`)?.click(),0);return}
+        if(seasonButton){activate('seasons');ensureHistoryTab('seasons').then(()=>shell.querySelector(`[data-season-year="${seasonButton.dataset.archiveSeason}"]`)?.click());return}
         const tabButton=event.target.closest('[data-archive-tab]');
         if(tabButton){activate(tabButton.dataset.archiveTab);return}
         const viewButton=event.target.closest('[data-archive-view]');
@@ -102,7 +106,7 @@
     setStatus('is-loading','Loading season archive…');
     seasonHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Loading season archive…</div></div>';
     try{
-      const [seasonRes,playoffRes]=await Promise.all([fetch('data/seasons.json',{cache:'no-store'}),fetch('data/playoffs.json',{cache:'no-store'})]);
+      const [seasonRes,playoffRes]=await Promise.all([(window.gateData?.fetch || fetch)('data/seasons.json',{cache:'no-store'}),(window.gateData?.fetch || fetch)('data/playoffs.json',{cache:'no-store'})]);
       if(!seasonRes.ok)throw new Error(`seasons.json returned HTTP ${seasonRes.status}`);
       if(!playoffRes.ok)throw new Error(`playoffs.json returned HTTP ${playoffRes.status}`);
       const seasons=(await seasonRes.json()).seasons||[];
@@ -113,8 +117,8 @@
       const loadExtras=year=>{
         if(!extraCache[year]){
           extraCache[year]=Promise.all([
-            fetch(`data/drafts/${year}.json`,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
-            fetch(`data/players/${year}.json`,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
+            (window.gateData?.fetch || fetch)(`data/drafts/${year}.json`,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
+            (window.gateData?.fetch || fetch)(`data/players/${year}.json`,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
           ]).then(([draft,players])=>({draft,players}));
         }
         return extraCache[year];
@@ -179,7 +183,7 @@
     setStatus('is-loading','Loading matchup archive…');
     matchupHost.innerHTML='<div class="panel history-content-panel"><div class="history-loading">Loading matchup archive…</div></div>';
     try{
-      const response=await fetch('data/matchups.json',{cache:'no-store'});if(!response.ok)throw new Error(`matchups.json returned HTTP ${response.status}`);const data=await response.json();const people=data.participants||[],pairs=data.pairs||[];
+      const response=await (window.gateData?.fetch || fetch)('data/matchups.json',{cache:'no-store'});if(!response.ok)throw new Error(`matchups.json returned HTTP ${response.status}`);const data=await response.json();const people=data.participants||[],pairs=data.pairs||[];
       function rivalryMatrix(){
         const shortName=p=>{const t=String(p).trim().split(/\s+/);return t.length>1?`${t[0][0]}. ${t[t.length-1]}`:p};
         const record=(i,j)=>{
@@ -298,9 +302,9 @@
     setStatus('is-loading','Loading championship archive…');
     try{
       const [seasonRes,playoffRes,membersRes]=await Promise.all([
-        fetch('data/seasons.json',{cache:'no-store'}),
-        fetch('data/playoffs.json',{cache:'no-store'}),
-        fetch('data/members.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
+        (window.gateData?.fetch || fetch)('data/seasons.json',{cache:'no-store'}),
+        (window.gateData?.fetch || fetch)('data/playoffs.json',{cache:'no-store'}),
+        (window.gateData?.fetch || fetch)('data/members.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
       ]);
       if(!seasonRes.ok)throw new Error(`seasons.json returned HTTP ${seasonRes.status}`);
       if(!playoffRes.ok)throw new Error(`playoffs.json returned HTTP ${playoffRes.status}`);
@@ -316,8 +320,13 @@
     }
   }
 
-  setStatus('is-loading','Loading league archive…');
-  Promise.all([loadArchiveOverview(),loadSeasonArchive(),loadMatchups(),loadTrophyRoom()]).then(()=>{if(!statusNode?.classList.contains('is-error'))setStatus('is-live','Live · Archive connected')}).catch(()=>{});
+  const loadedTabs=new Map();
+  function ensureHistoryTab(tab){
+    const loaders={overview:loadArchiveOverview,seasons:loadSeasonArchive,matchups:loadMatchups,champions:loadTrophyRoom};
+    if(!loaders[tab])return Promise.resolve();
+    if(!loadedTabs.has(tab))loadedTabs.set(tab,loaders[tab]().then(()=>{if(history.dataset.historyTab===tab&&!statusNode?.classList.contains('is-error'))setStatus('','Archive · Loaded');}));
+    return loadedTabs.get(tab);
+  }
   let shameAttempts=0;
   function placeShameTimeline(){
     const shameTimeline=document.getElementById('shameTimeline');

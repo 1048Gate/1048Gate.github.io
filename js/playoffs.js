@@ -62,7 +62,7 @@
 
   async function loadSources(preferred){
     try{
-      const response=await fetch('data/playoffs.json',{cache:'no-store'});
+      const response=await (window.gateData?.fetch || fetch)('data/playoffs.json',{cache:'no-store'});
       if(!response.ok)throw new Error(`playoffs.json returned HTTP ${response.status}`);
       const data=await response.json();
       archive=Array.isArray(data.seasons)?data.seasons:[];
@@ -106,10 +106,13 @@
 
   select.addEventListener('change',e=>loadChoice(e.target.value));
   window.refreshPlayoffs=()=>loadSources(select?.value);
-  loadSources();
+  let opened=false;
+  function ensureLoaded(){if(opened)return;opened=true;loadSources();}
+  document.addEventListener('gate:history-tab',event=>{if(event.detail?.tab==='playoffs')ensureLoaded();});
+  if(document.getElementById('history')?.classList.contains('active')&&document.querySelector('[data-history-panel="playoffs"]')?.classList.contains('active'))ensureLoaded();
   window.gateSupabaseReady?.then(client=>{
     if(!client||supabase===client)return;
     supabase=client;
-    loadSources(select?.value);
+    if(opened)loadSources(select?.value);
   });
 })();
