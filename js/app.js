@@ -130,6 +130,23 @@ function switchView(name, {updateHash = true, scroll = true, scrollTarget = null
 }
 
 window.switchView = switchView;
+document.getElementById('homeJumpForm')?.addEventListener('submit',event=>{
+  event.preventDefault();
+  const select=document.getElementById('homeJumpTarget');
+  if(select?.value==='newspaper'){
+    switchView('newspaper',{scroll:false});
+    window.scrollTo({top:0,behavior:'instant'});
+    const heading=document.querySelector('#newspaper .section-title h2');
+    if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}
+    return;
+  }
+  const target=document.getElementById(select?.value);
+  if(!target||!document.getElementById('home')?.contains(target))return;
+  target.scrollIntoView({behavior:'instant',block:'start'});
+  const heading=target.querySelector('h2,h3')||target;
+  heading.tabIndex=-1;
+  heading.focus({preventScroll:true});
+});
 document.getElementById('tabs')?.addEventListener('click', event => {
   if (event.target.closest('[data-more-toggle]')) {
     toggleMoreMenu();

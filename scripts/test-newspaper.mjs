@@ -92,10 +92,11 @@ class FakeElement {
     this.attributes = {};
     this.classList = new FakeClassList();
     this.isConnected = true;
+    this.handlers = {};
   }
-  addEventListener(){}
+  addEventListener(name, handler){this.handlers[name]=handler;}
   setAttribute(name, value){ this.attributes[name] = String(value); }
-  focus(){}
+  focus(){context.document.activeElement=this;}
   closest(){ return null; }
 }
 
@@ -103,7 +104,7 @@ const elements = Object.fromEntries([
   'editionTabs', 'editionContent', 'editionSourcesToggle', 'editionSourcesClose',
   'editionSourcesBackdrop', 'editionSourcesDrawer', 'editionSourcesList',
   'weeklyEditionPicker', 'weeklyEditionSelect', 'weeklyEditionActions', 'editionExportStatus',
-  'editionPdfDownload', 'editionImageDownload', 'editionShare'
+  'editionPdfDownload', 'editionImageDownload', 'editionShare', 'editionArchiveStatus'
 ].map(id => [id, new FakeElement(id)]));
 const tabs = [new FakeElement(), new FakeElement()];
 tabs[0].dataset.edition = 'historical';
@@ -113,21 +114,23 @@ const escapeHtml = value => String(value ?? '')
   .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
 
 const emptyWeeklyIndex = {...weeklyIndex, editions: []};
+const listeners = {};
 const context = {
+  URLSearchParams,
   window: {
     gateShared: {escapeHtml},
     location: {hash:'#home'},
     switchView(){},
-    addEventListener(){}
+    addEventListener(name,handler){listeners[name]=handler;}
   },
   document: {
     activeElement: null,
     body: new FakeElement('body'),
     getElementById(id){ return elements[id] || null; },
     querySelectorAll(selector){ return selector === '#editionTabs .edition-tab' ? tabs : []; },
-    addEventListener(){}
+    addEventListener(name,handler){listeners[name]=handler;}
   },
-  history: {pushState(){}},
+  history: {pushState(state,title,url){context.window.location.hash=url;}},
   fetch: async path => ({
     ok: true,
     async json(){ return structuredClone(path.includes('index.json') ? emptyWeeklyIndex : historical); }
@@ -145,9 +148,10 @@ assert.match(pdfText, /1048 GATE WEEKLY/);
 assert.match(pdfText, /%%EOF$/);
 assert.equal(exportContext.window.gateNewspaperExport.fileBase(exportFixture), `1048-gate-${exportFixture.season}-week-${exportFixture.week}`);
 const drawnText = [];
+const paintedFills = [];
 const fakeCanvasContext = {
   fillStyle:'', strokeStyle:'', lineWidth:0, font:'', textAlign:'left',
-  fillRect(){}, strokeRect(){}, beginPath(){}, moveTo(){}, lineTo(){}, stroke(){}, drawImage(){},
+  fillRect(){paintedFills.push(this.fillStyle);}, strokeRect(){}, beginPath(){}, moveTo(){}, lineTo(){}, stroke(){}, drawImage(){},
   fillText(text, x, y){ drawnText.push({text, x, y}); },
   measureText(text){ return {width:String(text).length * 10}; }
 };
@@ -165,6 +169,7 @@ assert.ok(drawnText.some(entry => entry.text === '1048 GATE WEEKLY'));
 assert.ok(drawnText.every(entry => entry.y <= 1262), 'Share-card text overflowed its canvas.');
 const fullCanvas = await exportContext.window.gateNewspaperExport.createFullEditionCanvas(exportFixture);
 assert.equal(fullCanvas.width, 1080);
+assert.ok(paintedFills.includes('#f3ead9'),'Exported pages must retain the tan newspaper paper.');
 assert.equal(fullCanvas.height % 1398, 0);
 assert.ok(fullCanvas.height > 1350, 'Full-edition image must retain the complete newspaper instead of the summary crop.');
 assert.equal(fullCanvas.height / 1398, 3, 'A complete 12-team edition should fill three balanced pages, not spill into an empty-looking tail page.');
@@ -197,7 +202,7 @@ assert.match(elements.editionSourcesList.innerHTML, /data\/seasons\.json \+ data
 
 await context.window.gateNewspaper.loadEdition('weekly');
 assert.match(elements.editionContent.innerHTML, /No weekly edition has been published yet/);
-assert.match(elements.editionContent.innerHTML, /verified live issue while games are underway/i);
+assert.match(elements.editionContent.innerHTML, /Tuesdays at 7 AM Eastern/);
 assert.equal(elements.weeklyEditionSelect.disabled, true);
 
 context.fetch = async () => ({ok:false, status:404});
@@ -221,5 +226,32 @@ assert.deepEqual(context.window.gateNewspaper.weeklyEntries({editions:[
   {season:2025,week:14,path:'week-14.json',validation_status:'valid',source_status:'verified_final'},
   {season:2024,week:8,path:'live.json',validation_status:'valid',source_status:'verified_live'}
 ]}).map(entry => entry.path), ['week-1.json','week-14.json']);
+
+const tick=async()=>{for(let i=0;i<25;i++)await Promise.resolve();};
+context.fetch=async path=>({ok:true,json:async()=>readJson(path)});
+context.window.location.hash='#newspaper';
+listeners['gate:viewchange']({detail:{name:'newspaper'}});await tick();
+const latest=context.window.gateNewspaper.latestWeeklyEntry(weeklyIndex);
+assert.match(elements.editionContent.innerHTML,new RegExp(`${latest.season} Week ${latest.week} Edition`));
+assert.match(elements.editionArchiveStatus.textContent,/Latest published edition/);
+assert.match(elements.weeklyEditionSelect.innerHTML,/Latest ·/);
+assert.match(elements.weeklyEditionSelect.innerHTML,/Archive ·/);
+const older=context.window.gateNewspaper.weeklyEntries(weeklyIndex)[1];
+await context.window.gateNewspaper.selectEdition('weekly',{path:older.path});
+assert.match(elements.editionArchiveStatus.textContent,/Archived weekly edition/);
+assert.ok(context.window.location.hash.includes(encodeURIComponent(older.path)));
+await context.window.gateNewspaper.selectEdition('historical');
+assert.equal(context.window.location.hash,'#newspaper?edition=historical');
+context.window.location.hash='#newspaper';listeners['gate:viewchange']({detail:{name:'newspaper'}});await tick();
+assert.match(elements.editionArchiveStatus.textContent,/Latest published edition/);
+// Native tab keyboard controls select, focus and maintain a single tab stop.
+elements.editionTabs.handlers.keydown({target:tabs[1],key:'ArrowRight',preventDefault(){}});await tick();
+assert.equal(context.document.activeElement,tabs[0]);assert.equal(tabs[0].tabIndex,0);assert.equal(tabs[1].tabIndex,-1);
+await context.window.gateNewspaper.loadEdition('weekly','missing.json');
+assert.match(elements.editionContent.innerHTML,/archived edition is not available/);
+context.fetch=async path=>({ok:true,json:async()=>path.includes('index.json')?weeklyIndex:{...exportFixture,week:99}});
+await context.window.gateNewspaper.loadEdition('weekly');
+assert.match(elements.editionContent.innerHTML,/does not match the selected season and week/);
+assert.equal(elements.weeklyEditionActions.hidden,true);
 
 console.log('Newspaper checks passed: archive, weekly picker, sources, PDF export, download controls, and HTML escaping.');
