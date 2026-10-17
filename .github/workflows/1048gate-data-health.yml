@@ -115,6 +115,8 @@ jobs:
         run: |
           node scripts/build-homepage-week.mjs
           node scripts/build-static-week-board.mjs
+      - name: Install Node dependencies for validation
+        run: npm ci
       - name: Validate site checks still pass
         env:
           SEASON: ${{ inputs.season || '2026' }}
