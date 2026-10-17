@@ -1,0 +1,144 @@
+[
+  {
+    "theme": "light",
+    "view": "home",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "nodes": [
+          {
+            "target": [
+              ".home-archive-links"
+            ],
+            "html": "<div class=\"home-archive-links\" aria-label=\"Explore the archive\">",
+            "summary": "Fix all of the following:\n  aria-label attribute is not well supported on a div with no valid role attribute."
+          }
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "nodes": [
+          {
+            "target": [
+              ".orientation-link[data-scroll-to=\"weekBoard\"][type=\"button\"] > span[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\">→</span>",
+            "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+          },
+          {
+            "target": [
+              ".orientation-link[data-view-link=\"league\"][type=\"button\"] > span[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\">→</span>",
+            "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+          },
+          {
+            "target": [
+              ".orientation-link[data-view-link=\"history\"][type=\"button\"] > span[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\">→</span>",
+            "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+          },
+          {
+            "target": [
+              "button[data-view-link=\"rules\"] > span[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\">→</span>",
+            "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theme": "light",
+    "view": "newspaper",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "nodes": [
+          {
+            "target": [
+              ".edition-status"
+            ],
+            "html": "<div class=\"edition-status\" aria-label=\"Source status: verified 2026 weekly edition\"><span class=\"status-dot\"></span>verified 2026 weekly edition</div>",
+            "summary": "Fix all of the following:\n  aria-label attribute is not well supported on a div with no valid role attribute."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theme": "dark",
+    "view": "home",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "nodes": [
+          {
+            "target": [
+              ".home-archive-links"
+            ],
+            "html": "<div class=\"home-archive-links\" aria-label=\"Explore the archive\">",
+            "summary": "Fix all of the following:\n  aria-label attribute is not well supported on a div with no valid role attribute."
+          }
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "nodes": [
+          {
+            "target": [
+              ".orientation-link[data-scroll-to=\"weekBoard\"][type=\"button\"] > span[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\">→</span>",
+            "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+          },
+          {
+            "target": [
+              ".orientation-link[data-view-link=\"league\"][type=\"button\"] > span[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\">→</span>",
+            "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+          },
+          {
+            "target": [
+              ".orientation-link[data-view-link=\"history\"][type=\"button\"] > span[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\">→</span>",
+            "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+          },
+          {
+            "target": [
+              "button[data-view-link=\"rules\"] > span[aria-hidden=\"true\"]"
+            ],
+            "html": "<span aria-hidden=\"true\">→</span>",
+            "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theme": "dark",
+    "view": "newspaper",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "nodes": [
+          {
+            "target": [
+              ".edition-status"
+            ],
+            "html": "<div class=\"edition-status\" aria-label=\"Source status: verified 2026 weekly edition\"><span class=\"status-dot\"></span>verified 2026 weekly edition</div>",
+            "summary": "Fix all of the following:\n  aria-label attribute is not well supported on a div with no valid role attribute."
+          }
+        ]
+      }
+    ]
+  }
+]

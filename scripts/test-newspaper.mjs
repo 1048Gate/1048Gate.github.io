@@ -254,4 +254,34 @@ await context.window.gateNewspaper.loadEdition('weekly');
 assert.match(elements.editionContent.innerHTML,/does not match the selected season and week/);
 assert.equal(elements.weeklyEditionActions.hidden,true);
 
+// Exercise the actual homepage loader with the real Eastern date formatter.
+runInNewContext(readFileSync(new URL('js/freshness.js',root),'utf8'),context);
+context.CustomEvent=class{constructor(type,options){this.type=type;this.detail=options?.detail;}};
+context.document.dispatchEvent=()=>{};
+const feature=new FakeElement(),featureStatus=new FakeElement();
+feature.querySelector=()=>null;
+context.document.querySelector=selector=>selector==='[data-weekly-feature]'?feature:selector==='[data-weekly-feature-status]'?featureStatus:null;
+for(const entry of [weeklyIndex.editions[0],older]){
+  const edition=readJson(entry.path);
+  // Legacy published_at is deliberately different: it must never supply the label.
+  const index={...weeklyIndex,editions:[{...entry,published_at:'2000-01-01T00:00:00Z'}]};
+  context.fetch=async path=>({ok:true,json:async()=>structuredClone(path.includes('index.json')?index:edition)});
+  runInNewContext(readFileSync(new URL('js/newspaper.js',root),'utf8'),context);
+  await tick();
+  const expected=`Edition generated ${context.window.gateFreshness.dateTimeLabel(edition.generated_at)}`;
+  assert.equal(featureStatus.textContent,expected);
+  await context.window.gateNewspaper.loadEdition('weekly');
+  assert.ok(elements.editionArchiveStatus.textContent.includes(expected));
+  assert.ok(!featureStatus.textContent.includes('2000'),'Legacy publication alias used as generation time');
+}
+for(const generated_at of [undefined,'invalid timestamp']){
+  const edition={...exportFixture,generated_at};
+  context.fetch=async path=>({ok:true,json:async()=>path.includes('index.json')?{...weeklyIndex,editions:[weeklyIndex.editions[0]]}:edition});
+  runInNewContext(readFileSync(new URL('js/newspaper.js',root),'utf8'),context);
+  await tick();
+  assert.equal(featureStatus.textContent,'Edition generation time unavailable','Do not invent generation or publication time');
+  await context.window.gateNewspaper.loadEdition('weekly');
+  assert.ok(elements.editionArchiveStatus.textContent.includes('Edition generation time unavailable'));
+}
+
 console.log('Newspaper checks passed: archive, weekly picker, sources, PDF export, download controls, and HTML escaping.');

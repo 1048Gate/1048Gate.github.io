@@ -546,6 +546,9 @@ html body .desk-notes li{margin:0 0 6px !important;padding:0 !important;border:0
 html body .desk-foot{margin:6px 0 0 !important;font-size:12px !important;}
 html body .desk-unavailable{margin:0 !important;padding:6px 0 !important;font-style:italic;}
 html body .desk-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0;}
+/* Keep the wrapper as the sole horizontal scroll region at phone widths. */
+html body .desk-playoff-scroll .desk-race{display:table;overflow:visible;}
+html body .desk-playoff-scroll:focus-visible{outline:2px solid var(--text);outline-offset:2px;}
 html body .desk-table{
   width:100%;border-collapse:collapse !important;
   font-size:13px !important;line-height:1.3 !important;
