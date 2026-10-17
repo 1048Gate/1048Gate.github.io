@@ -182,6 +182,8 @@ def build_board(
             raise RuntimeError('Invalid public board: missing standings values')
         if any(not finite_number(team[key]) or int(team[key]) != team[key] or team[key] < 0 for key in ('wins', 'losses', 'ties')):
             raise RuntimeError('Invalid public board: invalid source records')
+        if any(not finite_number(team[key]) for key in ('points_for', 'points_against')):
+            raise RuntimeError('Invalid public board: invalid source standings points')
     for source in (standings_norm, scoreboard_norm):
         if source.get('season', season) != season:
             raise RuntimeError('Invalid public board: source season mismatch')
@@ -200,8 +202,8 @@ def build_board(
             "wins": int(espn.get("wins") or 0),
             "losses": int(espn.get("losses") or 0),
             "ties": int(espn.get("ties") or 0),
-            "pointsFor": float(espn.get("points_for") or 0),
-            "pointsAgainst": float(espn.get("points_against") or 0),
+            "pointsFor": float(espn["points_for"]),
+            "pointsAgainst": float(espn["points_against"]),
         })
     standings.sort(key=lambda row: (
         -(row["wins"] + 0.5 * row["ties"]),

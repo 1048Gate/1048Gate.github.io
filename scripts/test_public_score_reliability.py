@@ -127,8 +127,11 @@ class PublicScoreReliabilityTests(unittest.TestCase):
             self.assertEqual(result['projectionsFetchedAt'], self.previous['projectionsFetchedAt'])
 
     def test_invalid_source_never_overwrites_previous_public_file(self):
-        for invalid in ('duplicate', 'missing_record', 'wrong_week', 'nonfinite', 'wrong_season', 'missing_live_score'):
+        malformed_points = [(key, value) for key in ('points_for', 'points_against')
+                            for value in ('', False, True, '12.5', float('nan'), float('inf'))]
+        for invalid in ['duplicate', 'missing_record', 'wrong_week', 'nonfinite', 'wrong_season', 'missing_live_score', *malformed_points]:
             standings, scoreboard = copy.deepcopy(self.standings), copy.deepcopy(self.scoreboard)
+            if isinstance(invalid, tuple): standings['teams'][0][invalid[0]] = invalid[1]
             if invalid == 'duplicate': standings['teams'][1]['team_id'] = 1
             if invalid == 'missing_record': standings['teams'][0]['wins'] = None
             if invalid == 'wrong_week': scoreboard['games'][0]['matchup_period'] = 3
