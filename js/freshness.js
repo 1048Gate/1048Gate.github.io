@@ -18,17 +18,19 @@
       && (expected.week == null || week === expected.week)
       && Array.isArray(payload.matchups)
       && payload.matchups.length === 6
-      && payload.matchups.every(game=>game.week == null || game.week === week)
+      && payload.matchups.every(game=>game && (game.week == null || game.week === week))
       && Array.isArray(payload.standings)
       && payload.standings.length === 12;
   }
 
   function sourceTime(payload){return payload?.fetchedAt||payload?.last_updated;}
+  const sourceMillis=value=>typeof value==='string'&&/(?:Z|[+-]\d{2}:\d{2})$/.test(value)?Date.parse(value):NaN;
   function validScoreboard(payload,expected={}){
     if(!validWeek(payload,expected)||payload.phase!==`Week ${payload.week}`)return false;
-    const stamp=Date.parse(sourceTime(payload));
+    const stamp=sourceMillis(sourceTime(payload));
     if(!Number.isFinite(stamp)||stamp>Date.now()+5*60000)return false;
     const finite=value=>typeof value==='number'&&Number.isFinite(value);
+    if(payload.standings.some(row=>!row||typeof row!=='object'))return false;
     const teams=new Map(payload.standings.map(row=>[row.teamId,row]));
     if(teams.size!==12||payload.standings.some(row=>!Number.isInteger(row.teamId)||row.teamId<1||!row.team||!row.owner||['wins','losses','ties'].some(key=>!Number.isInteger(row[key])||row[key]<0)||!finite(row.pointsFor)||!finite(row.pointsAgainst)))return false;
     const seen=new Set();
@@ -42,13 +44,13 @@
       }
     }
     if(payload.teamProjections!=null){
-      if(!Array.isArray(payload.teamProjections)||payload.teamProjections.length!==12||new Set(payload.teamProjections.map(row=>row.teamId)).size!==12)return false;
+      if(!Array.isArray(payload.teamProjections)||payload.teamProjections.length!==12||payload.teamProjections.some(row=>!row||typeof row!=='object')||new Set(payload.teamProjections.map(row=>row.teamId)).size!==12)return false;
       const projected=new Map(payload.teamProjections.map(row=>[row.teamId,row]));
       if(payload.teamProjections.some(row=>!teams.has(row.teamId)||typeof row.complete!=='boolean'||(row.complete?!finite(row.projectedScore):row.projectedScore!==null)))return false;
       if(payload.matchups.some(game=>[game.away,game.home].some(side=>side.projectedScore!==projected.get(side.teamId).projectedScore)))return false;
     }
     if(payload.projectionsStale===true||payload.teamProjections!=null||payload.projectionsFetchedAt!=null){
-      const projectionStamp=Date.parse(payload.projectionsFetchedAt);
+      const projectionStamp=sourceMillis(payload.projectionsFetchedAt);
       if(!Number.isFinite(projectionStamp)||projectionStamp>Date.now()+5*60000)return false;
     }
     return seen.size===12;

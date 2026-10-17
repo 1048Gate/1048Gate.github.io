@@ -14,6 +14,8 @@ Base: latest main at `d053b6b3a628dbea736228cfd92f34dec7846cc3`. The original re
 
 Requests fell 73%; measured transfer fell 76%. [Before](requests-before.json) and [after](requests-after.json) include every path and byte count. Resource Timing transfer size includes browser-estimated HTTP overhead; the local server does not compress. Illustrative local DOMContentLoaded/last-JSON timings are in those files, and are not a production speed guarantee.
 
+Opening all history sections, drafts, player history, and the latest and previous newspaper editions produced 20 requests across 17 paths, totaling 193,301 transfer bytes in the [after-change navigation trace](requests-navigation.json). This includes initial homepage requests; no equivalent before-change navigation trace was measured. Newspaper requests remain unretained by design.
+
 ## Root causes and changes
 
 - Independent consumers fetched the same archives without sharing in-flight work. `js/data-loader.js` offers explicit shared fetching; consumers retain their native-fetch fallback when used independently. Each receives an independent Response clone. A five-minute, in-memory cache is limited to an archive allowlist. Current scores, homepage payload, season configuration, newspaper files, and odds are never retained after their in-flight request completes. Authenticated, non-GET, external, custom-header, and AbortSignal requests bypass sharing. Global fetch is not patched.
@@ -38,6 +40,18 @@ Live collections older than 45 minutes show delayed scores, with the existing 90
 ## Verification and boundaries
 
 Regression suites exercise the real loader, strict validator and scoreboard renderer: concurrent requests, independent response bodies, expiration/invalidation, stale generations, malformed JSON/HTTP/network recovery, rapid 2024 → 2025 → 2024 selection, in-place period changes, live/final transitions, hidden/visible behavior, minimum intervals, invalid-data preservation, projection rollback rejection and original stale-projection timestamps. The static scoreboard renderer keeps the new control through existing publishing runs.
+
+Local agent-browser checks passed at phone (390px), tablet (768px), and desktop (1440px) widths, including concurrent manual refreshes, live/final transitions, network/malformed/wrong-week preservation, cooldowns, no scrolling/overflow, original stale-projection timestamps, and proof that refresh requested only `/data/current-season.json`. Native browser tab switching produced hidden → visible events and exactly one request on return after five minutes of controlled clock advancement. No requests were started on hiding. Native controls retain keyboard operation and a 44px phone refresh target. Accessibility verification covers Chromium semantics/focus, not a manual screen-reader session.
+
+The failure warning kept both score HTML and its vertical position unchanged (410.65625px in the phone check). Source collection and retrieval labels remain distinct:
+
+| Phone | Failure preserving scores | Tablet | Desktop |
+| --- | --- | --- | --- |
+| ![Phone](phone.png) | ![Failure](phone-failure.png) | ![Tablet](tablet.png) | ![Desktop](desktop.png) |
+
+Independent Standards review: no findings. Spec review caught a startup cooldown gap; startup now records its period and the default-loader → immediate-refresh regression passes. Independent re-review found no remaining Spec findings.
+
+`npm test` passed, including 89 Python tests and all Phase 1–4 checks. Cloudflare checks passed (107 public files, 56 hashed assets) and the deployment dry run passed. No test used an ESPN endpoint. Null-row cache corruption and timestamps without explicit timezone offsets also reject safely.
 
 No newspaper generation or scheduling code, GitHub Actions schedule, ESPN collection, Supabase authentication/permissions/migrations, production data, or Phase 1 HTML escaping code is changed. Refresh events never reload newspaper content; primary newspaper entry and archives keep Phase 4 behavior. No dependencies or frameworks added.
 

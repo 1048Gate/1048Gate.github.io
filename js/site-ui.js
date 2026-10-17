@@ -248,6 +248,7 @@ async function renderWeekBoard({refresh=false}={}){
   lastScoreAttempt=Date.now();
   const config=window.gateSiteConfig;
   const scope=scoreScope(config);
+  lastScoreScope=scope;
   const phaseWeek=/^Week (\d+)$/i.exec(config?.phase||'');
   const expected={season:config?.seasonYear,...(phaseWeek?{week:Number(phaseWeek[1])}:{})};
   try{

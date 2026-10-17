@@ -18,7 +18,7 @@ const context={URL,Date:Clock,window:{location:{origin:'https://example.test'},a
     querySelector:selector=>({'[data-week-matchups]':games,'[data-week-standings]':standings,'[data-week-stamp]':stamp})[selector]||null,
     querySelectorAll:selector=>selector==='[data-week-heading], #weekBoard h2'?[heading]:[],
     createTextNode:text=>({textContent:text}),createElement:()=>element()},
-  fetch:url=>{if(String(url).endsWith('site.json'))return new Promise(()=>{});assert.match(String(url),/\/data\/current-season\.json$/);return new Promise((resolve,reject)=>pending.push({url,resolve,reject}));},
+  fetch:url=>{if(String(url).endsWith('site.json'))return new Promise(()=>{});assert.match(String(url),/\/data\/(?:current-season|homepage-week)\.json$/);return new Promise((resolve,reject)=>pending.push({url,resolve,reject}));},
   CustomEvent:class{},console:{warn(){}}};
 for(const name of ['shared','data-loader','freshness','week-board','site-ui'])runInNewContext(readFileSync(new URL(`../js/${name}.js`,import.meta.url),'utf8'),context,{filename:`js/${name}.js`});
 const freshness=context.window.gateFreshness,api=context.window.gateScoreRefresh;
@@ -74,6 +74,18 @@ now+=60001;const projectionNew=data(2024,fixture.week+1);projectionNew.projectio
 const projectionWork=api.refresh();respond(projectionNew);await projectionWork;
 now+=60001;const projectionOld=api.refresh();respond(data(2024,fixture.week+1));assert.equal(await projectionOld,false);
 assert.equal(context.window.gateHomeBoard.projectionsFetchedAt,projectionNew.projectionsFetchedAt);
+now+=60001;
+const startup=context.renderWeekBoard();
+const startupData={...data(2024,fixture.week+1),league_pulse:[],projectionsFetchedAt:projectionNew.projectionsFetchedAt};
+respond(startupData);assert.equal(await startup,true);
+const startupCount=pending.length;
+assert.equal(await api.refresh(),false);
+assert.equal(pending.length,startupCount,'Startup is a score check and must obey the same minimum interval');
 const invalid=structuredClone(fixture);invalid.matchups[0].away.score=Infinity;assert.equal(freshness.validScoreboard(invalid),false);
+for(const shape of ['standings','matchups','teamProjections']){
+  const malformed=structuredClone(fixture);malformed[shape][0]=null;
+  assert.equal(freshness.validScoreboard(malformed),false,`${shape} null rows must fail safely, including cached files`);
+}
+assert.equal(freshness.validScoreboard({...fixture,fetchedAt:'2026-10-17T12:00:00'}),false,'Ambiguous timestamps cannot acquire the browser timezone');
 assert.equal(freshness.validScoreboard(fixture),true);
 console.log('Score refresh: real loader/validator/rendering passed live/final, cooldown, concurrent/visible/hidden requests, bad data preservation, stale projections, rapid periods and late responses.');
