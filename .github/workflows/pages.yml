@@ -95,6 +95,9 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
+      - name: Install Node dependencies
+        if: steps.deployment_guard.outputs.should_deploy == 'true'
+        run: npm ci
       - name: Validate source
         if: steps.deployment_guard.outputs.should_deploy == 'true'
         run: npm run check
