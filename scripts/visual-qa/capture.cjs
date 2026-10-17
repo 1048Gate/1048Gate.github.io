@@ -2,6 +2,7 @@
 const {readFileSync,writeFileSync,mkdirSync}=require('node:fs');
 const path=require('node:path');
 const http=require('node:http');
+const {checkPlayoffAccessibility}=require('./playoff-accessibility.cjs');
 const {chromium}=require(path.join(process.env.QA_NODE_MODULES,'playwright'));
 const root=path.resolve('dist'), output=path.resolve('qa-artifacts');
 mkdirSync(output,{recursive:true});
@@ -174,6 +175,8 @@ const server=http.createServer((req,res)=>{
   const deskIndex={tocVisible,expectedVisible:width===1440};
   await page.addScriptTag({path:path.join(process.env.QA_NODE_MODULES,'axe-core/axe.min.js')});
   const a11y=await page.evaluate(async()=>{const r=await axe.run('#home',{runOnly:{type:'rule',values:['color-contrast']}});return {violations:r.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),incomplete:r.incomplete.map(v=>({id:v.id,count:v.nodes.length}))};});
+  const playoffAccessibility=await checkPlayoffAccessibility(page);
+  await resetScroll();
   let navigation=null;
   if(state==='live'&&theme==='light'){
     if(width===1440){
@@ -267,7 +270,7 @@ const server=http.createServer((req,res)=>{
       draftPanelActive:document.querySelector('[data-history-panel="drafts"]')?.classList.contains('active')||false
     }));
   }
-  report.cases.push({name,metrics,anchors,deskIndex,a11y,navigation,noCacheFallback,cachedFallback,archiveFallback,draftArchive,errors:[...errors]});
+  report.cases.push({name,metrics,anchors,deskIndex,a11y,playoffAccessibility,navigation,noCacheFallback,cachedFallback,archiveFallback,draftArchive,errors:[...errors]});
   writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));
   console.log(name,JSON.stringify({pageOverflow:metrics.pageOverflow,standingsScroll:metrics.standingsScroll,anchors,contrastNodes:a11y.violations.reduce((a,v)=>a+v.nodes.length,0),draftArchive,errors}));
   if(state==='live'){
