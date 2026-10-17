@@ -29,6 +29,9 @@ if(currentEditionPublished) assert.equal(live.featured_story.week, week.week);
 assert.ok(live.championship_odds?.favorite?.odds);
 assert.ok(live.league_pulse.length >= 5);
 assert.deepEqual(live.freshness.sources[0], 'data/current-season.json');
+const retained = buildHomepageWeek({site,week:{...week,projectionsStale:true,projectionsFetchedAt:'2026-09-09T10:00:00Z'},index,archive,pulseApi,builtAt:'2026-09-21T18:00:00.000Z'});
+assert.equal(retained.projectionsStale,true);
+assert.equal(retained.projectionsFetchedAt,'2026-09-09T10:00:00Z');
 
 assert.equal(committed.season, live.season);
 assert.equal(committed.week, live.week);

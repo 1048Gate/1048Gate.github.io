@@ -18,5 +18,20 @@ assert.match(paper, /git add data\/newspaper_editions data\/homepage-week\.json/
 for(const workflow of [scores, paper]) assert.match(workflow, /group: data-health-current-season/);
 for(const name of ['pages','cloudflare']) assert.match(read(`.github/workflows/${name}.yml`), /- Publish completed weekly newspaper/);
 assert.match(scores, /always\(\) && steps\.fantasy_collect\.outcome == 'failure'/);
-assert.ok(scores.indexOf('- name: Commit updated board') < scores.indexOf('- name: Fail the run when owner snapshot'));
+const publisher = scores.split('  publish-current-season:')[1].split('  private-collection-status:')[0];
+assert.doesNotMatch(publisher, /exit 1/);
+assert.match(publisher, /id: fantasy_collect[\s\S]*?continue-on-error: true/);
+assert.match(publisher, /private_collection: \$\{\{ steps.fantasy_collect.outcome \}\}/);
+assert.match(scores, /needs: publish-current-season/);
+assert.match(scores, /needs.publish-current-season.outputs.private_collection == 'failure'/);
+assert.ok(publisher.indexOf('--validate-only') < publisher.indexOf('git push'));
+assert.ok(publisher.indexOf('npm run check') < publisher.indexOf('git push'));
+for(const name of ['pages','cloudflare']){
+  const deployment = read(`.github/workflows/${name}.yml`);
+  assert.match(deployment, /actions: read/);
+  assert.match(deployment, /scripts\/publication-policy.cjs/);
+  assert.match(deployment, /needs: publication-permission/);
+  assert.match(deployment, /if: needs.publication-permission.outputs.allowed == 'true'/);
+}
+assert.equal((scores.match(/python3 scripts\/collect_fantasy_data.py/g) || []).length, 1);
 console.log('Data-health checks passed: score publishing and Tuesday final editorial are independent.');

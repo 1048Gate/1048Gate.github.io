@@ -25,8 +25,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  publication-permission:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      allowed: ${{ steps.policy.outputs.allowed }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && 'main' || github.ref }}
+      - name: Check the public publisher result independently of private collection
+        id: policy
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const publicationAllowed = require(`${process.cwd()}/scripts/publication-policy.cjs`);
+            core.setOutput('allowed', String(await publicationAllowed({github, context})));
+
   deploy:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    needs: publication-permission
+    if: needs.publication-permission.outputs.allowed == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

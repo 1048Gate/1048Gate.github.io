@@ -122,8 +122,11 @@ def add_team_projections(board, snapshot):
         complete = complete and all(row['projected_points'] is not None for row in starters)
         teams.append({'teamId':team['id'], 'projectedScore':round(sum(row['projected_points'] for row in starters),2) if complete else None,
                       'complete':complete})
+    if board.get('standings') and (len(teams) != len(board['standings']) or {team['teamId'] for team in teams} != {team['teamId'] for team in board['standings']}):
+        raise RuntimeError('Projection team identities do not match the public board; previous totals were retained.')
     board['teamProjections'] = teams
     board['projectionsFetchedAt'] = snapshot['fetched_at']
+    board['projectionsStale'] = False
     by_id = {str(team['teamId']):team for team in teams}
     for game in board.get('matchups',[]):
         for side in ('away','home'):
