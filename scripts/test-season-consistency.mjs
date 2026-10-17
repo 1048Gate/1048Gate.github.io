@@ -82,5 +82,38 @@ async function archiveTest(){
   assert.match(node('transactionFeed').innerHTML,/unavailable/);assert.doesNotMatch(node('transactionFeed').innerHTML,/wrong season/);
   const count=requests.length;node('transactionSeason').value='';node('transactionSeason').handlers.change();await tick();assert.equal(requests.length,count);
 }
-await historyTest();await pulseTest();await archiveTest();
+async function weekBoundaryTest(){
+  const requests=[],rendered=[],board=element(),games=element();board.dataset={weekSeason:'2025',week:'2'};
+  const context={window:{addEventListener(){},localStorage:{getItem:()=>null,setItem(){}}},
+    document:{querySelector:s=>s==='[data-week-matchups]'?games:null,querySelectorAll:()=>[],getElementById:id=>id==='weekBoard'?board:null,dispatchEvent(){}},
+    CustomEvent:class{},console:{warn(){}},fetch:url=>{
+      if(url==='data/site.json')return new Promise(()=>{});
+      const request=deferred();requests.push({url,...request});return request.promise;
+    }};
+  board.querySelector=()=>null;
+  runInNewContext(source('freshness'),context);runInNewContext(source('site-ui'),context);
+  const actualRender=context.renderWeekBoardFrom;
+  context.renderWeekBoardFrom=payload=>rendered.push(payload);
+  const payload=(season,week)=>({season,week,matchups:Array.from({length:6},()=>({week})),standings:Array.from({length:12},()=>({})),league_pulse:[]});
+  const respond=(i,data)=>requests[i].resolve({ok:true,json:async()=>data});
+  context.window.gateSiteConfig={seasonYear:2026,phase:'Week 2'};
+  const pending=context.renderWeekBoard();await tick();respond(0,payload(2025,2));await tick();
+  assert.equal(requests[1].url,'data/current-season.json');respond(1,payload(2026,1));await pending;
+  assert.equal(rendered.length,0,'wrong-season home file and wrong-week current file must not render');
+  assert.equal(board.dataset.weekSource,'unavailable');assert.match(games.textContent,/temporarily unavailable/);
+  const old=context.renderWeekBoard();await tick();
+  context.window.gateSiteConfig={seasonYear:2026,phase:'Week 3'};
+  const latest=context.renderWeekBoard();await tick();respond(3,payload(2026,3));await latest;
+  respond(2,payload(2026,2));await old;
+  assert.equal(rendered.length,1);assert.equal(rendered[0].week,3);
+  assert.equal(context.window.gateHomepageWeek.week,3,'late file must not overwrite the derived payload cache');
+  context.renderWeekBoardFrom=actualRender;
+  actualRender(payload(2026,3));
+  assert.equal(board.dataset.weekSeason,'2026');assert.equal(board.dataset.week,'3');
+  context.window.gateSiteConfig={seasonYear:2026,phase:'Week 2'};
+  const failed=context.renderWeekBoard();await tick();
+  requests[4].resolve({ok:false});await tick();requests[5].resolve({ok:false,status:503});await failed;
+  assert.equal(board.dataset.weekSource,'unavailable');assert.equal(context.window.gateHomeBoard,null);
+}
+await historyTest();await pulseTest();await archiveTest();await weekBoundaryTest();
 console.log('Season consistency: history races, wrong/missing/failed files, recovery, configuration readiness, transaction invalidation and labels passed.');

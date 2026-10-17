@@ -191,6 +191,8 @@ function renderWeekBoardFrom(payload, {saved = false} = {}){
   const boardNode=document.getElementById('weekBoard');
   if(boardNode){
     boardNode.dataset.weekSource=saved?'saved':'fresh';
+    boardNode.dataset.weekSeason=String(payload.season);
+    boardNode.dataset.week=String(payload.week);
     if(payload.fetchedAt || payload.last_updated) boardNode.dataset.weekFetchedAt=payload.fetchedAt || payload.last_updated;
   }
   const weekBoard = window.gateWeekBoard;
@@ -258,6 +260,18 @@ async function renderWeekBoard(){
     const board=document.getElementById('weekBoard');
     const cached=window.gateFreshness?.readWeek({season:expected.season??board?.dataset.weekSeason,week:expected.week??board?.dataset.week});
     if(cached) renderWeekBoardFrom(cached,{saved:true});
+    else if(board&&((expected.season!=null&&Number(board.dataset.weekSeason)!==expected.season)||(expected.week!=null&&Number(board.dataset.week)!==expected.week))){
+      window.gateHomeBoard=null;window.gateHomepageWeek=null;
+      window.stopWeekFreshnessMonitor?.();
+      const stamp=board.querySelector('[data-week-stamp]');
+      if(stamp)stamp.textContent='Scores unavailable';
+      const games=document.querySelector('[data-week-matchups]');
+      const standings=document.querySelector('[data-week-standings]');
+      if(games)games.textContent='Scores for the selected season and week are temporarily unavailable.';
+      if(standings)standings.replaceChildren();
+      document.querySelectorAll('[data-week-heading], #weekBoard h2').forEach(el=>{el.textContent=expected.week?`Week ${expected.week}`:'This week'});
+      board.dataset.weekSource='unavailable';
+    }
     else{
       const stamp=board?.querySelector('[data-week-stamp]');
       window.gateFreshness?.setTimestamp(stamp,{iso:board?.dataset.weekFetchedAt,saved:true});

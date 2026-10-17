@@ -88,9 +88,9 @@ def prepare_import(data: dict[str, Any], *, authoritative: bool = False, allow_e
             raise ValueError('Incomplete transaction items')
     if authoritative and data.get('snapshot_complete') is not True:
         raise ValueError('Authoritative reconciliation requires a certified complete snapshot')
-    if authoritative and not parents and not allow_empty:
-        raise ValueError('Empty authoritative snapshots require --allow-empty-snapshot')
     kept = {key: row for key, row in parents.items() if str(row.get('transaction_type', '')).upper() != 'DRAFT'}
+    if authoritative and not kept and not allow_empty:
+        raise ValueError('Empty authoritative snapshots require --allow-empty-snapshot')
     kept_items = [row for (parent, _), row in children.items() if parent in kept]
     return {**data, 'transactions': list(kept.values()), 'items': kept_items,
             'transaction_count': len(kept), 'item_count': len(kept_items), 'snapshot_complete': authoritative}

@@ -58,6 +58,11 @@ class TransactionImportTests(unittest.TestCase):
         data['snapshot_complete'] = True
         with self.assertRaises(ValueError): prepare_import(data, authoritative=True)
         self.assertTrue(prepare_import(data, authoritative=True, allow_empty=True)['snapshot_complete'])
+        draft_only = copy.deepcopy(self.data)
+        draft_only['transactions'][0]['transaction_type'] = 'DRAFT'
+        draft_only['snapshot_complete'] = True
+        with self.assertRaises(ValueError): prepare_import(draft_only, authoritative=True)
+        self.assertEqual(prepare_import(draft_only, authoritative=True, allow_empty=True)['transactions'], [])
 
     def test_source_identity_and_missing_data_rejected(self):
         for payload in ({}, {'transactions': [], 'seasonId': 2024}, {'transactions': [], 'id': 1}):
