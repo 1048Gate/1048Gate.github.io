@@ -19,7 +19,7 @@ if(/[?&]v=20\d{6}/.test(html)) throw new Error('A manual date-based cache-bustin
 if(html.includes('member-logo-patch')) throw new Error('The retired member logo patch is still referenced.');
 
 const scriptAssets = [...html.matchAll(/<script defer src="((?:js)\/[^"?]+\.js)(?:\?[^"#]*)?"/g)].map(match => match[1]);
-const requiredScriptOrder = ['js/shared.js', 'js/freshness.js', 'js/site-ui.js', 'js/supabase-config.js', 'js/auth.js', 'js/app.js'];
+const requiredScriptOrder = ['js/shared.js', 'js/data-loader.js', 'js/freshness.js', 'js/site-ui.js', 'js/supabase-config.js', 'js/auth.js', 'js/app.js'];
 for(let index = 0; index < requiredScriptOrder.length; index++){
   if(scriptAssets[index] !== requiredScriptOrder[index]){
     throw new Error(`Core script order must begin: ${requiredScriptOrder.join(', ')}`);
@@ -469,7 +469,7 @@ for(const entry of readdirSync(jsDir, {withFileTypes:true})){
 if(supabaseClientCreations !== 1) throw new Error(`Expected one shared Supabase client, found ${supabaseClientCreations}.`);
 
 const appSource = readFileSync(new URL('js/app.js', root), 'utf8');
-if(!appSource.includes("from('league_members')") || !appSource.includes("fetch('data/members.json'")){
+if(!appSource.includes("from('league_members')") || !appSource.includes("(window.gateData?.fetch || fetch)('data/members.json'")){
   throw new Error('app.js must use Supabase first and members.json as its fallback.');
 }
 if(!appSource.includes('closePhoneMore') || !appSource.includes('phoneDock') || !appSource.includes('data-more-toggle')){

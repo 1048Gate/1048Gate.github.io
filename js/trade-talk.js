@@ -129,7 +129,7 @@
       try{
         if(!currentSeasonYear){
           try{
-            const site = await fetch('data/site.json', {cache:'no-store'});
+            const site = await (window.gateData?.fetch || fetch)('data/site.json', {cache:'no-store'});
             if(site.ok) currentSeasonYear = Number((await site.json()).seasonYear) || null;
           }catch(_){}
         }

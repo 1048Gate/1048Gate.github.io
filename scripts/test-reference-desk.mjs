@@ -71,4 +71,22 @@ assert.ok(html.includes('js/reference-desk.js'));
 assert.ok(html.includes('data-home-lede'));
 assert.ok(!/The current championship favorite/.test(html));
 
+// The independent homepage transaction table must wait for season settings too.
+const events={},rpcRequests=[],txBody={innerHTML:''},txStatus={textContent:''};
+const domContext={window:{addEventListener:(name,fn)=>{events[name]=fn;}},
+  document:{getElementById:()=>null,addEventListener:(name,fn)=>{if(name==='gate:site-ready')events[name]=fn;},
+    querySelector:selector=>selector==='[data-desk-body="transactions"]'?txBody:selector==='[data-desk-status="transactions"]'?txStatus:null},
+  setTimeout(){},fetch:async()=>({ok:false}),console:{warn(){}}};
+domContext.window.gateSupabase={rpc:(name,args)=>new Promise(resolve=>rpcRequests.push({args,resolve}))};
+runInNewContext(readFileSync(new URL('../js/shared.js',import.meta.url),'utf8'),domContext);
+runInNewContext(readFileSync(new URL('../js/reference-desk.js',import.meta.url),'utf8'),domContext);
+assert.equal(rpcRequests.length,0,'No silent all-season homepage request before configuration');
+domContext.window.gateSiteConfig={seasonYear:2024};events['gate:site-ready']();
+domContext.window.gateSiteConfig={seasonYear:2025};events['gate:site-ready']();
+assert.deepEqual(rpcRequests.map(row=>row.args.p_season_year),[2024,2025]);
+rpcRequests[1].resolve({data:{items:[]}});await new Promise(setImmediate);
+assert.match(txBody.innerHTML,/2025/);
+rpcRequests[0].resolve({data:{items:[{season_year:2024,team_name:'Obsolete'}]}});await new Promise(setImmediate);
+assert.doesNotMatch(txBody.innerHTML,/Obsolete/);
+
 console.log('Reference desk checks passed: odds math, standings/race/leaders/history notes, dry copy, and homepage hooks.');

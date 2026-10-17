@@ -1,0 +1,50 @@
+{
+  "decodedBytes": 83400,
+  "domContentLoadedMs": 83,
+  "lastJsonMs": 99,
+  "paths": {
+    "/data/homepage-week.json": {
+      "decoded": 13519,
+      "requests": 1,
+      "transfer": 13819
+    },
+    "/data/matchups.json": {
+      "decoded": 23983,
+      "requests": 1,
+      "transfer": 24283
+    },
+    "/data/members.json": {
+      "decoded": 13952,
+      "requests": 1,
+      "transfer": 14252
+    },
+    "/data/newspaper_editions/2026/week_05.json": {
+      "decoded": 13345,
+      "requests": 1,
+      "transfer": 13645
+    },
+    "/data/newspaper_editions/index.json": {
+      "decoded": 1604,
+      "requests": 1,
+      "transfer": 1904
+    },
+    "/data/seasons.json": {
+      "decoded": 7924,
+      "requests": 1,
+      "transfer": 8224
+    },
+    "/data/site.json": {
+      "decoded": 6963,
+      "requests": 1,
+      "transfer": 7263
+    },
+    "/data/streaks.json": {
+      "decoded": 2110,
+      "requests": 1,
+      "transfer": 2410
+    }
+  },
+  "requests": 8,
+  "transferBytes": 85800,
+  "uniquePaths": 8
+}

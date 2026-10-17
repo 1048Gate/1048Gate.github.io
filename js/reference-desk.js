@@ -265,6 +265,7 @@
   const esc = value => (window.gateShared?.escapeHtml || (text => String(text ?? '')))(value);
   const feeds = {matchups:null, seasons:null, streaks:null};
   let feedsRequested = false, txRequested = false;
+  let txSeason=null,txSequence=0;
 
   function setHtml(id, html){ const node = document.querySelector(`[data-desk-body="${id}"]`); if(node) node.innerHTML = html; }
   function setNote(id, text){ const node = document.querySelector(`[data-desk-note="${id}"]`); if(!node) return; node.textContent = text || ''; node.hidden = !text; }
@@ -275,7 +276,7 @@
     if(feedsRequested) return;
     feedsRequested = true;
     await Promise.all(Object.keys(feeds).map(async key => {
-      try{ const response = await fetch(`data/${key}.json`); if(response.ok) feeds[key] = await response.json(); }
+      try{ const response = await (window.gateData?.fetch || fetch)(`data/${key}.json`); if(response.ok) feeds[key] = await response.json(); }
       catch(error){ console.warn(`Reference desk could not load data/${key}.json.`, error); }
     }));
     render();
@@ -354,16 +355,28 @@
   }
 
   async function loadTransactions(){
-    if(txRequested) return;
+    const year=window.gateSiteConfig?.seasonYear;
+    if(!Number.isInteger(year)||year<2019){
+      if(txSeason!==null){++txSequence;txSeason=null;setHtml('transactions',unavailable('Season settings unavailable. Reload to try again.'));setStatus('transactions','Unavailable');}
+      return;
+    }
+    if(txSeason===year)return;
+    const sequence=++txSequence;
+    txSeason=year;
+    setHtml('transactions',unavailable(`Loading ${year} transactions…`));setStatus('transactions','Loading archive');
     const supabase = window.gateSupabase || await (window.gateSupabaseReady || Promise.resolve(null));
-    if(!supabase) return;
+    if(!supabase){if(sequence===txSequence)txSeason=null;return;}
+    if(sequence!==txSequence)return;
     txRequested = true;
-    const year = Number(window.gateSiteConfig?.seasonYear) || null;
     try{
       const {data, error} = await supabase.rpc('get_transaction_archive', {p_page:1, p_page_size:6, p_season_year:year, p_category:'all', p_search:null, p_sort:'newest'});
+      if(sequence!==txSequence||window.gateSiteConfig?.seasonYear!==year)return;
       if(error) throw error;
+      if(data?.items?.some(row=>row.season_year!==year))throw new Error('Transaction response season mismatch');
       renderTransactions(Array.isArray(data?.items) ? data.items : [], year);
     }catch(error){
+      if(sequence!==txSequence)return;
+      txSeason=null;
       console.warn('Reference desk could not load recent transactions.', error);
       setHtml('transactions', unavailable('Transaction feed unavailable right now. The full archive is on the Wire.'));
       setStatus('transactions', 'Unavailable');
@@ -372,6 +385,7 @@
 
   ['gate:site-ready', 'gate:home-board-ready', 'gate:homepage-week-ready'].forEach(evt => document.addEventListener(evt, render));
   window.addEventListener('gate-supabase-ready', loadTransactions);
+  document.addEventListener('gate:site-ready',loadTransactions);
   if(window.gateSupabase) loadTransactions();
   setTimeout(() => {
     if(txRequested) return;

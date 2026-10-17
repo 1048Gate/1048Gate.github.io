@@ -1,7 +1,7 @@
 (async function(){
   const $ = id => document.getElementById(id), esc = window.gateShared.escapeHtml;
   try{
-    const response = await fetch('/data/current-season.json',{cache:'no-store'});
+    const response = await (window.gateData?.fetch || fetch)('/data/current-season.json',{cache:'no-store'});
     if(!response.ok)throw new Error('Unavailable');
     const data = await response.json();
     if(!Array.isArray(data.teamProjections) || !data.teamProjections.length){$('projectionStatus').textContent='Weekly team projections will appear after the next ESPN refresh.';return;}

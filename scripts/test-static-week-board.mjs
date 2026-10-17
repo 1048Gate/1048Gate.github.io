@@ -7,6 +7,7 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const rendered = renderStaticWeekBoard(board);
 
 assert.match(rendered, new RegExp(`aria-label="${board.phase} matchups and standings"`));
+assert.match(rendered,/id="refreshScores"/,'The normal score publishing renderer must preserve the refresh control.');
 assert.equal((rendered.match(/class="week-game week-card is-/g) || []).length, 6);
 assert.equal((rendered.match(/class="week-standings-rank"/g) || []).length, 12);
 assert.ok(html.includes(rendered), 'index.html static week board must match data/current-season.json.');

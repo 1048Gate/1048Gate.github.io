@@ -75,6 +75,7 @@ async function archiveTest(){
   node('transactionSeason').value='2025';node('transactionSeason').handlers.change();await tick();
   assert.deepEqual(requests.map(x=>x.args.p_season_year),[null,2024,2025]);
   requests[2].resolve({data:{items:[],total_count:25}});await tick();assert.match(node('transactionResultCount').textContent,/^25 /);
+  assert.doesNotMatch(node('transactionSync').innerHTML,/Updated just now/,'browser retrieval must not pretend source data just updated');
   requests[1].resolve({data:{items:[],total_count:24}});requests[0].reject(new Error('old failed request'));await tick();
   assert.match(node('transactionResultCount').textContent,/^25 /);assert.doesNotMatch(node('transactionFeed').innerHTML,/unavailable/);
   node('transactionSeason').value='2024';node('transactionSeason').handlers.change();await tick();
@@ -85,16 +86,17 @@ async function archiveTest(){
 async function weekBoundaryTest(){
   const requests=[],rendered=[],board=element(),games=element();board.dataset={weekSeason:'2025',week:'2'};
   const context={window:{addEventListener(){},localStorage:{getItem:()=>null,setItem(){}}},
-    document:{querySelector:s=>s==='[data-week-matchups]'?games:null,querySelectorAll:()=>[],getElementById:id=>id==='weekBoard'?board:null,dispatchEvent(){}},
+    document:{addEventListener(){},querySelector:s=>s==='[data-week-matchups]'?games:null,querySelectorAll:()=>[],getElementById:id=>id==='weekBoard'?board:null,dispatchEvent(){}},
     CustomEvent:class{},console:{warn(){}},fetch:url=>{
       if(url==='data/site.json')return new Promise(()=>{});
       const request=deferred();requests.push({url,...request});return request.promise;
     }};
   board.querySelector=()=>null;
-  runInNewContext(source('freshness'),context);runInNewContext(source('site-ui'),context);
+  runInNewContext(source('freshness'),context);runInNewContext(source('week-board'),context);runInNewContext(source('site-ui'),context);
   const actualRender=context.renderWeekBoardFrom;
   context.renderWeekBoardFrom=payload=>rendered.push(payload);
-  const payload=(season,week)=>({season,week,matchups:Array.from({length:6},()=>({week})),standings:Array.from({length:12},()=>({})),league_pulse:[]});
+  const baseBoard=JSON.parse(readFileSync(new URL('../data/current-season.json',import.meta.url),'utf8'));
+  const payload=(season,week)=>({...structuredClone(baseBoard),season,week,phase:`Week ${week}`,matchups:baseBoard.matchups.map(game=>({...structuredClone(game),week})),league_pulse:[]});
   const respond=(i,data)=>requests[i].resolve({ok:true,json:async()=>data});
   context.window.gateSiteConfig={seasonYear:2026,phase:'Week 2'};
   const pending=context.renderWeekBoard();await tick();respond(0,payload(2025,2));await tick();

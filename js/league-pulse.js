@@ -184,7 +184,7 @@
     if(archiveRequested) return archive;
     archiveRequested=true;
     try{
-      const response=await fetch('data/matchups.json',{cache:'no-store'});
+      const response=await (window.gateData?.fetch || fetch)('data/matchups.json',{cache:'no-store'});
       if(response.ok) archive=await response.json();
     }catch(error){console.warn('League Pulse could not refresh matchup history.',error);}
     return archive;

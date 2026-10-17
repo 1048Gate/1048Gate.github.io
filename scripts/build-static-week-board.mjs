@@ -48,6 +48,10 @@ export function renderStaticWeekBoard(board, renderer = loadWeekBoard()){
   const standingsHtml = renderer.standingsSnapshotHtml(standings, '', escapeHtml);
   return `<section class="home-section week-board" data-panel="data" id="weekBoard" data-week-source="saved" data-week-season="${escapeHtml(board.season)}" data-week="${escapeHtml(board.week)}" data-week-fetched-at="${escapeHtml(fetchedAt)}" aria-label="${escapeHtml(phase)} matchups and standings">
       <header class="home-section-head"><div><span>01 · Current week</span><h2>${escapeHtml(phase)}</h2></div><small data-week-stamp class="is-saved" role="status">${escapeHtml(snapshotLabel(fetchedAt))}</small></header>
+      <div class="score-refresh-controls">
+        <button type="button" id="refreshScores" aria-controls="weekBoard">Refresh scores</button>
+        <span id="scoreRefreshStatus" role="status" aria-live="polite">Published snapshots only</span>
+      </div>
       <div class="week-board-grid">
         <div class="week-matchups" data-week-matchups>
 ${matchupHtml}

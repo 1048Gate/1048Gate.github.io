@@ -10,7 +10,7 @@
   async function load(){
     setStatus('','Championship archive');
     try{
-      const response = await fetch('data/seasons.json', {cache:'no-store'});
+      const response = await (window.gateData?.fetch || fetch)('data/seasons.json', {cache:'no-store'});
       if(!response.ok) throw new Error(`seasons.json returned HTTP ${response.status}`);
       const seasons = (await response.json()).seasons || [];
       const banners = seasons
@@ -46,7 +46,7 @@
         });
         host.insertAdjacentElement('afterend', button);
       }
-      setStatus('is-live',`Live · ${banners.length} banners`);
+      setStatus('',`Archive · ${banners.length} banners`);
     }catch(error){
       console.error('Unable to load banner wall:', error);
       setStatus('is-error','Unavailable · Championship archive failed');

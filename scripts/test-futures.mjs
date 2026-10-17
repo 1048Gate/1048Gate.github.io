@@ -184,9 +184,15 @@ const domStub = {
   querySelector: selector => selector === '#playoffs .playoff-toolbar' ? {insertAdjacentElement: (_, element) => { rendered.host = element; }} : null,
   createElement: () => ({classList: {remove(){}}, addEventListener(){}, innerHTML: ''})
 };
-const domSandbox = {document: domStub, window: {gateShared: {escapeHtml: value => String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;')}}, fetch: async () => ({ok: true, json: async () => rankingsData}), console};
+let openPlayoffs;
+domStub.addEventListener=(name,handler)=>{if(name==='gate:history-tab')openPlayoffs=handler;};
+domStub.getElementById=()=>null;
+let oddsFetches=0;
+const domSandbox = {document: domStub, window: {gateShared: {escapeHtml: value => String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;')}}, fetch: async () => {oddsFetches++;return {ok: true, json: async () => rankingsData};}, console};
 vm.createContext(domSandbox);
 vm.runInContext(browserSource, domSandbox);
+assert.equal(oddsFetches,0,'Hidden playoff simulations should not load eagerly.');
+openPlayoffs({detail:{tab:'playoffs'}});
 await new Promise(resolve => setTimeout(resolve, 50));
 const tabHtml = rendered.host?.innerHTML || '';
 assert.ok(tabHtml.includes('data-odds-method') && tabHtml.includes(rankingsData.method.text.replace(/&/g, '&amp;')), 'Playoffs tab must render the method note.');

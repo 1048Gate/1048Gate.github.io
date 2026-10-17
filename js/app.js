@@ -356,7 +356,7 @@ function useMembers(rows, sourceLabel) {
 }
 
 async function loadJsonMembers() {
-  const response = await fetch('data/members.json', {cache: 'no-store'});
+  const response = await (window.gateData?.fetch || fetch)('data/members.json', {cache: 'no-store'});
   if (!response.ok) throw new Error(`members.json returned HTTP ${response.status}`);
   const payload = await response.json();
   if (!Array.isArray(payload.members)) throw new Error('members.json does not contain a members array');

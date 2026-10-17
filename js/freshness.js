@@ -18,9 +18,42 @@
       && (expected.week == null || week === expected.week)
       && Array.isArray(payload.matchups)
       && payload.matchups.length === 6
-      && payload.matchups.every(game=>game.week == null || game.week === week)
+      && payload.matchups.every(game=>game && (game.week == null || game.week === week))
       && Array.isArray(payload.standings)
       && payload.standings.length === 12;
+  }
+
+  function sourceTime(payload){return payload?.fetchedAt||payload?.last_updated;}
+  const sourceMillis=value=>typeof value==='string'&&/(?:Z|[+-]\d{2}:\d{2})$/.test(value)?Date.parse(value):NaN;
+  function validScoreboard(payload,expected={}){
+    if(!validWeek(payload,expected)||payload.phase!==`Week ${payload.week}`)return false;
+    const stamp=sourceMillis(sourceTime(payload));
+    if(!Number.isFinite(stamp)||stamp>Date.now()+5*60000)return false;
+    const finite=value=>typeof value==='number'&&Number.isFinite(value);
+    if(payload.standings.some(row=>!row||typeof row!=='object'))return false;
+    const teams=new Map(payload.standings.map(row=>[row.teamId,row]));
+    if(teams.size!==12||payload.standings.some(row=>!Number.isInteger(row.teamId)||row.teamId<1||!row.team||!row.owner||['wins','losses','ties'].some(key=>!Number.isInteger(row[key])||row[key]<0)||!finite(row.pointsFor)||!finite(row.pointsAgainst)))return false;
+    const seen=new Set();
+    for(const game of payload.matchups){
+      if(game.week!==payload.week||!['scheduled','live','final'].includes(game.state))return false;
+      for(const side of [game.away,game.home]){
+        const team=teams.get(side?.teamId);
+        if(!team||seen.has(side.teamId)||side.team!==team.team||side.owner!==team.owner||!(finite(side.score)||(side.score===null&&game.state==='scheduled')))return false;
+        if(side.projectedScore!=null&&!finite(side.projectedScore))return false;
+        seen.add(side.teamId);
+      }
+    }
+    if(payload.teamProjections!=null){
+      if(!Array.isArray(payload.teamProjections)||payload.teamProjections.length!==12||payload.teamProjections.some(row=>!row||typeof row!=='object')||new Set(payload.teamProjections.map(row=>row.teamId)).size!==12)return false;
+      const projected=new Map(payload.teamProjections.map(row=>[row.teamId,row]));
+      if(payload.teamProjections.some(row=>!teams.has(row.teamId)||typeof row.complete!=='boolean'||(row.complete?!finite(row.projectedScore):row.projectedScore!==null)))return false;
+      if(payload.matchups.some(game=>[game.away,game.home].some(side=>side.projectedScore!==projected.get(side.teamId).projectedScore)))return false;
+    }
+    if(payload.projectionsStale===true||payload.teamProjections!=null||payload.projectionsFetchedAt!=null){
+      const projectionStamp=sourceMillis(payload.projectionsFetchedAt);
+      if(!Number.isFinite(projectionStamp)||projectionStamp>Date.now()+5*60000)return false;
+    }
+    return seen.size===12;
   }
 
   function relativeFrom(iso, now = Date.now()){
@@ -82,15 +115,16 @@
     const clock = clockLabel(iso);
     const absolute=dateTimeLabel(iso);
     const state=saved?'snapshot':status||(live?'live':'snapshot');
-    const freshness=state==='live' ? liveFreshness(iso, now) : {level:'fresh'};
+    const freshness=state==='live' ? liveFreshness(iso, now) : state==='upcoming'&&now-Date.parse(iso)>86400000?{level:'warning',ageMinutes:Math.floor((now-Date.parse(iso))/60000)}:{level:'fresh'};
     const stale=freshness.level==='warning'||freshness.level==='critical';
     let text='';
     if(degraded) text=rel?`ESPN scores last updated ${rel} · Feed reconnecting`:'ESPN feed reconnecting';
-    else if(stale) text=`Live scores delayed · Last snapshot ${rel || clock || 'unavailable'}`;
-    else if(state==='live') text=rel?`${source} live · Updated ${rel}`:`${source} live`;
-    else if(state==='final') text=absolute?`Final · ${source} verified · ${absolute}`:`Final · ${source} verified`;
-    else if(state==='upcoming') text=absolute?`Upcoming · ${source} schedule · ${absolute}`:`Upcoming · ${source} schedule`;
-    else text=absolute?`${source} snapshot · ${absolute}`:`${source} snapshot`;
+    else if(!absolute)text=`${source} source time unavailable`;
+    else if(stale) text=`${state==='live'?'Live scores delayed':'Schedule snapshot stale'} · Last collection ${rel || clock || 'unavailable'}`;
+    else if(state==='live') text=`${source} live · Collected ${rel}`;
+    else if(state==='final') text=`Final · ${source} verified · Collected ${absolute}`;
+    else if(state==='upcoming') text=`Upcoming · ${source} schedule · Collected ${absolute}`;
+    else text=`${source} snapshot · Collected ${absolute}`;
     const appendClock=state==='live'&&clock&&!degraded&&!stale;
     target.replaceChildren(document.createTextNode(appendClock ? `${text} · ` : text));
     if(iso && appendClock){
@@ -101,7 +135,7 @@
       target.append(time);
     }
     target.classList.toggle('is-saved', saved);
-    target.classList.toggle('is-live', !!(state==='live' && !saved && !degraded && !stale));
+    target.classList.toggle('is-live', !!(absolute && state==='live' && !saved && !degraded && !stale));
     target.classList.toggle('is-final', !!(state==='final' && !degraded));
     target.classList.toggle('is-upcoming', !!(state==='upcoming' && !degraded));
     target.classList.toggle('is-degraded', !!degraded);
@@ -143,6 +177,8 @@
     LIVE_WARNING_MINUTES,
     LIVE_CRITICAL_MINUTES,
     validWeek,
+    validScoreboard,
+    sourceTime,
     relativeFrom,
     clockLabel,
     dateTimeLabel,

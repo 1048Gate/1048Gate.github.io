@@ -257,7 +257,7 @@
       const now = new Date().toISOString();
       const rel = window.gateFreshness?.relativeFrom(now) || 'just now';
       const clock = window.gateFreshness?.clockLabel(now) || '';
-      setSync('is-live', clock ? `Updated ${rel} \u00b7 ${clock}` : `Updated ${rel}`);
+      setSync('', clock ? `Archive retrieved ${rel} \u00b7 ${clock} · Source collection time unavailable` : `Archive retrieved ${rel} · Source collection time unavailable`);
     }catch(error){
       if(request!==archiveRequest)return;
       console.error('Unable to load transaction archive:', error);
