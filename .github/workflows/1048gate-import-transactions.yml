@@ -25,6 +25,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 22
+      - name: Install Node dependencies for validation
+        run: npm ci
+      - name: Validate site checks before collection and import
+        run: npm run check
       - name: Fetch ESPN player-card transactions
         env:
           ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
@@ -48,8 +52,6 @@ jobs:
             --output "artifacts/transactions-$SEASON.json"
           python3 scripts/import_transactions_to_supabase.py \
             --input "artifacts/transactions-$SEASON.json"
-      - name: Validate site checks
-        run: npm run check
       - name: Commit transactionRange bump when needed
         run: |
           git config user.name "github-actions[bot]"
