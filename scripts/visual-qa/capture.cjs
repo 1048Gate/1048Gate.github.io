@@ -62,11 +62,14 @@ const server=http.createServer((req,res)=>{
   const exerciseArchiveFailure=width===1440&&theme==='dark';
   if(exerciseArchiveFailure) homepage.league_pulse=[];
   const fixtures={'/data/site.json':config,'/data/current-season.json':board,'/data/homepage-week.json':homepage,'/data/newspaper_editions/index.json':index,['/'+entry.path]:edition};
-  let forceWeekFailure=exerciseFallbacks;
+  let forceWeekFailure=exerciseFallbacks,failedWeekRequests=0;
   await page.route('**/*',async route=>{
     const u=new URL(route.request().url());
     if(u.hostname==='127.0.0.1'){
-      if((u.pathname==='/data/current-season.json'||u.pathname==='/data/homepage-week.json')&&forceWeekFailure)return route.fulfill({status:503,body:'unavailable'});
+      if((u.pathname==='/data/current-season.json'||u.pathname==='/data/homepage-week.json')&&forceWeekFailure){
+        failedWeekRequests++;
+        return route.fulfill({status:503,body:'unavailable'});
+      }
       if(u.pathname==='/data/matchups.json'&&exerciseArchiveFailure)return route.fulfill({status:503,body:'unavailable'});
       if(fixtures[u.pathname])return route.fulfill({json:fixtures[u.pathname]});
       return route.continue();
@@ -228,24 +231,30 @@ const server=http.createServer((req,res)=>{
   }
   let cachedFallback=null;
   if(exerciseFallbacks){
-    forceWeekFailure=true;
-    await page.evaluate(()=>renderWeekBoard());
-    await page.waitForFunction(()=>document.getElementById('weekBoard')?.dataset.weekSource==='saved');
-    await page.waitForFunction(()=>document.getElementById('leaguePulse')?.dataset.pulseSource==='saved');
-    cachedFallback=await page.evaluate(()=>({
+    // A verified runtime board survives a failed refresh without being relabeled
+    // or rerendered as a saved fallback. Initial no-cache fallback is tested above.
+    const snapshot=()=>page.evaluate(()=>({
       source:document.getElementById('weekBoard')?.dataset.weekSource,
+      matchups:document.querySelector('[data-week-matchups]')?.innerHTML,
+      standings:document.querySelector('[data-week-standings]')?.innerHTML,
+      status:document.querySelector('[data-week-stamp]')?.textContent,
+      pulse:document.getElementById('leaguePulse')?.innerHTML,
       cards:document.querySelectorAll('#weekBoard .week-card').length,
-      status:document.querySelector('[data-week-stamp]')?.textContent||'',
-      pulseSource:document.getElementById('leaguePulse')?.dataset.pulseSource,
-      pulseStatus:document.querySelector('[data-pulse-status]')?.textContent||'',
-      pulseCards:document.querySelectorAll('#leaguePulse [data-pulse-card]').length,
-      ok:document.getElementById('weekBoard')?.dataset.weekSource==='saved'
-        && document.querySelectorAll('#weekBoard .week-card').length===6
-        && document.querySelector('[data-week-stamp]')?.textContent.includes('ESPN snapshot')
-        && document.getElementById('leaguePulse')?.dataset.pulseSource==='saved'
-        && document.querySelector('[data-pulse-status]')?.textContent.includes('Saved league read')
-        && document.querySelectorAll('#leaguePulse [data-pulse-card]').length===6
+      rows:document.querySelectorAll('#weekBoard .week-standings-table tbody tr').length,
+      pulseCards:document.querySelectorAll('#leaguePulse [data-pulse-card]').length
     }));
+    const before=await snapshot(),failuresBefore=failedWeekRequests;
+    forceWeekFailure=true;
+    const result=await page.evaluate(()=>renderWeekBoard({refresh:true}));
+    const after=await snapshot();
+    const warning=await page.locator('#scoreRefreshStatus').textContent();
+    cachedFallback={source:after.source,status:after.status,cards:after.cards,rows:after.rows,
+      pulseCards:after.pulseCards,warning,failedRequests:failedWeekRequests-failuresBefore,
+      unchanged:JSON.stringify(before)===JSON.stringify(after),
+      ok:result===false&&failedWeekRequests>failuresBefore
+        &&JSON.stringify(before)===JSON.stringify(after)&&before.source==='fresh'
+        &&after.cards===6&&after.rows===12&&after.pulseCards===6
+        &&after.status.includes('Collected')&&warning.includes('Keeping the last valid scores')};
   }
   let draftArchive=null;
   if(state==='offseason'&&width===1440&&theme==='light'){
