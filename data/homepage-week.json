@@ -5,7 +5,7 @@
   "week": 6,
   "phase": "Week 6",
   "status": "live",
-  "last_updated": "2026-10-18T05:11:11.969502+00:00",
+  "last_updated": "2026-10-18T05:41:11.800247+00:00",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -49,7 +49,7 @@
         "team": "Jigalos Jims",
         "owner": "James Brochu",
         "score": 0,
-        "projectedScore": 122.54
+        "projectedScore": 122.92
       }
     },
     {
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-18T05:11:13.007489+00:00",
+  "projectionsFetchedAt": "2026-10-18T05:41:12.798806+00:00",
   "featured_story": {
     "season": 2026,
     "week": 5,
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-18T05:11:11.969502+00:00",
+    "week_fetched_at": "2026-10-18T05:41:11.800247+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-18T05:11:15.616Z",
+    "payload_built_at": "2026-10-18T05:41:15.923Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

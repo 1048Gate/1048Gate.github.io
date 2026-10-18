@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-18T05:11:11.969502+00:00",
+  "fetchedAt": "2026-10-18T05:41:11.800247+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -195,7 +195,7 @@
         "team": "Jigalos Jims",
         "owner": "James Brochu",
         "score": 0,
-        "projectedScore": 122.54
+        "projectedScore": 122.92
       }
     },
     {
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-18T05:11:13.007489+00:00",
+  "projectionsFetchedAt": "2026-10-18T05:41:12.798806+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -321,7 +321,7 @@
     },
     {
       "teamId": 8,
-      "projectedScore": 122.54,
+      "projectedScore": 122.92,
       "complete": true
     },
     {
