@@ -5,7 +5,7 @@
   "week": 6,
   "phase": "Week 6",
   "status": "live",
-  "last_updated": "2026-10-18T16:51:33.704181+00:00",
+  "last_updated": "2026-10-18T17:11:15.028380+00:00",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,14 +19,14 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 0,
+        "score": 11.42,
         "projectedScore": 111.33
       },
       "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": -2,
+        "score": 1.7,
         "projectedScore": 109.39
       }
     },
@@ -41,14 +41,14 @@
         "teamId": 3,
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
-        "score": 0,
+        "score": 10.8,
         "projectedScore": 120.67
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 10.9,
+        "score": 24,
         "projectedScore": 123.05
       }
     },
@@ -63,14 +63,14 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 32.7,
+        "score": 42.7,
         "projectedScore": 116.31
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 72.94,
+        "score": 82.94,
         "projectedScore": 117.49
       }
     },
@@ -85,14 +85,14 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 0,
+        "score": 1.8,
         "projectedScore": 122.56
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 6,
+        "score": 13.4,
         "projectedScore": 133.87
       }
     },
@@ -114,7 +114,7 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 0,
+        "score": 12.2,
         "projectedScore": 118.6
       }
     },
@@ -129,14 +129,14 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 0,
+        "score": 4.2,
         "projectedScore": 123.26
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 19.8,
+        "score": 22.3,
         "projectedScore": 141.45
       }
     }
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-18T16:51:34.612994+00:00",
+  "projectionsFetchedAt": "2026-10-18T17:11:16.313692+00:00",
   "featured_story": {
     "season": 2026,
     "week": 5,
@@ -406,7 +406,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "The Buwhops / Ja'Marr-a-Lago",
-      "detail": "2.00 points apart · Live",
+      "detail": "9.72 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -433,8 +433,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Vincent Cannarozzi · 72.94",
-      "detail": "162.70 shy of the 235.64 all-time mark",
+      "title": "Vincent Cannarozzi · 82.94",
+      "detail": "152.70 shy of the 235.64 all-time mark",
       "view": "intel"
     },
     {
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-18T16:51:33.704181+00:00",
+    "week_fetched_at": "2026-10-18T17:11:15.028380+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-18T16:51:37.644Z",
+    "payload_built_at": "2026-10-18T17:11:18.782Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
