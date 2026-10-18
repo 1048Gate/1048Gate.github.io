@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-18T16:11:16.260043+00:00",
+  "fetchedAt": "2026-10-18T16:41:13.207878+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -172,8 +172,8 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": -1,
-        "projectedScore": 109.36
+        "score": -2,
+        "projectedScore": 109.39
       }
     },
     {
@@ -194,8 +194,8 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 5.2,
-        "projectedScore": 123.06
+        "score": 10.9,
+        "projectedScore": 123.05
       }
     },
     {
@@ -209,15 +209,15 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 19.5,
+        "score": 32.6,
         "projectedScore": 116.31
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 65.14,
-        "projectedScore": 117.48
+        "score": 72.94,
+        "projectedScore": 117.49
       }
     },
     {
@@ -232,7 +232,7 @@
         "team": "Team Hash",
         "owner": "Trevor Hash",
         "score": 0,
-        "projectedScore": 120.96
+        "projectedScore": 122.56
       },
       "home": {
         "teamId": 14,
@@ -253,7 +253,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 29.1,
+        "score": 31.1,
         "projectedScore": 118.39
       },
       "home": {
@@ -261,7 +261,7 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 0,
-        "projectedScore": 117.71
+        "projectedScore": 118.6
       }
     },
     {
@@ -276,18 +276,18 @@
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 0,
-        "projectedScore": 123.25
+        "projectedScore": 123.26
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 16.3,
+        "score": 19.8,
         "projectedScore": 141.45
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-18T16:11:17.207193+00:00",
+  "projectionsFetchedAt": "2026-10-18T16:41:14.224621+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -301,12 +301,12 @@
     },
     {
       "teamId": 4,
-      "projectedScore": 117.71,
+      "projectedScore": 118.6,
       "complete": true
     },
     {
       "teamId": 5,
-      "projectedScore": 123.25,
+      "projectedScore": 123.26,
       "complete": true
     },
     {
@@ -316,17 +316,17 @@
     },
     {
       "teamId": 7,
-      "projectedScore": 117.48,
+      "projectedScore": 117.49,
       "complete": true
     },
     {
       "teamId": 8,
-      "projectedScore": 123.06,
+      "projectedScore": 123.05,
       "complete": true
     },
     {
       "teamId": 9,
-      "projectedScore": 109.36,
+      "projectedScore": 109.39,
       "complete": true
     },
     {
@@ -346,7 +346,7 @@
     },
     {
       "teamId": 15,
-      "projectedScore": 120.96,
+      "projectedScore": 122.56,
       "complete": true
     }
   ],
