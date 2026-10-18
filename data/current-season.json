@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-18T21:49:59.334726+00:00",
+  "fetchedAt": "2026-10-18T22:11:11.339622+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -172,7 +172,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 58.76,
+        "score": 59.72,
         "projectedScore": 108.79
       }
     },
@@ -187,7 +187,7 @@
         "teamId": 3,
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
-        "score": 128.06,
+        "score": 129.76,
         "projectedScore": 120.76
       },
       "home": {
@@ -231,14 +231,14 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 103.6,
+        "score": 102.5,
         "projectedScore": 122.55
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 68.74,
+        "score": 71.34,
         "projectedScore": 133.89
       }
     },
@@ -253,14 +253,14 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 53.4,
+        "score": 60.6,
         "projectedScore": 117.97
       },
       "home": {
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 88.06,
+        "score": 90.66,
         "projectedScore": 118.58
       }
     },
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-18T21:50:00.734956+00:00",
+  "projectionsFetchedAt": "2026-10-18T22:11:12.552404+00:00",
   "teamProjections": [
     {
       "teamId": 1,

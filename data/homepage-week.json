@@ -5,7 +5,7 @@
   "week": 6,
   "phase": "Week 6",
   "status": "live",
-  "last_updated": "2026-10-18T21:49:59.334726+00:00",
+  "last_updated": "2026-10-18T22:11:11.339622+00:00",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -26,7 +26,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 58.76,
+        "score": 59.72,
         "projectedScore": 108.79
       }
     },
@@ -41,7 +41,7 @@
         "teamId": 3,
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
-        "score": 128.06,
+        "score": 129.76,
         "projectedScore": 120.76
       },
       "home": {
@@ -85,14 +85,14 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 103.6,
+        "score": 102.5,
         "projectedScore": 122.55
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 68.74,
+        "score": 71.34,
         "projectedScore": 133.89
       }
     },
@@ -107,14 +107,14 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 53.4,
+        "score": 60.6,
         "projectedScore": 117.97
       },
       "home": {
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 88.06,
+        "score": 90.66,
         "projectedScore": 118.58
       }
     },
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-18T21:50:00.734956+00:00",
+  "projectionsFetchedAt": "2026-10-18T22:11:12.552404+00:00",
   "featured_story": {
     "season": 2026,
     "week": 5,
@@ -406,7 +406,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "The Buwhops / Ja'Marr-a-Lago",
-      "detail": "14.72 points apart · Live",
+      "detail": "13.76 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -433,8 +433,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Jared Hall · 128.06",
-      "detail": "107.58 shy of the 235.64 all-time mark",
+      "title": "Jared Hall · 129.76",
+      "detail": "105.88 shy of the 235.64 all-time mark",
       "view": "intel"
     },
     {
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-18T21:49:59.334726+00:00",
+    "week_fetched_at": "2026-10-18T22:11:11.339622+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-18T21:50:03.180Z",
+    "payload_built_at": "2026-10-18T22:11:15.005Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
