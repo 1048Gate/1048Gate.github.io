@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-18T23:11:12.435225+00:00",
+  "fetchedAt": "2026-10-18T23:41:11.506334+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,14 +165,14 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 77.48,
+        "score": 78.48,
         "projectedScore": 111.42
       },
       "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 68.68,
+        "score": 69.1,
         "projectedScore": 108.79
       }
     },
@@ -209,7 +209,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 69.3,
+        "score": 70.6,
         "projectedScore": 117.72
       },
       "home": {
@@ -238,7 +238,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 92.86,
+        "score": 101.72,
         "projectedScore": 133.89
       }
     },
@@ -260,7 +260,7 @@
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 102.08,
+        "score": 101.78,
         "projectedScore": 118.58
       }
     },
@@ -282,12 +282,12 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 49.9,
+        "score": 51.9,
         "projectedScore": 142.47
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-18T23:11:13.394592+00:00",
+  "projectionsFetchedAt": "2026-10-18T23:41:12.694539+00:00",
   "teamProjections": [
     {
       "teamId": 1,
