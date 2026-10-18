@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-18T15:11:11.550793+00:00",
+  "fetchedAt": "2026-10-18T15:41:12.589725+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -172,7 +172,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 4,
+        "score": 2,
         "projectedScore": 108.67
       }
     },
@@ -188,7 +188,7 @@
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
         "score": 0,
-        "projectedScore": 120.06
+        "projectedScore": 120.3
       },
       "home": {
         "teamId": 8,
@@ -209,7 +209,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 17.6,
+        "score": 18.5,
         "projectedScore": 116.23
       },
       "home": {
@@ -253,7 +253,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 25.4,
+        "score": 25.7,
         "projectedScore": 118.39
       },
       "home": {
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-18T15:11:12.761252+00:00",
+  "projectionsFetchedAt": "2026-10-18T15:41:14.392018+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -296,7 +296,7 @@
     },
     {
       "teamId": 3,
-      "projectedScore": 120.06,
+      "projectedScore": 120.3,
       "complete": true
     },
     {
