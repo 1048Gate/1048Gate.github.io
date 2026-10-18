@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-18T21:11:11.788702+00:00",
+  "fetchedAt": "2026-10-18T21:41:14.738977+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -165,14 +165,14 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 67.48,
+        "score": 70.48,
         "projectedScore": 111.42
       },
       "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 52.4,
+        "score": 58.76,
         "projectedScore": 108.79
       }
     },
@@ -209,14 +209,14 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 57.2,
+        "score": 65.1,
         "projectedScore": 117.72
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 112.34,
+        "score": 117.94,
         "projectedScore": 117.13
       }
     },
@@ -231,14 +231,14 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 101.2,
+        "score": 100.3,
         "projectedScore": 122.55
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 65.36,
+        "score": 68.74,
         "projectedScore": 133.89
       }
     },
@@ -253,14 +253,14 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 48.2,
+        "score": 50.1,
         "projectedScore": 117.97
       },
       "home": {
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 85.14,
+        "score": 86.74,
         "projectedScore": 118.58
       }
     },
@@ -275,19 +275,19 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 98.1,
+        "score": 106.7,
         "projectedScore": 123.26
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 40,
+        "score": 43.2,
         "projectedScore": 142.47
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-18T21:11:12.968376+00:00",
+  "projectionsFetchedAt": "2026-10-18T21:41:15.855094+00:00",
   "teamProjections": [
     {
       "teamId": 1,
