@@ -5,7 +5,7 @@
   "week": 6,
   "phase": "Week 6",
   "status": "live",
-  "last_updated": "2026-10-18T18:41:12.753121+00:00",
+  "last_updated": "2026-10-18T19:11:12.700220+00:00",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,15 +19,15 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 38.26,
-        "projectedScore": 111.33
+        "score": 51.86,
+        "projectedScore": 111.42
       },
       "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 38.9,
-        "projectedScore": 109.39
+        "score": 45.6,
+        "projectedScore": 108.76
       }
     },
     {
@@ -41,15 +41,15 @@
         "teamId": 3,
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
-        "score": 57.92,
-        "projectedScore": 120.67
+        "score": 71.1,
+        "projectedScore": 120.76
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 34.9,
-        "projectedScore": 123.05
+        "score": 36.5,
+        "projectedScore": 123.2
       }
     },
     {
@@ -63,15 +63,15 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 57.4,
-        "projectedScore": 116.31
+        "score": 56.8,
+        "projectedScore": 114.26
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 78.54,
-        "projectedScore": 117.49
+        "score": 79.54,
+        "projectedScore": 115.64
       }
     },
     {
@@ -85,15 +85,15 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 42.7,
-        "projectedScore": 122.56
+        "score": 49.94,
+        "projectedScore": 122.54
       },
       "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 35.7,
-        "projectedScore": 133.87
+        "score": 41.9,
+        "projectedScore": 133.86
       }
     },
     {
@@ -108,13 +108,13 @@
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 31.1,
-        "projectedScore": 118.39
+        "projectedScore": 118.62
       },
       "home": {
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 27.4,
+        "score": 30.6,
         "projectedScore": 118.6
       }
     },
@@ -129,7 +129,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 53.08,
+        "score": 58.44,
         "projectedScore": 123.26
       },
       "home": {
@@ -137,7 +137,7 @@
         "team": "Madison Beer Garden",
         "owner": "George Travis",
         "score": 22.3,
-        "projectedScore": 141.45
+        "projectedScore": 141.53
       }
     }
   ],
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-18T18:41:13.784380+00:00",
+  "projectionsFetchedAt": "2026-10-18T19:11:13.722413+00:00",
   "featured_story": {
     "season": 2026,
     "week": 5,
@@ -405,8 +405,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "The Buwhops / Ja'Marr-a-Lago",
-      "detail": "0.64 points apart · Live",
+      "title": "Your Reigning Champ / You Just Made the List!",
+      "detail": "0.50 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -433,8 +433,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Vincent Cannarozzi · 78.54",
-      "detail": "157.10 shy of the 235.64 all-time mark",
+      "title": "Vincent Cannarozzi · 79.54",
+      "detail": "156.10 shy of the 235.64 all-time mark",
       "view": "intel"
     },
     {
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-18T18:41:12.753121+00:00",
+    "week_fetched_at": "2026-10-18T19:11:12.700220+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-18T18:41:16.356Z",
+    "payload_built_at": "2026-10-18T19:11:16.351Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
