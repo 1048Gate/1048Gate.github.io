@@ -5,13 +5,13 @@
   "week": 6,
   "phase": "Week 6",
   "status": "live",
-  "last_updated": "2026-10-18T13:13:37.535939+00:00",
+  "last_updated": "2026-10-18T13:41:12.874433+00:00",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "matchups": [
     {
       "id": 31,
       "week": 6,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -26,7 +26,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 0,
+        "score": 10,
         "projectedScore": 108.67
       }
     },
@@ -63,14 +63,14 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 13.6,
+        "score": 13.8,
         "projectedScore": 116.23
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 37.6,
+        "score": 38.56,
         "projectedScore": 117.48
       }
     },
@@ -107,7 +107,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 6.4,
+        "score": 6.7,
         "projectedScore": 118.39
       },
       "home": {
@@ -121,7 +121,7 @@
     {
       "id": 36,
       "week": 6,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -136,7 +136,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 0,
+        "score": 3.4,
         "projectedScore": 141.36
       }
     }
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-18T13:13:38.484751+00:00",
+  "projectionsFetchedAt": "2026-10-18T13:41:13.813736+00:00",
   "featured_story": {
     "season": 2026,
     "week": 5,
@@ -405,8 +405,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "Team Hash / Ice Has Me Running Back",
-      "detail": "6.00 points apart · Live",
+      "title": "Howya Been's / Madison Beer Garden",
+      "detail": "3.40 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -433,8 +433,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Vincent Cannarozzi · 37.60",
-      "detail": "198.04 shy of the 235.64 all-time mark",
+      "title": "Vincent Cannarozzi · 38.56",
+      "detail": "197.08 shy of the 235.64 all-time mark",
       "view": "intel"
     },
     {
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-18T13:13:37.535939+00:00",
+    "week_fetched_at": "2026-10-18T13:41:12.874433+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-18T13:13:40.684Z",
+    "payload_built_at": "2026-10-18T13:41:16.371Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
