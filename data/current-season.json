@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-18T14:11:13.067017+00:00",
+  "fetchedAt": "2026-10-18T14:41:12.109132+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -172,7 +172,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 8,
+        "score": 6,
         "projectedScore": 108.67
       }
     },
@@ -209,14 +209,14 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 14.7,
+        "score": 16.6,
         "projectedScore": 116.23
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 39.96,
+        "score": 47.84,
         "projectedScore": 117.48
       }
     },
@@ -253,7 +253,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 7.8,
+        "score": 18.2,
         "projectedScore": 118.39
       },
       "home": {
@@ -282,12 +282,12 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 7.2,
+        "score": 14.3,
         "projectedScore": 141.36
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-18T14:11:14.144930+00:00",
+  "projectionsFetchedAt": "2026-10-18T14:41:13.505072+00:00",
   "teamProjections": [
     {
       "teamId": 1,
