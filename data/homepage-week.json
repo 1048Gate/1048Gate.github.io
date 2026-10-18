@@ -5,7 +5,7 @@
   "week": 6,
   "phase": "Week 6",
   "status": "live",
-  "last_updated": "2026-10-18T12:41:12.631821+00:00",
+  "last_updated": "2026-10-18T13:11:12.365860+00:00",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -64,7 +64,7 @@
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
         "score": 13.6,
-        "projectedScore": 119.12
+        "projectedScore": 116.23
       },
       "home": {
         "teamId": 7,
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-18T12:41:13.589749+00:00",
+  "projectionsFetchedAt": "2026-10-18T13:11:13.468903+00:00",
   "featured_story": {
     "season": 2026,
     "week": 5,
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-18T12:41:12.631821+00:00",
+    "week_fetched_at": "2026-10-18T13:11:12.365860+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-18T12:41:16.733Z",
+    "payload_built_at": "2026-10-18T13:11:16.374Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
