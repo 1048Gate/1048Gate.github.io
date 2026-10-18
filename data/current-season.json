@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-18T16:41:13.207878+00:00",
+  "fetchedAt": "2026-10-18T16:51:33.704181+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -166,7 +166,7 @@
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 0,
-        "projectedScore": 103.57
+        "projectedScore": 111.33
       },
       "home": {
         "teamId": 9,
@@ -209,7 +209,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 32.6,
+        "score": 32.7,
         "projectedScore": 116.31
       },
       "home": {
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-18T16:41:14.224621+00:00",
+  "projectionsFetchedAt": "2026-10-18T16:51:34.612994+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -311,7 +311,7 @@
     },
     {
       "teamId": 6,
-      "projectedScore": 103.57,
+      "projectedScore": 111.33,
       "complete": true
     },
     {
