@@ -5,7 +5,7 @@
   "week": 6,
   "phase": "Week 6",
   "status": "live",
-  "last_updated": "2026-10-18T13:41:12.874433+00:00",
+  "last_updated": "2026-10-18T14:11:13.067017+00:00",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -20,20 +20,20 @@
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 0,
-        "projectedScore": 115.55
+        "projectedScore": 115.57
       },
       "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 10,
+        "score": 8,
         "projectedScore": 108.67
       }
     },
     {
       "id": 32,
       "week": 6,
-      "state": "scheduled",
+      "state": "live",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -48,7 +48,7 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 0,
+        "score": 5.2,
         "projectedScore": 122.92
       }
     },
@@ -63,14 +63,14 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 13.8,
+        "score": 14.7,
         "projectedScore": 116.23
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 38.56,
+        "score": 39.96,
         "projectedScore": 117.48
       }
     },
@@ -107,7 +107,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 6.7,
+        "score": 7.8,
         "projectedScore": 118.39
       },
       "home": {
@@ -115,7 +115,7 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 0,
-        "projectedScore": 117.53
+        "projectedScore": 117.71
       }
     },
     {
@@ -136,7 +136,7 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 3.4,
+        "score": 7.2,
         "projectedScore": 141.36
       }
     }
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-18T13:41:13.813736+00:00",
+  "projectionsFetchedAt": "2026-10-18T14:11:14.144930+00:00",
   "featured_story": {
     "season": 2026,
     "week": 5,
@@ -405,8 +405,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "Howya Been's / Madison Beer Garden",
-      "detail": "3.40 points apart · Live",
+      "title": "Your Get Right Game / Jigalos Jims",
+      "detail": "5.20 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -433,8 +433,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Vincent Cannarozzi · 38.56",
-      "detail": "197.08 shy of the 235.64 all-time mark",
+      "title": "Vincent Cannarozzi · 39.96",
+      "detail": "195.68 shy of the 235.64 all-time mark",
       "view": "intel"
     },
     {
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-18T13:41:12.874433+00:00",
+    "week_fetched_at": "2026-10-18T14:11:13.067017+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-18T13:41:16.371Z",
+    "payload_built_at": "2026-10-18T14:11:16.453Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
