@@ -5,7 +5,7 @@
   "week": 6,
   "phase": "Week 6",
   "status": "live",
-  "last_updated": "2026-10-18T14:41:12.109132+00:00",
+  "last_updated": "2026-10-18T15:11:11.550793+00:00",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -26,7 +26,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 6,
+        "score": 4,
         "projectedScore": 108.67
       }
     },
@@ -63,14 +63,14 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 16.6,
+        "score": 17.6,
         "projectedScore": 116.23
       },
       "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 47.84,
+        "score": 54.94,
         "projectedScore": 117.48
       }
     },
@@ -107,7 +107,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 18.2,
+        "score": 25.4,
         "projectedScore": 118.39
       },
       "home": {
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-18T14:41:13.505072+00:00",
+  "projectionsFetchedAt": "2026-10-18T15:11:12.761252+00:00",
   "featured_story": {
     "season": 2026,
     "week": 5,
@@ -405,8 +405,8 @@
     {
       "id": "matchup",
       "label": "Game watch",
-      "title": "Your Get Right Game / Jigalos Jims",
-      "detail": "5.20 points apart · Live",
+      "title": "The Buwhops / Ja'Marr-a-Lago",
+      "detail": "4.00 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -433,8 +433,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Vincent Cannarozzi · 47.84",
-      "detail": "187.80 shy of the 235.64 all-time mark",
+      "title": "Vincent Cannarozzi · 54.94",
+      "detail": "180.70 shy of the 235.64 all-time mark",
       "view": "intel"
     },
     {
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-18T14:41:12.109132+00:00",
+    "week_fetched_at": "2026-10-18T15:11:11.550793+00:00",
     "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-18T14:41:16.713Z",
+    "payload_built_at": "2026-10-18T15:11:15.539Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
