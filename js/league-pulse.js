@@ -153,19 +153,19 @@
     return {id:'transactions',label:`Latest move${Number.isInteger(row.season_year)?` · ${row.season_year}`:''}`,title:`${clean(row.team_name||'League activity')} · ${type}`,detail:player?`${player}${route?` · ${route}`:''}`:'Open the verified transaction for full details.',view:'transactions'};
   }
 
-  const api=Object.freeze({buildCards,transactionCard,isOffseason,refresh});
-  window.gateLeaguePulse=api;
-  if(typeof document === 'undefined') return;
-
-  const esc=value=>(window.gateShared?.escapeHtml||((text)=>String(text??'')))(value);
-  let archive=null,archiveRequested=false,transactionSeason=null,transactionRequest=0,latestTransaction=null;
-
-  function cardHtml(card,index){
+  const escapeText=value=>String(value??'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  function cardHtml(card,index,esc=escapeText){
     const action=card.view
       ? `<button type="button" data-view-link="${esc(card.view)}"${card.scrollTo?` data-scroll-to="${esc(card.scrollTo)}"`:''}>Open <span aria-hidden="true">→</span></button>`
       :card.scrollTo?`<button type="button" data-scroll-to="${esc(card.scrollTo)}">Open <span aria-hidden="true">→</span></button>`:'';
     return `<article class="league-pulse-card${index===0?' is-lead':''}" data-pulse-card="${esc(card.id)}" role="listitem"><span>${esc(card.label)}</span><strong>${esc(card.title)}</strong><p>${esc(card.detail)}</p>${action}</article>`;
   }
+
+  const api=Object.freeze({buildCards,transactionCard,isOffseason,refresh,cardHtml});
+  window.gateLeaguePulse=api;
+  if(typeof document === 'undefined') return;
+
+  let archive=null,archiveRequested=false,transactionSeason=null,transactionRequest=0,latestTransaction=null;
 
   function render(cards,{saved=false}={}){
     const host=document.querySelector('[data-league-pulse]');
@@ -173,7 +173,7 @@
     if(latestTransaction?.season_year===window.gateSiteConfig?.seasonYear) cards=cards.map(card=>card.id==='transactions'?transactionCard(latestTransaction):card);
     /* Prebuilt payloads may carry older odds copy; rebuild that card from site.json when it is loaded. */
     if(window.gateSiteConfig) cards=cards.map(card=>card.id==='odds'?(oddsCard(window.gateSiteConfig)||card):card);
-    host.innerHTML=cards.map(cardHtml).join('');
+    host.innerHTML=cards.map((card,index)=>cardHtml(card,index,window.gateShared?.escapeHtml)).join('');
     const section=document.getElementById('leaguePulse');
     if(section) section.dataset.pulseSource=saved?'saved':'current';
     const status=document.querySelector('[data-pulse-status]');

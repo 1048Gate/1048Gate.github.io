@@ -385,8 +385,12 @@ if(!currentSeason.standings.every(team => team.teamId && team.owner && team.team
 if(!currentSeason.matchups.every(game => game.away?.owner && game.home?.owner && game.away?.teamId && game.home?.teamId)){
   throw new Error('Each matchup needs home/away owners and teamIds.');
 }
-if(!html.includes('Madison Beer Garden') || !html.includes('1912 Titanic Swimteam') || !html.includes('Your Reigning Champ')){
-  throw new Error('Home board fallback must keep the 2026 club names.');
+// Derive the expected club names from the published board instead of hardcoding them, so a
+// stale fallback can never satisfy this check and a roster rename cannot break it.
+const htmlEscape = value => String(value ?? '').replace(/[<>&"]/g, character => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[character]));
+const missingClubs = currentSeason.standings.filter(team => !html.includes(htmlEscape(team.team))).map(team => team.team);
+if(missingClubs.length){
+  throw new Error(`Home board fallback must keep the current club names. Missing: ${missingClubs.join(', ')}. Run: npm run homepage-static`);
 }
 const siteUiSource = readFileSync(new URL('js/site-ui.js', root), 'utf8');
 if(!siteUiSource.includes('renderWeekBoard') || !siteUiSource.includes('data/current-season.json')){
