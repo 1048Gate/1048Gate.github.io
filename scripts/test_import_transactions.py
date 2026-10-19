@@ -68,6 +68,14 @@ class TransactionImportTests(unittest.TestCase):
         for payload in ({}, {'transactions': [], 'seasonId': 2024}, {'transactions': [], 'id': 1}):
             with self.assertRaises(ValueError): normalize_transactions(payload, 2025, 1237285)
 
+    def test_workflow_sources_accepted_unknown_source_or_league_rejected(self):
+        for source in ('ESPN mTransactions2', 'ESPN kona_playercard', 'ESPN trade-history adapter'):
+            data = copy.deepcopy(self.data); data['source'] = source
+            self.assertEqual(prepare_import(data)['source'], source)
+        for field, value in (('source', 'Unknown feed'), ('source', None), ('league_id', 999)):
+            data = copy.deepcopy(self.data); data[field] = value
+            with self.assertRaises(ValueError): prepare_import(data)
+
     def test_failed_rpc_does_not_run_further_writes(self):
         with patch('import_transactions_to_supabase.supabase_request', side_effect=RuntimeError('failed')) as request:
             with self.assertRaises(RuntimeError): import_snapshot(self.data)

@@ -45,12 +45,17 @@ def supabase_request(method: str, path: str, payload: Any | None = None, prefer:
         raise RuntimeError(f"Supabase {method} {path} failed HTTP {exc.code}: {detail}") from exc
 
 
+# Sources produced by the import workflow: fetch_transactions.py (mTransactions2),
+# fetch_trade_history.py (kona_playercard), and the adapter's fallback label.
+ALLOWED_SOURCES = frozenset({'ESPN mTransactions2', 'ESPN kona_playercard', 'ESPN trade-history adapter'})
+
+
 def prepare_import(data: dict[str, Any], *, authoritative: bool = False, allow_empty: bool = False) -> dict[str, Any]:
     """Fail closed before any write; completeness is an explicit operator assertion."""
     from datetime import datetime
     if not isinstance(data, dict) or type(data.get('season')) is not int or data['season'] < 2019:
         raise ValueError('Invalid transaction season')
-    if data.get('league_id') != 1237285 or data.get('source') != 'ESPN mTransactions2':
+    if data.get('league_id') != 1237285 or data.get('source') not in ALLOWED_SOURCES:
         raise ValueError('Unexpected transaction source or league')
     stamp = datetime.fromisoformat(str(data.get('fetched_at', '')).replace('Z', '+00:00'))
     if stamp.tzinfo is None:
