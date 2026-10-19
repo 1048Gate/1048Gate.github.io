@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-19T01:41:11.882197+00:00",
+  "fetchedAt": "2026-10-19T02:11:13.155040+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -187,14 +187,14 @@
         "teamId": 3,
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
-        "score": 143.76,
+        "score": 146.86,
         "projectedScore": 120.76
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 63.36,
+        "score": 71.52,
         "projectedScore": 123.86
       }
     },
@@ -253,7 +253,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 77.7,
+        "score": 77.98,
         "projectedScore": 117.97
       },
       "home": {
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-19T01:41:13.155906+00:00",
+  "projectionsFetchedAt": "2026-10-19T02:11:14.421382+00:00",
   "teamProjections": [
     {
       "teamId": 1,
