@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-20T00:41:11.548546+00:00",
+  "fetchedAt": "2026-10-20T01:11:12.696002+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -209,7 +209,7 @@
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
-        "score": 71.98,
+        "score": 74.38,
         "projectedScore": 117.72
       },
       "home": {
@@ -238,7 +238,7 @@
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 112.02,
+        "score": 113.72,
         "projectedScore": 133.89
       }
     },
@@ -253,7 +253,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 100.52,
+        "score": 101.52,
         "projectedScore": 117.97
       },
       "home": {
@@ -275,19 +275,19 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 120.5,
+        "score": 124.2,
         "projectedScore": 123.26
       },
       "home": {
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 90.26,
+        "score": 93.84,
         "projectedScore": 142.47
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-20T00:41:12.902051+00:00",
+  "projectionsFetchedAt": "2026-10-20T01:11:13.683743+00:00",
   "teamProjections": [
     {
       "teamId": 1,
