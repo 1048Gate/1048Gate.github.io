@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "seasonRoman": "X",
   "seasonYear": 2026,
-  "phase": "Week 6",
+  "phase": "Week 7",
   "competition": "Regular",
   "transactionRange": [
     2019,
@@ -13,75 +13,75 @@
   "futures": [
     {
       "name": "George Travis",
-      "odds": "+325",
-      "case": "5-0 · 141.10 PF/G through 5. Draft note: CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan.",
+      "odds": "+350",
+      "case": "5-1 · 136.91 PF/G through 6. Draft note: CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan.",
       "draftCase": "CMC at 2, Kyren and Javonte behind him. The commissioner always drafts a team you have to game-plan."
     },
     {
       "name": "Trevor Hash",
-      "odds": "+350",
-      "case": "4-1 · 155.63 PF/G through 5. Draft note: Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up.",
+      "odds": "+375",
+      "case": "4-2 · 147.87 PF/G through 6. Draft note: Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up.",
       "draftCase": "Gibbs 1.01 and Chase Brown kept in the 9th. The RBs are elite — the rest has to catch up."
     },
     {
       "name": "Bryan Hunt",
-      "odds": "+600",
-      "case": "3-2 · 134.49 PF/G through 5. Draft note: Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé.",
+      "odds": "+400",
+      "case": "4-2 · 134.89 PF/G through 6. Draft note: Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé.",
       "draftCase": "Chase at 3 and Bowers in the 9th. Finally a roster that matches the perennial-contender résumé."
     },
     {
-      "name": "Thomas Speer",
-      "odds": "+750",
-      "case": "2-3 · 123.96 PF/G through 5. Draft note: Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four.",
-      "draftCase": "Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."
-    },
-    {
-      "name": "James Brochu",
-      "odds": "+1000",
-      "case": "3-2 · 120.03 PF/G through 5. Draft note: Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix.",
-      "draftCase": "Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix."
-    },
-    {
       "name": "Vincent Cannarozzi",
-      "odds": "+1500",
-      "case": "3-2 · 120.02 PF/G through 5. Draft note: JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit.",
+      "odds": "+1100",
+      "case": "4-2 · 119.76 PF/G through 6. Draft note: JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit.",
       "draftCase": "JSN and Jeanty up top. The Nabers era is over; this is the rebuild that has to hit."
     },
     {
+      "name": "Thomas Speer",
+      "odds": "+1200",
+      "case": "2-4 · 119.39 PF/G through 6. Draft note: Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four.",
+      "draftCase": "Puka locked in the 9th, then ARSB, Hampton, and McBride. Best roster in the league, and he's chasing ring four."
+    },
+    {
       "name": "German Haro",
-      "odds": "+1700",
-      "case": "3-2 · 122.84 PF/G through 5. Draft note: Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence.",
+      "odds": "+1300",
+      "case": "4-2 · 122.30 PF/G through 6. Draft note: Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence.",
       "draftCase": "Cook and Henry in the first two rounds. First time in years the roster isn't a two-win sentence."
     },
     {
-      "name": "Collin Krum",
-      "odds": "+2000",
-      "case": "3-2 · 107.25 PF/G through 5. Draft note: Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip.",
-      "draftCase": "Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip."
+      "name": "James Brochu",
+      "odds": "+1500",
+      "case": "3-3 · 116.05 PF/G through 6. Draft note: Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix.",
+      "draftCase": "Lamb, Nico, Breece, and ETN kept in the 8th. Jigalos is back in the mix."
     },
     {
       "name": "Kyle Fowler",
-      "odds": "+3250",
-      "case": "2-3 · 124.80 PF/G through 5. Draft note: AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin.",
+      "odds": "+2300",
+      "case": "3-3 · 120.96 PF/G through 6. Draft note: AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin.",
       "draftCase": "AJ Brown, DeVonta, and Skattebo kept in the 8th. Young and thin, but not 3-11 thin."
     },
     {
-      "name": "JD Daley",
-      "odds": "+4500",
-      "case": "1-4 · 110.97 PF/G through 5. Draft note: Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version.",
-      "draftCase": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
+      "name": "Collin Krum",
+      "odds": "+2750",
+      "case": "3-3 · 105.31 PF/G through 6. Draft note: Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip.",
+      "draftCase": "Bijan stays, London and Judkins came with him. Still one piece from the ring after last year's title-game trip."
     },
     {
       "name": "Jared Hall",
-      "odds": "+4750",
-      "case": "0-5 · 115.80 PF/G through 5. Draft note: Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset.",
+      "odds": "+4500",
+      "case": "1-5 · 121.86 PF/G through 6. Draft note: Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset.",
       "draftCase": "Taylor and Nabers are the spine. Three rings say don't bury him after a 7-7 reset."
     },
     {
       "name": "Brian Heino",
-      "odds": "+5000",
-      "case": "1-4 · 94.24 PF/G through 5. Draft note: Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window.",
+      "odds": "+4750",
+      "case": "2-4 · 94.45 PF/G through 6. Draft note: Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window.",
       "draftCase": "Achane in the 12th is the steal of the night, and Saquon fell to 11. The RBs are a title window."
+    },
+    {
+      "name": "JD Daley",
+      "odds": "+5000",
+      "case": "1-5 · 103.99 PF/G through 6. Draft note: Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version.",
+      "draftCase": "Jefferson, Josh Allen, and Rice kept in the 7th. Boom-or-bust just built the boom version."
     }
   ],
   "draftOrder": [
@@ -178,13 +178,13 @@
     "status": "complete"
   },
   "futuresMethod": {
-    "gamesPlayed": 5,
-    "preseasonShare": 75,
-    "scoringShare": 25,
+    "gamesPlayed": 6,
+    "preseasonShare": 71,
+    "scoringShare": 29,
     "careerShare": 45,
     "rosterShare": 55,
     "simulations": 10000,
     "houseEdgePct": 5,
-    "text": "Each rating blends a preseason rating with 2026 scoring. Preseason: 45% career form (recent and career win %, scoring vs. league, playoff finishes) + 55% post-draft roster (2026 draft ranks). 2026 scoring: points per game, pulled toward the league average while the sample is small; its share grows each week. After Week 5, preseason carries 75% of each rating and 2026 scoring 25%. The rest of the season is simulated 10,000 times on the real schedule; standings ties go to points for; six-team bracket, top two seeds get byes. Prices include a 5% house edge."
+    "text": "Each rating blends a preseason rating with 2026 scoring. Preseason: 45% career form (recent and career win %, scoring vs. league, playoff finishes) + 55% post-draft roster (2026 draft ranks). 2026 scoring: points per game, pulled toward the league average while the sample is small; its share grows each week. After Week 6, preseason carries 71% of each rating and 2026 scoring 29%. The rest of the season is simulated 10,000 times on the real schedule; standings ties go to points for; six-team bracket, top two seeds get byes. Prices include a 5% house edge."
   }
 }

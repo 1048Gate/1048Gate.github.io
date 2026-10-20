@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "season": 2026,
   "seasonNumber": 10,
-  "week": 6,
-  "phase": "Week 6",
-  "fetchedAt": "2026-10-20T03:41:12.244736+00:00",
+  "week": 7,
+  "phase": "Week 7",
+  "fetchedAt": "2026-10-20T13:33:42.172399+00:00",
   "source": "ESPN league endpoint",
-  "note": "Week 6 in progress. Live scoring from ESPN.",
+  "note": "Week 7 slate from ESPN.",
   "standings": [
     {
       "locker": 1,
@@ -15,10 +15,10 @@
       "owner": "George Travis",
       "abbrev": "BDS",
       "wins": 5,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
-      "pointsFor": 705.5000000000001,
-      "pointsAgainst": 462.80000000000007
+      "pointsFor": 821.4600000000002,
+      "pointsAgainst": 599.7
     },
     {
       "locker": 12,
@@ -27,10 +27,10 @@
       "owner": "Trevor Hash",
       "abbrev": "HASH",
       "wins": 4,
-      "losses": 1,
+      "losses": 2,
       "ties": 0,
-      "pointsFor": 778.14,
-      "pointsAgainst": 510.24
+      "pointsFor": 887.24,
+      "pointsAgainst": 629.86
     },
     {
       "locker": 4,
@@ -38,11 +38,11 @@
       "team": "Howya Been's",
       "owner": "Bryan Hunt",
       "abbrev": "HUNT",
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 0,
-      "pointsFor": 672.46,
-      "pointsAgainst": 692.78
+      "pointsFor": 809.36,
+      "pointsAgainst": 808.74
     },
     {
       "locker": 11,
@@ -50,11 +50,35 @@
       "team": "Ice Has Me Running Back",
       "owner": "German Haro",
       "abbrev": "HARO",
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 0,
-      "pointsFor": 614.2,
-      "pointsAgainst": 570.3
+      "pointsFor": 733.82,
+      "pointsAgainst": 679.4
+    },
+    {
+      "locker": 6,
+      "teamId": 7,
+      "team": "McConkey Tonk Badonkadonk",
+      "owner": "Vincent Cannarozzi",
+      "abbrev": "CANN",
+      "wins": 4,
+      "losses": 2,
+      "ties": 0,
+      "pointsFor": 718.56,
+      "pointsAgainst": 725.68
+    },
+    {
+      "locker": 3,
+      "teamId": 4,
+      "team": "You Just Made the List!",
+      "owner": "Kyle Fowler",
+      "abbrev": "Kyle",
+      "wins": 3,
+      "losses": 3,
+      "ties": 0,
+      "pointsFor": 725.7800000000001,
+      "pointsAgainst": 782.92
     },
     {
       "locker": 7,
@@ -63,22 +87,10 @@
       "owner": "James Brochu",
       "abbrev": "JIM",
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "pointsFor": 600.14,
-      "pointsAgainst": 594.66
-    },
-    {
-      "locker": 6,
-      "teamId": 7,
-      "team": "McConkey Tonk Badonkadonk",
-      "owner": "Vincent Cannarozzi",
-      "abbrev": "CANN",
-      "wins": 3,
-      "losses": 2,
-      "ties": 0,
-      "pointsFor": 600.12,
-      "pointsAgainst": 630.0799999999999
+      "pointsFor": 696.28,
+      "pointsAgainst": 746.8199999999999
     },
     {
       "locker": 10,
@@ -87,22 +99,10 @@
       "owner": "Collin Krum",
       "abbrev": "BB",
       "wins": 3,
-      "losses": 2,
-      "ties": 0,
-      "pointsFor": 536.26,
-      "pointsAgainst": 517.5600000000001
-    },
-    {
-      "locker": 3,
-      "teamId": 4,
-      "team": "You Just Made the List!",
-      "owner": "Kyle Fowler",
-      "abbrev": "Kyle",
-      "wins": 2,
       "losses": 3,
       "ties": 0,
-      "pointsFor": 624.0000000000001,
-      "pointsAgainst": 686.4
+      "pointsFor": 631.86,
+      "pointsAgainst": 636.0
     },
     {
       "locker": 9,
@@ -111,10 +111,34 @@
       "owner": "Thomas Speer",
       "abbrev": "SPEE",
       "wins": 2,
-      "losses": 3,
+      "losses": 4,
       "ties": 0,
-      "pointsFor": 619.82,
-      "pointsAgainst": 624.98
+      "pointsFor": 716.34,
+      "pointsAgainst": 726.76
+    },
+    {
+      "locker": 5,
+      "teamId": 6,
+      "team": "The Buwhops",
+      "owner": "Brian Heino",
+      "abbrev": "HEIN",
+      "wins": 2,
+      "losses": 4,
+      "ties": 0,
+      "pointsFor": 566.7,
+      "pointsAgainst": 731.62
+    },
+    {
+      "locker": 2,
+      "teamId": 3,
+      "team": "Your Get Right Game",
+      "owner": "Jared Hall",
+      "abbrev": "HALL",
+      "wins": 1,
+      "losses": 5,
+      "ties": 0,
+      "pointsFor": 731.18,
+      "pointsAgainst": 804.66
     },
     {
       "locker": 8,
@@ -123,151 +147,127 @@
       "owner": "JD Daley",
       "abbrev": "MAGA",
       "wins": 1,
-      "losses": 4,
-      "ties": 0,
-      "pointsFor": 554.86,
-      "pointsAgainst": 694.9
-    },
-    {
-      "locker": 5,
-      "teamId": 6,
-      "team": "The Buwhops",
-      "owner": "Brian Heino",
-      "abbrev": "HEIN",
-      "wins": 1,
-      "losses": 4,
-      "ties": 0,
-      "pointsFor": 471.22,
-      "pointsAgainst": 662.52
-    },
-    {
-      "locker": 2,
-      "teamId": 3,
-      "team": "Your Get Right Game",
-      "owner": "Jared Hall",
-      "abbrev": "HALL",
-      "wins": 0,
       "losses": 5,
       "ties": 0,
-      "pointsFor": 579.02,
-      "pointsAgainst": 708.52
+      "pointsFor": 623.96,
+      "pointsAgainst": 790.38
     }
   ],
   "matchups": [
     {
-      "id": 31,
-      "week": 6,
-      "state": "live",
+      "id": 37,
+      "week": 7,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 6,
-        "team": "The Buwhops",
-        "owner": "Brian Heino",
-        "score": 95.48,
-        "projectedScore": 111.42
-      },
-      "home": {
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 69.1,
-        "projectedScore": 108.79
-      }
-    },
-    {
-      "id": 32,
-      "week": 6,
-      "state": "live",
-      "winner": "UNDECIDED",
-      "isPlayoff": false,
-      "matchupType": "NONE",
-      "away": {
-        "teamId": 3,
-        "team": "Your Get Right Game",
-        "owner": "Jared Hall",
-        "score": 152.16,
-        "projectedScore": 120.76
+        "score": 0,
+        "projectedScore": 76.57
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 96.14,
-        "projectedScore": 123.86
+        "score": 0,
+        "projectedScore": 128.92
       }
     },
     {
-      "id": 33,
-      "week": 6,
-      "state": "live",
+      "id": 38,
+      "week": 7,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 13,
-        "team": "Breezin’ with Bijan",
-        "owner": "Collin Krum",
-        "score": 95.6,
-        "projectedScore": 117.72
-      },
-      "home": {
         "teamId": 7,
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
-        "score": 118.44,
-        "projectedScore": 117.13
+        "score": 0,
+        "projectedScore": 74.56
+      },
+      "home": {
+        "teamId": 6,
+        "team": "The Buwhops",
+        "owner": "Brian Heino",
+        "score": 0,
+        "projectedScore": 80.96
       }
     },
     {
-      "id": 34,
-      "week": 6,
-      "state": "live",
+      "id": 39,
+      "week": 7,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 15,
-        "team": "Team Hash",
-        "owner": "Trevor Hash",
-        "score": 109.1,
-        "projectedScore": 122.55
-      },
-      "home": {
         "teamId": 14,
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
-        "score": 119.62,
-        "projectedScore": 133.89
+        "score": 0,
+        "projectedScore": 114.09
+      },
+      "home": {
+        "teamId": 3,
+        "team": "Your Get Right Game",
+        "owner": "Jared Hall",
+        "score": 0,
+        "projectedScore": 114.31
       }
     },
     {
-      "id": 35,
-      "week": 6,
-      "state": "live",
+      "id": 40,
+      "week": 7,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
       "away": {
-        "teamId": 11,
-        "team": "Your Reigning Champ",
-        "owner": "Thomas Speer",
-        "score": 96.52,
-        "projectedScore": 117.97
-      },
-      "home": {
         "teamId": 4,
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
-        "score": 101.78,
-        "projectedScore": 118.58
+        "score": 0,
+        "projectedScore": 120.13
+      },
+      "home": {
+        "teamId": 13,
+        "team": "Breezin’ with Bijan",
+        "owner": "Collin Krum",
+        "score": 0,
+        "projectedScore": 71.39
       }
     },
     {
-      "id": 36,
-      "week": 6,
-      "state": "live",
+      "id": 41,
+      "week": 7,
+      "state": "scheduled",
+      "winner": "UNDECIDED",
+      "isPlayoff": false,
+      "matchupType": "NONE",
+      "away": {
+        "teamId": 1,
+        "team": "Madison Beer Garden",
+        "owner": "George Travis",
+        "score": 0,
+        "projectedScore": 131.03
+      },
+      "home": {
+        "teamId": 15,
+        "team": "Team Hash",
+        "owner": "Trevor Hash",
+        "score": 0,
+        "projectedScore": 111.96
+      }
+    },
+    {
+      "id": 42,
+      "week": 7,
+      "state": "scheduled",
       "winner": "UNDECIDED",
       "isPlayoff": false,
       "matchupType": "NONE",
@@ -275,80 +275,80 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 136.9,
-        "projectedScore": 123.26
+        "score": 0,
+        "projectedScore": 108.41
       },
       "home": {
-        "teamId": 1,
-        "team": "Madison Beer Garden",
-        "owner": "George Travis",
-        "score": 115.96,
-        "projectedScore": 142.47
+        "teamId": 11,
+        "team": "Your Reigning Champ",
+        "owner": "Thomas Speer",
+        "score": 0,
+        "projectedScore": 88.38
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-20T03:41:13.378488+00:00",
   "teamProjections": [
     {
       "teamId": 1,
-      "projectedScore": 142.47,
+      "projectedScore": 131.03,
       "complete": true
     },
     {
       "teamId": 3,
-      "projectedScore": 120.76,
+      "projectedScore": 114.31,
       "complete": true
     },
     {
       "teamId": 4,
-      "projectedScore": 118.58,
+      "projectedScore": 120.13,
       "complete": true
     },
     {
       "teamId": 5,
-      "projectedScore": 123.26,
+      "projectedScore": 108.41,
       "complete": true
     },
     {
       "teamId": 6,
-      "projectedScore": 111.42,
+      "projectedScore": 80.96,
       "complete": true
     },
     {
       "teamId": 7,
-      "projectedScore": 117.13,
+      "projectedScore": 74.56,
       "complete": true
     },
     {
       "teamId": 8,
-      "projectedScore": 123.86,
+      "projectedScore": 128.92,
       "complete": true
     },
     {
       "teamId": 9,
-      "projectedScore": 108.79,
+      "projectedScore": 76.57,
       "complete": true
     },
     {
       "teamId": 11,
-      "projectedScore": 117.97,
+      "projectedScore": 88.38,
       "complete": true
     },
     {
       "teamId": 13,
-      "projectedScore": 117.72,
+      "projectedScore": 71.39,
       "complete": true
     },
     {
       "teamId": 14,
-      "projectedScore": 133.89,
+      "projectedScore": 114.09,
       "complete": true
     },
     {
       "teamId": 15,
-      "projectedScore": 122.55,
+      "projectedScore": 111.96,
       "complete": true
     }
   ],
+  "projectionsFetchedAt": "2026-10-20T13:33:44.018789+00:00",
   "projectionsStale": false
 }
