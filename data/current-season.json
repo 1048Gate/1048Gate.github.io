@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 6,
   "phase": "Week 6",
-  "fetchedAt": "2026-10-20T01:11:12.696002+00:00",
+  "fetchedAt": "2026-10-20T01:14:29.631069+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 6 in progress. Live scoring from ESPN.",
   "standings": [
@@ -253,7 +253,7 @@
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
-        "score": 101.52,
+        "score": 102.52,
         "projectedScore": 117.97
       },
       "home": {
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-20T01:11:13.683743+00:00",
+  "projectionsFetchedAt": "2026-10-20T01:14:31.138760+00:00",
   "teamProjections": [
     {
       "teamId": 1,
