@@ -291,29 +291,29 @@
   "projectionsFetchedAt": "2026-10-20T13:33:44.018789+00:00",
   "featured_story": {
     "season": 2026,
-    "week": 5,
-    "headline": "Trevor Hash sets the Week 5 pace as the table takes shape",
-    "standfirst": "Madison Beer Garden (George Travis) leads the verified table after Week 5; Ice Has Me Running Back (German Haro) survived the week's closest finish by 3.66.",
-    "path": "data/newspaper_editions/2026/week_05.json",
+    "week": 6,
+    "headline": "Jared Hall sets the Week 6 pace as the table takes shape",
+    "standfirst": "Madison Beer Garden (George Travis) leads the verified table after Week 6; You Just Made the List! (Kyle Fowler) survived the week's closest finish by 5.26.",
+    "path": "data/newspaper_editions/2026/week_06.json",
     "source_status": "verified_final",
     "validation_status": "valid",
     "status": "final",
-    "generated_at": "2026-10-13T14:05:23.076898Z",
+    "generated_at": "2026-10-20T15:35:28.565476Z",
     "table_leader": {
       "rank": 1,
       "team": "Madison Beer Garden",
       "owner": "George Travis",
-      "record": "5-0",
-      "pointsFor": "705.50",
+      "record": "5-1",
+      "pointsFor": "821.46",
       "tag": "Highest scoring"
     },
     "pressure": {
       "team": "Team Hash",
       "owner": "Trevor Hash",
-      "record": "4-1",
+      "record": "4-2",
       "label": "EARLY READ",
       "title": "Team Hash keeps the leaders honest",
-      "body": "Team Hash (Trevor Hash) sits 4-1 with 778.14 points for, the clearest early chase line behind the top spot.",
+      "body": "Team Hash (Trevor Hash) sits 4-2 with 887.24 points for, the clearest early chase line behind the top spot.",
       "sourceIds": [
         "current-season",
         "seasons"
@@ -447,8 +447,8 @@
   ],
   "freshness": {
     "week_fetched_at": "2026-10-20T13:33:42.172399+00:00",
-    "edition_published_at": "2026-10-13T14:05:23.076898Z",
-    "payload_built_at": "2026-10-20T13:33:46.781Z",
+    "edition_published_at": "2026-10-20T15:35:28.565476Z",
+    "payload_built_at": "2026-10-20T15:35:52.655Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

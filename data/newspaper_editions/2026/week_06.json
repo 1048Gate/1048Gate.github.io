@@ -1,0 +1,446 @@
+{
+  "schema_version": 3,
+  "league_name": "1048 Gate",
+  "season": 2026,
+  "edition_year": 2026,
+  "week": 6,
+  "generated_at": "2026-10-20T15:35:28.565476Z",
+  "source_status": "verified_final",
+  "validation_status": "valid",
+  "editorial_policy": {
+    "max_primary_features_per_manager": 2,
+    "matchup_recap_exempt": true
+  },
+  "source_trace": {
+    "dataset": "data/current-season.json",
+    "locator": "season=2026;week=6",
+    "description": "Published ESPN board snapshot"
+  },
+  "status": "final",
+  "headline": "Jared Hall sets the Week 6 pace as the table takes shape",
+  "standfirst": "Madison Beer Garden (George Travis) leads the verified table after Week 6; You Just Made the List! (Kyle Fowler) survived the week's closest finish by 5.26.",
+  "lead": {
+    "title": "Inside Week 6: the high score, the table lead, and the closest call",
+    "body": "Your Get Right Game (Jared Hall) set the Week 6 scoring pace at 152.16, while Madison Beer Garden (George Travis) moved to 5-1 with 821.46 points for. The closest result was decided by 5.26 points.",
+    "sourceIds": [
+      "current-season",
+      "power-rankings"
+    ]
+  },
+  "matchup": {
+    "awayTeam": "Your Reigning Champ",
+    "awayOwner": "Thomas Speer",
+    "awayScore": 96.52,
+    "homeTeam": "You Just Made the List!",
+    "homeOwner": "Kyle Fowler",
+    "homeScore": 101.78,
+    "whyItMatters": "The closest game on the final board finished with a 5.26-point margin, making it the tightest result of Week 6.",
+    "history": "This is a current-board feature, not a declared rivalry. The archive remains the authority on long-term series claims.",
+    "edge": "Verified result: You Just Made the List! (Kyle Fowler) by 5.26 points.",
+    "sourceIds": [
+      "current-season"
+    ]
+  },
+  "tableNotes": [
+    {
+      "rank": 1,
+      "team": "Madison Beer Garden",
+      "owner": "George Travis",
+      "record": "5-1",
+      "pointsFor": "821.46",
+      "tag": "Highest scoring"
+    },
+    {
+      "rank": 2,
+      "team": "Team Hash",
+      "owner": "Trevor Hash",
+      "record": "4-2",
+      "pointsFor": "887.24",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 3,
+      "team": "Howya Been's",
+      "owner": "Bryan Hunt",
+      "record": "4-2",
+      "pointsFor": "809.36",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 4,
+      "team": "Ice Has Me Running Back",
+      "owner": "German Haro",
+      "record": "4-2",
+      "pointsFor": "733.82",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 5,
+      "team": "McConkey Tonk Badonkadonk",
+      "owner": "Vincent Cannarozzi",
+      "record": "4-2",
+      "pointsFor": "718.56",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 6,
+      "team": "You Just Made the List!",
+      "owner": "Kyle Fowler",
+      "record": "3-3",
+      "pointsFor": "725.78",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 7,
+      "team": "Jigalos Jims",
+      "owner": "James Brochu",
+      "record": "3-3",
+      "pointsFor": "696.28",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 8,
+      "team": "Breezin’ with Bijan",
+      "owner": "Collin Krum",
+      "record": "3-3",
+      "pointsFor": "631.86",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 9,
+      "team": "Your Reigning Champ",
+      "owner": "Thomas Speer",
+      "record": "2-4",
+      "pointsFor": "716.34",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 10,
+      "team": "The Buwhops",
+      "owner": "Brian Heino",
+      "record": "2-4",
+      "pointsFor": "566.70",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 11,
+      "team": "Your Get Right Game",
+      "owner": "Jared Hall",
+      "record": "1-5",
+      "pointsFor": "731.18",
+      "tag": "Early signal"
+    },
+    {
+      "rank": 12,
+      "team": "Ja'Marr-a-Lago",
+      "owner": "JD Daley",
+      "record": "1-5",
+      "pointsFor": "623.96",
+      "tag": "Early signal"
+    }
+  ],
+  "pressure": {
+    "team": "Team Hash",
+    "owner": "Trevor Hash",
+    "record": "4-2",
+    "label": "EARLY READ",
+    "title": "Team Hash keeps the leaders honest",
+    "body": "Team Hash (Trevor Hash) sits 4-2 with 887.24 points for, the clearest early chase line behind the top spot.",
+    "sourceIds": [
+      "current-season",
+      "seasons"
+    ]
+  },
+  "surprise": {
+    "title": "Biggest surprise: the scoring range is already loud",
+    "body": "The gap between Your Get Right Game (Jared Hall) at 152.16 and Ja'Marr-a-Lago (JD Daley) at 69.10 is 83.06 points. That scoring range is Week 6's sharpest completed result.",
+    "sourceIds": [
+      "current-season"
+    ]
+  },
+  "recordWatch": {
+    "title": "Record to watch: the first benchmark is on the board",
+    "body": "Week 6's results did not break the checked-in highest-score, blowout, or closest-game marks.",
+    "sourceIds": [
+      "current-season",
+      "matchups"
+    ]
+  },
+  "archiveComparison": {
+    "title": "From the archive: early leaders need patience",
+    "body": "Week 6 is now part of the verified Szn 10 record, but the archive does not turn an opening table into a final ranking. Keep the benchmark; wait for the pattern.",
+    "linkLabel": "Open the newspaper archive",
+    "sourceIds": [
+      "seasons",
+      "newspaper"
+    ]
+  },
+  "editorial_note": "Week 6 edition generated from the verified final board.",
+  "results": [
+    {
+      "winnerTeam": "Your Get Right Game",
+      "winnerOwner": "Jared Hall",
+      "winnerScore": 152.16,
+      "loserTeam": "Jigalos Jims",
+      "loserOwner": "James Brochu",
+      "loserScore": 96.14,
+      "margin": 56.02,
+      "state": "final"
+    },
+    {
+      "winnerTeam": "Howya Been's",
+      "winnerOwner": "Bryan Hunt",
+      "winnerScore": 136.9,
+      "loserTeam": "Madison Beer Garden",
+      "loserOwner": "George Travis",
+      "loserScore": 115.96,
+      "margin": 20.94,
+      "state": "final"
+    },
+    {
+      "winnerTeam": "Ice Has Me Running Back",
+      "winnerOwner": "German Haro",
+      "winnerScore": 119.62,
+      "loserTeam": "Team Hash",
+      "loserOwner": "Trevor Hash",
+      "loserScore": 109.1,
+      "margin": 10.52,
+      "state": "final"
+    },
+    {
+      "winnerTeam": "McConkey Tonk Badonkadonk",
+      "winnerOwner": "Vincent Cannarozzi",
+      "winnerScore": 118.44,
+      "loserTeam": "Breezin’ with Bijan",
+      "loserOwner": "Collin Krum",
+      "loserScore": 95.6,
+      "margin": 22.84,
+      "state": "final"
+    },
+    {
+      "winnerTeam": "You Just Made the List!",
+      "winnerOwner": "Kyle Fowler",
+      "winnerScore": 101.78,
+      "loserTeam": "Your Reigning Champ",
+      "loserOwner": "Thomas Speer",
+      "loserScore": 96.52,
+      "margin": 5.26,
+      "state": "final"
+    },
+    {
+      "winnerTeam": "The Buwhops",
+      "winnerOwner": "Brian Heino",
+      "winnerScore": 95.48,
+      "loserTeam": "Ja'Marr-a-Lago",
+      "loserOwner": "JD Daley",
+      "loserScore": 69.1,
+      "margin": 26.38,
+      "state": "final"
+    }
+  ],
+  "powerTable": [
+    {
+      "owner": "Trevor Hash",
+      "team": "Team Hash",
+      "rating": "68.1",
+      "record": "4-2",
+      "why": "147.87 PF/G",
+      "rank": 1
+    },
+    {
+      "owner": "George Travis",
+      "team": "Madison Beer Garden",
+      "rating": "58.8",
+      "record": "5-1",
+      "why": "136.91 PF/G",
+      "rank": 2
+    },
+    {
+      "owner": "Bryan Hunt",
+      "team": "Howya Been's",
+      "rating": "57.1",
+      "record": "4-2",
+      "why": "134.89 PF/G",
+      "rank": 3
+    },
+    {
+      "owner": "German Haro",
+      "team": "Ice Has Me Running Back",
+      "rating": "46.3",
+      "record": "4-2",
+      "why": "122.30 PF/G",
+      "rank": 4
+    },
+    {
+      "owner": "Jared Hall",
+      "team": "Your Get Right Game",
+      "rating": "45.9",
+      "record": "1-5",
+      "why": "121.86 PF/G",
+      "rank": 5
+    },
+    {
+      "owner": "Kyle Fowler",
+      "team": "You Just Made the List!",
+      "rating": "45.2",
+      "record": "3-3",
+      "why": "120.96 PF/G",
+      "rank": 6
+    },
+    {
+      "owner": "Vincent Cannarozzi",
+      "team": "McConkey Tonk Badonkadonk",
+      "rating": "44.1",
+      "record": "4-2",
+      "why": "119.76 PF/G",
+      "rank": 7
+    },
+    {
+      "owner": "Thomas Speer",
+      "team": "Your Reigning Champ",
+      "rating": "43.8",
+      "record": "2-4",
+      "why": "119.39 PF/G",
+      "rank": 8
+    },
+    {
+      "owner": "James Brochu",
+      "team": "Jigalos Jims",
+      "rating": "41.0",
+      "record": "3-3",
+      "why": "116.05 PF/G",
+      "rank": 9
+    },
+    {
+      "owner": "Collin Krum",
+      "team": "Breezin’ with Bijan",
+      "rating": "31.8",
+      "record": "3-3",
+      "why": "105.31 PF/G",
+      "rank": 10
+    },
+    {
+      "owner": "JD Daley",
+      "team": "Ja'Marr-a-Lago",
+      "rating": "30.7",
+      "record": "1-5",
+      "why": "103.99 PF/G",
+      "rank": 11
+    },
+    {
+      "owner": "Brian Heino",
+      "team": "The Buwhops",
+      "rating": "22.5",
+      "record": "2-4",
+      "why": "94.45 PF/G",
+      "rank": 12
+    }
+  ],
+  "recordBook": [
+    {
+      "label": "Highest score",
+      "value": "235.64 · Downtown Browns (Collin Krum) · 2022 W8"
+    },
+    {
+      "label": "Biggest blowout",
+      "value": "137.42 pts · Jared Hall over Trevor Hash · 2021 W5"
+    },
+    {
+      "label": "Closest finish",
+      "value": "0.08 pts · Ed Perrine over Brian Heino · 2018 W9"
+    }
+  ],
+  "rivalryFile": {
+    "title": "Brian Heino vs. JD Daley",
+    "body": "The series stands 7-4-0 through 11 meetings. Brian Heino leads series scoring 1243.76–1221.96. Brian Heino took the latest meeting 95.48–69.10."
+  },
+  "nextSlate": [],
+  "stories": [
+    {
+      "story_type": "matchup_recap",
+      "title": "Week 6: The league board",
+      "body": "Brian Heino handled JD Daley 95.48–69.10. Jared Hall stormed past James Brochu 152.16–96.14. Vincent Cannarozzi topped Collin Krum 118.44–95.60. German Haro edged Trevor Hash 119.62–109.10. Kyle Fowler slipped by Thomas Speer 101.78–96.52. Bryan Hunt outpaced George Travis 136.90–115.96.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=6;matchups",
+        "description": "Final ESPN matchup board"
+      }
+    },
+    {
+      "story_type": "biggest_win",
+      "title": "Jared Hall delivers the week's biggest win",
+      "body": "Jared Hall rolled past James Brochu 152.16–96.14, a commanding margin of 56.02 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=6;matchups",
+        "description": "Final ESPN matchup board"
+      },
+      "primary_owner": "Jared Hall"
+    },
+    {
+      "story_type": "closest_game",
+      "title": "Kyle Fowler survives the closest finish",
+      "body": "The week's tightest tussle ended 101.78–96.52, with Kyle Fowler edging Thomas Speer by 5.26 points.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=6;matchups",
+        "description": "Final ESPN matchup board"
+      },
+      "primary_owner": "Kyle Fowler"
+    },
+    {
+      "story_type": "scoring_leaders",
+      "title": "Jared Hall sets the Week 6 pace",
+      "body": "Jared Hall posted the league's top mark, 152.16. JD Daley landed the week's low score at 69.10.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=6;matchups",
+        "description": "Final ESPN matchup board"
+      },
+      "primary_owner": "Jared Hall"
+    },
+    {
+      "story_type": "standings",
+      "title": "George Travis leads the verified table",
+      "body": "After Week 6, George Travis remains first at 5-1 with 821.46 points for.",
+      "source": {
+        "dataset": "data/current-season.json",
+        "locator": "season=2026;week=6;standings",
+        "description": "Verified standings table"
+      },
+      "primary_owner": "George Travis"
+    },
+    {
+      "story_type": "preseason_order_watch",
+      "title": "Early read: Kyle Fowler presses the preseason order",
+      "body": "Kyle Fowler picked up a Week 6 win with 101.78 points after entering the season with a 27.4 post-draft rating. The full 1–12 ranking appears on the league board.",
+      "source": {
+        "dataset": "data/current-season.json + data/power-rankings.json",
+        "locator": "week=6;ratings",
+        "description": "Weekly results compared with checked-in post-draft ratings"
+      },
+      "primary_owner": "Kyle Fowler"
+    },
+    {
+      "story_type": "record_watch",
+      "title": "The record book holds",
+      "body": "Week 6's results left the checked-in highest-score, blowout, and closest-game marks untouched.",
+      "source": {
+        "dataset": "data/current-season.json + data/matchups.json",
+        "locator": "week=6;records",
+        "description": "Week board compared with archive records"
+      }
+    },
+    {
+      "story_type": "rivalry",
+      "title": "Rivalry file: Brian Heino and JD Daley",
+      "body": "The series stands 7-4-0 through 11 meetings. Brian Heino owns the series scoring edge, 1243.76–1221.96. He also claimed the latest meeting 95.48–69.10.",
+      "source": {
+        "dataset": "data/matchups.json",
+        "locator": "pair=Brian Heino|JD Daley",
+        "description": "All-time head-to-head archive"
+      }
+    }
+  ],
+  "writing_mode": "openai_verified_rewrite"
+}
