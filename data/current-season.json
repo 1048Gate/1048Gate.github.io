@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-20T13:33:42.172399+00:00",
+  "fetchedAt": "2026-10-21T13:48:39.678117+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 slate from ESPN.",
   "standings": [
@@ -166,14 +166,14 @@
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
         "score": 0,
-        "projectedScore": 76.57
+        "projectedScore": 109.75
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
         "score": 0,
-        "projectedScore": 128.92
+        "projectedScore": 114.22
       }
     },
     {
@@ -188,14 +188,14 @@
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
         "score": 0,
-        "projectedScore": 74.56
+        "projectedScore": 93.56
       },
       "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 0,
-        "projectedScore": 80.96
+        "projectedScore": 104.32
       }
     },
     {
@@ -210,14 +210,14 @@
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
         "score": 0,
-        "projectedScore": 114.09
+        "projectedScore": 130.56
       },
       "home": {
         "teamId": 3,
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
         "score": 0,
-        "projectedScore": 114.31
+        "projectedScore": 123.43
       }
     },
     {
@@ -232,14 +232,14 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 0,
-        "projectedScore": 120.13
+        "projectedScore": 120.12
       },
       "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
         "score": 0,
-        "projectedScore": 71.39
+        "projectedScore": 71.36
       }
     },
     {
@@ -254,7 +254,7 @@
         "team": "Madison Beer Garden",
         "owner": "George Travis",
         "score": 0,
-        "projectedScore": 131.03
+        "projectedScore": 133.88
       },
       "home": {
         "teamId": 15,
@@ -283,24 +283,25 @@
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 0,
-        "projectedScore": 88.38
+        "projectedScore": 111.17
       }
     }
   ],
+  "projectionsFetchedAt": "2026-10-21T13:48:41.515790+00:00",
   "teamProjections": [
     {
       "teamId": 1,
-      "projectedScore": 131.03,
+      "projectedScore": 133.88,
       "complete": true
     },
     {
       "teamId": 3,
-      "projectedScore": 114.31,
+      "projectedScore": 123.43,
       "complete": true
     },
     {
       "teamId": 4,
-      "projectedScore": 120.13,
+      "projectedScore": 120.12,
       "complete": true
     },
     {
@@ -310,37 +311,37 @@
     },
     {
       "teamId": 6,
-      "projectedScore": 80.96,
+      "projectedScore": 104.32,
       "complete": true
     },
     {
       "teamId": 7,
-      "projectedScore": 74.56,
+      "projectedScore": 93.56,
       "complete": true
     },
     {
       "teamId": 8,
-      "projectedScore": 128.92,
+      "projectedScore": 114.22,
       "complete": true
     },
     {
       "teamId": 9,
-      "projectedScore": 76.57,
+      "projectedScore": 109.75,
       "complete": true
     },
     {
       "teamId": 11,
-      "projectedScore": 88.38,
+      "projectedScore": 111.17,
       "complete": true
     },
     {
       "teamId": 13,
-      "projectedScore": 71.39,
+      "projectedScore": 71.36,
       "complete": true
     },
     {
       "teamId": 14,
-      "projectedScore": 114.09,
+      "projectedScore": 130.56,
       "complete": true
     },
     {
@@ -349,6 +350,5 @@
       "complete": true
     }
   ],
-  "projectionsFetchedAt": "2026-10-20T13:33:44.018789+00:00",
   "projectionsStale": false
 }
