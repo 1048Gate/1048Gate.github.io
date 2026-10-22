@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-21T13:48:39.678117+00:00",
+  "fetchedAt": "2026-10-22T04:11:15.895717+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 slate from ESPN.",
   "standings": [
@@ -166,14 +166,14 @@
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
         "score": 0,
-        "projectedScore": 109.75
+        "projectedScore": 95.7
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
         "score": 0,
-        "projectedScore": 114.22
+        "projectedScore": 114.2
       }
     },
     {
@@ -188,14 +188,14 @@
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
         "score": 0,
-        "projectedScore": 93.56
+        "projectedScore": 115.63
       },
       "home": {
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 0,
-        "projectedScore": 104.32
+        "projectedScore": 102.94
       }
     },
     {
@@ -210,14 +210,14 @@
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
         "score": 0,
-        "projectedScore": 130.56
+        "projectedScore": 128.34
       },
       "home": {
         "teamId": 3,
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
         "score": 0,
-        "projectedScore": 123.43
+        "projectedScore": 125.45
       }
     },
     {
@@ -232,14 +232,14 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 0,
-        "projectedScore": 120.12
+        "projectedScore": 120.11
       },
       "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
         "score": 0,
-        "projectedScore": 71.36
+        "projectedScore": 113.0
       }
     },
     {
@@ -254,14 +254,14 @@
         "team": "Madison Beer Garden",
         "owner": "George Travis",
         "score": 0,
-        "projectedScore": 133.88
+        "projectedScore": 134.09
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
         "score": 0,
-        "projectedScore": 111.96
+        "projectedScore": 110.76
       }
     },
     {
@@ -276,77 +276,77 @@
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 0,
-        "projectedScore": 108.41
+        "projectedScore": 109.73
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 0,
-        "projectedScore": 111.17
+        "projectedScore": 111.13
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-21T13:48:41.515790+00:00",
+  "projectionsFetchedAt": "2026-10-22T04:11:16.887135+00:00",
   "teamProjections": [
     {
       "teamId": 1,
-      "projectedScore": 133.88,
+      "projectedScore": 134.09,
       "complete": true
     },
     {
       "teamId": 3,
-      "projectedScore": 123.43,
+      "projectedScore": 125.45,
       "complete": true
     },
     {
       "teamId": 4,
-      "projectedScore": 120.12,
+      "projectedScore": 120.11,
       "complete": true
     },
     {
       "teamId": 5,
-      "projectedScore": 108.41,
+      "projectedScore": 109.73,
       "complete": true
     },
     {
       "teamId": 6,
-      "projectedScore": 104.32,
+      "projectedScore": 102.94,
       "complete": true
     },
     {
       "teamId": 7,
-      "projectedScore": 93.56,
+      "projectedScore": 115.63,
       "complete": true
     },
     {
       "teamId": 8,
-      "projectedScore": 114.22,
+      "projectedScore": 114.2,
       "complete": true
     },
     {
       "teamId": 9,
-      "projectedScore": 109.75,
+      "projectedScore": 95.7,
       "complete": true
     },
     {
       "teamId": 11,
-      "projectedScore": 111.17,
+      "projectedScore": 111.13,
       "complete": true
     },
     {
       "teamId": 13,
-      "projectedScore": 71.36,
+      "projectedScore": 113.0,
       "complete": true
     },
     {
       "teamId": 14,
-      "projectedScore": 130.56,
+      "projectedScore": 128.34,
       "complete": true
     },
     {
       "teamId": 15,
-      "projectedScore": 111.96,
+      "projectedScore": 110.76,
       "complete": true
     }
   ],
