@@ -5,7 +5,7 @@
   "week": 7,
   "phase": "Week 7",
   "status": "scheduled",
-  "last_updated": "2026-10-22T15:11:48.570204+00:00",
+  "last_updated": "2026-10-22T15:41:14.242849+00:00",
   "note": "Week 7 slate from ESPN.",
   "matchups": [
     {
@@ -130,7 +130,7 @@
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 0,
-        "projectedScore": 109.73
+        "projectedScore": 140.39
       },
       "home": {
         "teamId": 11,
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-22T15:11:49.436342+00:00",
+  "projectionsFetchedAt": "2026-10-22T15:41:15.130781+00:00",
   "featured_story": {
     "season": 2026,
     "week": 6,
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-22T15:11:48.570204+00:00",
+    "week_fetched_at": "2026-10-22T15:41:14.242849+00:00",
     "edition_published_at": "2026-10-20T15:35:28.565476Z",
-    "payload_built_at": "2026-10-22T15:11:51.222Z",
+    "payload_built_at": "2026-10-22T15:41:17.572Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",

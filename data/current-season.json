@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-22T15:11:48.570204+00:00",
+  "fetchedAt": "2026-10-22T15:41:14.242849+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 slate from ESPN.",
   "standings": [
@@ -276,7 +276,7 @@
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 0,
-        "projectedScore": 109.73
+        "projectedScore": 140.39
       },
       "home": {
         "teamId": 11,
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-22T15:11:49.436342+00:00",
+  "projectionsFetchedAt": "2026-10-22T15:41:15.130781+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -306,7 +306,7 @@
     },
     {
       "teamId": 5,
-      "projectedScore": 109.73,
+      "projectedScore": 140.39,
       "complete": true
     },
     {
