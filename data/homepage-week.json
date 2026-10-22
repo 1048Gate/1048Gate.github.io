@@ -5,7 +5,7 @@
   "week": 7,
   "phase": "Week 7",
   "status": "scheduled",
-  "last_updated": "2026-10-22T20:41:22.646736+00:00",
+  "last_updated": "2026-10-22T21:11:14.464222+00:00",
   "note": "Week 7 slate from ESPN.",
   "matchups": [
     {
@@ -86,7 +86,7 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 0,
-        "projectedScore": 120.11
+        "projectedScore": 123.05
       },
       "home": {
         "teamId": 13,
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-22T20:41:23.877692+00:00",
+  "projectionsFetchedAt": "2026-10-22T21:11:15.487493+00:00",
   "featured_story": {
     "season": 2026,
     "week": 6,
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-22T20:41:22.646736+00:00",
+    "week_fetched_at": "2026-10-22T21:11:14.464222+00:00",
     "edition_published_at": "2026-10-20T15:35:28.565476Z",
-    "payload_built_at": "2026-10-22T20:41:27.265Z",
+    "payload_built_at": "2026-10-22T21:11:18.662Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
