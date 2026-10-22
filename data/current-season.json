@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-22T23:11:12.587947+00:00",
+  "fetchedAt": "2026-10-22T23:41:21.267697+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 slate from ESPN.",
   "standings": [
@@ -166,14 +166,14 @@
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
         "score": 0,
-        "projectedScore": 105.22
+        "projectedScore": 110.18
       },
       "home": {
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
         "score": 0,
-        "projectedScore": 114.23
+        "projectedScore": 118.16
       }
     },
     {
@@ -261,7 +261,7 @@
         "team": "Team Hash",
         "owner": "Trevor Hash",
         "score": 0,
-        "projectedScore": 116.25
+        "projectedScore": 138.15
       }
     },
     {
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-22T23:11:13.793013+00:00",
+  "projectionsFetchedAt": "2026-10-22T23:41:22.195212+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -321,12 +321,12 @@
     },
     {
       "teamId": 8,
-      "projectedScore": 114.23,
+      "projectedScore": 118.16,
       "complete": true
     },
     {
       "teamId": 9,
-      "projectedScore": 105.22,
+      "projectedScore": 110.18,
       "complete": true
     },
     {
@@ -346,7 +346,7 @@
     },
     {
       "teamId": 15,
-      "projectedScore": 116.25,
+      "projectedScore": 138.15,
       "complete": true
     }
   ],
