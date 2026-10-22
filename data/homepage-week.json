@@ -5,7 +5,7 @@
   "week": 7,
   "phase": "Week 7",
   "status": "scheduled",
-  "last_updated": "2026-10-22T09:37:43.058125+00:00",
+  "last_updated": "2026-10-22T09:41:16.670989+00:00",
   "note": "Week 7 slate from ESPN.",
   "matchups": [
     {
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-22T09:37:44.573830+00:00",
+  "projectionsFetchedAt": "2026-10-22T09:41:17.834185+00:00",
   "featured_story": {
     "season": 2026,
     "week": 6,
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-22T09:37:43.058125+00:00",
+    "week_fetched_at": "2026-10-22T09:41:16.670989+00:00",
     "edition_published_at": "2026-10-20T15:35:28.565476Z",
-    "payload_built_at": "2026-10-22T09:37:46.967Z",
+    "payload_built_at": "2026-10-22T09:41:19.599Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
