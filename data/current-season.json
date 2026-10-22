@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-22T09:41:16.670989+00:00",
+  "fetchedAt": "2026-10-22T10:11:35.475195+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 slate from ESPN.",
   "standings": [
@@ -166,7 +166,7 @@
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
         "score": 0,
-        "projectedScore": 95.7
+        "projectedScore": 103.81
       },
       "home": {
         "teamId": 8,
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-22T09:41:17.834185+00:00",
+  "projectionsFetchedAt": "2026-10-22T10:11:36.377667+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -326,7 +326,7 @@
     },
     {
       "teamId": 9,
-      "projectedScore": 95.7,
+      "projectedScore": 103.81,
       "complete": true
     },
     {
