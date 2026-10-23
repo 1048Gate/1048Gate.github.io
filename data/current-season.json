@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-23T17:41:16.223610+00:00",
+  "fetchedAt": "2026-10-23T18:11:48.231594+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 in progress. Live scoring from ESPN.",
   "standings": [
@@ -283,11 +283,11 @@
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 0,
-        "projectedScore": 118.0
+        "projectedScore": 124.53
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-23T17:41:17.107247+00:00",
+  "projectionsFetchedAt": "2026-10-23T18:11:49.769881+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -331,7 +331,7 @@
     },
     {
       "teamId": 11,
-      "projectedScore": 118.0,
+      "projectedScore": 124.53,
       "complete": true
     },
     {
