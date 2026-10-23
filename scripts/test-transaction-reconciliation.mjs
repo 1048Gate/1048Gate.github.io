@@ -6,7 +6,7 @@ import {PGlite} from '@electric-sql/pglite';
 const db=new PGlite();
 try{
   await db.exec('create role anon; create role authenticated; create role service_role bypassrls;');
-  for(const name of ['20260825010000_011_transaction_archive_base.sql','20261017130000_transaction_snapshot_reconciliation.sql']){
+  for(const name of ['20260825010000_011_transaction_archive_base.sql','20261017130000_transaction_snapshot_reconciliation.sql','20261023120000_transaction_snapshot_player_card_sources.sql']){
     await db.exec(readFileSync(new URL(`../supabase/migrations/${name}`,import.meta.url),'utf8'));
   }
   const tx=(id,count=1,season=2025)=>({season_year:season,espn_transaction_id:id,transaction_type:'WAIVER',item_count:count,raw_data:{id}});

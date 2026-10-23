@@ -46,8 +46,12 @@ def supabase_request(method: str, path: str, payload: Any | None = None, prefer:
 
 
 # Sources produced by the import workflow: fetch_transactions.py (mTransactions2),
-# fetch_trade_history.py (kona_playercard), and the adapter's fallback label.
-ALLOWED_SOURCES = frozenset({'ESPN mTransactions2', 'ESPN kona_playercard', 'ESPN trade-history adapter'})
+# fetch_trade_history.py (kona_playercard).
+# Must match v_allowed_sources / v_authoritative_source in the latest
+# supabase/migrations/*import_transaction_snapshot* definition (asserted by tests).
+ALLOWED_SOURCES = frozenset({'ESPN mTransactions2', 'ESPN kona_playercard'})
+# Only this feed may reconcile (delete); other sources merge without nulling data.
+AUTHORITATIVE_SOURCE = 'ESPN mTransactions2'
 
 
 def prepare_import(data: dict[str, Any], *, authoritative: bool = False, allow_empty: bool = False) -> dict[str, Any]:
@@ -91,6 +95,8 @@ def prepare_import(data: dict[str, Any], *, authoritative: bool = False, allow_e
     for key, row in parents.items():
         if sorted(index for parent, index in children if parent == key) != list(range(row['item_count'])):
             raise ValueError('Incomplete transaction items')
+    if authoritative and data.get('source') != AUTHORITATIVE_SOURCE:
+        raise ValueError(f'Authoritative reconciliation requires a {AUTHORITATIVE_SOURCE} snapshot')
     if authoritative and data.get('snapshot_complete') is not True:
         raise ValueError('Authoritative reconciliation requires a certified complete snapshot')
     kept = {key: row for key, row in parents.items() if str(row.get('transaction_type', '')).upper() != 'DRAFT'}
