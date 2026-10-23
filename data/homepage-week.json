@@ -5,7 +5,7 @@
   "week": 7,
   "phase": "Week 7",
   "status": "live",
-  "last_updated": "2026-10-23T01:26:34.068441+00:00",
+  "last_updated": "2026-10-23T01:41:16.804946+00:00",
   "note": "Week 7 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -19,7 +19,7 @@
         "teamId": 9,
         "team": "Ja'Marr-a-Lago",
         "owner": "JD Daley",
-        "score": 7,
+        "score": 9,
         "projectedScore": 110.18
       },
       "home": {
@@ -48,7 +48,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 9.6,
+        "score": 10.6,
         "projectedScore": 111.28
       }
     },
@@ -114,7 +114,7 @@
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 23.42,
+        "score": 24.62,
         "projectedScore": 138.15
       }
     },
@@ -129,7 +129,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 9.1,
+        "score": 10.7,
         "projectedScore": 140.83
       },
       "home": {
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-23T01:26:35.142462+00:00",
+  "projectionsFetchedAt": "2026-10-23T01:41:18.308036+00:00",
   "featured_story": {
     "season": 2026,
     "week": 6,
@@ -433,8 +433,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Trevor Hash · 23.42",
-      "detail": "212.22 shy of the 235.64 all-time mark",
+      "title": "Trevor Hash · 24.62",
+      "detail": "211.02 shy of the 235.64 all-time mark",
       "view": "intel"
     },
     {
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-23T01:26:34.068441+00:00",
+    "week_fetched_at": "2026-10-23T01:41:16.804946+00:00",
     "edition_published_at": "2026-10-20T15:35:28.565476Z",
-    "payload_built_at": "2026-10-23T01:26:36.973Z",
+    "payload_built_at": "2026-10-23T01:41:20.881Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
