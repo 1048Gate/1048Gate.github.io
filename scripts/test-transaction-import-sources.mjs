@@ -122,5 +122,83 @@ try{
   for(const role of ['anon','authenticated']){
     await db.exec(`set role ${role}`);await assert.rejects(apply(kona));await db.exec('reset role');
   }
-  console.log('Transaction import sources: real kona workflow output accepted without degrading mTransactions2 rows; idempotent, never deletes, unknown/obsolete rejected, grants preserved.');
-}finally{await db.close();rmSync(tmp,{recursive:true,force:true});}
+}finally{await db.close();}
+
+// Permitted-change contract for a non-authoritative (kona) import over existing rows:
+// identity (id, season, espn id, created_at) fixed; populated columns unchanged;
+// NULL columns may be filled; raw_data keys preserved, missing keys may be added;
+// updated_at may change. Existing items are not touched at all (including updated_at).
+function assertPermittedChanges(beforeRows,afterRows,label){
+  for(const before of beforeRows){
+    const after=afterRows.find(r=>r.id===before.id);
+    assert.ok(after,`${label}: existing row ${before.espn_transaction_id} must survive`);
+    for(const key of ['id','season_year','espn_transaction_id','created_at']) assert.deepEqual(after[key],before[key],`${label}: ${key} is identity`);
+    for(const [key,value] of Object.entries(before)){
+      if(key==='updated_at'||key==='raw_data'||value===null) continue;
+      assert.deepEqual(after[key],value,`${label}: populated ${key} must be preserved`);
+    }
+    for(const [key,value] of Object.entries(before.raw_data)) assert.deepEqual(after.raw_data[key],value,`${label}: raw_data.${key} must be preserved`);
+  }
+}
+
+const db2=new PGlite();
+try{
+  await db2.exec('create role anon; create role authenticated; create role service_role bypassrls;');
+  for(const name of ['20260825010000_011_transaction_archive_base.sql','20261017130000_transaction_snapshot_reconciliation.sql',migrationFile]){
+    await db2.exec(readFileSync(join(root,'supabase','migrations',name),'utf8'));
+  }
+  const apply=async data=>(await db2.query('select public.import_transaction_snapshot($1::jsonb) r',[JSON.stringify(data)])).rows[0].r;
+  const all=async(table,season)=>(await db2.query(`select * from public.${table} where season_year=$1 order by espn_transaction_id${table.endsWith('items')?',item_index':''}`,[season])).rows;
+  const players=[card(101,'Alpha Player',[waiver]),card(202,'Beta Player',[waiver]),card(303,'Gamma Player',[trade]),card(404,'Delta Player',[trade])];
+
+  // Production-shaped 2026 rows: created by the earlier kona REST upsert, so member_id and
+  // bid_amount are NULL and raw_data has the adapter's key set. Seed one transaction only.
+  const seed=workflowSnapshot(2026,[card(101,'Alpha Player',[waiver]),card(202,'Beta Player',[waiver])],'seed');
+  await apply({...seed,fetched_at:'2026-10-17T12:16:00Z'});
+  // Simulate legacy partial rows: one NULL column and one missing raw_data key on the parent,
+  // and an existing item order that differs from the player-card sort.
+  await db2.exec(`update public.league_transactions set scoring_period=null, raw_data=raw_data-'processDate' where espn_transaction_id='w-1';
+    update public.league_transaction_items set item_index=item_index+10 where espn_transaction_id='w-1';
+    update public.league_transaction_items set item_index=case when item_index=10 then 1 else 0 end where espn_transaction_id='w-1';`);
+  // Historical season that a 2026 import must never touch (rich mTransactions2-style row).
+  await db2.exec(`insert into public.league_transactions (season_year,espn_transaction_id,transaction_type,status,team_id,team_name,member_id,bid_amount,item_count,raw_data)
+    values (2025,'w-1','WAIVER','EXECUTED',3,'Team of 2025','{MEMBER-3}',7,1,'{"id":"w-1","bidAmount":7}');
+    insert into public.league_transaction_items (season_year,espn_transaction_id,item_index,item_type,player_id,player_name,raw_data)
+    values (2025,'w-1',0,'ADD',101,'Alpha Player','{}');`);
+  const tx0=await all('league_transactions',2026),items0=await all('league_transaction_items',2026);
+  const hist0=JSON.stringify([await all('league_transactions',2025),await all('league_transaction_items',2025)]);
+
+  // Daily kona run: 1 existing + 1 new transaction.
+  const daily=workflowSnapshot(2026,players,'daily');
+  await apply({...daily,fetched_at:'2026-10-24T15:30:00Z'});
+  const tx1=await all('league_transactions',2026),items1=await all('league_transaction_items',2026);
+
+  assertPermittedChanges(tx0,tx1,'production-shaped');
+  const w1=tx1.find(r=>r.espn_transaction_id==='w-1');
+  assert.equal(w1.scoring_period,6,'NULL column may be filled');
+  assert.equal(w1.raw_data.processDate,1790000000000,'missing raw_data key may be added');
+  assert.equal(w1.member_id,null);assert.equal(w1.bid_amount,null);
+  assert.equal(w1.item_count,2);
+  // Existing items untouched: same rows, same order, same updated_at.
+  assert.deepEqual(items1.filter(r=>r.espn_transaction_id==='w-1'),items0);
+  // Exactly one new transaction (the trade) with its items; nothing else appeared.
+  assert.deepEqual(tx1.map(r=>r.espn_transaction_id),['t-2','w-1']);
+  assert.equal(items1.filter(r=>r.espn_transaction_id==='t-2').length,2);
+  // Other seasons byte-identical, including updated_at.
+  assert.equal(JSON.stringify([await all('league_transactions',2025),await all('league_transaction_items',2025)]),hist0);
+
+  // A rich row (populated member_id/FAAB/raw keys) keeps every value under kona.
+  await db2.exec(`update public.league_transactions set member_id='{MEMBER-3}', bid_amount=12, raw_data=raw_data||'{"bidAmount":12}' where season_year=2026 and espn_transaction_id='w-1'`);
+  const rich0=await all('league_transactions',2026);
+  await apply({...daily,fetched_at:'2026-10-25T15:30:00Z'});
+  const rich1=await all('league_transactions',2026);
+  assertPermittedChanges(rich0,rich1,'rich row');
+  const w1r=rich1.find(r=>r.espn_transaction_id==='w-1');
+  assert.equal(w1r.member_id,'{MEMBER-3}');assert.equal(w1r.bid_amount,'12');assert.equal(w1r.raw_data.bidAmount,12);
+  assert.deepEqual(await all('league_transaction_items',2026),items1);
+
+  // The contract checker itself rejects a degraded row.
+  assert.throws(()=>assertPermittedChanges(rich0,rich0.map(r=>({...r,bid_amount:null})),'negative'),/populated bid_amount/);
+  assert.throws(()=>assertPermittedChanges(rich0,rich0.map(r=>({...r,raw_data:{...r.raw_data,bidAmount:undefined}})),'negative'),/raw_data.bidAmount/);
+}finally{await db2.close();rmSync(tmp,{recursive:true,force:true});}
+console.log('Transaction import sources: real kona workflow output accepted without degrading mTransactions2 rows; idempotent, never deletes, unknown/obsolete rejected, grants preserved; production-shaped rows change only by permitted fills, items and other seasons untouched.');
