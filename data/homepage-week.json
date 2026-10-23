@@ -5,7 +5,7 @@
   "week": 7,
   "phase": "Week 7",
   "status": "live",
-  "last_updated": "2026-10-23T14:41:12.677657+00:00",
+  "last_updated": "2026-10-23T15:11:23.897129+00:00",
   "note": "Week 7 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-23T14:41:13.814526+00:00",
+  "projectionsFetchedAt": "2026-10-23T15:11:24.815138+00:00",
   "featured_story": {
     "season": 2026,
     "week": 6,
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-23T14:41:12.677657+00:00",
+    "week_fetched_at": "2026-10-23T15:11:23.897129+00:00",
     "edition_published_at": "2026-10-20T15:35:28.565476Z",
-    "payload_built_at": "2026-10-23T14:41:16.634Z",
+    "payload_built_at": "2026-10-23T15:11:28.898Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
