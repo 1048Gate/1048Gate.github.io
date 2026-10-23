@@ -5,7 +5,7 @@
   "week": 7,
   "phase": "Week 7",
   "status": "live",
-  "last_updated": "2026-10-23T02:57:47.587588+00:00",
+  "last_updated": "2026-10-23T03:12:57.122416+00:00",
   "note": "Week 7 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -26,7 +26,7 @@
         "teamId": 8,
         "team": "Jigalos Jims",
         "owner": "James Brochu",
-        "score": 22.4,
+        "score": 22.5,
         "projectedScore": 118.16
       }
     },
@@ -48,7 +48,7 @@
         "teamId": 6,
         "team": "The Buwhops",
         "owner": "Brian Heino",
-        "score": 13.8,
+        "score": 12.8,
         "projectedScore": 111.28
       }
     },
@@ -107,14 +107,14 @@
         "teamId": 1,
         "team": "Madison Beer Garden",
         "owner": "George Travis",
-        "score": 4.7,
+        "score": 10.9,
         "projectedScore": 134.09
       },
       "home": {
         "teamId": 15,
         "team": "Team Hash",
         "owner": "Trevor Hash",
-        "score": 53.78,
+        "score": 53.82,
         "projectedScore": 138.15
       }
     },
@@ -129,7 +129,7 @@
         "teamId": 5,
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
-        "score": 18,
+        "score": 19,
         "projectedScore": 140.83
       },
       "home": {
@@ -137,7 +137,7 @@
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 0,
-        "projectedScore": 111.17
+        "projectedScore": 118
       }
     }
   ],
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-23T02:57:48.578096+00:00",
+  "projectionsFetchedAt": "2026-10-23T03:12:58.389274+00:00",
   "featured_story": {
     "season": 2026,
     "week": 6,
@@ -406,7 +406,7 @@
       "id": "matchup",
       "label": "Game watch",
       "title": "McConkey Tonk Badonkadonk / The Buwhops",
-      "detail": "11.10 points apart · Live",
+      "detail": "10.10 points apart · Live",
       "scrollTo": "weekBoard"
     },
     {
@@ -433,8 +433,8 @@
     {
       "id": "record",
       "label": "Record watch",
-      "title": "Trevor Hash · 53.78",
-      "detail": "181.86 shy of the 235.64 all-time mark",
+      "title": "Trevor Hash · 53.82",
+      "detail": "181.82 shy of the 235.64 all-time mark",
       "view": "intel"
     },
     {
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-23T02:57:47.587588+00:00",
+    "week_fetched_at": "2026-10-23T03:12:57.122416+00:00",
     "edition_published_at": "2026-10-20T15:35:28.565476Z",
-    "payload_built_at": "2026-10-23T02:57:50.840Z",
+    "payload_built_at": "2026-10-23T03:13:02.753Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
