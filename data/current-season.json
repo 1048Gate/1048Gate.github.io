@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-23T18:11:48.231594+00:00",
+  "fetchedAt": "2026-10-23T18:45:22.820246+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 in progress. Live scoring from ESPN.",
   "standings": [
@@ -188,7 +188,7 @@
         "team": "McConkey Tonk Badonkadonk",
         "owner": "Vincent Cannarozzi",
         "score": 5.3,
-        "projectedScore": 115.56
+        "projectedScore": 117.56
       },
       "home": {
         "teamId": 6,
@@ -210,7 +210,7 @@
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
         "score": 0,
-        "projectedScore": 130.36
+        "projectedScore": 130.33
       },
       "home": {
         "teamId": 3,
@@ -232,14 +232,14 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 7.8,
-        "projectedScore": 123.05
+        "projectedScore": 123.03
       },
       "home": {
         "teamId": 13,
         "team": "Breezin’ with Bijan",
         "owner": "Collin Krum",
         "score": 19.9,
-        "projectedScore": 115.71
+        "projectedScore": 117.65
       }
     },
     {
@@ -254,7 +254,7 @@
         "team": "Madison Beer Garden",
         "owner": "George Travis",
         "score": 10.9,
-        "projectedScore": 134.09
+        "projectedScore": 134.1
       },
       "home": {
         "teamId": 15,
@@ -276,22 +276,22 @@
         "team": "Howya Been's",
         "owner": "Bryan Hunt",
         "score": 19,
-        "projectedScore": 140.83
+        "projectedScore": 127.11
       },
       "home": {
         "teamId": 11,
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 0,
-        "projectedScore": 124.53
+        "projectedScore": 125.04
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-23T18:11:49.769881+00:00",
+  "projectionsFetchedAt": "2026-10-23T18:45:23.859610+00:00",
   "teamProjections": [
     {
       "teamId": 1,
-      "projectedScore": 134.09,
+      "projectedScore": 134.1,
       "complete": true
     },
     {
@@ -301,12 +301,12 @@
     },
     {
       "teamId": 4,
-      "projectedScore": 123.05,
+      "projectedScore": 123.03,
       "complete": true
     },
     {
       "teamId": 5,
-      "projectedScore": 140.83,
+      "projectedScore": 127.11,
       "complete": true
     },
     {
@@ -316,7 +316,7 @@
     },
     {
       "teamId": 7,
-      "projectedScore": 115.56,
+      "projectedScore": 117.56,
       "complete": true
     },
     {
@@ -331,17 +331,17 @@
     },
     {
       "teamId": 11,
-      "projectedScore": 124.53,
+      "projectedScore": 125.04,
       "complete": true
     },
     {
       "teamId": 13,
-      "projectedScore": 115.71,
+      "projectedScore": 117.65,
       "complete": true
     },
     {
       "teamId": 14,
-      "projectedScore": 130.36,
+      "projectedScore": 130.33,
       "complete": true
     },
     {
