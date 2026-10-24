@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-24T13:41:12.339155+00:00",
+  "fetchedAt": "2026-10-24T14:11:20.834660+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 in progress. Live scoring from ESPN.",
   "standings": [
@@ -195,7 +195,7 @@
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 13.1,
-        "projectedScore": 111.68
+        "projectedScore": 111.71
       }
     },
     {
@@ -210,14 +210,14 @@
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
         "score": 0,
-        "projectedScore": 130.32
+        "projectedScore": 130.33
       },
       "home": {
         "teamId": 3,
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
         "score": 0,
-        "projectedScore": 125.99
+        "projectedScore": 126.01
       }
     },
     {
@@ -261,7 +261,7 @@
         "team": "Team Hash",
         "owner": "Trevor Hash",
         "score": 55.14,
-        "projectedScore": 137.95
+        "projectedScore": 137.94
       }
     },
     {
@@ -283,11 +283,11 @@
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 0,
-        "projectedScore": 100.9
+        "projectedScore": 100.93
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-24T13:41:13.288249+00:00",
+  "projectionsFetchedAt": "2026-10-24T14:11:22.042639+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -296,7 +296,7 @@
     },
     {
       "teamId": 3,
-      "projectedScore": 125.99,
+      "projectedScore": 126.01,
       "complete": true
     },
     {
@@ -311,7 +311,7 @@
     },
     {
       "teamId": 6,
-      "projectedScore": 111.68,
+      "projectedScore": 111.71,
       "complete": true
     },
     {
@@ -331,7 +331,7 @@
     },
     {
       "teamId": 11,
-      "projectedScore": 100.9,
+      "projectedScore": 100.93,
       "complete": true
     },
     {
@@ -341,12 +341,12 @@
     },
     {
       "teamId": 14,
-      "projectedScore": 130.32,
+      "projectedScore": 130.33,
       "complete": true
     },
     {
       "teamId": 15,
-      "projectedScore": 137.95,
+      "projectedScore": 137.94,
       "complete": true
     }
   ],

@@ -5,7 +5,7 @@
   "week": 7,
   "phase": "Week 7",
   "status": "live",
-  "last_updated": "2026-10-24T13:41:12.339155+00:00",
+  "last_updated": "2026-10-24T14:11:20.834660+00:00",
   "note": "Week 7 in progress. Live scoring from ESPN.",
   "matchups": [
     {
@@ -49,7 +49,7 @@
         "team": "The Buwhops",
         "owner": "Brian Heino",
         "score": 13.1,
-        "projectedScore": 111.68
+        "projectedScore": 111.71
       }
     },
     {
@@ -64,14 +64,14 @@
         "team": "Ice Has Me Running Back",
         "owner": "German Haro",
         "score": 0,
-        "projectedScore": 130.32
+        "projectedScore": 130.33
       },
       "home": {
         "teamId": 3,
         "team": "Your Get Right Game",
         "owner": "Jared Hall",
         "score": 0,
-        "projectedScore": 125.99
+        "projectedScore": 126.01
       }
     },
     {
@@ -115,7 +115,7 @@
         "team": "Team Hash",
         "owner": "Trevor Hash",
         "score": 55.14,
-        "projectedScore": 137.95
+        "projectedScore": 137.94
       }
     },
     {
@@ -137,7 +137,7 @@
         "team": "Your Reigning Champ",
         "owner": "Thomas Speer",
         "score": 0,
-        "projectedScore": 100.9
+        "projectedScore": 100.93
       }
     }
   ],
@@ -288,7 +288,7 @@
     }
   ],
   "projectionsStale": false,
-  "projectionsFetchedAt": "2026-10-24T13:41:13.288249+00:00",
+  "projectionsFetchedAt": "2026-10-24T14:11:22.042639+00:00",
   "featured_story": {
     "season": 2026,
     "week": 6,
@@ -446,9 +446,9 @@
     }
   ],
   "freshness": {
-    "week_fetched_at": "2026-10-24T13:41:12.339155+00:00",
+    "week_fetched_at": "2026-10-24T14:11:20.834660+00:00",
     "edition_published_at": "2026-10-20T15:35:28.565476Z",
-    "payload_built_at": "2026-10-24T13:41:16.149Z",
+    "payload_built_at": "2026-10-24T14:11:25.871Z",
     "sources": [
       "data/current-season.json",
       "data/site.json",
