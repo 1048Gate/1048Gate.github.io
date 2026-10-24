@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-24T02:41:11.606837+00:00",
+  "fetchedAt": "2026-10-24T03:11:12.608862+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 in progress. Live scoring from ESPN.",
   "standings": [
@@ -232,7 +232,7 @@
         "team": "You Just Made the List!",
         "owner": "Kyle Fowler",
         "score": 7.8,
-        "projectedScore": 106.33
+        "projectedScore": 113.4
       },
       "home": {
         "teamId": 13,
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-24T02:41:13.231346+00:00",
+  "projectionsFetchedAt": "2026-10-24T03:11:13.809600+00:00",
   "teamProjections": [
     {
       "teamId": 1,
@@ -301,7 +301,7 @@
     },
     {
       "teamId": 4,
-      "projectedScore": 106.33,
+      "projectedScore": 113.4,
       "complete": true
     },
     {
