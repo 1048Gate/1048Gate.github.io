@@ -219,10 +219,16 @@ class NewspaperTests(unittest.TestCase):
     def test_duplicate_skips_before_ai_call(self):
         current=self.root/"current.json"; paper.write_json(current,board())
         editions=self.root/"data/newspaper_editions"; existing=paper.edition_path(2026,1,editions); paper.write_json(existing,self.make())
+        # The catch-up must never require rewriting a previously published edition.
+        before=existing.read_bytes()
+        index=editions/'index.json'; index.write_bytes(b'{"immutable_index_fixture": true}\n')
+        index_before=index.read_bytes()
         with patch.object(paper,"ROOT",self.root),patch.object(paper,"CURRENT_PATH",current),patch.object(paper,"EDITIONS_ROOT",editions),patch.object(paper,"apply_ai_stories") as rewrite:
             output=io.StringIO()
             with redirect_stdout(output):code=paper.main(["--season","2026","--week","1","--writing","auto"])
         self.assertEqual(code,0); self.assertIn("SKIP edition_already_published",output.getvalue()); rewrite.assert_not_called()
+        self.assertEqual(existing.read_bytes(),before)
+        self.assertEqual(index.read_bytes(),index_before)
     def test_regenerate_replaces_existing_after_verified_rewrite(self):
         current=self.root/"current.json"; paper.write_json(current,board())
         editions=self.root/"data/newspaper_editions"; existing=paper.edition_path(2026,1,editions); paper.write_json(existing,self.make())

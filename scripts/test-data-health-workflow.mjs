@@ -14,7 +14,24 @@ assert.match(paper, /if: needs\.publication-window\.outputs\.due == 'true'/);
 assert.match(paper, /--week "\$WEEK" --output data\/current-season\.json --no-sync-site-phase/);
 assert.match(paper, /source_status'\] == 'verified_final'/);
 assert.match(paper, /git restore data\/current-season\.json/);
-assert.match(paper, /git add data\/newspaper_editions data\/homepage-week\.json/);
+assert.match(scores, /python3 scripts\/backfill_completed_weeks\.py/);
+const catchup = scores.split(/^      - /m).find(step => /run: python3 scripts\/backfill_completed_weeks\.py/.test(step));
+assert.ok(catchup, 'Keep the historical catch-up step');
+assert.doesNotMatch(catchup, /continue-on-error:/, 'Catch-up handles historical failures and surfaces live-board corruption');
+assert.ok(scores.indexOf('python3 scripts/backfill_completed_weeks.py') < scores.indexOf('id: score_source'), 'Catch up before replacing the saved live week');
+for(const restore of paper.matchAll(/^\s*git restore (.+)$/gm)){
+  assert.equal(restore[1].trim(), 'data/current-season.json', 'Retain the archive merge and rebuild derived data');
+}
+const restored = paper.slice(paper.indexOf('git restore data/current-season.json'));
+const commands = ['npm run futures', 'node scripts/build-homepage-week.mjs', 'node scripts/build-static-week-board.mjs', 'npm run check', 'git add'];
+for(let i=0; i<commands.length; i++){
+  assert.ok(restored.indexOf(commands[i]) >= 0, `After restoring live board: ${commands[i]}`);
+  if(i) assert.ok(restored.indexOf(commands[i-1]) < restored.indexOf(commands[i]), 'Rebuild in dependency order before staging');
+}
+const staged = paper.match(/^\s*git add (.+)$/m)?.[1].split(/\s+/) || [];
+for(const file of ['data/newspaper_editions', 'data/matchups.json', 'data/streaks.json', 'data/site.json', 'data/power-rankings.json', 'data/homepage-week.json', 'index.html']){
+  assert.ok(staged.includes(file), `Stage consistent newspaper output: ${file}`);
+}
 for(const workflow of [scores, paper]) assert.match(workflow, /group: data-health-current-season/);
 for(const name of ['pages','cloudflare']) assert.match(read(`.github/workflows/${name}.yml`), /- Publish completed weekly newspaper/);
 assert.match(scores, /always\(\) && steps\.fantasy_collect\.outcome == 'failure'/);

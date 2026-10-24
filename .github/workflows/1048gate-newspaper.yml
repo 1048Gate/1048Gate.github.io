@@ -119,19 +119,21 @@ jobs:
           assert edition['source_status'] == 'verified_final' and edition['validation_status'] == 'valid'
           PY
           fi
-      - name: Restore public scoreboard and derived ratings
+      - name: Restore live public scoreboard and retain completed score history
         run: |
-          git restore data/current-season.json data/site.json data/power-rankings.json data/matchups.json data/streaks.json
+          git restore data/current-season.json
       - name: Rebuild and validate public payload
         run: |
+          npm run futures
           node scripts/build-homepage-week.mjs
+          node scripts/build-static-week-board.mjs
           npm run check
-      - name: Commit only the final newspaper and homepage feature
+      - name: Commit final newspaper and consistent public derived data
         if: inputs.newspaper_allow_incomplete != true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/newspaper_editions data/homepage-week.json
+          git add data/newspaper_editions data/homepage-week.json data/matchups.json data/streaks.json data/site.json data/power-rankings.json index.html
           if ! git diff --cached --quiet; then
             git commit -m "Publish completed weekly newspaper"
             git push origin HEAD:main
