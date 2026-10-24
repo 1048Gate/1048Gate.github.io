@@ -4,7 +4,7 @@
   "seasonNumber": 10,
   "week": 7,
   "phase": "Week 7",
-  "fetchedAt": "2026-10-24T15:41:12.892584+00:00",
+  "fetchedAt": "2026-10-24T16:11:12.026556+00:00",
   "source": "ESPN league endpoint",
   "note": "Week 7 in progress. Live scoring from ESPN.",
   "standings": [
@@ -287,7 +287,7 @@
       }
     }
   ],
-  "projectionsFetchedAt": "2026-10-24T15:41:13.958563+00:00",
+  "projectionsFetchedAt": "2026-10-24T16:11:12.891039+00:00",
   "teamProjections": [
     {
       "teamId": 1,
