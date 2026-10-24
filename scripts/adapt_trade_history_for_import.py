@@ -11,6 +11,9 @@ from pathlib import Path
 def adapt(data: dict, team_names: dict[int, str] | None = None) -> dict:
     team_names = team_names or {}
     season = int(data["season"])
+    source = str(data.get("source") or "").strip()
+    if not source:
+        raise ValueError("Trade-history input is missing its source provenance")
     transactions = []
     items = []
     for tx in data.get("transactions") or []:
@@ -73,7 +76,7 @@ def adapt(data: dict, team_names: dict[int, str] | None = None) -> dict:
         "fetched_at": data.get("fetched_at"),
         "league_id": data.get("league_id"),
         "season": season,
-        "source": data.get("source") or "ESPN trade-history adapter",
+        "source": source,
         "transaction_count": len(transactions),
         "item_count": len(items),
         "transactions": transactions,
@@ -87,13 +90,17 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--roster", type=Path, help="Optional current-season.json for teamId to name")
     args = parser.parse_args()
+    data = json.loads(args.input.read_text(encoding="utf-8"))
     team_names: dict[int, str] = {}
     if args.roster and args.roster.exists():
         board = json.loads(args.roster.read_text(encoding="utf-8"))
-        for row in board.get("standings") or []:
-            if row.get("teamId") is not None:
-                team_names[int(row["teamId"])] = row.get("team") or ""
-    data = json.loads(args.input.read_text(encoding="utf-8"))
+        if board.get("season") != data.get("season"):
+            # Never stamp current-season team names onto another season's rows.
+            print(f"Roster season {board.get('season')} != {data.get('season')}; team names omitted")
+        else:
+            for row in board.get("standings") or []:
+                if row.get("teamId") is not None:
+                    team_names[int(row["teamId"])] = row.get("team") or ""
     result = adapt(data, team_names)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
